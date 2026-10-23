@@ -30,6 +30,10 @@ import {
 } from '../utils/payment';
 import { QrCodeMatrix } from './QrCodeMatrix';
 import { buildCustomerOrderMessage, toWhatsAppHref } from '../utils/whatsapp';
+import {
+  confirmBrowserOrderPayment,
+  createBrowserBespokeOrder,
+} from '../data/storeData';
 
 interface CartCheckoutDrawerProps {
   isOpen: boolean;
@@ -138,39 +142,62 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
 
     setSubmitting(true);
     try {
-      const res = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customerName,
-          customerWhatsapp,
-          customerEmail,
-          customerCpf,
-          cep,
-          street,
-          number,
-          complement,
-          neighborhood,
-          city,
-          state,
-          items: cart,
-        }),
+      const localResult = createBrowserBespokeOrder({
+        customerName,
+        customerWhatsapp,
+        customerEmail,
+        customerCpf,
+        cep,
+        street,
+        number,
+        complement,
+        neighborhood,
+        city,
+        state,
+        items: cart,
       });
 
-      const data = await res.json();
-      if (!res.ok) {
-        setFormError(data.error || 'Não foi possível registrar sua encomenda.');
-        return;
+      let finalOrder = localResult.order;
+      let finalDeposit = localResult.depositPayment;
+
+      try {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customerName,
+            customerWhatsapp,
+            customerEmail,
+            customerCpf,
+            cep,
+            street,
+            number,
+            complement,
+            neighborhood,
+            city,
+            state,
+            items: cart,
+          }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.order && data?.depositPayment) {
+            finalOrder = data.order;
+            finalDeposit = data.depositPayment;
+          }
+        }
+      } catch {
+        // Fallback to localResult already created
       }
 
-      setCreatedOrder(data.order);
-      setDepositPayment(data.depositPayment);
+      setCreatedOrder(finalOrder);
+      setDepositPayment(finalDeposit);
       setCardHolder(customerName.toUpperCase());
       onClearCart();
-      onOrderCreated(data.order);
+      onOrderCreated(finalOrder);
       setStep('PAYMENT');
     } catch (err) {
-      setFormError('Erro de conexão ao registrar pedido. Tente novamente.');
+      setFormError('Erro ao registrar pedido. Tente novamente.');
     } finally {
       setSubmitting(false);
     }
@@ -180,22 +207,44 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
     if (!createdOrder) return;
     setConfirmingDeposit(true);
     try {
-      const res = await fetch(`/api/orders/${createdOrder.id}/confirm-payment`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          installmentType: 'ENTRADA_50',
-          method: 'PIX_MERCADO_PAGO',
-        }),
+      const localUpdated = confirmBrowserOrderPayment(createdOrder.id, {
+        installmentType: 'ENTRADA_50',
+        method: 'PIX_MERCADO_PAGO',
       });
-      if (res.ok) {
-        const data = await res.json();
-        setCreatedOrder(data.order);
-        const updatedDeposit = data.order.payments?.find(
+      if (localUpdated) {
+        setCreatedOrder(localUpdated);
+        const updatedDep = localUpdated.payments?.find(
           (p: PaymentRecord) => p.installmentType === 'ENTRADA_50'
         );
-        if (updatedDeposit) setDepositPayment(updatedDeposit);
-        onOrderCreated(data.order);
+        if (updatedDep) setDepositPayment(updatedDep);
+        onOrderCreated(localUpdated);
+      }
+
+      try {
+        const res = await fetch(
+          `/api/orders/${createdOrder.id}/confirm-payment`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              installmentType: 'ENTRADA_50',
+              method: 'PIX_MERCADO_PAGO',
+            }),
+          }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.order) {
+            setCreatedOrder(data.order);
+            const updatedDeposit = data.order.payments?.find(
+              (p: PaymentRecord) => p.installmentType === 'ENTRADA_50'
+            );
+            if (updatedDeposit) setDepositPayment(updatedDeposit);
+            onOrderCreated(data.order);
+          }
+        }
+      } catch {
+        // Local update already applied
       }
     } finally {
       setConfirmingDeposit(false);
@@ -208,7 +257,12 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
     setCardError('');
 
     const cleanDigits = cardNumber.replace(/\D/g, '');
-    if (cleanDigits.length < 13 || !cardHolder.trim() || cardExpiry.length < 5 || cardCvv.length < 3) {
+    if (
+      cleanDigits.length < 13 ||
+      !cardHolder.trim() ||
+      cardExpiry.length < 5 ||
+      cardCvv.length < 3
+    ) {
       setCardError(
         'Por favor, preencha os dados do cartão de crédito corretamente para processar os 50% de entrada.'
       );
@@ -220,27 +274,55 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
       const brand = detectCardBrand(cleanDigits);
       const last4 = cleanDigits.slice(-4);
 
-      const res = await fetch(`/api/orders/${createdOrder.id}/confirm-payment`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          installmentType: 'ENTRADA_50',
-          method: 'CARTAO_MERCADO_PAGO',
-          installments: currentCardOption.installments,
-          feeAmount: currentCardOption.feeAmount,
-          totalCharged: currentCardOption.totalWithFee,
-          cardBrand: brand,
-          cardLast4: last4,
-        }),
+      const localUpdated = confirmBrowserOrderPayment(createdOrder.id, {
+        installmentType: 'ENTRADA_50',
+        method: 'CARTAO_MERCADO_PAGO',
+        installments: currentCardOption.installments,
+        feeAmount: currentCardOption.feeAmount,
+        totalCharged: currentCardOption.totalWithFee,
+        cardBrand: brand,
+        cardLast4: last4,
       });
-      if (res.ok) {
-        const data = await res.json();
-        setCreatedOrder(data.order);
-        const updatedDeposit = data.order.payments?.find(
+
+      if (localUpdated) {
+        setCreatedOrder(localUpdated);
+        const updatedDep = localUpdated.payments?.find(
           (p: PaymentRecord) => p.installmentType === 'ENTRADA_50'
         );
-        if (updatedDeposit) setDepositPayment(updatedDeposit);
-        onOrderCreated(data.order);
+        if (updatedDep) setDepositPayment(updatedDep);
+        onOrderCreated(localUpdated);
+      }
+
+      try {
+        const res = await fetch(
+          `/api/orders/${createdOrder.id}/confirm-payment`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              installmentType: 'ENTRADA_50',
+              method: 'CARTAO_MERCADO_PAGO',
+              installments: currentCardOption.installments,
+              feeAmount: currentCardOption.feeAmount,
+              totalCharged: currentCardOption.totalWithFee,
+              cardBrand: brand,
+              cardLast4: last4,
+            }),
+          }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.order) {
+            setCreatedOrder(data.order);
+            const updatedDeposit = data.order.payments?.find(
+              (p: PaymentRecord) => p.installmentType === 'ENTRADA_50'
+            );
+            if (updatedDeposit) setDepositPayment(updatedDeposit);
+            onOrderCreated(data.order);
+          }
+        }
+      } catch {
+        // Local update already applied
       }
     } finally {
       setConfirmingDeposit(false);

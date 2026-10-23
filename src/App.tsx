@@ -26,6 +26,12 @@ import { OrderTrackingModal } from './components/OrderTrackingModal';
 import { AiConsultantDrawer } from './components/AiConsultantDrawer';
 import { SizeGuideModal } from './components/SizeGuideModal';
 import { AdminDashboard } from './components/AdminDashboard';
+import {
+  getBrowserStoreDb,
+  INITIAL_PRODUCTS,
+  INITIAL_SETTINGS,
+  saveBrowserStoreDb,
+} from './data/storeData';
 
 const CATEGORIES = [
   'Todos',
@@ -36,19 +42,14 @@ const CATEGORIES = [
 ] as const;
 
 export default function App() {
-  const [products, setProducts] = useState<BespokeProduct[]>([]);
-  const [settings, setSettings] = useState<StoreSettings>({
-    storeName: 'Peterson Shoes',
-    instagramUrl: 'https://www.instagram.com/petersonshoes_/',
-    whatsappStore: '5562984998265',
-    whatsappFactory: '5562984998265',
-    productionDays: 15,
-    depositPercentage: 50,
-    mercadoPagoLiveEnabled: false,
-    pixKey: '62984998265',
-    creditCardFeePercentage: 4.99,
+  const [products, setProducts] = useState<BespokeProduct[]>(() => {
+    const local = getBrowserStoreDb().products.filter((p) => p.active);
+    return local.length > 0 ? local : INITIAL_PRODUCTS;
   });
-  const [loadingCatalog, setLoadingCatalog] = useState(true);
+  const [settings, setSettings] = useState<StoreSettings>(() => {
+    return getBrowserStoreDb().settings || INITIAL_SETTINGS;
+  });
+  const [loadingCatalog, setLoadingCatalog] = useState(false);
 
   // Hero showcase selector
   const [heroSlideIdx, setHeroSlideIdx] = useState(0);
@@ -66,6 +67,9 @@ export default function App() {
   const [activeProductModal, setActiveProductModal] =
     useState<BespokeProduct | null>(null);
   const [activeModalColorIdx, setActiveModalColorIdx] = useState<number>(0);
+  const [activeModalPhotoUrl, setActiveModalPhotoUrl] = useState<
+    string | undefined
+  >(undefined);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isTrackingOpen, setIsTrackingOpen] = useState(false);
   const [trackingQuery, setTrackingQuery] = useState('');
@@ -74,7 +78,15 @@ export default function App() {
   const [isAdminView, setIsAdminView] = useState(false);
 
   const loadStoreData = useCallback(async () => {
-    setLoadingCatalog(true);
+    const localDb = getBrowserStoreDb();
+    const localActive = localDb.products.filter((p) => p.active);
+    if (localActive.length > 0) {
+      setProducts(localActive);
+    }
+    if (localDb.settings) {
+      setSettings(localDb.settings);
+    }
+
     try {
       const [prodRes, setRes] = await Promise.all([
         fetch('/api/products'),
@@ -82,14 +94,34 @@ export default function App() {
       ]);
       if (prodRes.ok) {
         const prods = await prodRes.json();
-        setProducts(prods);
+        if (Array.isArray(prods) && prods.length > 0) {
+          // Preserve any custom prices edited in browser if serverless restarted
+          const localPriceMap = new Map(
+            localDb.products.map((lp) => [lp.id, lp.price])
+          );
+          const mergedProds = prods.map((sp: BespokeProduct) => ({
+            ...sp,
+            price: localPriceMap.get(sp.id) ?? sp.price,
+          }));
+          setProducts(mergedProds);
+          saveBrowserStoreDb({
+            ...getBrowserStoreDb(),
+            products: mergedProds,
+          });
+        }
       }
       if (setRes.ok) {
         const cfg = await setRes.json();
-        setSettings(cfg);
+        if (cfg && cfg.storeName) {
+          setSettings(cfg);
+          saveBrowserStoreDb({
+            ...getBrowserStoreDb(),
+            settings: cfg,
+          });
+        }
       }
-    } catch (err) {
-      console.error('Erro ao carregar dados da Peterson Shoes:', err);
+    } catch {
+      // Fallback already populated from getBrowserStoreDb() / INITIAL_PRODUCTS
     } finally {
       setLoadingCatalog(false);
     }
@@ -124,8 +156,13 @@ export default function App() {
     setCart([]);
   };
 
-  const openProductCustomizer = (product: BespokeProduct, colorIdx = 0) => {
+  const openProductCustomizer = (
+    product: BespokeProduct,
+    colorIdx = 0,
+    photoUrl?: string
+  ) => {
     setActiveModalColorIdx(colorIdx);
+    setActiveModalPhotoUrl(photoUrl);
     setActiveProductModal(product);
   };
 
@@ -138,7 +175,9 @@ export default function App() {
     );
   }
 
-  const filteredProducts = products.filter((prod) => {
+  const catalogList = products.length > 0 ? products : INITIAL_PRODUCTS;
+
+  const filteredProducts = catalogList.filter((prod) => {
     const matchCategory =
       selectedCategory === 'Todos' || prod.category === selectedCategory;
     const matchSize =
@@ -158,8 +197,9 @@ export default function App() {
   const cartDepositTotal =
     cart.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0) * 0.5;
 
-  const heroProducts = products.slice(0, 4);
-  const currentHeroProduct = heroProducts[heroSlideIdx] || products[0] || null;
+  const heroProducts = catalogList.slice(0, 4);
+  const currentHeroProduct =
+    heroProducts[heroSlideIdx] || catalogList[0] || INITIAL_PRODUCTS[0];
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] text-[#1F1215] flex flex-col justify-between">
@@ -324,19 +364,42 @@ export default function App() {
                   </div>
 
                   <h1
-                    className="font-serif-display text-4xl sm:text-5xl lg:text-[3.35rem] font-semibold leading-[1.1] text-[#1F1215]"
+                    className="font-serif-display text-4xl sm:text-5xl lg:text-[3.25rem] font-semibold leading-[1.08] text-[#1F1215]"
                     style={{ textWrap: 'balance' }}
                   >
                     Seu estilo, sua sandália: qualidade e conforto feitos sob encomenda para os seus pés.
                   </h1>
 
                   <p className="text-sm sm:text-base text-[#4A383B] leading-relaxed max-w-xl">
-                    Direto da nossa fabricação própria em <strong>Goiânia - Goiás</strong> para você: na <strong>Peterson Shoes (@petersonshoes_)</strong>, confeccionamos todos os modelos do nosso Instagram sob encomenda na numeração{' '}
-                    <strong>34 ao 39</strong>, nas cores padrão (Preto, Branco, Marsala, Nude, Dourado, Prata, Vermelho, Rosa) ou na{' '}
-                    <strong>cor personalizada que você escrever</strong>. Você confirma o pedido com{' '}
-                    <strong className="text-[#631421]">50% de entrada (no Pix sem taxa ou no Cartão de Crédito com a taxa do banco)</strong> e paga os outros{' '}
-                    <strong className="text-[#631421]">50% somente quando sua sandália estiver pronta</strong>.
+                    Da nossa fabricação própria em{' '}
+                    <strong className="text-[#1F1215]">Goiânia – Goiás</strong> para todo o Brasil. Cada par da{' '}
+                    <strong className="text-[#631421]">Peterson Shoes</strong> é confeccionado artesanalmente sob medida, unindo design autoral, conforto anatômico e acabamento impecável.
                   </p>
+
+                  {/* Clean Luxury Atelier Specification Highlights */}
+                  <div className="bg-[#F3EDE2]/85 border border-[#E6DDD0] rounded-xl p-4 space-y-2.5 max-w-xl">
+                    <div className="flex items-start gap-2.5 text-xs sm:text-[13px] text-[#3D2C30]">
+                      <Check className="w-4 h-4 text-[#631421] shrink-0 mt-0.5" />
+                      <span>
+                        <strong className="text-[#1F1215]">Sob Medida (34 ao 39 BR):</strong> Todos os modelos do nosso Instagram confeccionados exclusivamente na sua numeração.
+                      </span>
+                    </div>
+                    <div className="flex items-start gap-2.5 text-xs sm:text-[13px] text-[#3D2C30]">
+                      <Check className="w-4 h-4 text-[#631421] shrink-0 mt-0.5" />
+                      <span>
+                        <strong className="text-[#1F1215]">Cores Clássicas ou Personalizada:</strong> Preto, Branco, Marsala, Nude, Dourado, Prata, Vermelho, Rosa ou a{' '}
+                        <strong className="text-[#631421]">cor que você escolher</strong>.
+                      </span>
+                    </div>
+                    <div className="flex items-start gap-2.5 text-xs sm:text-[13px] text-[#3D2C30]">
+                      <Check className="w-4 h-4 text-[#631421] shrink-0 mt-0.5" />
+                      <span>
+                        <strong className="text-[#1F1215]">Pagamento 50% + 50%:</strong> Confirme com{' '}
+                        <strong className="text-[#631421]">50% de entrada</strong> (no Pix sem taxa ou no Cartão de Crédito com taxa da operadora) e pague os{' '}
+                        <strong className="text-[#631421]">50% restantes somente quando ficar pronta</strong>.
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Action Controls & Bespoke Guarantees */}
@@ -346,7 +409,7 @@ export default function App() {
                       href="#catalogo"
                       className="px-6 py-3.5 bg-[#631421] hover:bg-[#4D0E18] text-[#FAF7F2] text-xs sm:text-sm font-semibold rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap shrink-0 shadow-sm"
                     >
-                      <span>Ver Todos os {products.length} Modelos do Instagram</span>
+                      <span>Ver Todos os {catalogList.length} Modelos do Instagram</span>
                       <ArrowRight className="w-4 h-4 text-[#E5D3B3]" />
                     </a>
 
@@ -399,7 +462,14 @@ export default function App() {
                       <img
                         src={currentHeroProduct.image}
                         alt={currentHeroProduct.name}
-                        className="w-full h-full object-cover max-h-[520px]"
+                        onClick={() =>
+                          openProductCustomizer(
+                            currentHeroProduct,
+                            0,
+                            currentHeroProduct.image
+                          )
+                        }
+                        className="w-full h-full object-cover max-h-[540px] cursor-pointer"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#1A0509]/95 via-[#1A0509]/25 to-black/25 flex flex-col justify-between p-5 sm:p-7">
                         {/* Top switcher inside showcase */}
@@ -643,7 +713,13 @@ export default function App() {
                     <div>
                       {/* Product Image (4:5 aspect ratio matching real Instagram vertical photos) */}
                       <div
-                        onClick={() => openProductCustomizer(product, activeColorIdx)}
+                        onClick={() =>
+                          openProductCustomizer(
+                            product,
+                            activeColorIdx,
+                            cardDisplayImage
+                          )
+                        }
                         className="aspect-4/5 w-full bg-[#F3EDE2] overflow-hidden cursor-pointer relative border-b border-[#E6DDD0]"
                       >
                         <img
@@ -946,14 +1022,23 @@ export default function App() {
                 },
               ].map((item, idx) => {
                 const targetProduct =
-                  products.find((p) => p.sku === item.sku) || products[0];
+                  catalogList.find((p) => p.sku === item.sku) ||
+                  catalogList[0] ||
+                  INITIAL_PRODUCTS[0];
                 return (
                   <button
                     key={idx}
                     type="button"
                     onClick={() => {
                       if (targetProduct) {
-                        openProductCustomizer(targetProduct, item.colorIdx);
+                        const matchedColorIdx = targetProduct.colors.findIndex(
+                          (c) => c.image === item.img
+                        );
+                        openProductCustomizer(
+                          targetProduct,
+                          matchedColorIdx >= 0 ? matchedColorIdx : item.colorIdx,
+                          item.img
+                        );
                       }
                     }}
                     className="group relative aspect-4/5 rounded-xl overflow-hidden border border-[#E6DDD0] bg-[#F3EDE2] text-left cursor-pointer"
@@ -1141,8 +1226,12 @@ export default function App() {
       <ProductCustomModal
         product={activeProductModal}
         initialColorIdx={activeModalColorIdx}
+        initialPhotoUrl={activeModalPhotoUrl}
         isOpen={Boolean(activeProductModal)}
-        onClose={() => setActiveProductModal(null)}
+        onClose={() => {
+          setActiveProductModal(null);
+          setActiveModalPhotoUrl(undefined);
+        }}
         onAddToCart={handleAddToCart}
         onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
         whatsappStore={settings.whatsappStore}

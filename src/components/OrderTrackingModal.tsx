@@ -12,6 +12,10 @@ import { BespokeOrder, ProductionStatus } from '../types/peterson';
 import { calculateCardInstallments, formatBRL } from '../utils/payment';
 import { QrCodeMatrix } from './QrCodeMatrix';
 import { buildCustomerOrderMessage, toWhatsAppHref } from '../utils/whatsapp';
+import {
+  confirmBrowserOrderPayment,
+  lookupBrowserOrders,
+} from '../data/storeData';
 
 interface OrderTrackingModalProps {
   isOpen: boolean;
@@ -72,16 +76,26 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
 
   const fetchOrders = async (searchStr: string) => {
     setLoading(true);
+    const localMatched = lookupBrowserOrders(searchStr);
+    setOrders(localMatched);
     try {
       const res = await fetch(
         `/api/orders/lookup?query=${encodeURIComponent(searchStr)}`
       );
       if (res.ok) {
         const data = await res.json();
-        setOrders(data);
+        if (Array.isArray(data) && data.length > 0) {
+          // Merge local + server orders by id
+          const mergedMap = new Map<string, BespokeOrder>();
+          for (const lo of localMatched) mergedMap.set(lo.id, lo);
+          for (const so of data) {
+            if (!mergedMap.has(so.id)) mergedMap.set(so.id, so);
+          }
+          setOrders(Array.from(mergedMap.values()));
+        }
       }
-    } catch (err) {
-      console.error('Erro ao buscar encomendas:', err);
+    } catch {
+      // Already showing localMatched
     } finally {
       setLoading(false);
     }
@@ -111,24 +125,38 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
           (o) => o.installments === chosenInstallments
         ) || calculateCardInstallments(baseAmount, creditCardFeePercentage)[0];
 
-      const res = await fetch(`/api/orders/${orderId}/confirm-payment`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          installmentType,
-          method,
-          ...(method === 'CARTAO_MERCADO_PAGO'
-            ? {
-                installments: cardOpt.installments,
-                feeAmount: cardOpt.feeAmount,
-                totalCharged: cardOpt.totalWithFee,
-              }
-            : {}),
-        }),
+      confirmBrowserOrderPayment(orderId, {
+        installmentType,
+        method,
+        ...(method === 'CARTAO_MERCADO_PAGO'
+          ? {
+              installments: cardOpt.installments,
+              feeAmount: cardOpt.feeAmount,
+              totalCharged: cardOpt.totalWithFee,
+            }
+          : {}),
       });
-      if (res.ok) {
-        await fetchOrders(query);
+
+      try {
+        await fetch(`/api/orders/${orderId}/confirm-payment`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            installmentType,
+            method,
+            ...(method === 'CARTAO_MERCADO_PAGO'
+              ? {
+                  installments: cardOpt.installments,
+                  feeAmount: cardOpt.feeAmount,
+                  totalCharged: cardOpt.totalWithFee,
+                }
+              : {}),
+          }),
+        });
+      } catch {
+        // Local update already applied
       }
+      await fetchOrders(query);
     } finally {
       setConfirmingOrderId(null);
     }

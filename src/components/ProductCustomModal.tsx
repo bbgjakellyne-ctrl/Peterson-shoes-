@@ -8,6 +8,9 @@ import {
   Ruler,
   ExternalLink,
   CreditCard,
+  ZoomIn,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { BespokeProduct, OrderItem } from '../types/peterson';
 import { calculateCardInstallments, formatBRL } from '../utils/payment';
@@ -16,6 +19,7 @@ import { buildCustomerProductMessage, toWhatsAppHref } from '../utils/whatsapp';
 interface ProductCustomModalProps {
   product: BespokeProduct | null;
   initialColorIdx?: number;
+  initialPhotoUrl?: string;
   isOpen: boolean;
   onClose: () => void;
   onAddToCart: (item: OrderItem) => void;
@@ -27,6 +31,7 @@ interface ProductCustomModalProps {
 export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
   product,
   initialColorIdx = 0,
+  initialPhotoUrl,
   isOpen,
   onClose,
   onAddToCart,
@@ -38,6 +43,7 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
   const [customColorText, setCustomColorText] = useState('');
   const [colorError, setColorError] = useState('');
   const [activePhotoUrl, setActivePhotoUrl] = useState<string>('');
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState<number>(36);
   const [heelOption, setHeelOption] = useState<string>('');
   const [strapFinish, setStrapFinish] = useState<string>('');
@@ -57,8 +63,11 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
       setSelectedColorIdx(safeIdx);
       setCustomColorText('');
       setColorError('');
+      setIsLightboxOpen(false);
       const initialColor = product.colors[safeIdx] || product.colors[0];
-      setActivePhotoUrl(initialColor?.image || product.image);
+      setActivePhotoUrl(
+        initialPhotoUrl || initialColor?.image || product.image
+      );
       setSelectedSize(
         product.availableSizes.includes(36) ? 36 : product.availableSizes[0] || 36
       );
@@ -69,7 +78,7 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
       setCustomNotes('');
       setQuantity(1);
     }
-  }, [product, initialColorIdx]);
+  }, [product, initialColorIdx, initialPhotoUrl]);
 
   if (!isOpen || !product) return null;
 
@@ -183,12 +192,27 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
             {/* Left Column: Real Instagram Product Imagery & Gallery */}
             <div className="lg:col-span-5 bg-[#F3EDE2] flex flex-col justify-between p-6 md:p-8 border-b lg:border-b-0 lg:border-r border-[#E6DDD0]">
               <div>
-                <div className="aspect-4/5 w-full rounded-xl overflow-hidden bg-white border border-[#E6DDD0] shadow-xs">
+                <div
+                  onClick={() => setIsLightboxOpen(true)}
+                  className="aspect-4/5 w-full rounded-xl overflow-hidden bg-white border border-[#E6DDD0] shadow-xs relative group cursor-zoom-in"
+                  title="Clique para ampliar a foto em tela cheia"
+                >
                   <img
                     src={displayImage}
                     alt={`${product.name} - ${resolvedColorName}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-103"
                   />
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsLightboxOpen(true);
+                    }}
+                    className="absolute bottom-3 right-3 px-3 py-1.5 bg-black/65 hover:bg-black/80 text-[#FAF7F2] text-[11px] font-medium rounded-lg flex items-center gap-1.5 backdrop-blur-xs transition-colors cursor-pointer"
+                  >
+                    <ZoomIn className="w-3.5 h-3.5 text-[#E5D3B3]" />
+                    <span>Ampliar Foto</span>
+                  </button>
                 </div>
 
                 {/* Multi-Photo Instagram Carousel Thumbnails */}
@@ -537,6 +561,97 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Full-Screen Photo Lightbox Zoom */}
+      {isLightboxOpen && (
+        <div
+          onClick={() => setIsLightboxOpen(false)}
+          className="fixed inset-0 z-60 bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center p-4 sm:p-8"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-w-3xl w-full flex flex-col items-center"
+          >
+            <div className="w-full flex items-center justify-between text-[#FAF7F2] mb-3 px-1">
+              <div>
+                <p className="text-sm font-semibold">{product.name}</p>
+                <p className="text-xs text-[#E5D3B3]">
+                  Cor selecionada: {resolvedColorName} · Numeração 34 ao 39 BR
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsLightboxOpen(false)}
+                className="px-3 py-1.5 bg-white/15 hover:bg-white/25 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+                <span>Fechar Zoom</span>
+              </button>
+            </div>
+
+            <div className="relative w-full max-h-[75vh] bg-[#1A0509] rounded-2xl overflow-hidden border border-white/15 flex items-center justify-center">
+              <img
+                src={displayImage}
+                alt={product.name}
+                className="max-h-[75vh] w-auto object-contain"
+              />
+
+              {galleryList.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const currIdx = Math.max(0, galleryList.indexOf(displayImage));
+                      const prevIdx =
+                        (currIdx - 1 + galleryList.length) % galleryList.length;
+                      setActivePhotoUrl(galleryList[prevIdx]);
+                    }}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/65 hover:bg-black/85 text-white border border-white/20 cursor-pointer"
+                    aria-label="Foto anterior"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const currIdx = Math.max(0, galleryList.indexOf(displayImage));
+                      const nextIdx = (currIdx + 1) % galleryList.length;
+                      setActivePhotoUrl(galleryList[nextIdx]);
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/65 hover:bg-black/85 text-white border border-white/20 cursor-pointer"
+                    aria-label="Próxima foto"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </>
+              )}
+            </div>
+
+            {galleryList.length > 1 && (
+              <div className="flex items-center gap-2 mt-4 overflow-x-auto max-w-full py-1">
+                {galleryList.map((imgUrl, idx) => (
+                  <button
+                    key={`zoom-thumb-${idx}`}
+                    type="button"
+                    onClick={() => setActivePhotoUrl(imgUrl)}
+                    className={`w-14 h-14 rounded-lg overflow-hidden border-2 shrink-0 cursor-pointer transition-all ${
+                      displayImage === imgUrl
+                        ? 'border-[#E5D3B3] scale-105'
+                        : 'border-white/20 opacity-65 hover:opacity-100'
+                    }`}
+                  >
+                    <img
+                      src={imgUrl}
+                      alt={`${product.name} miniatura ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

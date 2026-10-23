@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { X, Send, Sparkles, MessageCircle } from 'lucide-react';
 import { toWhatsAppHref } from '../utils/whatsapp';
+import { getBrowserStoreDb } from '../data/storeData';
+import { formatBRL } from '../utils/payment';
 
 interface AiConsultantDrawerProps {
   isOpen: boolean;
@@ -16,9 +18,41 @@ interface ChatMessage {
 const SUGGESTED_QUESTIONS = [
   'Como funciona o pagamento de 50% de entrada?',
   'Qual o prazo de produção das sandálias?',
-  'Quais modelos vocês têm na cor Vinho?',
+  'Quais modelos vocês têm na cor Marsala ou Dourado?',
   'Qual o status do pedido PTS-2026-101?',
 ];
+
+function buildSmartLocalReply(question: string): string {
+  const q = question.toLowerCase();
+  const db = getBrowserStoreDb();
+
+  const codeMatch = question.match(/PTS-\d{4}-\d+/i);
+  if (codeMatch) {
+    const code = codeMatch[0].toUpperCase();
+    const order = db.orders.find((o) => o.orderCode.toUpperCase() === code);
+    if (order) {
+      return `Localizei o pedido **${order.orderCode}** em nome de **${order.customerName}**!\n\n• **Status da Produção:** ${order.productionStatus.replace(/_/g, ' ')}\n• **Status do Pagamento:** ${order.paymentStatus.replace(/_/g, ' ')}\n• **Previsão de Conclusão:** ${order.estimatedDeliveryDate}\n• **Notas do Ateliê:** ${order.factoryNotes}`;
+    }
+  }
+
+  if (q.includes('50%') || q.includes('pagamento') || q.includes('entrada') || q.includes('pix') || q.includes('cartão') || q.includes('cartao')) {
+    return 'Na **Peterson Shoes**, trabalhamos sob encomenda com pagamento super seguro e facilitado:\n\n1. **50% de Entrada:** Você paga na hora de confirmar o pedido — pode escolher entre **Pix (sem taxa)** ou **Cartão de Crédito em até 6x** (com o acréscimo da taxa da operadora).\n2. **50% Restantes:** Você só paga quando sua sandália estiver **100% pronta** (em até 15 dias), antes do envio!';
+  }
+
+  if (q.includes('prazo') || q.includes('dias') || q.includes('entrega') || q.includes('frete') || q.includes('goiania') || q.includes('goiânia')) {
+    return `Somos de **Goiânia – Goiás** com fabricação própria! Nosso prazo de confecção artesanal sob encomenda é de **${db.settings.productionDays || 15} dias**. Fazemos entregas em Goiânia e região e enviamos para todo o Brasil via Correios.`;
+  }
+
+  if (q.includes('cor') || q.includes('marsala') || q.includes('dourad') || q.includes('prata') || q.includes('preta') || q.includes('branca') || q.includes('modelo')) {
+    const sampleModels = db.products
+      .slice(0, 4)
+      .map((p) => `• ${p.name}: ${formatBRL(p.price)} (50% entrada: ${formatBRL(p.price / 2)})`)
+      .join('\n');
+    return `Todos os nossos **${db.products.length} modelos do Instagram** são confeccionados na numeração **34 ao 39 BR**, nas 8 cores clássicas (**Preto, Branco, Marsala, Nude, Dourado, Prata, Vermelho e Rosa**) ou na opção **Outra Cor**, onde você escreve a cor personalizada que desejar!\n\nAlguns dos nossos destaques:\n${sampleModels}`;
+  }
+
+  return `Olá! Aqui na **Peterson Shoes (@petersonshoes_)**, direto da nossa fabricação própria em **Goiânia – Goiás**, confeccionamos todos os modelos do nosso Instagram sob encomenda do **34 ao 39 BR** em até **${db.settings.productionDays || 15} dias**.\n\nVocê escolhe entre as 8 cores padrão ou escreve sua cor personalizada, confirma o pedido com **50% de entrada** (no Pix sem taxa ou no Cartão de Crédito com taxa da operadora) e paga os outros **50% somente quando sua sandália estiver pronta**!`;
+}
 
 export const AiConsultantDrawer: React.FC<AiConsultantDrawerProps> = ({
   isOpen,
@@ -57,23 +91,30 @@ export const AiConsultantDrawer: React.FC<AiConsultantDrawerProps> = ({
           history: messages,
         }),
       });
-      const data = await res.json();
+      if (res.ok) {
+        const data = await res.json();
+        setMessages([
+          ...updatedHistory,
+          {
+            role: 'model',
+            text: data.reply || buildSmartLocalReply(trimmed),
+          },
+        ]);
+      } else {
+        setMessages([
+          ...updatedHistory,
+          {
+            role: 'model',
+            text: buildSmartLocalReply(trimmed),
+          },
+        ]);
+      }
+    } catch {
       setMessages([
         ...updatedHistory,
         {
           role: 'model',
-          text:
-            data.reply ||
-            data.error ||
-            'Estou à disposição para ajudar na escolha da sua sandália Peterson Shoes.',
-        },
-      ]);
-    } catch (err) {
-      setMessages([
-        ...updatedHistory,
-        {
-          role: 'model',
-          text: 'Tivemos uma oscilação momentânea. Você também pode falar diretamente conosco pelo botão de WhatsApp abaixo!',
+          text: buildSmartLocalReply(trimmed),
         },
       ]);
     } finally {
