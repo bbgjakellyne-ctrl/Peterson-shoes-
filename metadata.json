@@ -1,0 +1,6 @@
+{
+  "name": "Solaris Ateliê — Sandálias Artesanais",
+  "description": "Loja online de sandálias artesanais em couro legítimo e fibras naturais com catálogo interativo, provador de medidas e checkout de pagamento seguro via PIX, Cartão e Boleto.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
