@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { createServer as createViteServer } from 'vite';
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
@@ -14,7 +13,7 @@ import {
   StoreSettings,
   PaymentStatus,
   ProductionStatus,
-} from './src/types/peterson.ts';
+} from './src/types/peterson';
 
 dotenv.config();
 
@@ -1859,6 +1858,7 @@ async function startServer() {
   // VITE MIDDLEWARE (DEVELOPMENT) OR STATIC SERVING (PRODUCTION)
   // ==========================================================================
   if (process.env.NODE_ENV !== 'production') {
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
@@ -1880,3 +1880,5 @@ async function startServer() {
 if (!IS_VERCEL) {
   startServer();
 }
+
+export default app;
