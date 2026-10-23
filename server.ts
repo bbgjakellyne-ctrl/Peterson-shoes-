@@ -19,7 +19,9 @@ import {
 dotenv.config();
 
 const PORT = 3000;
-const DATA_DIR = path.resolve(process.cwd(), 'data');
+const IS_VERCEL = Boolean(process.env.VERCEL);
+const BUNDLED_DB_FILE = path.resolve(process.cwd(), 'data', 'peterson-db.json');
+const DATA_DIR = IS_VERCEL ? path.join('/tmp', 'peterson-data') : path.resolve(process.cwd(), 'data');
 const DB_FILE = path.join(DATA_DIR, 'peterson-db.json');
 const SQL_SCHEMA_FILE = path.resolve(process.cwd(), 'supabase-schema.sql');
 const INSTAGRAM_PUBLIC_DIR = path.resolve(process.cwd(), 'public', 'instagram');
@@ -991,9 +993,18 @@ function loadDb(): DatabaseSchema {
     fs.mkdirSync(DATA_DIR, { recursive: true });
   }
   if (!fs.existsSync(DB_FILE)) {
-    const initial = createInitialDatabase();
-    fs.writeFileSync(DB_FILE, JSON.stringify(initial, null, 2), 'utf-8');
-    return initial;
+    if (IS_VERCEL && fs.existsSync(BUNDLED_DB_FILE)) {
+      try {
+        fs.copyFileSync(BUNDLED_DB_FILE, DB_FILE);
+      } catch {
+        // Fallback to initial database creation below
+      }
+    }
+    if (!fs.existsSync(DB_FILE)) {
+      const initial = createInitialDatabase();
+      fs.writeFileSync(DB_FILE, JSON.stringify(initial, null, 2), 'utf-8');
+      return initial;
+    }
   }
   try {
     const raw = fs.readFileSync(DB_FILE, 'utf-8');
@@ -1029,8 +1040,13 @@ function saveDb(data: DatabaseSchema): void {
   fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
 }
 
-// Active admin tokens in memory
+// Active admin tokens in memory + deterministic HMAC token for serverless (Vercel)
 const activeAdminTokens = new Set<string>();
+
+function getStatelessAdminToken(): string {
+  const secret = process.env.ADMIN_PASSWORD || 'peterson2026';
+  return crypto.createHmac('sha256', secret).update('peterson-admin-session-v1').digest('hex');
+}
 
 function requireAdminAuth(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
@@ -1038,15 +1054,16 @@ function requireAdminAuth(req: Request, res: Response, next: NextFunction) {
     return res.status(401).json({ error: 'Não autorizado: Token administrativo ausente.' });
   }
   const token = authHeader.slice('Bearer '.length).trim();
-  if (!activeAdminTokens.has(token)) {
+  if (!activeAdminTokens.has(token) && token !== getStatelessAdminToken()) {
     return res.status(401).json({ error: 'Sessão administrativa inválida ou expirada.' });
   }
   next();
 }
 
-async function startServer() {
-  const app = express();
-  app.use(express.json({ limit: '12mb' }));
+export const app = express();
+app.use(express.json({ limit: '12mb' }));
+
+function registerApiRoutes() {
 
   // Ensure DB exists on startup
   loadDb();
@@ -1539,7 +1556,7 @@ DIRETRIZES DE ESTILO:
       password === expectedPassword &&
       (!email || email.toLowerCase().trim() === expectedEmail.toLowerCase())
     ) {
-      const token = crypto.randomBytes(24).toString('hex');
+      const token = getStatelessAdminToken();
       activeAdminTokens.add(token);
       return res.json({
         token,
@@ -1833,7 +1850,11 @@ DIRETRIZES DE ESTILO:
     }
     res.json({ sql: sqlContent });
   });
+}
 
+registerApiRoutes();
+
+async function startServer() {
   // ==========================================================================
   // VITE MIDDLEWARE (DEVELOPMENT) OR STATIC SERVING (PRODUCTION)
   // ==========================================================================
@@ -1856,4 +1877,6 @@ DIRETRIZES DE ESTILO:
   });
 }
 
-startServer();
+if (!IS_VERCEL) {
+  startServer();
+}
