@@ -162,9 +162,9 @@ export default function App() {
   useEffect(() => {
     const origin = window.location.origin;
     const baseTitle =
-      'Peterson Shoes | Sandálias Femininas em Goiânia (34 ao 39)';
+      'Peterson Shoes - Goiânia | Sandálias Femininas (34 ao 39)';
     const baseDescription =
-      'Peterson Shoes (@petersonshoes_): sandálias femininas de fabricação própria em Goiânia - GO sob encomenda do 34 ao 39. Papetes, Anabelas e Rasteiras com 50% de entrada.';
+      'Peterson Shoes - Goiânia (@petersonshoes_): sandálias femininas de fabricação própria em Goiânia - GO sob encomenda do 34 ao 39. Papetes, Anabelas e Rasteiras com 50% de entrada.';
 
     let nextTitle = baseTitle;
     let nextDescription = baseDescription;
@@ -173,12 +173,12 @@ export default function App() {
     if (activeProductModal) {
       const deposit = (activeProductModal.price * 0.5).toFixed(2).replace('.', ',');
       const total = activeProductModal.price.toFixed(2).replace('.', ',');
-      nextTitle = `${activeProductModal.name} — R$ ${total} | Peterson Shoes Goiânia`;
+      nextTitle = `${activeProductModal.name} — R$ ${total} | Peterson Shoes - Goiânia`;
       nextDescription = `${activeProductModal.name} (${activeProductModal.subtitle}). Confeccionada sob encomenda em Goiânia do 34 ao 39 BR por R$ ${total} (50% de entrada: R$ ${deposit} no Pix).`;
       canonicalHref = `${origin}/?modelo=${encodeURIComponent(activeProductModal.sku)}`;
     } else if (selectedCategory !== 'Todos') {
-      nextTitle = `${selectedCategory} Sob Encomenda (34 ao 39) | Peterson Shoes Goiânia`;
-      nextDescription = `Confira ${selectedCategory} de fabricação própria da Peterson Shoes (@petersonshoes_) em Goiânia - GO. Numeração 34 ao 39 BR com 50% de entrada no Pix ou Cartão.`;
+      nextTitle = `${selectedCategory} Sob Encomenda (34 ao 39) | Peterson Shoes - Goiânia`;
+      nextDescription = `Confira ${selectedCategory} de fabricação própria da Peterson Shoes - Goiânia (@petersonshoes_) em Goiânia - GO. Numeração 34 ao 39 BR com 50% de entrada no Pix ou Cartão.`;
       canonicalHref = `${origin}/?categoria=${encodeURIComponent(selectedCategory)}`;
     }
 
