@@ -51,11 +51,15 @@ export function generateMercadoPagoPixPayload(
   reference: string,
   pixKey: string
 ): string {
-  const cleanKey = pixKey.trim() || '62984998265';
-  const normalizedKey =
-    /^\d{10,11}$/.test(cleanKey) && !cleanKey.startsWith('+55')
-      ? `+55${cleanKey}`
-      : cleanKey;
+  const cleanKey = pixKey.trim() || '50789636000132';
+  const digitsOnly = cleanKey.replace(/\D/g, '');
+  let normalizedKey = cleanKey;
+  if (digitsOnly.length === 14 && !cleanKey.includes('@')) {
+    // 14-digit CNPJ Pix key (must be digits only in EMVCo BRCode)
+    normalizedKey = digitsOnly;
+  } else if (/^\d{10,11}$/.test(cleanKey) && !cleanKey.startsWith('+55')) {
+    normalizedKey = `+55${cleanKey}`;
+  }
 
   const gui = emvField('00', 'br.gov.bcb.pix');
   const keyField = emvField('01', normalizedKey);
@@ -72,7 +76,7 @@ export function generateMercadoPagoPixPayload(
     '5303986' +
     emvField('54', formattedAmount) +
     '5802BR' +
-    emvField('59', 'PETERSON SHOES') +
+    emvField('59', 'JACKELINE PETERSON') +
     emvField('60', 'GOIANIA') +
     additionalData +
     '6304';
@@ -150,7 +154,7 @@ export function buildStandardColors(
 }
 
 export const INITIAL_SETTINGS: StoreSettings = {
-  storeName: 'Peterson Shoes',
+  storeName: 'PETERSON SHOES',
   instagramUrl: 'https://www.instagram.com/petersonshoes_/',
   whatsappStore: '5562984998265',
   whatsappFactory: '5562984998265',
@@ -158,7 +162,14 @@ export const INITIAL_SETTINGS: StoreSettings = {
   depositPercentage: 50,
   creditCardFeePercentage: 4.99,
   mercadoPagoLiveEnabled: false,
-  pixKey: '62984998265',
+  pixKey: '50789636000132',
+  pixKeyType: 'CNPJ',
+  bankName: 'Banco Inter',
+  bankHolderName: 'Jackeline Peterson',
+  bankHolderDoc: '50.789.636/0001-32',
+  bankAgency: '',
+  bankAccount: '',
+  cardPaymentLink: '',
 };
 
 export const INITIAL_PRODUCTS: BespokeProduct[] = [
@@ -2370,7 +2381,7 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
   };
 }
 
-const LOCAL_STORAGE_KEY = 'peterson_shoes_store_v7';
+const LOCAL_STORAGE_KEY = 'peterson_shoes_store_v9';
 
 export function getBrowserStoreDb(): StoreDatabaseSchema {
   if (typeof window === 'undefined') {
@@ -2486,7 +2497,7 @@ export function createBrowserBespokeOrder(params: {
     params.complement ? ` (${params.complement})` : ''
   } - ${params.neighborhood}, ${params.city}/${params.state} - CEP ${params.cep}`;
 
-  const pixKey = db.settings.pixKey || '62984998265';
+  const pixKey = db.settings.pixKey || '50789636000132';
 
   const depositPayment: PaymentRecord = {
     id: `pay-${Date.now()}-1`,

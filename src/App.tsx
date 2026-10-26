@@ -353,7 +353,7 @@ export default function App() {
     heroProducts[heroSlideIdx] || catalogList[0] || INITIAL_PRODUCTS[0];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#1F1215] flex flex-col justify-between">
+    <div translate="no" className="notranslate min-h-screen bg-[#FAF7F2] text-[#1F1215] flex flex-col justify-between">
       {/* =====================================================================
           TOP BAR CONTRACT (Strictly 3 Zones separated by gap-8)
       ===================================================================== */}
@@ -362,9 +362,10 @@ export default function App() {
           {/* Zone 1: Single text element wordmark */}
           <a
             href="#top"
-            className="font-serif-display text-2xl sm:text-[1.7rem] font-semibold tracking-tight text-[#631421] whitespace-nowrap shrink-0"
+            translate="no"
+            className="notranslate font-serif-display text-2xl sm:text-[1.7rem] font-semibold tracking-tight text-[#631421] whitespace-nowrap shrink-0"
           >
-            Peterson Shoes
+            PETERSON SHOES
           </a>
 
           {/* Zone 2: 5 concise single-line navigation links */}
@@ -1664,6 +1665,14 @@ export default function App() {
         }}
         whatsappStore={settings.whatsappStore}
         creditCardFeePercentage={settings.creditCardFeePercentage ?? 4.99}
+        bankName={settings.bankName}
+        bankHolderName={settings.bankHolderName}
+        bankHolderDoc={settings.bankHolderDoc}
+        pixKey={settings.pixKey}
+        pixKeyType={settings.pixKeyType}
+        bankAgency={settings.bankAgency}
+        bankAccount={settings.bankAccount}
+        cardPaymentLink={settings.cardPaymentLink}
       />
 
       <OrderTrackingModal

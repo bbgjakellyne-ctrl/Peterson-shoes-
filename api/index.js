@@ -1880,7 +1880,7 @@ var INITIAL_PRODUCTS = [
 
 // server.ts
 dotenv.config();
-var PORT = 3e3;
+var PORT = Number(process.env.PORT) || 3e3;
 var IS_VERCEL = Boolean(process.env.VERCEL);
 var BUNDLED_DB_FILE = path.resolve(process.cwd(), "data", "peterson-db.json");
 var DATA_DIR = IS_VERCEL ? path.join("/tmp", "peterson-data") : path.resolve(process.cwd(), "data");
@@ -1911,15 +1911,21 @@ function emvField(id, value) {
   return `${id}${String(value.length).padStart(2, "0")}${value}`;
 }
 function generateMercadoPagoPixPayload(amount, reference, pixKey) {
-  const cleanKey = pixKey.trim() || "62984998265";
-  const normalizedKey = /^\d{10,11}$/.test(cleanKey) && !cleanKey.startsWith("+55") ? `+55${cleanKey}` : cleanKey;
+  const cleanKey = pixKey.trim() || "50789636000132";
+  const digitsOnly = cleanKey.replace(/\D/g, "");
+  let normalizedKey = cleanKey;
+  if (digitsOnly.length === 14 && !cleanKey.includes("@")) {
+    normalizedKey = digitsOnly;
+  } else if (/^\d{10,11}$/.test(cleanKey) && !cleanKey.startsWith("+55")) {
+    normalizedKey = `+55${cleanKey}`;
+  }
   const gui = emvField("00", "br.gov.bcb.pix");
   const keyField = emvField("01", normalizedKey);
   const merchantAccountInfo = emvField("26", `${gui}${keyField}`);
   const formattedAmount = amount.toFixed(2);
   const txId = reference.replace(/[^a-zA-Z0-9]/g, "").slice(0, 20) || "PETERSONSHOES";
   const additionalData = emvField("62", emvField("05", txId));
-  const bodyWithoutCrc = "000201" + merchantAccountInfo + "520400005303986" + emvField("54", formattedAmount) + "5802BR" + emvField("59", "PETERSON SHOES") + emvField("60", "GOIANIA") + additionalData + "6304";
+  const bodyWithoutCrc = "000201" + merchantAccountInfo + "520400005303986" + emvField("54", formattedAmount) + "5802BR" + emvField("59", "JACKELINE PETERSON") + emvField("60", "GOIANIA") + additionalData + "6304";
   const crc = computeCRC16(bodyWithoutCrc);
   return `${bodyWithoutCrc}${crc}`;
 }
@@ -2936,7 +2942,7 @@ function createInitialDatabase() {
   const order2Date = new Date(Date.now() - 14 * 864e5).toISOString();
   const order2Est = addDaysISO(1);
   const settings = {
-    storeName: "Peterson Shoes",
+    storeName: "PETERSON SHOES",
     instagramUrl: "https://www.instagram.com/petersonshoes_/",
     whatsappStore: process.env.WHATSAPP_STORE_NUMBER || "5562984998265",
     whatsappFactory: process.env.WHATSAPP_FACTORY_NUMBER || "5562984998265",
@@ -2944,7 +2950,14 @@ function createInitialDatabase() {
     depositPercentage: 50,
     creditCardFeePercentage: 4.99,
     mercadoPagoLiveEnabled: process.env.MERCADO_PAGO_LIVE_CHARGES_ENABLED === "true",
-    pixKey: "62984998265"
+    pixKey: "50789636000132",
+    pixKeyType: "CNPJ",
+    bankName: "Banco Inter",
+    bankHolderName: "Jackeline Peterson",
+    bankHolderDoc: "50.789.636/0001-32",
+    bankAgency: "",
+    bankAccount: "",
+    cardPaymentLink: ""
   };
   const customers = [
     {
@@ -3166,12 +3179,20 @@ function loadDb() {
   try {
     const raw = fs.readFileSync(DB_FILE, "utf-8");
     const parsed = JSON.parse(raw);
-    const needsUpgrade = !parsed.products || parsed.products.length < 46 || parsed.products[0]?.price !== 130 || parsed.settings?.whatsappStore !== "5562984998265" || parsed.products[0]?.availableSizes?.includes(33) || !parsed.products[0]?.colors?.some((c) => c.name === "Marsala");
+    const needsUpgrade = !parsed.products || parsed.products.length < 46 || parsed.products[0]?.price !== 130 || parsed.settings?.whatsappStore !== "5562984998265" || parsed.products[0]?.availableSizes?.includes(33) || !parsed.products[0]?.colors?.some((c) => c.name === "Marsala") || parsed.settings?.pixKey !== "50789636000132";
     if (needsUpgrade) {
       const upgraded = createInitialDatabase();
       fs.writeFileSync(DB_FILE, JSON.stringify(upgraded, null, 2), "utf-8");
       return upgraded;
     }
+    parsed.settings = {
+      bankName: "Banco Inter",
+      bankHolderName: "Jackeline Peterson",
+      bankHolderDoc: "50.789.636/0001-32",
+      pixKeyType: "CNPJ",
+      pixKey: "50789636000132",
+      ...parsed.settings
+    };
     return parsed;
   } catch (err) {
     console.error("Erro ao ler banco de dados, recriando estado inicial:", err);
@@ -3388,7 +3409,7 @@ ${productUrlsXml}
           payerName: customerName,
           payerCpf: customerCpf || "",
           externalReference: `${orderCode}E`,
-          pixKey: db.settings.pixKey || "62984998265",
+          pixKey: db.settings.pixKey || "50789636000132",
           liveEnabled: db.settings.mercadoPagoLiveEnabled
         }),
         createMercadoPagoPixPayment({
@@ -3398,7 +3419,7 @@ ${productUrlsXml}
           payerName: customerName,
           payerCpf: customerCpf || "",
           externalReference: `${orderCode}F`,
-          pixKey: db.settings.pixKey || "62984998265",
+          pixKey: db.settings.pixKey || "50789636000132",
           liveEnabled: db.settings.mercadoPagoLiveEnabled
         })
       ]);
@@ -3896,6 +3917,11 @@ DIRETRIZES DE ESTILO:
 }
 registerApiRoutes();
 async function startServer() {
+  const publicPath = path.join(process.cwd(), "public");
+  if (fs.existsSync(publicPath)) {
+    app.use(express.static(publicPath));
+  }
+  const distPath = path.join(process.cwd(), "dist");
   if (process.env.NODE_ENV !== "production") {
     const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
@@ -3904,7 +3930,6 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
     app.get("*", (_req, res) => {
       res.sendFile(path.join(distPath, "index.html"));

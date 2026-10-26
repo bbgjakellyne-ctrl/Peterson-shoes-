@@ -14,6 +14,7 @@ import { QrCodeMatrix } from './QrCodeMatrix';
 import { buildCustomerOrderMessage, toWhatsAppHref } from '../utils/whatsapp';
 import {
   confirmBrowserOrderPayment,
+  getBrowserStoreDb,
   lookupBrowserOrders,
 } from '../data/storeData';
 
@@ -109,6 +110,12 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
   }, [isOpen, initialQuery]);
 
   if (!isOpen) return null;
+
+  const storeSettings = getBrowserStoreDb().settings;
+  const activeBankName = storeSettings.bankName || 'Banco Inter';
+  const activeHolderName = storeSettings.bankHolderName || 'Jackeline Peterson';
+  const activePixKey = storeSettings.pixKey || '50789636000132';
+  const activePixKeyType = storeSettings.pixKeyType || 'CNPJ';
 
   const handleConfirmInstallment = async (
     orderId: string,
@@ -419,6 +426,18 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
 
                       {depositPayment && depositPayment.status !== 'APROVADO' && (
                         <div className="mt-4 pt-3 border-t border-[#E6DDD0] space-y-2">
+                          <div className="p-2.5 rounded-lg bg-white border border-[#E6DDD0] text-[11px] text-[#3D2C30] space-y-0.5">
+                            <p>
+                              <strong>Banco:</strong> {activeBankName} ·{' '}
+                              <strong>Favorecido:</strong> {activeHolderName}
+                            </p>
+                            <p className="font-mono-tabular">
+                              <strong>Chave Pix ({activePixKeyType}):</strong>{' '}
+                              <span className="text-[#631421] font-bold">
+                                {activePixKey}
+                              </span>
+                            </p>
+                          </div>
                           <div className="flex items-center gap-3">
                             <QrCodeMatrix seed={depositPayment.pixCopyPaste} size={88} />
                             <div className="flex-1 space-y-1.5">
@@ -517,6 +536,18 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
                         <div className="mt-4 pt-3 border-t border-[#E6DDD0]">
                           {order.productionStatus === 'PRONTA_PARA_ENTREGA' ? (
                             <div className="space-y-2.5">
+                              <div className="p-2.5 rounded-lg bg-white border border-[#E6DDD0] text-[11px] text-[#3D2C30] space-y-0.5">
+                                <p>
+                                  <strong>Banco:</strong> {activeBankName} ·{' '}
+                                  <strong>Favorecido:</strong> {activeHolderName}
+                                </p>
+                                <p className="font-mono-tabular">
+                                  <strong>Chave Pix ({activePixKeyType}):</strong>{' '}
+                                  <span className="text-[#631421] font-bold">
+                                    {activePixKey}
+                                  </span>
+                                </p>
+                              </div>
                               <div className="flex items-center gap-3">
                                 <QrCodeMatrix seed={finalPayment.pixCopyPaste} size={88} />
                                 <div className="flex-1 space-y-1.5">

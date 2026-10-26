@@ -871,11 +871,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap ${
               activeTab === 'SETTINGS'
                 ? 'bg-[#5B1824] text-[#F7F3EC] shadow-xs'
-                : 'text-[#4A373B] hover:text-[#231619]'
+                : 'text-[#5B1824] bg-[#5B1824]/10 hover:bg-[#5B1824]/20'
             }`}
           >
-            <Database className="w-4 h-4" />
-            <span>WhatsApp, Pix, Cartão & Banco SQL</span>
+            <DollarSign className="w-4 h-4" />
+            <span>Cadastrar Banco, Chave Pix & Cartão</span>
           </button>
 
           <button
@@ -1692,9 +1692,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             >
               <div className="flex items-center gap-2 text-[#5B1824]">
                 <Settings className="w-5 h-5" />
-                <h3 className="text-lg font-semibold text-[#231619]">
-                  Configurações de WhatsApp, Prazo & Mercado Pago Pix
-                </h3>
+                <div>
+                  <h3 className="text-lg font-semibold text-[#231619]">
+                    Cadastro do Banco Recebedor, Chave Pix & Cartão
+                  </h3>
+                  <p className="text-xs text-[#6E5A5F]">
+                    Cadastre abaixo o banco e a chave Pix onde os pagamentos de 50% das clientes cairão diretamente na sua conta.
+                  </p>
+                </div>
               </div>
 
               {settingsSavedMsg && (
@@ -1703,35 +1708,227 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
               )}
 
-              <div>
-                <label className="block text-xs font-semibold text-[#231619] mb-1">
-                  WhatsApp de Atendimento da Loja (DDI + DDD + Número)
-                </label>
-                <input
-                  type="text"
-                  value={settings.whatsappStore}
-                  onChange={(e) =>
-                    setSettings({ ...settings, whatsappStore: e.target.value })
-                  }
-                  className="w-full px-3.5 py-2 bg-[#F7F3EC] border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular"
-                />
+              {/* Bank Quick Selection & Input */}
+              <div className="p-4 rounded-xl bg-[#F7F3EC] border border-[#DFD3C3] space-y-3">
+                <p className="text-xs font-bold uppercase tracking-wider text-[#5B1824]">
+                  1. Conta Bancária & Chave Pix para Recebimento Direto
+                </p>
+
+                <div>
+                  <label className="block text-xs font-semibold text-[#231619] mb-1">
+                    Banco / Instituição Financeira Recebedora *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={settings.bankName || ''}
+                    onChange={(e) =>
+                      setSettings({ ...settings, bankName: e.target.value })
+                    }
+                    placeholder="Ex: Nubank, Mercado Pago, Caixa, Itaú, Sicoob, Inter..."
+                    className="w-full px-3.5 py-2 bg-white border border-[#DFD3C3] rounded-lg text-xs text-[#231619]"
+                  />
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {[
+                      'Mercado Pago',
+                      'Nubank',
+                      'Caixa Econômica',
+                      'Banco do Brasil',
+                      'Itaú',
+                      'Bradesco',
+                      'Santander',
+                      'Sicoob',
+                      'Sicredi',
+                      'Banco Inter',
+                      'PagBank',
+                      'Cora',
+                    ].map((bName) => (
+                      <button
+                        key={bName}
+                        type="button"
+                        onClick={() =>
+                          setSettings({ ...settings, bankName: bName })
+                        }
+                        className={`px-2 py-1 rounded text-[11px] font-medium border cursor-pointer transition-colors ${
+                          settings.bankName === bName
+                            ? 'bg-[#5B1824] text-white border-[#5B1824]'
+                            : 'bg-white text-[#4A373B] border-[#DFD3C3] hover:border-[#5B1824]'
+                        }`}
+                      >
+                        {bName}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#231619] mb-1">
+                      Nome do Titular / Favorecido *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={settings.bankHolderName || ''}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          bankHolderName: e.target.value,
+                        })
+                      }
+                      placeholder="Nome que aparece no Pix"
+                      className="w-full px-3.5 py-2 bg-white border border-[#DFD3C3] rounded-lg text-xs text-[#231619]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#231619] mb-1">
+                      CPF ou CNPJ do Titular (Opcional)
+                    </label>
+                    <input
+                      type="text"
+                      value={settings.bankHolderDoc || ''}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          bankHolderDoc: e.target.value,
+                        })
+                      }
+                      placeholder="Ex: ***.123.456-** ou CNPJ"
+                      className="w-full px-3.5 py-2 bg-white border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular text-[#231619]"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#231619] mb-1">
+                      Tipo da Chave Pix *
+                    </label>
+                    <select
+                      value={settings.pixKeyType || 'CELULAR'}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          pixKeyType: e.target.value as any,
+                        })
+                      }
+                      className="w-full px-3 py-2 bg-white border border-[#DFD3C3] rounded-lg text-xs text-[#231619]"
+                    >
+                      <option value="CELULAR">Celular</option>
+                      <option value="CNPJ">CNPJ</option>
+                      <option value="CPF">CPF</option>
+                      <option value="EMAIL">E-mail</option>
+                      <option value="ALEATORIA">Chave Aleatória</option>
+                    </select>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-semibold text-[#231619] mb-1">
+                      Chave Pix Oficial (Geradora do QR Code) *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={settings.pixKey}
+                      onChange={(e) =>
+                        setSettings({ ...settings, pixKey: e.target.value })
+                      }
+                      placeholder="Ex: 62984998265, CPF, CNPJ ou E-mail"
+                      className="w-full px-3.5 py-2 bg-white border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular text-[#231619]"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#231619] mb-1">
+                      Agência Bancária (Opcional)
+                    </label>
+                    <input
+                      type="text"
+                      value={settings.bankAgency || ''}
+                      onChange={(e) =>
+                        setSettings({ ...settings, bankAgency: e.target.value })
+                      }
+                      placeholder="Ex: 0001"
+                      className="w-full px-3.5 py-2 bg-white border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular text-[#231619]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#231619] mb-1">
+                      Conta Corrente / Poupança (Opcional)
+                    </label>
+                    <input
+                      type="text"
+                      value={settings.bankAccount || ''}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          bankAccount: e.target.value,
+                        })
+                      }
+                      placeholder="Ex: 123456-7"
+                      className="w-full px-3.5 py-2 bg-white border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular text-[#231619]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-[#231619] mb-1">
+                    Link Externo para Pagamento no Cartão / Maquininha (Opcional)
+                  </label>
+                  <input
+                    type="url"
+                    value={settings.cardPaymentLink || ''}
+                    onChange={(e) =>
+                      setSettings({
+                        ...settings,
+                        cardPaymentLink: e.target.value,
+                      })
+                    }
+                    placeholder="Ex: https://link.mercadopago.com.br/petersonshoes"
+                    className="w-full px-3.5 py-2 bg-white border border-[#DFD3C3] rounded-lg text-xs text-[#231619]"
+                  />
+                  <p className="text-[11px] text-[#6E5A5F] mt-1">
+                    O site já possui checkout de cartão integrado. Se você também colar um link da sua maquininha (Mercado Pago, InfinitePay, Ton, PagBank), um botão direto para ele aparecerá na aba de Cartão.
+                  </p>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-[#231619] mb-1">
-                  WhatsApp do Fabricante / Recebimento de Pedidos (DDI + DDD + Número)
-                </label>
-                <input
-                  type="text"
-                  value={settings.whatsappFactory}
-                  onChange={(e) =>
-                    setSettings({ ...settings, whatsappFactory: e.target.value })
-                  }
-                  className="w-full px-3.5 py-2 bg-[#F7F3EC] border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular"
-                />
+              {/* Store WhatsApp & Production Settings */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-[#231619] mb-1">
+                    WhatsApp de Atendimento da Loja
+                  </label>
+                  <input
+                    type="text"
+                    value={settings.whatsappStore}
+                    onChange={(e) =>
+                      setSettings({ ...settings, whatsappStore: e.target.value })
+                    }
+                    className="w-full px-3.5 py-2 bg-[#F7F3EC] border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-[#231619] mb-1">
+                    WhatsApp de Recebimento de Pedidos
+                  </label>
+                  <input
+                    type="text"
+                    value={settings.whatsappFactory}
+                    onChange={(e) =>
+                      setSettings({
+                        ...settings,
+                        whatsappFactory: e.target.value,
+                      })
+                    }
+                    className="w-full px-3.5 py-2 bg-[#F7F3EC] border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular"
+                  />
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-[#231619] mb-1">
                     Prazo de Produção (Dias)
@@ -1750,20 +1947,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-[#231619] mb-1">
-                    Chave Pix Oficial (BRCode)
-                  </label>
-                  <input
-                    type="text"
-                    value={settings.pixKey}
-                    onChange={(e) =>
-                      setSettings({ ...settings, pixKey: e.target.value })
-                    }
-                    className="w-full px-3.5 py-2 bg-[#F7F3EC] border border-[#DFD3C3] rounded-lg text-xs"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[#231619] mb-1">
-                    Taxa Base Cartão 1x (%)
+                    Taxa Base do Banco no Cartão 1x (%)
                   </label>
                   <input
                     type="number"
@@ -1772,7 +1956,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     onChange={(e) =>
                       setSettings({
                         ...settings,
-                        creditCardFeePercentage: parseFloat(e.target.value) || 4.99,
+                        creditCardFeePercentage:
+                          parseFloat(e.target.value) || 4.99,
                       })
                     }
                     className="w-full px-3.5 py-2 bg-[#F7F3EC] border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular"
@@ -1784,39 +1969,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-[#5B1824] flex items-center gap-1.5">
                     <ShieldCheck className="w-4 h-4" />
-                    <span>Integração Mercado Pago Pix Automatizada</span>
+                    <span>Geração de QR Code Pix Padrão Banco Central (BRCode)</span>
                   </span>
                   <span className="text-xs font-semibold text-[#2E6B3E]">
-                    {settings.mercadoPagoLiveEnabled
-                      ? 'API Produção Ativa'
-                      : 'Pix BRCode + Homologação Ativo'}
+                    Ativo Direto na Sua Chave Pix ✓
                   </span>
                 </div>
-                <label className="flex items-start gap-2.5 text-xs text-[#4A373B] cursor-pointer pt-1">
-                  <input
-                    type="checkbox"
-                    checked={settings.mercadoPagoLiveEnabled}
-                    onChange={(e) =>
-                      setSettings({
-                        ...settings,
-                        mercadoPagoLiveEnabled: e.target.checked,
-                      })
-                    }
-                    className="mt-0.5 accent-[#5B1824]"
-                  />
-                  <span>
-                    Autorizo ativar chamadas ao vivo na API <code className="font-mono">/v1/payments</code> do Mercado Pago (requer{' '}
-                    <code className="font-mono">MERCADO_PAGO_ACCESS_TOKEN</code> configurado no ambiente).
-                  </span>
-                </label>
+                <p className="text-[11px] text-[#4A373B]">
+                  Todo QR Code e código Pix Copia e Cola gerado no site envia o valor de 50% diretamente para a <strong>Chave Pix ({settings.pixKey})</strong> do banco <strong>{settings.bankName || 'cadastrado'}</strong> sem intermediários.
+                </p>
               </div>
 
               <button
                 type="submit"
                 disabled={savingSettings}
-                className="w-full py-3 px-4 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-semibold cursor-pointer"
+                className="w-full py-3 px-4 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-semibold cursor-pointer shadow-sm"
               >
-                {savingSettings ? 'Salvando...' : 'Salvar Configurações da Loja'}
+                {savingSettings
+                  ? 'Salvando dados bancários...'
+                  : 'Salvar Banco Recebedor, Chave Pix e Configurações'}
               </button>
             </form>
 

@@ -33,6 +33,7 @@ import { buildCustomerOrderMessage, toWhatsAppHref } from '../utils/whatsapp';
 import {
   confirmBrowserOrderPayment,
   createBrowserBespokeOrder,
+  getBrowserStoreDb,
 } from '../data/storeData';
 
 interface CartCheckoutDrawerProps {
@@ -45,6 +46,14 @@ interface CartCheckoutDrawerProps {
   onOrderCreated: (order: BespokeOrder) => void;
   whatsappStore: string;
   creditCardFeePercentage?: number;
+  bankName?: string;
+  bankHolderName?: string;
+  bankHolderDoc?: string;
+  pixKey?: string;
+  pixKeyType?: string;
+  bankAgency?: string;
+  bankAccount?: string;
+  cardPaymentLink?: string;
 }
 
 export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
@@ -57,6 +66,14 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
   onOrderCreated,
   whatsappStore,
   creditCardFeePercentage = 4.99,
+  bankName,
+  bankHolderName,
+  bankHolderDoc,
+  pixKey,
+  pixKeyType,
+  bankAgency,
+  bankAccount,
+  cardPaymentLink,
 }) => {
   const [step, setStep] = useState<'CART' | 'CUSTOMER' | 'PAYMENT'>('CART');
 
@@ -90,9 +107,23 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
   const [createdOrder, setCreatedOrder] = useState<BespokeOrder | null>(null);
   const [depositPayment, setDepositPayment] = useState<PaymentRecord | null>(null);
   const [copiedPix, setCopiedPix] = useState(false);
+  const [copiedDirectKey, setCopiedDirectKey] = useState(false);
   const [confirmingDeposit, setConfirmingDeposit] = useState(false);
 
   if (!isOpen) return null;
+
+  const fallbackSettings = getBrowserStoreDb().settings;
+  const activeBankName =
+    bankName || fallbackSettings.bankName || 'Banco Inter';
+  const activeHolderName =
+    bankHolderName || fallbackSettings.bankHolderName || 'Jackeline Peterson';
+  const activeHolderDoc =
+    bankHolderDoc || fallbackSettings.bankHolderDoc || '50.789.636/0001-32';
+  const activePixKey = pixKey || fallbackSettings.pixKey || '50789636000132';
+  const activePixKeyType = pixKeyType || fallbackSettings.pixKeyType || 'CNPJ';
+  const activeBankAgency = bankAgency || fallbackSettings.bankAgency || '';
+  const activeBankAccount = bankAccount || fallbackSettings.bankAccount || '';
+  const activeCardLink = cardPaymentLink || fallbackSettings.cardPaymentLink || '';
 
   const totalAmount = cart.reduce(
     (sum, item) => sum + item.unitPrice * item.quantity,
@@ -774,6 +805,71 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                       </span>
                     </div>
 
+                    {/* Bank & Receiver Verification Card */}
+                    <div className="p-3.5 rounded-xl bg-white border border-[#DFD3C3] space-y-2 text-xs">
+                      <div className="flex items-center justify-between border-b border-[#EFE7DA] pb-1.5">
+                        <span className="font-bold text-[#5B1824] uppercase tracking-wider text-[11px]">
+                          Dados Bancários do Recebedor (Conta Oficial)
+                        </span>
+                        <span className="text-[11px] font-semibold text-[#2E6B3E]">
+                          Pix Verificado ✓
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[#231619]">
+                        <div>
+                          <span className="text-[#6E5A5F]">Banco / Instituição:</span>{' '}
+                          <strong className="text-[#231619]">{activeBankName}</strong>
+                        </div>
+                        <div>
+                          <span className="text-[#6E5A5F]">Favorecido / Titular:</span>{' '}
+                          <strong className="text-[#231619]">
+                            {activeHolderName}
+                            {activeHolderDoc ? ` (${activeHolderDoc})` : ''}
+                          </strong>
+                        </div>
+                        {(activeBankAgency || activeBankAccount) && (
+                          <div className="sm:col-span-2">
+                            <span className="text-[#6E5A5F]">Agência / Conta:</span>{' '}
+                            <strong className="font-mono-tabular">
+                              {activeBankAgency ? `Ag: ${activeBankAgency}` : ''}{' '}
+                              {activeBankAccount ? `· Cc: ${activeBankAccount}` : ''}
+                            </strong>
+                          </div>
+                        )}
+                      </div>
+                      <div className="pt-1.5 border-t border-[#EFE7DA] flex items-center justify-between gap-2">
+                        <div className="truncate">
+                          <span className="text-[#6E5A5F]">
+                            Chave Pix ({activePixKeyType}):
+                          </span>{' '}
+                          <strong className="font-mono-tabular text-[#5B1824]">
+                            {activePixKey}
+                          </strong>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            navigator.clipboard.writeText(activePixKey);
+                            setCopiedDirectKey(true);
+                            setTimeout(() => setCopiedDirectKey(false), 2500);
+                          }}
+                          className="px-2.5 py-1 bg-[#F7F3EC] hover:bg-[#EFE7DA] border border-[#DFD3C3] rounded-md text-[11px] font-semibold text-[#5B1824] flex items-center gap-1 shrink-0 cursor-pointer"
+                        >
+                          {copiedDirectKey ? (
+                            <>
+                              <Check className="w-3 h-3 text-[#2E6B3E]" />
+                              <span>Chave Copiada!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3 h-3" />
+                              <span>Copiar Chave</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
                     <div className="flex flex-col items-center text-center space-y-3">
                       <QrCodeMatrix seed={depositPayment.pixCopyPaste} size={160} />
                       <p className="text-xs text-[#4A373B]">
@@ -836,6 +932,12 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
 
                     {/* Transparent Bank Fee Breakdown Box */}
                     <div className="p-3.5 rounded-lg bg-white border border-[#DFD3C3] space-y-1.5 text-xs">
+                      <div className="flex justify-between text-[#4A373B] pb-1.5 border-b border-[#EFE7DA]">
+                        <span>Instituição Recebedora:</span>
+                        <span className="font-semibold text-[#231619]">
+                          {activeBankName} ({activeHolderName})
+                        </span>
+                      </div>
                       <div className="flex justify-between text-[#4A373B]">
                         <span>Valor líquido dos 50% de Entrada:</span>
                         <span className="font-mono-tabular font-semibold">
@@ -857,6 +959,18 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                         </span>
                       </div>
                     </div>
+
+                    {activeCardLink && (
+                      <a
+                        href={activeCardLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full py-2.5 px-4 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
+                      >
+                        <CreditCard className="w-4 h-4" />
+                        <span>Abrir Link Oficial do Banco / Maquininha ({activeBankName})</span>
+                      </a>
+                    )}
 
                     {cardError && (
                       <div className="p-2.5 rounded-lg bg-[#7A2434]/10 border border-[#7A2434] text-xs text-[#5B1824] font-medium">

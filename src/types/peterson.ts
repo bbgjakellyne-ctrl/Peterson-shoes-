@@ -141,6 +141,13 @@ export interface StoreSettings {
   creditCardFeePercentage?: number;
   mercadoPagoLiveEnabled: boolean;
   pixKey: string;
+  pixKeyType?: 'CELULAR' | 'CNPJ' | 'CPF' | 'EMAIL' | 'ALEATORIA';
+  bankName?: string;
+  bankHolderName?: string;
+  bankHolderDoc?: string;
+  bankAgency?: string;
+  bankAccount?: string;
+  cardPaymentLink?: string;
   supabaseConfigured?: boolean;
   mercadoPagoTokenConfigured?: boolean;
 }
