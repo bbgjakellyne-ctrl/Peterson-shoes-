@@ -39,10 +39,8 @@ export function buildCustomerOrderMessage(order: BespokeOrder): string {
     .map(
       (item, idx) =>
         `${idx + 1}. *${item.name}* (${item.quantity}x)\n   • Cor: *${item.colorName}* | Tam: *${item.size} BR*\n   • Salto: ${item.customization.heelOption} | Acabamento: ${item.customization.strapFinish}\n   • Forma: ${item.customization.footWidth}${
-          item.customization.insoleEngraving
-            ? ` | Iniciais: "${item.customization.insoleEngraving}"`
-            : ''
-        }${item.customization.customNotes ? `\n   • Obs: ${item.customization.customNotes}` : ''}`
+          item.customization.customNotes ? `\n   • Obs: ${item.customization.customNotes}` : ''
+        }`
     )
     .join('\n\n');
 
@@ -83,7 +81,6 @@ export function buildFactoryProductionMessage(order: BespokeOrder): string {
         `• Salto / Solado: *${item.customization.heelOption}*\n` +
         `• Metais / Acabamento: *${item.customization.strapFinish}*\n` +
         `• Ajuste de Forma: *${item.customization.footWidth}*\n` +
-        `• Gravação na Palmilha: *${item.customization.insoleEngraving || 'Sem gravação'}*\n` +
         `• Observações Técnicas: ${item.customization.customNotes || 'Padrão de ficha técnica'}`
     )
     .join('\n\n');

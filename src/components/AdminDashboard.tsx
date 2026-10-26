@@ -1394,9 +1394,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             </p>
                             <p className="text-[#6E5A5F]">
                               Forma: <strong>{item.customization.footWidth}</strong>
-                              {item.customization.insoleEngraving
-                                ? ` · Iniciais na Palmilha: "${item.customization.insoleEngraving}"`
-                                : ''}
                               {item.customization.customNotes
                                 ? ` · Obs: ${item.customization.customNotes}`
                                 : ''}

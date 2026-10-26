@@ -483,7 +483,7 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
                   </div>
                 </div>
 
-                {/* 5. Largura da Forma & Iniciais na Palmilha */}
+                {/* 5. Largura da Forma & Observações para a Fábrica */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-[#1F1215] mb-1.5">
@@ -506,31 +506,16 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
 
                   <div>
                     <label className="block text-xs font-semibold text-[#1F1215] mb-1.5">
-                      6. Gravação de Iniciais na Palmilha (Cortesia)
+                      6. Observações para a Fábrica (Opcional)
                     </label>
                     <input
                       type="text"
-                      maxLength={6}
-                      value={insoleEngraving}
-                      onChange={(e) => setInsoleEngraving(e.target.value)}
-                      placeholder="Ex: M.C. (Opcional)"
+                      value={customNotes}
+                      onChange={(e) => setCustomNotes(e.target.value)}
+                      placeholder="Ex: Preciso para evento, pedido atacado..."
                       className="w-full px-3.5 py-2.5 bg-white border border-[#E6DDD0] rounded-lg text-xs text-[#1F1215] focus:outline-none focus:border-[#631421]"
                     />
                   </div>
-                </div>
-
-                {/* Observações extras */}
-                <div>
-                  <label className="block text-xs font-semibold text-[#1F1215] mb-1.5">
-                    Observações Especiais para a Fábrica (Opcional)
-                  </label>
-                  <input
-                    type="text"
-                    value={customNotes}
-                    onChange={(e) => setCustomNotes(e.target.value)}
-                    placeholder="Ex: Preciso para evento, desejo furo extra na tira do tornozelo, pedido atacado..."
-                    className="w-full px-3.5 py-2.5 bg-white border border-[#E6DDD0] rounded-lg text-xs text-[#1F1215] focus:outline-none focus:border-[#631421]"
-                  />
                 </div>
               </div>
 

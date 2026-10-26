@@ -374,9 +374,6 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
                             <p className="text-[#6E5D5F] mt-0.5">
                               Cor: <strong className="text-[#631421]">{item.colorName}</strong> · Tam: <strong>{item.size} BR</strong> · {item.customization.heelOption} ·{' '}
                               {item.customization.strapFinish} · Forma: {item.customization.footWidth}
-                              {item.customization.insoleEngraving
-                                ? ` · Iniciais: "${item.customization.insoleEngraving}"`
-                                : ''}
                             </p>
                           </div>
                         </div>

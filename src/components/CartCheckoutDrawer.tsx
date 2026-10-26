@@ -463,9 +463,6 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                           <p className="text-xs text-[#6E5A5F]">
                             {item.customization.heelOption} · {item.customization.strapFinish} · Forma:{' '}
                             {item.customization.footWidth}
-                            {item.customization.insoleEngraving
-                              ? ` · Iniciais: "${item.customization.insoleEngraving}"`
-                              : ''}
                           </p>
 
                           <div className="mt-3 flex items-center justify-between">
