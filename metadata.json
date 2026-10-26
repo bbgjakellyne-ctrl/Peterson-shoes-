@@ -1,6 +1,6 @@
 {
-  "name": "Solaris Ateliê — Sandálias Artesanais",
-  "description": "Loja online de sandálias artesanais em couro legítimo e fibras naturais com catálogo interativo, provador de medidas e checkout de pagamento seguro via PIX, Cartão e Boleto.",
+  "name": "Peterson Shoes",
+  "description": "Peterson Shoes (@petersonshoes_): sandálias femininas de fabricação própria em Goiânia - GO sob encomenda do 34 ao 39. Papetes, Anabelas e Rasteiras com 50% de entrada.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

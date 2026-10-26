@@ -179,7 +179,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [loginError, setLoginError] = useState('');
 
   const [activeTab, setActiveTab] = useState<
-    'PRODUCTS' | 'ORDERS' | 'FINANCE' | 'CUSTOMERS' | 'SETTINGS'
+    'PRODUCTS' | 'ORDERS' | 'FINANCE' | 'CUSTOMERS' | 'SETTINGS' | 'SEO'
   >('PRODUCTS');
 
   const [products, setProducts] = useState<BespokeProduct[]>([]);
@@ -281,16 +281,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         const data = await dashRes.json();
         if (data?.products && Array.isArray(data.products)) {
           const localDb = getBrowserStoreDb();
-          const localPriceMap = new Map(
-            localDb.products.map((lp) => [lp.id, lp.price])
-          );
-          const mergedProducts = data.products.map((sp: BespokeProduct) => ({
-            ...sp,
-            price: localPriceMap.get(sp.id) ?? sp.price,
-          }));
           const updatedDb = {
             ...localDb,
-            products: mergedProducts,
+            products: data.products,
             settings: data.settings || localDb.settings,
           };
           saveBrowserStoreDb(updatedDb);
@@ -883,6 +876,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           >
             <Database className="w-4 h-4" />
             <span>WhatsApp, Pix, Cartão & Banco SQL</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('SEO')}
+            className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap ${
+              activeTab === 'SEO'
+                ? 'bg-[#2E6B3E] text-white shadow-xs'
+                : 'text-[#2E6B3E] bg-[#2E6B3E]/10 hover:bg-[#2E6B3E]/20'
+            }`}
+          >
+            <ShieldCheck className="w-4 h-4" />
+            <span>Google & SEO (Aparecer nas Buscas)</span>
           </button>
         </div>
 
@@ -1851,6 +1856,159 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <pre className="p-3 bg-[#1E191A] text-[#F7F3EC] rounded-lg text-[11px] font-mono overflow-x-auto max-h-72 leading-relaxed">
                   {sqlSchema}
                 </pre>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 6: GOOGLE & SEO (INDEXAÇÃO & VISIBILIDADE NAS BUSCAS) */}
+        {activeTab === 'SEO' && (
+          <div className="space-y-6">
+            <div className="bg-white border border-[#DFD3C3] rounded-xl p-6 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#EFE7DA] pb-4">
+                <div>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#2E6B3E] mb-1">
+                    <ShieldCheck className="w-4 h-4" />
+                    <span>SEO Técnico 100% Configurado & Ativo no Código</span>
+                  </span>
+                  <h2 className="text-2xl font-semibold text-[#231619]">
+                    Visibilidade da Peterson Shoes no Google
+                  </h2>
+                  <p className="text-xs text-[#6E5A5F] max-w-3xl mt-1">
+                    O site já conta com <strong>Meta Tags Otimizadas</strong>,{' '}
+                    <strong>Dados Estruturados Schema.org (ShoeStore + 46 Produtos + FAQ)</strong>,{' '}
+                    <strong>OpenGraph para WhatsApp/Instagram</strong>,{' '}
+                    <strong>/robots.txt</strong> e <strong>/sitemap.xml com fotos</strong>{' '}
+                    gerados automaticamente. Siga os 4 passos abaixo para colocar o site na primeira página do Google!
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <a
+                    href="/sitemap.xml"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3.5 py-2 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-semibold transition-colors"
+                  >
+                    Abrir /sitemap.xml
+                  </a>
+                  <a
+                    href="/robots.txt"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3.5 py-2 bg-[#EFE7DA] hover:bg-[#E2D4C0] text-[#231619] rounded-lg text-xs font-semibold transition-colors"
+                  >
+                    Abrir /robots.txt
+                  </a>
+                </div>
+              </div>
+
+              {/* Quick Copy Box for Sitemap & Site URL */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 rounded-xl bg-[#F7F3EC] border border-[#DFD3C3] space-y-2">
+                  <p className="text-xs font-bold text-[#231619]">
+                    Link do Sitemap para enviar no Google Search Console:
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <code className="flex-1 px-3 py-2 bg-white border border-[#DFD3C3] rounded-lg text-xs font-mono text-[#5B1824] truncate">
+                      {`${window.location.origin}/sitemap.xml`}
+                    </code>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        copyToClipboard(`${window.location.origin}/sitemap.xml`, 'sitemap-url')
+                      }
+                      className="px-3 py-2 bg-[#5B1824] text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer shrink-0"
+                    >
+                      {copiedTextId === 'sitemap-url' ? (
+                        <>
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Copiado!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>Copiar Sitemap</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#F7F3EC] border border-[#DFD3C3] space-y-2">
+                  <p className="text-xs font-bold text-[#231619]">
+                    Como o seu site aparece hoje nas buscas do Google (Prévia):
+                  </p>
+                  <div className="p-3 bg-white border border-[#DFD3C3] rounded-lg space-y-0.5">
+                    <p className="text-[11px] text-[#2E6B3E] truncate">
+                      {window.location.origin} › Goiânia - GO
+                    </p>
+                    <p className="text-sm font-semibold text-[#1a0dab] hover:underline">
+                      Peterson Shoes | Sandálias Femininas em Goiânia (34 ao 39)
+                    </p>
+                    <p className="text-xs text-[#4d5156] line-clamp-2">
+                      Peterson Shoes (@petersonshoes_): sandálias femininas de fabricação própria em Goiânia - GO sob encomenda do 34 ao 39. Papetes, Anabelas e Rasteiras com 50% de entrada.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* 4 Practical Steps */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                <div className="p-5 rounded-xl bg-white border border-[#DFD3C3] space-y-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#5B1824]">
+                    Passo 1 · Google Search Console (Gratuito)
+                  </span>
+                  <h3 className="text-base font-semibold text-[#231619]">
+                    Cadastrar o site no índice oficial do Google
+                  </h3>
+                  <p className="text-xs text-[#4A373B] leading-relaxed">
+                    1. Acesse <strong>search.google.com/search-console</strong> com sua conta Google.<br />
+                    2. Em <strong>&ldquo;Prefixo do URL&rdquo;</strong>, cole o endereço público do seu site.<br />
+                    3. No menu lateral esquerdo, clique em <strong>Sitemaps</strong>, digite{' '}
+                    <code className="font-mono bg-[#F7F3EC] px-1.5 py-0.5 rounded">sitemap.xml</code> e clique em <strong>Enviar</strong>. O Google indexará todas as 46 sandálias e fotos!
+                  </p>
+                </div>
+
+                <div className="p-5 rounded-xl bg-white border border-[#DFD3C3] space-y-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#5B1824]">
+                    Passo 2 · Google Meu Negócio (Perfil da Empresa)
+                  </span>
+                  <h3 className="text-base font-semibold text-[#231619]">
+                    Aparecer no topo e no Google Maps em Goiânia - GO
+                  </h3>
+                  <p className="text-xs text-[#4A373B] leading-relaxed">
+                    1. Acesse <strong>business.google.com</strong> gratuitamente.<br />
+                    2. Cadastre <strong>Peterson Shoes — Fábrica de Sandálias Femininas</strong> em <strong>Goiânia - GO</strong>.<br />
+                    3. Coloque o link deste site no campo <strong>Website</strong>. Quando alguém pesquisar <em>&ldquo;sandálias femininas em Goiânia&rdquo;</em> ou <em>&ldquo;Peterson Shoes&rdquo;</em>, sua loja aparecerá em destaque com fotos e botão para o site!
+                  </p>
+                </div>
+
+                <div className="p-5 rounded-xl bg-white border border-[#DFD3C3] space-y-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#5B1824]">
+                    Passo 3 · Domínio Próprio (.com.br)
+                  </span>
+                  <h3 className="text-base font-semibold text-[#231619]">
+                    Ter seu endereço www.petersonshoes.com.br
+                  </h3>
+                  <p className="text-xs text-[#4A373B] leading-relaxed">
+                    Para um endereço profissional fácil de lembrar, registre{' '}
+                    <strong>petersonshoes.com.br</strong> no <strong>Registro.br</strong> (custa R$ 40/ano) e conecte ao seu site publicado (Cloud Run ou Vercel).
+                  </p>
+                </div>
+
+                <div className="p-5 rounded-xl bg-white border border-[#DFD3C3] space-y-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#5B1824]">
+                    Passo 4 · Link na Bio do Instagram @petersonshoes_
+                  </span>
+                  <h3 className="text-base font-semibold text-[#231619]">
+                    Gerar tráfego imediato para acelerar o Google
+                  </h3>
+                  <p className="text-xs text-[#4A373B] leading-relaxed">
+                    Coloque o link do site na bio do seu perfil{' '}
+                    <strong>@petersonshoes_</strong>. Quando o Google percebe acessos reais vindos do Instagram e WhatsApp, ele sobe a posição do site nas pesquisas muito mais rápido.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

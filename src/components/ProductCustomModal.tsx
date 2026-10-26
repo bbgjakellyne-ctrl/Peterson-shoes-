@@ -194,13 +194,13 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
               <div>
                 <div
                   onClick={() => setIsLightboxOpen(true)}
-                  className="aspect-4/5 w-full rounded-xl overflow-hidden bg-white border border-[#E6DDD0] shadow-xs relative group cursor-zoom-in"
+                  className="w-full h-[360px] sm:h-[420px] rounded-xl overflow-hidden bg-white border border-[#E6DDD0] shadow-xs relative group cursor-zoom-in"
                   title="Clique para ampliar a foto em tela cheia"
                 >
                   <img
                     src={displayImage}
                     alt={`${product.name} - ${resolvedColorName}`}
-                    className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-103"
+                    className="w-full h-full object-cover block transition-transform duration-200 group-hover:scale-103"
                   />
                   <button
                     type="button"
@@ -208,7 +208,7 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
                       e.stopPropagation();
                       setIsLightboxOpen(true);
                     }}
-                    className="absolute bottom-3 right-3 px-3 py-1.5 bg-black/65 hover:bg-black/80 text-[#FAF7F2] text-[11px] font-medium rounded-lg flex items-center gap-1.5 backdrop-blur-xs transition-colors cursor-pointer"
+                    className="absolute bottom-3 right-3 px-3 py-1.5 bg-black/70 hover:bg-black/85 text-[#FAF7F2] text-[11px] font-medium rounded-lg flex items-center gap-1.5 backdrop-blur-xs transition-colors cursor-pointer"
                   >
                     <ZoomIn className="w-3.5 h-3.5 text-[#E5D3B3]" />
                     <span>Ampliar Foto</span>
@@ -231,16 +231,16 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
                             onClick={() => {
                               setActivePhotoUrl(imgUrl);
                             }}
-                            className={`aspect-square rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
+                            className={`h-20 w-full rounded-lg overflow-hidden border-2 transition-all cursor-pointer bg-white ${
                               isSelectedThumb
                                 ? 'border-[#631421] shadow-xs scale-102'
-                                : 'border-[#E6DDD0] opacity-80 hover:opacity-100'
+                                : 'border-[#E6DDD0] opacity-85 hover:opacity-100'
                             }`}
                           >
                             <img
                               src={imgUrl}
                               alt={`${product.name} foto ${idx + 1}`}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover block"
                             />
                           </button>
                         );
@@ -566,7 +566,7 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
       {isLightboxOpen && (
         <div
           onClick={() => setIsLightboxOpen(false)}
-          className="fixed inset-0 z-60 bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center p-4 sm:p-8"
+          className="fixed inset-0 z-[80] bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center p-4 sm:p-8"
         >
           <div
             onClick={(e) => e.stopPropagation()}

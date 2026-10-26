@@ -1,0 +1,4291 @@
+{
+  "products": [
+    {
+      "id": "prod-ig-01-papete-piramides",
+      "sku": "PTS-IG-01",
+      "name": "Papete Flatform Pirâmides & Fivela (Dourada)",
+      "subtitle": "Bico Quadrado Anatômico com Pirâmides Espelhadas & Pulseira no Tornozelo",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_1_C454LXbOzrn_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_1_C454LXbOzrn_slide_1.jpg",
+        "/instagram/feed_1_C454LXbOzrn_slide_2.jpg",
+        "/instagram/feed_1_C454LXbOzrn_slide_3.jpg",
+        "/instagram/feed_1_C454LXbOzrn_slide_4.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C454LXbOzrn/",
+      "heelOptions": [
+        "Flatform Anatômica 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Pirâmides Douradas & Fivela Ouro",
+        "Pirâmides Cromadas & Fivela Prata"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_4.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_2.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_2.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_3.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Modelo oficial @petersonshoes_ de fabricação própria em Goiânia - GO! Nossa Papete Flatform Pirâmides combina palmilha anatômica macia de bico quadrado, tiras de dedo com aplicação de pirâmides espelhadas e fivela regulável no tornozelo.",
+      "craftDetails": [
+        "Fabricação própria @petersonshoes_ sob encomenda em até 15 dias (Numeração 34 ao 39)",
+        "Disponível em Preto, Branco, Marsala, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor à sua escolha",
+        "Pagamento de 50% de entrada (Pix sem taxa ou Cartão c/ taxa do banco) e 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-02-anabela-piramides-fivela",
+      "sku": "PTS-IG-02",
+      "name": "Anabela Plataforma Pirâmides & Fivela (Preta)",
+      "subtitle": "Plataforma Alta Bico Quadrado com Tiras em Pirâmides & Fechamento por Fivela",
+      "category": "Anabelas & Plataformas",
+      "price": 150,
+      "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4Tc5OnpB_L/",
+      "heelOptions": [
+        "Anabela Alta 9,5cm (Meia Pata 3,5cm)",
+        "Anabela Média 7,5cm"
+      ],
+      "strapFinishes": [
+        "Pirâmides Douradas & Fivela Ouro",
+        "Pirâmides Prata & Fivela Cromada"
+      ],
+      "colors": [
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Clássica e imponente! Nossa Anabela Plataforma de bico quadrado com tachas piramidais e tira de fivela no tornozelo é produzida sob encomenda na sua cor favorita e numeração do 34 ao 39.",
+      "craftDetails": [
+        "Disponível em todas as cores padrão ou qualquer outra cor personalizada escrita por você",
+        "Meia pata frontal anatômica que proporciona estabilidade e leveza",
+        "Confeccionada sob medida no seu número (34 ao 39 BR) em até 15 dias"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-03-anabela-piramides-amarracao",
+      "sku": "PTS-IG-03",
+      "name": "Anabela Plataforma Pirâmides Gladiadora (Dourada)",
+      "subtitle": "Plataforma Alta Bico Quadrado com Pirâmides & Amarração Lace-Up na Perna",
+      "category": "Anabelas & Plataformas",
+      "price": 150,
+      "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg",
+      "gallery": [
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4Tc5OnpB_L/",
+      "heelOptions": [
+        "Anabela Alta 9,5cm (Meia Pata 3,5cm)",
+        "Anabela Média 7,5cm"
+      ],
+      "strapFinishes": [
+        "Pirâmides Douradas & Ponteiras Ouro",
+        "Pirâmides Prata & Ponteiras Prata"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Versão Gladiadora com amarração na perna da nossa Anabela Plataforma @petersonshoes_! Tiras de dedo cravejadas em pirâmides metalizadas e cordões macios que permitem diversas formas de amarração no tornozelo.",
+      "craftDetails": [
+        "Escolha entre Preto, Branco, Marsala, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
+        "Cordões macios de alta resistência com ajuste perfeito na perna",
+        "Produção própria sob encomenda em 15 dias (50% no Pix ou Cartão de Crédito)"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-04-papete-tratorada-strass",
+      "sku": "PTS-IG-04",
+      "name": "Papete Flatform Tratorada Strass & Amarração (Off-White)",
+      "subtitle": "Solado Tratorado Cravejado com Tiras Duplas de Strass & Amarração Nó Frontal",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg",
+        "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg",
+        "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4Tc1qCpAdX/",
+      "heelOptions": [
+        "Flatform Tratorada 4cm",
+        "Flatform Anatômica 3cm"
+      ],
+      "strapFinishes": [
+        "Strass Cristal & Vira Cravejada",
+        "Strass Grafite Onix"
+      ],
+      "colors": [
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Brilho intenso e design super moderno do Instagram @petersonshoes_! Papete Flatform com solado tratorado contornado por fileira de strass, duas tiras frontais cravejadas e amarração com nó central sobre o peito do pé.",
+      "craftDetails": [
+        "Disponível em todas as cores padrão ou cor personalizada sob encomenda (34 ao 39 BR)",
+        "Vira da palmilha inteiramente contornada em manta de strass",
+        "Solado tratorado leve e antiderrapante feito sob encomenda"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-05-anabela-trancada-gold",
+      "sku": "PTS-IG-05",
+      "name": "Anabela Plataforma Trançada Esferas (Dourada)",
+      "subtitle": "Salto Plataforma Revestido em Trama Artesanal com Esferas & Fivela",
+      "category": "Anabelas & Plataformas",
+      "price": 150,
+      "image": "/instagram/feed_5_C4539VxO5om_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_5_C4539VxO5om_slide_1.jpg",
+        "/instagram/feed_5_C4539VxO5om_slide_2.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4539VxO5om/",
+      "heelOptions": [
+        "Anabela Alta 9,5cm (Meia Pata 3,5cm)",
+        "Anabela Média 7,5cm"
+      ],
+      "strapFinishes": [
+        "Esferas & Fivela Dourada",
+        "Esferas & Fivela Prateada"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_5_C4539VxO5om_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_5_C4539VxO5om_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_5_C4539VxO5om_slide_1.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_5_C4539VxO5om_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_5_C4539VxO5om_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_5_C4539VxO5om_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_5_C4539VxO5om_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_5_C4539VxO5om_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_5_C4539VxO5om_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Destaque absoluto do Instagram @petersonshoes_! Sandália Anabela Plataforma inteiramente revestida em trama artesanal, com tira frontal de dedo adornada por esferas e tiras cruzadas no tornozelo.",
+      "craftDetails": [
+        "Revestimento completo da plataforma em trançado artesanal feito à mão",
+        "Meia pata frontal que reduz a inclinação do pé e garante conforto prolongado",
+        "Confeccionada sob encomenda (34 ao 39 BR) com 50% de entrada no Pix ou Cartão"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-06-flatform-amarracao-strass",
+      "sku": "PTS-IG-06",
+      "name": "Flatform Gladiadora Tiras Cruzadas Strass (Dourada)",
+      "subtitle": "Flatform Anatômica com Vira de Strass, Tiras Finas Brilhantes & Amarração Gladiadora",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg",
+        "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4Tcs31JPdl/",
+      "heelOptions": [
+        "Flatform Anatômica 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Strass Dourado & Vira Brilhante",
+        "Strass Prata Cristal"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Delicadeza e sofisticação em cada detalhe! Nossa Flatform Gladiadora @petersonshoes_ possui tiras finas cruzadas recobertas por strass, borda da palmilha cravejada e amarração ajustável no tornozelo.",
+      "craftDetails": [
+        "Produzida em Preto, Branco, Marsala, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
+        "Palmilha anatômica acolchoada com filete lateral de strass",
+        "Fabricação própria sob encomenda em até 15 dias (Numeração 34 ao 39)"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-07-papete-metalizada-transpassada",
+      "sku": "PTS-IG-07",
+      "name": "Papete Flatform Espelhada Tiras Strass (Prata)",
+      "subtitle": "Acabamento Premium com Tiras Transpassadas em Strass & Fivela no Tornozelo",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg",
+        "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4TcpFaJ9ll/",
+      "heelOptions": [
+        "Flatform Espelhada 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Strass Cristal & Fivela Prata",
+        "Strass Champagne & Fivela Ouro"
+      ],
+      "colors": [
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Para quem ama brilho com máximo conforto! Papete Flatform @petersonshoes_ com tiras curvas cravejadas em strass e fechamento seguro por fivela no tornozelo.",
+      "craftDetails": [
+        "Disponível em todas as cores padrão ou qualquer outra cor personalizada",
+        "Bico quadrado anatômico que acomoda os dedos com perfeição (34 ao 39 BR)",
+        "Encomenda confirmada com 50% de entrada via Pix ou Cartão de Crédito"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-08-papete-dos-sonhos-strass",
+      "sku": "PTS-IG-08",
+      "name": "Flatform Tira de Dedo Strass Duo (Dourada & Prata)",
+      "subtitle": "Flatform Normal Bico Quadrado com Tiras de Dedo e Peito do Pé Cravejadas em Strass",
+      "category": "Flatforms & Papetes",
+      "price": 110,
+      "image": "/instagram/feed_7_C4ayCqZteae_main.jpg",
+      "gallery": [
+        "/instagram/feed_7_C4ayCqZteae_main.jpg",
+        "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg",
+        "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4ayCqZteae/",
+      "heelOptions": [
+        "Flatform Anatômica 3cm",
+        "Flatform Baixa 2cm"
+      ],
+      "strapFinishes": [
+        "Manta de Strass Dourado",
+        "Manta de Strass Prata Cristal"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_7_C4ayCqZteae_main.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_7_C4ayCqZteae_main.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_7_C4ayCqZteae_main.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_7_C4ayCqZteae_main.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_7_C4ayCqZteae_main.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_7_C4ayCqZteae_main.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_7_C4ayCqZteae_main.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_7_C4ayCqZteae_main.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_7_C4ayCqZteae_main.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Publicada em nosso Instagram @petersonshoes_, nossa Flatform de Dedo Strass Duo combina calce prático estilo slide com anel de dedo e três tiras superiores inteiramente cravejadas em strass de alto brilho.",
+      "craftDetails": [
+        "Flatform normal prática de calçar e super leve para o dia a dia ou eventos",
+        "Disponível nas cores padrão ou cor personalizada (Numeração 34 ao 39 BR)",
+        "Produzida sob encomenda pela Peterson Shoes em até 15 dias"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-09-chinelo-flatform-no-strass",
+      "sku": "PTS-IG-09",
+      "name": "Flatform Slide Tira de Dedo Nó em Strass",
+      "subtitle": "Flatform Normal Anatômica Macia com Tiras Revestidas em Manta de Strass e Nó",
+      "category": "Flatforms & Papetes",
+      "price": 110,
+      "image": "/instagram/feed_12_C4TcmhYpO8__main.jpg",
+      "gallery": [
+        "/instagram/feed_12_C4TcmhYpO8__main.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4TcmhYpO8_/",
+      "heelOptions": [
+        "Solado Anatômico 3,5cm",
+        "Solado Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Manta de Strass Cristal c/ Nó Central",
+        "Manta de Strass Dourado"
+      ],
+      "colors": [
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_12_C4TcmhYpO8__main.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_12_C4TcmhYpO8__main.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_12_C4TcmhYpO8__main.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_12_C4TcmhYpO8__main.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_12_C4TcmhYpO8__main.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_12_C4TcmhYpO8__main.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_12_C4TcmhYpO8__main.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_12_C4TcmhYpO8__main.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_12_C4TcmhYpO8__main.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Conforto absoluto nos pés com o glamour da manta de strass! Nossa Flatform Normal Slide com nó central do Instagram @petersonshoes_ é confeccionada em todas as cores padrão ou sob encomenda na cor que você desejar.",
+      "craftDetails": [
+        "Palmilha anatômica tipo nuvem de altíssima maciez (34 ao 39 BR)",
+        "Tiras revestidas em manta de strass com forro interno suave",
+        "Ideal para varejo ou pedidos em atacado (a partir de 6 pares)"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-10-anabela-espadrille-branca",
+      "sku": "PTS-IG-10",
+      "name": "Anabela Espadrille Pirâmides & Juta (Branca)",
+      "subtitle": "Anabela com Tachas Piramidais Espelhadas & Corda de Juta Natural",
+      "category": "Anabelas & Plataformas",
+      "price": 150,
+      "image": "/instagram/feed_2_C454HJKO2oG_main.jpg",
+      "gallery": [
+        "/instagram/feed_2_C454HJKO2oG_main.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C454HJKO2oG/",
+      "heelOptions": [
+        "Anabela 9cm com Meia Pata",
+        "Anabela 7cm Conforto"
+      ],
+      "strapFinishes": [
+        "Pirâmides Prateadas Cromadas",
+        "Pirâmides Douradas"
+      ],
+      "colors": [
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_2_C454HJKO2oG_main.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_2_C454HJKO2oG_main.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_2_C454HJKO2oG_main.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_2_C454HJKO2oG_main.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_2_C454HJKO2oG_main.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_2_C454HJKO2oG_main.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_2_C454HJKO2oG_main.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_2_C454HJKO2oG_main.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_2_C454HJKO2oG_main.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Modelo oficial @petersonshoes_ pensado para produções sofisticadas! Sandália Anabela estruturada em napa macia, com tira frontal e tornozeleira cravejadas de pirâmides e vira contornada em corda de juta.",
+      "craftDetails": [
+        "Tira frontal e pulseira do tornozelo com aplicação firme de pirâmides espelhadas",
+        "Base contornada em juta natural trançada e tachas metálicas",
+        "Feita sob medida no seu número (34 ao 39 BR) em até 15 dias"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-11-rasteira-gladiadora-strass",
+      "sku": "PTS-IG-11",
+      "name": "Rasteira Gladiadora Strass Cristal (Prata)",
+      "subtitle": "Tiras Duplas em Manta de Strass & Amarração Gladiadora Delicada na Perna",
+      "category": "Rasteiras & Gladiadoras",
+      "price": 110,
+      "image": "/instagram/feed_4_C454A4GujcN_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_4_C454A4GujcN_slide_1.jpg",
+        "/instagram/feed_4_C454A4GujcN_slide_2.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C454A4GujcN/",
+      "heelOptions": [
+        "Rasteira Plana Conforto 1,2cm",
+        "Salto Baixo 2cm"
+      ],
+      "strapFinishes": [
+        "Strass Cristal Prata",
+        "Strass Dourado Champagne"
+      ],
+      "colors": [
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_4_C454A4GujcN_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_4_C454A4GujcN_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_4_C454A4GujcN_slide_1.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_4_C454A4GujcN_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_4_C454A4GujcN_slide_1.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_4_C454A4GujcN_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_4_C454A4GujcN_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_4_C454A4GujcN_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_4_C454A4GujcN_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Sucesso absoluto no Instagram @petersonshoes_ (\"Quando amamos o que fazemos\")! Rasteira Gladiadora com duas tiras frontais revestidas em manta de strass cristal de alto brilho e cordões macios para amarração.",
+      "craftDetails": [
+        "Manta de strass cristal com fixação reforçada e forro interno macio",
+        "Disponível em Preto, Branco, Marsala, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
+        "Fabricação própria sob encomenda em até 15 dias (34 ao 39 BR)"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-12-tamanco-plataforma-no",
+      "sku": "PTS-IG-12",
+      "name": "Anabela Tamanco Plataforma Trançado c/ Nó (Off-White)",
+      "subtitle": "Anabela Plataforma Alta Revestida em Trama Artesanal & Tira Larga com Nó Central",
+      "category": "Anabelas & Plataformas",
+      "price": 150,
+      "image": "/instagram/feed_6_C45360nuL6q_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_6_C45360nuL6q_slide_1.jpg",
+        "/instagram/feed_6_C45360nuL6q_slide_2.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C45360nuL6q/",
+      "heelOptions": [
+        "Anabela Plataforma Alta 8,5cm",
+        "Anabela Plataforma Média 6,5cm"
+      ],
+      "strapFinishes": [
+        "Napa Macia Sem Metais",
+        "Detalhe Dourado na Palmilha"
+      ],
+      "colors": [
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_6_C45360nuL6q_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_6_C45360nuL6q_slide_1.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_6_C45360nuL6q_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_6_C45360nuL6q_slide_2.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_6_C45360nuL6q_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_6_C45360nuL6q_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_6_C45360nuL6q_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_6_C45360nuL6q_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_6_C45360nuL6q_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Conforto, leveza e altura em um modelo tendência do nosso Instagram @petersonshoes_! Anabela Tamanco Plataforma com base inteiramente revestida em trama trançada e gáspea em napa ultra macia com nó frontal anatômico.",
+      "craftDetails": [
+        "Plataforma super leve com estabilidade total ao caminhar (34 ao 39 BR)",
+        "Tira larga forrada em espuma macia para zero atrito nos dedos",
+        "Produzido sob encomenda com 50% de entrada via Pix ou Cartão de Crédito"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-13-rasteira-medalhao-esferas",
+      "sku": "PTS-IG-13",
+      "name": "Rasteira Esferas & Medalhão Metalizada (Dourada)",
+      "subtitle": "Rasteira de Dedo com Tachas Esféricas & Tira Dupla no Tornozelo",
+      "category": "Rasteiras & Gladiadoras",
+      "price": 100,
+      "image": "/instagram/feed_3_C454E0zuuFv_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_3_C454E0zuuFv_slide_1.jpg",
+        "/instagram/feed_3_C454E0zuuFv_slide_2.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C454E0zuuFv/",
+      "heelOptions": [
+        "Rasteira Conforto 1,5cm",
+        "Salto Baixo 2,5cm"
+      ],
+      "strapFinishes": [
+        "Esferas & Medalhões Dourados",
+        "Esferas & Medalhões Prateados"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_1.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_2.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Escolha a sua favorita do nosso Instagram @petersonshoes_! Rasteira de dedo confeccionada com aplicação contínua de esferas e medalhões trabalhados e tira dupla que valoriza o tornozelo.",
+      "craftDetails": [
+        "Disponível em todas as cores padrão ou outra cor personalizada escrita por você",
+        "Aplicação de esferas e medalhões com rebites internos protegidos",
+        "Bico levemente quadrado moderno com palmilha macia (34 ao 39 BR)"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-14-papete-piramides-preta",
+      "sku": "PTS-IG-14",
+      "name": "Papete Flatform Pirâmides Black & Gold (Preta)",
+      "subtitle": "Edição Preta com Pirâmides Douradas Espelhadas & Solado Anatômico",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_1_C454LXbOzrn_slide_4.jpg",
+      "gallery": [
+        "/instagram/feed_1_C454LXbOzrn_slide_4.jpg",
+        "/instagram/feed_1_C454LXbOzrn_slide_1.jpg",
+        "/instagram/feed_1_C454LXbOzrn_slide_2.jpg",
+        "/instagram/feed_1_C454LXbOzrn_slide_3.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C454LXbOzrn/",
+      "heelOptions": [
+        "Flatform Anatômica 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Pirâmides Douradas & Fivela Dourada",
+        "Pirâmides Prata & Fivela Prata"
+      ],
+      "colors": [
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_4.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_2.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_4.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_2.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_3.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_4.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_4.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_4.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Contraste marcante entre o preto intenso e o brilho das pirâmides douradas! Esta versão da nossa Papete Flatform @petersonshoes_ traz palmilha anatômica contornada, tira de dedo com nó frontal e pulseira regulável.",
+      "craftDetails": [
+        "Disponível em Preto, Branco, Marsala, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
+        "Metais piramidais dourados com banho resistente à oxidação",
+        "Feita sob encomenda em até 15 dias (Numeração 34 ao 39 BR)"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-15-anabela-piramides-nude",
+      "sku": "PTS-IG-15",
+      "name": "Anabela Plataforma Pirâmides & Fivela (Nude Rosé)",
+      "subtitle": "Edição Nude Aveludada com Tachas Piramidais Douradas & Bico Quadrado",
+      "category": "Anabelas & Plataformas",
+      "price": 150,
+      "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg",
+      "gallery": [
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4Tc5OnpB_L/",
+      "heelOptions": [
+        "Anabela Alta 9,5cm (Meia Pata 3,5cm)",
+        "Anabela Média 7,5cm"
+      ],
+      "strapFinishes": [
+        "Fivela no Tornozelo (Foto 1)",
+        "Amarração Gladiadora (Foto 2)"
+      ],
+      "colors": [
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Elegância suave que alonga a silhueta! Nossa Anabela Plataforma Pirâmides pode ser encomendada tanto na versão com Fivela clássica no tornozelo quanto na versão Gladiadora de Amarração, do 34 ao 39.",
+      "craftDetails": [
+        "Escolha entre fechamento com Fivela ou Amarração Gladiadora",
+        "Disponível em todas as cores padrão ou qualquer outra cor personalizada",
+        "Pagamento facilitado: 50% de entrada (Pix ou Cartão c/ taxa) e 50% na conclusão"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-16-papete-piramides-nude",
+      "sku": "PTS-IG-16",
+      "name": "Papete Flatform Pirâmides & Fivela (Off-White / Nude)",
+      "subtitle": "Palmilha Anatômica Off-White com Pirâmides Douradas & Fivela Ajustável",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_1_C454LXbOzrn_slide_2.jpg",
+      "gallery": [
+        "/instagram/feed_1_C454LXbOzrn_slide_2.jpg",
+        "/instagram/feed_1_C454LXbOzrn_slide_1.jpg",
+        "/instagram/feed_1_C454LXbOzrn_slide_3.jpg",
+        "/instagram/feed_1_C454LXbOzrn_slide_4.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C454LXbOzrn/",
+      "heelOptions": [
+        "Flatform Anatômica 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Pirâmides Douradas & Fivela Ouro",
+        "Pirâmides Prata & Fivela Prata"
+      ],
+      "colors": [
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_2.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_4.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_2.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_2.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_3.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_2.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_2.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_2.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Versão Off-White / Nude super versátil do nosso Instagram @petersonshoes_! Combina com todos os looks e traz palmilha macia de bico quadrado com tachas piramidais.",
+      "craftDetails": [
+        "Fabricação própria em Goiânia - GO sob encomenda (34 ao 39 BR)",
+        "Disponível nas 8 cores padrão ou na cor personalizada que você escrever",
+        "Entrada de 50% (R$ 65,00 no Pix sem taxa) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-17-papete-piramides-prata",
+      "sku": "PTS-IG-17",
+      "name": "Papete Flatform Pirâmides & Fivela (Prata)",
+      "subtitle": "Acabamento Metalizado Prata com Pirâmides Espelhadas & Pulseira no Tornozelo",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_1_C454LXbOzrn_slide_3.jpg",
+      "gallery": [
+        "/instagram/feed_1_C454LXbOzrn_slide_3.jpg",
+        "/instagram/feed_1_C454LXbOzrn_slide_1.jpg",
+        "/instagram/feed_1_C454LXbOzrn_slide_2.jpg",
+        "/instagram/feed_1_C454LXbOzrn_slide_4.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C454LXbOzrn/",
+      "heelOptions": [
+        "Flatform Anatômica 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Pirâmides Cromadas & Fivela Prata",
+        "Pirâmides Douradas & Fivela Ouro"
+      ],
+      "colors": [
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_3.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_4.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_3.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_3.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_2.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_3.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_3.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_3.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Edição Prata Metalizada da nossa Papete Flatform Pirâmides @petersonshoes_! Moderna, confortável e feita sob medida na sua numeração.",
+      "craftDetails": [
+        "Confeccionada sob encomenda do 34 ao 39 BR em até 15 dias",
+        "Escolha Prata ou qualquer uma das cores padrão / cor personalizada",
+        "Entrada de 50% (R$ 65,00 no Pix) + 50% na conclusão"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-18-rasteira-medalhao-prata",
+      "sku": "PTS-IG-18",
+      "name": "Rasteira Esferas & Medalhão Metalizada (Prata)",
+      "subtitle": "Rasteira de Dedo Prateada com Esferas Cromadas & Tira Dupla no Tornozelo",
+      "category": "Rasteiras & Gladiadoras",
+      "price": 100,
+      "image": "/instagram/feed_3_C454E0zuuFv_slide_2.jpg",
+      "gallery": [
+        "/instagram/feed_3_C454E0zuuFv_slide_2.jpg",
+        "/instagram/feed_3_C454E0zuuFv_slide_1.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C454E0zuuFv/",
+      "heelOptions": [
+        "Rasteira Conforto 1,5cm",
+        "Salto Baixo 2,5cm"
+      ],
+      "strapFinishes": [
+        "Esferas & Medalhões Prateados",
+        "Esferas & Medalhões Dourados"
+      ],
+      "colors": [
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_2.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_2.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_2.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_2.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_2.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_2.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_2.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_3_C454E0zuuFv_slide_2.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Versão Prata Metalizada da nossa Rasteira Esferas & Medalhão @petersonshoes_! Leve, fresca e elegante para todas as ocasiões.",
+      "craftDetails": [
+        "Fabricação própria sob encomenda em Goiânia - GO (Numeração 34 ao 39)",
+        "Disponível em todas as cores padrão ou outra cor personalizada",
+        "Valor R$ 100,00 · Entrada de 50% (R$ 50,00 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-19-anabela-piramides-prata",
+      "sku": "PTS-IG-19",
+      "name": "Anabela Plataforma Pirâmides & Fivela (Prata Champagne)",
+      "subtitle": "Plataforma Alta Metalizada com Tachas Piramidais & Fivela no Tornozelo",
+      "category": "Anabelas & Plataformas",
+      "price": 150,
+      "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg",
+      "gallery": [
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4Tc5OnpB_L/",
+      "heelOptions": [
+        "Anabela Alta 9,5cm (Meia Pata 3,5cm)",
+        "Anabela Média 7,5cm"
+      ],
+      "strapFinishes": [
+        "Pirâmides Douradas & Fivela Ouro",
+        "Pirâmides Prata & Fivela Cromada"
+      ],
+      "colors": [
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Brilho sofisticado para festas e eventos! Anabela Plataforma Pirâmides @petersonshoes_ na edição Prata Champagne, confeccionada sob encomenda do 34 ao 39.",
+      "craftDetails": [
+        "Meia pata anatômica que garante conforto mesmo em salto alto",
+        "Disponível em todas as cores padrão ou cor personalizada",
+        "Entrada de 50% (R$ 75,00 no Pix) + 50% quando sua Anabela estiver pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-20-anabela-piramides-dourada",
+      "sku": "PTS-IG-20",
+      "name": "Anabela Plataforma Pirâmides & Fivela (Dourada)",
+      "subtitle": "Edição Ouro Metalizado com Pirâmides Douradas & Pulseira de Fivela",
+      "category": "Anabelas & Plataformas",
+      "price": 150,
+      "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg",
+      "gallery": [
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4Tc5OnpB_L/",
+      "heelOptions": [
+        "Anabela Alta 9,5cm (Meia Pata 3,5cm)",
+        "Anabela Média 7,5cm"
+      ],
+      "strapFinishes": [
+        "Pirâmides Douradas & Fivela Ouro",
+        "Pirâmides Prata & Fivela Cromada"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Uma das campeãs de pedidos no Instagram @petersonshoes_! Anabela Plataforma inteiramente dourada com pirâmides espelhadas e fechamento por fivela no tornozelo.",
+      "craftDetails": [
+        "Confeccionada sob encomenda na numeração 34 ao 39 BR",
+        "Disponível em Dourado ou qualquer outra cor escolhida por você",
+        "Valor R$ 150,00 · Entrada de 50% (R$ 75,00) + 50% na conclusão"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-21-anabela-piramides-branca",
+      "sku": "PTS-IG-21",
+      "name": "Anabela Plataforma Pirâmides & Fivela (Branca)",
+      "subtitle": "Edição Branca com Tachas Piramidais Douradas & Bico Quadrado Moderno",
+      "category": "Anabelas & Plataformas",
+      "price": 150,
+      "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg",
+      "gallery": [
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4Tc5OnpB_L/",
+      "heelOptions": [
+        "Anabela Alta 9,5cm (Meia Pata 3,5cm)",
+        "Anabela Média 7,5cm"
+      ],
+      "strapFinishes": [
+        "Pirâmides Douradas & Fivela Ouro",
+        "Pirâmides Prata & Fivela Cromada"
+      ],
+      "colors": [
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Destaque especial do carrossel @petersonshoes_! A Anabela Plataforma Branca com pirâmides douradas valoriza produções diurnas e noturnas com máximo conforto.",
+      "craftDetails": [
+        "Fabricação própria em Goiânia - GO sob encomenda (34 ao 39 BR)",
+        "8 cores padrão + opção Outra Cor personalizada",
+        "Entrada de 50% (R$ 75,00 no Pix) + 50% somente quando estiver pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-22-anabela-gladiadora-nude",
+      "sku": "PTS-IG-22",
+      "name": "Anabela Plataforma Pirâmides Gladiadora (Nude Rosé)",
+      "subtitle": "Anabela Bico Quadrado Nude Rosé com Pirâmides Douradas & Amarração na Perna",
+      "category": "Anabelas & Plataformas",
+      "price": 150,
+      "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg",
+      "gallery": [
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4Tc5OnpB_L/",
+      "heelOptions": [
+        "Anabela Alta 9,5cm (Meia Pata 3,5cm)",
+        "Anabela Média 7,5cm"
+      ],
+      "strapFinishes": [
+        "Pirâmides Douradas & Ponteiras Ouro",
+        "Pirâmides Prata & Ponteiras Prata"
+      ],
+      "colors": [
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Delicada e imponente! Anabela Plataforma Pirâmides Gladiadora na cor Nude Rosé com amarração lace-up macia no tornozelo.",
+      "craftDetails": [
+        "Produzida sob encomenda na numeração 34 ao 39 BR em até 15 dias",
+        "Disponível em Nude, Rosa, Dourado, Prata, Preto, Branco, Marsala, Vermelho ou Outra Cor",
+        "Valor R$ 150,00 · Entrada de 50% (R$ 75,00) + 50% na entrega"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-23-anabela-gladiadora-prata",
+      "sku": "PTS-IG-23",
+      "name": "Anabela Plataforma Pirâmides Gladiadora (Prata)",
+      "subtitle": "Anabela Metalizada Prata com Tachas Piramidais & Amarração Gladiadora",
+      "category": "Anabelas & Plataformas",
+      "price": 150,
+      "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg",
+      "gallery": [
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg",
+        "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4Tc5OnpB_L/",
+      "heelOptions": [
+        "Anabela Alta 9,5cm (Meia Pata 3,5cm)",
+        "Anabela Média 7,5cm"
+      ],
+      "strapFinishes": [
+        "Pirâmides Prata & Ponteiras Prata",
+        "Pirâmides Douradas & Ponteiras Ouro"
+      ],
+      "colors": [
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Edição Prata Metalizada da nossa Anabela Plataforma Gladiadora @petersonshoes_! Perfeita para quem busca altura com estabilidade e brilho.",
+      "craftDetails": [
+        "Meia pata frontal confortável e amarração ajustável",
+        "Confeccionada sob encomenda do 34 ao 39 BR em Goiânia - GO",
+        "Entrada de 50% (R$ 75,00 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-24-papete-tratorada-preta",
+      "sku": "PTS-IG-24",
+      "name": "Papete Flatform Tratorada Strass & Amarração (Preta)",
+      "subtitle": "Solado Tratorado Preto com Vira de Strass Cristal & Amarração Nó Central",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg",
+      "gallery": [
+        "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg",
+        "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg",
+        "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4Tc1qCpAdX/",
+      "heelOptions": [
+        "Flatform Tratorada 4cm",
+        "Flatform Anatômica 3cm"
+      ],
+      "strapFinishes": [
+        "Strass Cristal & Vira Cravejada",
+        "Strass Grafite Onix"
+      ],
+      "colors": [
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Destaque em preto com strass cristal do nosso Instagram @petersonshoes_! Papete Flatform Tratorada com amarração que abraça o pé com firmeza e maciez.",
+      "craftDetails": [
+        "Solado tratorado contornado por filete de strass brilhante",
+        "Disponível do 34 ao 39 BR em todas as cores padrão ou cor personalizada",
+        "Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-25-papete-tratorada-dourada",
+      "sku": "PTS-IG-25",
+      "name": "Papete Flatform Tratorada Strass & Amarração (Dourada)",
+      "subtitle": "Edição Dourada Metalizada com Tiras Duplas de Strass & Solado Tratorado",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg",
+      "gallery": [
+        "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg",
+        "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg",
+        "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4Tc1qCpAdX/",
+      "heelOptions": [
+        "Flatform Tratorada 4cm",
+        "Flatform Anatômica 3cm"
+      ],
+      "strapFinishes": [
+        "Strass Dourado & Vira Cravejada",
+        "Strass Cristal"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Versão Dourada da Papete Tratorada Strass @petersonshoes_! Confeccionada sob encomenda na numeração 34 ao 39 em nossa fábrica própria em Goiânia - GO.",
+      "craftDetails": [
+        "Tiras frontais em manta de strass com amarração ajustável",
+        "Disponível nas 8 cores padrão ou na cor personalizada que você digitar",
+        "Entrada de 50% (R$ 65,00 no Pix) + 50% somente na conclusão"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-26-flatform-gladiadora-branca",
+      "sku": "PTS-IG-26",
+      "name": "Flatform Gladiadora Tiras Cruzadas Strass (Branca & Prata)",
+      "subtitle": "Flatform Gladiadora Branca com Tiras Finas em Strass Cristal & Vira Cravejada",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg",
+      "gallery": [
+        "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg",
+        "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4Tcs31JPdl/",
+      "heelOptions": [
+        "Flatform Anatômica 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Strass Prata Cristal & Vira Brilhante",
+        "Strass Dourado"
+      ],
+      "colors": [
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Edição Branca & Prata Cristal da nossa Flatform Gladiadora Tiras Cruzadas @petersonshoes_! Delicada, iluminada e super confortável.",
+      "craftDetails": [
+        "Fabricação própria sob encomenda em até 15 dias (34 ao 39 BR)",
+        "Escolha Branco, Prata, Dourado ou qualquer outra cor personalizada",
+        "Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-27-papete-espelhada-dourada",
+      "sku": "PTS-IG-27",
+      "name": "Papete Flatform Espelhada Tiras Strass (Dourado Champagne)",
+      "subtitle": "Palmilha Espelhada Champagne com Tiras Transpassadas em Strass & Fivela",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg",
+      "gallery": [
+        "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg",
+        "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4TcpFaJ9ll/",
+      "heelOptions": [
+        "Flatform Espelhada 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Strass Champagne & Fivela Ouro",
+        "Strass Cristal & Fivela Prata"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Edição Dourado Champagne da Papete Flatform Espelhada @petersonshoes_! Tiras sinuosas cravejadas de strass sobre o peito do pé e fivela delicada no tornozelo.",
+      "craftDetails": [
+        "Produzida sob medida na numeração 34 ao 39 BR em Goiânia - GO",
+        "Disponível em todas as cores padrão ou outra cor personalizada",
+        "Entrada de 50% (R$ 65,00 no Pix) + 50% somente quando estiver pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-28-papete-transversal-piramides",
+      "sku": "PTS-IG-28",
+      "name": "Papete Flatform Tira Transversal Pirâmides & Fivela (Dourada & Prata)",
+      "subtitle": "Bico Quadrado Anatômico com Tira Diagonal Cravejada de Pirâmides & Fivela no Tornozelo",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_14_C4TcgZrplaC_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_14_C4TcgZrplaC_slide_1.jpg",
+        "/instagram/feed_14_C4TcgZrplaC_slide_2.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4TcgZrplaC/",
+      "heelOptions": [
+        "Flatform Anatômica 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Pirâmides Douradas & Fivela Ouro",
+        "Pirâmides Prata & Fivela Cromada"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_14_C4TcgZrplaC_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_14_C4TcgZrplaC_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_14_C4TcgZrplaC_slide_1.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_14_C4TcgZrplaC_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_14_C4TcgZrplaC_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_14_C4TcgZrplaC_slide_2.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_14_C4TcgZrplaC_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_14_C4TcgZrplaC_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_14_C4TcgZrplaC_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Um dos modelos mais pedidos do Instagram @petersonshoes_! Papete Flatform com tira transversal e pulseira inteiramente aplicadas com pirâmides metalizadas, garantindo firmeza e muito destaque.",
+      "craftDetails": [
+        "Confeccionada sob encomenda na numeração 34 ao 39 BR em até 15 dias",
+        "Disponível em Dourado, Prata, Preto, Branco, Marsala, Nude, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-29-rasteira-no-strass-bico-quadrado",
+      "sku": "PTS-IG-29",
+      "name": "Rasteira Bico Quadrado Tira de Dedo Nó em Strass",
+      "subtitle": "Rasteira Elegante de Bico Quadrado com Tiras em Manta de Strass & Nó Central",
+      "category": "Rasteiras & Gladiadoras",
+      "price": 100,
+      "image": "/instagram/feed_15_C4TceEBpcL2_main.jpg",
+      "gallery": [
+        "/instagram/feed_15_C4TceEBpcL2_main.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4TceEBpcL2/",
+      "heelOptions": [
+        "Rasteira Conforto 1,5cm",
+        "Salto Baixo 2,5cm"
+      ],
+      "strapFinishes": [
+        "Manta de Strass Cristal Brilhante",
+        "Manta de Strass Dourado Champagne"
+      ],
+      "colors": [
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_15_C4TceEBpcL2_main.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_15_C4TceEBpcL2_main.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_15_C4TceEBpcL2_main.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_15_C4TceEBpcL2_main.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_15_C4TceEBpcL2_main.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_15_C4TceEBpcL2_main.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_15_C4TceEBpcL2_main.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_15_C4TceEBpcL2_main.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_15_C4TceEBpcL2_main.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Clássica, leve e super brilhante! Rasteira de bico quadrado do nosso perfil @petersonshoes_ com tiras de dedo unidas por nó central cravejado de strass.",
+      "craftDetails": [
+        "Produzida sob medida na numeração 34 ao 39 BR em nossa fábrica em Goiânia - GO",
+        "Disponível em Preto, Dourado, Nude, Branco, Marsala, Prata, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 100,00 · Entrada de 50% (R$ 50,00 no Pix) + 50% na conclusão"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-30-rasteira-laco-duplo-strass",
+      "sku": "PTS-IG-30",
+      "name": "Rasteira Bico Quadrado Laço Duplo Cravejado em Strass",
+      "subtitle": "Modelo Tendência com Dois Laços Estruturados em Strass Cristal & Bico Quadrado",
+      "category": "Rasteiras & Gladiadoras",
+      "price": 100,
+      "image": "/instagram/feed_44_C12GJ6QORi4_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_44_C12GJ6QORi4_slide_1.jpg",
+        "/instagram/feed_16_C4TccS0J14Z_slide_1.jpg",
+        "/instagram/feed_16_C4TccS0J14Z_slide_2.jpg",
+        "/instagram/feed_16_C4TccS0J14Z_slide_3.jpg",
+        "/instagram/feed_44_C12GJ6QORi4_slide_2.jpg",
+        "/instagram/feed_44_C12GJ6QORi4_slide_4.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4TccS0J14Z/",
+      "heelOptions": [
+        "Rasteira Conforto 1,5cm",
+        "Salto Baixo 2,5cm"
+      ],
+      "strapFinishes": [
+        "Laço Duplo em Manta de Strass Cristal",
+        "Laço Duplo em Strass Dourado"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_44_C12GJ6QORi4_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_16_C4TccS0J14Z_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_16_C4TccS0J14Z_slide_3.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_44_C12GJ6QORi4_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_44_C12GJ6QORi4_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_44_C12GJ6QORi4_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_44_C12GJ6QORi4_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_16_C4TccS0J14Z_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_44_C12GJ6QORi4_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Campeã de olhares no perfil @petersonshoes_! Rasteira de bico quadrado com dois laços frontais inteiramente revestidos em strass de alto brilho. Sofisticada, feminina e ultra confortável.",
+      "craftDetails": [
+        "Laços duplos estruturados manualmente com manta de strass premium",
+        "Numeração 34 ao 39 BR em todas as cores padrão ou cor personalizada",
+        "Valor R$ 100,00 · Entrada de 50% (R$ 50,00 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-31-rasteira-transversal-strass-fivela",
+      "sku": "PTS-IG-31",
+      "name": "Rasteira Bico Quadrado Tira Transversal Strass & Fivela",
+      "subtitle": "Tira Diagonal em Manta de Strass, Anel de Dedo & Fechamento por Fivela no Tornozelo",
+      "category": "Rasteiras & Gladiadoras",
+      "price": 100,
+      "image": "/instagram/feed_17_C4TcYo9pYsy_main.jpg",
+      "gallery": [
+        "/instagram/feed_17_C4TcYo9pYsy_main.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4TcYo9pYsy/",
+      "heelOptions": [
+        "Rasteira Conforto 1,5cm",
+        "Salto Baixo 2,5cm"
+      ],
+      "strapFinishes": [
+        "Strass Cristal & Fivela Metalizada",
+        "Strass Dourado & Fivela Ouro"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_17_C4TcYo9pYsy_main.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_17_C4TcYo9pYsy_main.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_17_C4TcYo9pYsy_main.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_17_C4TcYo9pYsy_main.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_17_C4TcYo9pYsy_main.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_17_C4TcYo9pYsy_main.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_17_C4TcYo9pYsy_main.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_17_C4TcYo9pYsy_main.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_17_C4TcYo9pYsy_main.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Delicadeza e segurança ao caminhar! Modelo oficial @petersonshoes_ com tira transversal brilhante no peito do pé e pulseira com fivela ajustável no tornozelo.",
+      "craftDetails": [
+        "Fabricação própria em Goiânia - GO sob encomenda (Numeração 34 ao 39 BR)",
+        "Disponível em Dourado, Branco, Prata, Preto, Marsala, Nude, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 100,00 · Entrada de 50% (R$ 50,00 no Pix) + 50% na entrega"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-32-rasteira-gladiadora-no-strass",
+      "sku": "PTS-IG-32",
+      "name": "Rasteira Gladiadora Multitiras Nó de Strass & Amarração",
+      "subtitle": "Rasteira Gladiadora Bico Quadrado com Tiras Cravejadas, Nó Frontal & Amarração na Perna",
+      "category": "Rasteiras & Gladiadoras",
+      "price": 110,
+      "image": "/instagram/feed_20_C4TcQjaJejN_main.jpg",
+      "gallery": [
+        "/instagram/feed_20_C4TcQjaJejN_main.jpg",
+        "/instagram/feed_18_C4TcU91p2E8_main.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4TcQjaJejN/",
+      "heelOptions": [
+        "Rasteira Conforto 1,5cm",
+        "Salto Baixo 2,5cm"
+      ],
+      "strapFinishes": [
+        "Strass Cristal & Amarração Macia",
+        "Strass Dourado & Amarração Macia"
+      ],
+      "colors": [
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_20_C4TcQjaJejN_main.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_20_C4TcQjaJejN_main.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_18_C4TcU91p2E8_main.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_20_C4TcQjaJejN_main.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_20_C4TcQjaJejN_main.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_20_C4TcQjaJejN_main.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_20_C4TcQjaJejN_main.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_20_C4TcQjaJejN_main.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_20_C4TcQjaJejN_main.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Moderna e super estilosa! Nossa Rasteira Gladiadora com nó de strass e amarração lace-up no tornozelo (@petersonshoes_) valoriza qualquer produção e pode ser feita na sua cor favorita.",
+      "craftDetails": [
+        "Tiras finas confortáveis com aplicação de strass e cordões macios para amarração",
+        "Numeração 34 ao 39 BR · Escolha entre as cores padrão ou digite Outra Cor",
+        "Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-33-rasteira-tiras-x-pedraria",
+      "sku": "PTS-IG-33",
+      "name": "Rasteira Bico Quadrado Tiras Cruzadas X em Pedraria",
+      "subtitle": "Slide Rasteira com Tiras Largas Cruzadas em X Revestidas de Pedraria e Strass",
+      "category": "Rasteiras & Gladiadoras",
+      "price": 100,
+      "image": "/instagram/feed_19_C4TcSseJ1vr_main.jpg",
+      "gallery": [
+        "/instagram/feed_19_C4TcSseJ1vr_main.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4TcSseJ1vr/",
+      "heelOptions": [
+        "Rasteira Conforto 1,5cm",
+        "Salto Baixo 2,5cm"
+      ],
+      "strapFinishes": [
+        "Pedraria & Strass no Tom da Sandália",
+        "Pedraria Cristal Prateada"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_19_C4TcSseJ1vr_main.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_19_C4TcSseJ1vr_main.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_19_C4TcSseJ1vr_main.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_19_C4TcSseJ1vr_main.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_19_C4TcSseJ1vr_main.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_19_C4TcSseJ1vr_main.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_19_C4TcSseJ1vr_main.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_19_C4TcSseJ1vr_main.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_19_C4TcSseJ1vr_main.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Calce fácil e acabamento de joia nos pés! Rasteira de tiras cruzadas em X cravejadas em pedraria e strass, confeccionada sob encomenda pela Peterson Shoes em Goiânia - GO.",
+      "craftDetails": [
+        "Tiras largas cruzadas com forro interno acolchoado que abraça o peito do pé",
+        "Numeração 34 ao 39 BR em todas as cores padrão ou cor personalizada",
+        "Valor R$ 100,00 · Entrada de 50% (R$ 50,00 no Pix) + 50% na conclusão"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-34-flatform-3-tiras-strass",
+      "sku": "PTS-IG-34",
+      "name": "Flatform 3 Tiras Finas Assimétricas em Strass (Branca & Preta)",
+      "subtitle": "Flatform Normal Slide com Três Tiras Delicadas em Strass & Vira Brilhante",
+      "category": "Flatforms & Papetes",
+      "price": 110,
+      "image": "/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg",
+        "/instagram/feed_22_C4TcJj9Ju9I_slide_4.jpg",
+        "/instagram/feed_22_C4TcJj9Ju9I_slide_2.jpg",
+        "/instagram/feed_22_C4TcJj9Ju9I_slide_3.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4TcJj9Ju9I/",
+      "heelOptions": [
+        "Flatform Anatômica 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Strass Cristal & Vira Cravejada",
+        "Strass Onix / Dourado"
+      ],
+      "colors": [
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_22_C4TcJj9Ju9I_slide_4.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Minimalista, iluminada e super confortável! Nossa Flatform Normal de 3 tiras finas em strass (@petersonshoes_) combina praticidade de calce com vira contornada por brilho.",
+      "craftDetails": [
+        "Solado flatform macio com filete de strass em toda a borda (34 ao 39 BR)",
+        "Disponível em Branco, Preto, Marsala, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-35-flatform-no-pedraria-espelhada",
+      "sku": "PTS-IG-35",
+      "name": "Flatform Tiras Entrelaçadas & Nó Pedraria Espelhada",
+      "subtitle": "Flatform Normal com Palmilha Metalizada, Vira de Strass & Nó Frontal Cravejado",
+      "category": "Flatforms & Papetes",
+      "price": 110,
+      "image": "/instagram/feed_23_C4TcFzJJLNA_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_23_C4TcFzJJLNA_slide_1.jpg",
+        "/instagram/feed_23_C4TcFzJJLNA_slide_2.jpg",
+        "/instagram/feed_23_C4TcFzJJLNA_slide_3.jpg",
+        "/instagram/feed_23_C4TcFzJJLNA_slide_4.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4TcFzJJLNA/",
+      "heelOptions": [
+        "Flatform Espelhada 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Pedraria Cristal & Vira de Strass",
+        "Pedraria Dourada & Vira de Strass"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_23_C4TcFzJJLNA_slide_2.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_23_C4TcFzJJLNA_slide_4.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_23_C4TcFzJJLNA_slide_2.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_23_C4TcFzJJLNA_slide_2.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_23_C4TcFzJJLNA_slide_3.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_23_C4TcFzJJLNA_slide_2.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_23_C4TcFzJJLNA_slide_2.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_23_C4TcFzJJLNA_slide_2.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_23_C4TcFzJJLNA_slide_2.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Sucesso absoluto no feed @petersonshoes_! Flatform Normal com tiras duplas cravejadas unidas por nó frontal e palmilha com acabamento espelhado de luxo.",
+      "craftDetails": [
+        "Confeccionada sob encomenda na numeração 34 ao 39 BR em Goiânia - GO",
+        "Escolha Dourado, Nude, Preto ou qualquer outra cor personalizada",
+        "Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% na conclusão"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-36-flatform-tiras-cruzadas-duplas",
+      "sku": "PTS-IG-36",
+      "name": "Flatform Tiras Cruzadas Duplas em Manta de Strass",
+      "subtitle": "Flatform Normal Anatômica com Duplo X em Manta de Strass & Vira Brilhante",
+      "category": "Flatforms & Papetes",
+      "price": 110,
+      "image": "/instagram/feed_24_C4TcBT1pobH_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_24_C4TcBT1pobH_slide_1.jpg",
+        "/instagram/feed_24_C4TcBT1pobH_slide_2.jpg",
+        "/instagram/feed_24_C4TcBT1pobH_slide_3.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4TcBT1pobH/",
+      "heelOptions": [
+        "Flatform Anatômica 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Manta de Strass Cristal & Vira Cravejada",
+        "Manta de Strass Dourado"
+      ],
+      "colors": [
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_24_C4TcBT1pobH_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_24_C4TcBT1pobH_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_24_C4TcBT1pobH_slide_2.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_24_C4TcBT1pobH_slide_1.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_24_C4TcBT1pobH_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_24_C4TcBT1pobH_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_24_C4TcBT1pobH_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_24_C4TcBT1pobH_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_24_C4TcBT1pobH_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Design que abraça o pé com muito brilho e maciez! Flatform Normal com tiras cruzadas duplas em manta de strass do nosso Instagram @petersonshoes_.",
+      "craftDetails": [
+        "Palmilha macia e vira lateral contornada em strass (34 ao 39 BR)",
+        "Disponível em Nude, Branco, Preto, Dourado, Marsala, Prata, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-37-flatform-slide-no-dourada",
+      "sku": "PTS-IG-37",
+      "name": "Flatform Slide de Dedo Nó Central Strass Metalizada (Dourada)",
+      "subtitle": "Flatform Normal Metalizada com Tiras em Strass Unido por Nó Central & Vira Cravejada",
+      "category": "Flatforms & Papetes",
+      "price": 110,
+      "image": "/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg",
+        "/instagram/feed_26_C4Tb7oxJ70j_slide_2.jpg",
+        "/instagram/feed_26_C4Tb7oxJ70j_slide_3.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C4Tb7oxJ70j/",
+      "heelOptions": [
+        "Flatform Metalizada 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Strass Dourado & Vira Cravejada",
+        "Strass Prata Cristal & Vira Cravejada"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Praticidade e glamour para todos os momentos! Nossa Flatform Normal Slide com nó central em strass (@petersonshoes_) é confeccionada sob encomenda do 34 ao 39.",
+      "craftDetails": [
+        "Acabamento metalizado espelhado e filete de strass ao redor da sola",
+        "Numeração 34 ao 39 BR em todas as cores padrão ou cor personalizada",
+        "Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% na conclusão"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-38-papete-anel-dedo-strass-fivela",
+      "sku": "PTS-IG-38",
+      "name": "Papete Flatform Anel de Dedo & Tiras Strass c/ Fivela (Dourada)",
+      "subtitle": "Papete Metalizada com Anel de Dedo Cravejado, Tira Transversal em Strass & Fivela",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_28_C12HMIqOt-1_main.jpg",
+      "gallery": [
+        "/instagram/feed_28_C12HMIqOt-1_main.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C12HMIqOt-1/",
+      "heelOptions": [
+        "Flatform Espelhada 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Strass Dourado & Fivela no Tornozelo",
+        "Strass Prata & Fivela no Tornozelo"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_28_C12HMIqOt-1_main.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_28_C12HMIqOt-1_main.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_28_C12HMIqOt-1_main.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_28_C12HMIqOt-1_main.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_28_C12HMIqOt-1_main.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_28_C12HMIqOt-1_main.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_28_C12HMIqOt-1_main.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_28_C12HMIqOt-1_main.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_28_C12HMIqOt-1_main.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Design anatômico que prende o pé com delicadeza e brilho! Papete Flatform @petersonshoes_ com anel de dedo cravejado, tiras de strass e pulseira com fivela no tornozelo.",
+      "craftDetails": [
+        "Produzida sob medida na numeração 34 ao 39 BR em nossa fábrica em Goiânia - GO",
+        "Disponível nas 8 cores padrão ou na cor personalizada que você escrever",
+        "Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-39-papete-duas-tiras-strass-fivela",
+      "sku": "PTS-IG-39",
+      "name": "Papete Flatform Vira de Strass & Duas Tiras c/ Fivela (Branca)",
+      "subtitle": "Papete Branca com Duas Tiras Frontais em Strass, Vira Cravejada & Fivela Traseira",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_29_C12HDhQO1dO_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_29_C12HDhQO1dO_slide_1.jpg",
+        "/instagram/feed_29_C12HDhQO1dO_slide_2.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C12HDhQO1dO/",
+      "heelOptions": [
+        "Flatform Anatômica 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Strass Cristal & Fivela Regulável",
+        "Strass Dourado & Fivela Ouro"
+      ],
+      "colors": [
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_29_C12HDhQO1dO_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_29_C12HDhQO1dO_slide_1.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_29_C12HDhQO1dO_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_29_C12HDhQO1dO_slide_1.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_29_C12HDhQO1dO_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_29_C12HDhQO1dO_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_29_C12HDhQO1dO_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_29_C12HDhQO1dO_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_29_C12HDhQO1dO_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Delicada, romântica e super estável nos pés! Papete Flatform @petersonshoes_ com duas tiras paralelas de strass na frente, contorno brilhante na vira e fechamento por fivela.",
+      "craftDetails": [
+        "Confeccionada sob encomenda na numeração 34 ao 39 BR em até 15 dias",
+        "Escolha Branco, Preto, Nude, Dourado, Prata, Marsala, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% na conclusão"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-40-flatform-gladiadora-multitiras",
+      "sku": "PTS-IG-40",
+      "name": "Flatform Gladiadora Multitiras Strass & Amarração (Preta & Branca)",
+      "subtitle": "Flatform Gladiadora com Tiras Finas Brilhantes, Vira de Strass & Amarração na Perna",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_30_C12HAGoOeUg_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_30_C12HAGoOeUg_slide_1.jpg",
+        "/instagram/feed_30_C12HAGoOeUg_slide_2.jpg",
+        "/instagram/feed_30_C12HAGoOeUg_slide_3.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/C12HAGoOeUg/",
+      "heelOptions": [
+        "Flatform Anatômica 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Strass Cristal & Amarração Gladiadora",
+        "Strass Dourado & Amarração Gladiadora"
+      ],
+      "colors": [
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_30_C12HAGoOeUg_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_30_C12HAGoOeUg_slide_2.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_30_C12HAGoOeUg_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_30_C12HAGoOeUg_slide_1.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_30_C12HAGoOeUg_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_30_C12HAGoOeUg_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_30_C12HAGoOeUg_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_30_C12HAGoOeUg_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_30_C12HAGoOeUg_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Visual marcante direto da nossa fábrica em Goiânia - GO! Flatform Gladiadora @petersonshoes_ com multitiras de strass e amarração ajustável no tornozelo.",
+      "craftDetails": [
+        "Vira contornada em strass e palmilha macia (Numeração 34 ao 39 BR)",
+        "Disponível em Preto, Branco, Dourado, Prata, Nude, Marsala, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-41-flatform-3-tiras-tubulares-dourada",
+      "sku": "PTS-IG-41",
+      "name": "Flatform Metalizada 3 Tiras Tubulares em Strass (Dourada)",
+      "subtitle": "Flatform Normal Slide com Três Tiras Tubulares Cravejadas & Solado Tratorado c/ Strass",
+      "category": "Flatforms & Papetes",
+      "price": 110,
+      "image": "/instagram/feed_49_CzWpulBOVR3_main.jpg",
+      "gallery": [
+        "/instagram/feed_49_CzWpulBOVR3_main.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/CzWpulBOVR3/",
+      "heelOptions": [
+        "Flatform Tratorada 3,5cm",
+        "Flatform Anatômica 2,5cm"
+      ],
+      "strapFinishes": [
+        "3 Tiras Tubulares Strass Champagne",
+        "3 Tiras Tubulares Strass Cristal"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_49_CzWpulBOVR3_main.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_49_CzWpulBOVR3_main.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_49_CzWpulBOVR3_main.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_49_CzWpulBOVR3_main.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_49_CzWpulBOVR3_main.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_49_CzWpulBOVR3_main.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_49_CzWpulBOVR3_main.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_49_CzWpulBOVR3_main.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_49_CzWpulBOVR3_main.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Brilho triplo e conforto de nuvem! Nossa Flatform Normal com 3 tiras tubulares de strass (@petersonshoes_) é perfeita para quem ama praticidade sem abrir mão da sofisticação.",
+      "craftDetails": [
+        "Confeccionada sob encomenda na numeração 34 ao 39 BR em até 15 dias",
+        "Disponível em todas as cores padrão ou cor personalizada",
+        "Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% na conclusão"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-42-flatform-pedraria-cristal-espelhada",
+      "sku": "PTS-IG-42",
+      "name": "Flatform Tiras Cruzadas Pedraria Cristal Espelhada",
+      "subtitle": "Recordista de Curtidas @petersonshoes_ · Flatform Normal com Pedraria Lapidada & Vira de Strass",
+      "category": "Flatforms & Papetes",
+      "price": 110,
+      "image": "/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg",
+        "/instagram/feed_51_CzWpluLO3Lx_slide_2.jpg",
+        "/instagram/feed_51_CzWpluLO3Lx_slide_3.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/CzWpluLO3Lx/",
+      "heelOptions": [
+        "Flatform Espelhada 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Pedraria Lapidada Cristal & Vira de Strass",
+        "Pedraria Dourada & Vira de Strass"
+      ],
+      "colors": [
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_51_CzWpluLO3Lx_slide_2.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_51_CzWpluLO3Lx_slide_3.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "O modelo mais curtido do Instagram @petersonshoes_! Flatform Normal com tiras cruzadas ricamente trabalhadas em pedraria cristal lapidada e vira espelhada com strass.",
+      "craftDetails": [
+        "Sucesso absoluto de vendas no varejo e atacado (Numeração 34 ao 39 BR)",
+        "Disponível em Branco, Dourado, Prata, Preto, Nude, Marsala, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-43-rasteira-tiras-entrelacadas-dourada",
+      "sku": "PTS-IG-43",
+      "name": "Rasteira Bico Quadrado Tiras Entrelaçadas em Strass (Dourada)",
+      "subtitle": "Rasteira Metalizada de Bico Quadrado com Tiras Finas Entrelaçadas em Strass",
+      "category": "Rasteiras & Gladiadoras",
+      "price": 100,
+      "image": "/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg",
+        "/instagram/feed_54_CzJ_ceLJwx6_slide_2.jpg",
+        "/instagram/feed_54_CzJ_ceLJwx6_slide_3.jpg",
+        "/instagram/feed_54_CzJ_ceLJwx6_slide_4.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/CzJ_ceLJwx6/",
+      "heelOptions": [
+        "Rasteira Conforto 1,5cm",
+        "Salto Baixo 2,5cm"
+      ],
+      "strapFinishes": [
+        "Tiras Entrelaçadas Strass Dourado",
+        "Tiras Entrelaçadas Strass Cristal"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Elegância atemporal nos pés! Rasteira de bico quadrado do nosso perfil @petersonshoes_ com desenho de tiras finas entrelaçadas em strass sobre o peito do pé.",
+      "craftDetails": [
+        "Palmilha metalizada macia e solado antiderrapante (34 ao 39 BR)",
+        "Disponível em Dourado, Prata, Preto, Branco, Nude, Marsala, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 100,00 · Entrada de 50% (R$ 50,00 no Pix) + 50% na conclusão"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-44-flatform-slide-nuvem-metalizada",
+      "sku": "PTS-IG-44",
+      "name": "Flatform Slide Tira Larga Nuvem Metalizada (Dourada & Prata)",
+      "subtitle": "Flatform Normal Anatômica Estilo Nuvem com Gáspea Larga Acolchoada Metalizada",
+      "category": "Flatforms & Papetes",
+      "price": 110,
+      "image": "/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg",
+        "/instagram/feed_62_CzJ-wYRpoWs_slide_2.jpg",
+        "/instagram/feed_62_CzJ-wYRpoWs_slide_3.jpg",
+        "/instagram/feed_62_CzJ-wYRpoWs_slide_4.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/CzJ-wYRpoWs/",
+      "heelOptions": [
+        "Flatform Anatômica 3,5cm",
+        "Flatform Conforto 2,5cm"
+      ],
+      "strapFinishes": [
+        "Napa Metalizada Macia Acolchoada",
+        "Napa Fosca Acolchoada"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_62_CzJ-wYRpoWs_slide_2.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Um dos posts mais amados do nosso Instagram @petersonshoes_! Flatform Normal Slide com tira larga acolchoada e palmilha anatômica super leve para usar o dia inteiro.",
+      "craftDetails": [
+        "Conforto absoluto com espuma interna macia (Numeração 34 ao 39 BR)",
+        "Disponível em Dourado, Prata, Preto, Branco, Nude, Marsala, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-45-flatform-gladiadora-tratorada-cores",
+      "sku": "PTS-IG-45",
+      "name": "Flatform Gladiadora Tratorada Tiras Strass & Amarração (Preta, Branca & Nude)",
+      "subtitle": "Solado Flatform Tratorado com Vira Brilhante, Tiras Cruzadas em Strass & Amarração",
+      "category": "Flatforms & Papetes",
+      "price": 130,
+      "image": "/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg",
+        "/instagram/feed_69_Cqk8GO5NMY1_slide_2.jpg",
+        "/instagram/feed_69_Cqk8GO5NMY1_slide_3.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/Cqk8GO5NMY1/",
+      "heelOptions": [
+        "Flatform Tratorada 4cm",
+        "Flatform Anatômica 3cm"
+      ],
+      "strapFinishes": [
+        "Strass Cristal & Amarração Longa",
+        "Strass Dourado & Amarração Longa"
+      ],
+      "colors": [
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_69_Cqk8GO5NMY1_slide_2.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_69_Cqk8GO5NMY1_slide_3.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Moderna, imponente e cheia de personalidade! Flatform Gladiadora Tratorada @petersonshoes_ com tiras cruzadas em strass e amarração macia no tornozelo.",
+      "craftDetails": [
+        "Produzida sob encomenda na numeração 34 ao 39 BR em nossa fábrica em Goiânia - GO",
+        "Escolha Preto, Branco, Nude ou qualquer outra cor personalizada",
+        "Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% na conclusão"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-46-rasteira-multitiras-finas-fivela",
+      "sku": "PTS-IG-46",
+      "name": "Rasteira Bico Quadrado Multitiras Finas & Fivela",
+      "subtitle": "Rasteira Delicada de Bico Quadrado com Tiras Finas Assimétricas & Fivela no Tornozelo",
+      "category": "Rasteiras & Gladiadoras",
+      "price": 100,
+      "image": "/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg",
+      "gallery": [
+        "/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg",
+        "/instagram/feed_72_Cqk6zKsOtGe_slide_2.jpg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/p/Cqk6zKsOtGe/",
+      "heelOptions": [
+        "Rasteira Conforto 1,5cm",
+        "Salto Baixo 2,5cm"
+      ],
+      "strapFinishes": [
+        "Tiras Finas em Napa Macia c/ Fivela",
+        "Tiras Finas Metalizadas c/ Fivela"
+      ],
+      "colors": [
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/instagram/feed_72_Cqk6zKsOtGe_slide_2.jpg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/instagram/feed_72_Cqk6zKsOtGe_slide_2.jpg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Leveza minimalista que valoriza os pés! Rasteira de bico quadrado com multitiras finas e fechamento por fivela do nosso perfil @petersonshoes_.",
+      "craftDetails": [
+        "Confeccionada sob encomenda na numeração 34 ao 39 BR em até 15 dias",
+        "Disponível em Rosa, Branco, Preto, Marsala, Nude, Dourado, Prata, Vermelho ou Outra Cor",
+        "Valor R$ 100,00 · Entrada de 50% (R$ 50,00 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-01T12:00:00.000Z"
+    }
+  ],
+  "customers": [
+    {
+      "id": "cust-1",
+      "name": "Carolina Mendonça",
+      "email": "carolina.mendonca@email.com.br",
+      "whatsapp": "(62) 99412-8831",
+      "cpf": "348.912.408-22",
+      "cep": "74150-040",
+      "street": "Av. T-63",
+      "number": "1420",
+      "complement": "Apto 82",
+      "neighborhood": "Setor Bueno",
+      "city": "Goiânia",
+      "state": "GO",
+      "totalOrders": 1,
+      "totalSpent": 130,
+      "createdAt": "2026-10-20T12:36:13.060Z"
+    },
+    {
+      "id": "cust-2",
+      "name": "Juliana Vasconcelos",
+      "email": "juliana.vasc@email.com.br",
+      "whatsapp": "(62) 98731-5509",
+      "cpf": "129.845.307-10",
+      "cep": "74810-100",
+      "street": "Rua 1136",
+      "number": "615",
+      "complement": "Casa 2",
+      "neighborhood": "Setor Marista",
+      "city": "Goiânia",
+      "state": "GO",
+      "totalOrders": 1,
+      "totalSpent": 150,
+      "createdAt": "2026-10-12T12:36:13.060Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "ord-1001",
+      "orderCode": "PTS-2026-101",
+      "customerId": "cust-1",
+      "customerName": "Carolina Mendonça",
+      "customerWhatsapp": "(62) 99412-8831",
+      "customerEmail": "carolina.mendonca@email.com.br",
+      "customerCpf": "348.912.408-22",
+      "shippingAddress": "Av. T-63, 1420, Apto 82 - Setor Bueno, Goiânia/GO - CEP 74150-040",
+      "items": [
+        {
+          "productId": "prod-ig-01-papete-piramides",
+          "sku": "PTS-IG-01",
+          "name": "Papete Flatform Pirâmides & Fivela (Dourada)",
+          "image": "/instagram/feed_1_C454LXbOzrn_slide_1.jpg",
+          "unitPrice": 130,
+          "quantity": 1,
+          "size": 37,
+          "colorName": "Dourado",
+          "colorHex": "#D4AF37",
+          "customization": {
+            "heelOption": "Flatform Anatômica 3,5cm",
+            "strapFinish": "Pirâmides Douradas & Fivela Ouro",
+            "footWidth": "Padrão",
+            "insoleEngraving": "C.M.",
+            "customNotes": "Favor deixar a tira do tornozelo com 1 furo extra."
+          }
+        }
+      ],
+      "totalAmount": 130,
+      "depositAmount": 65,
+      "remainingAmount": 65,
+      "paymentStatus": "ENTRADA_50_PAGA",
+      "productionStatus": "MONTAGEM_ARTESANAL",
+      "estimatedDeliveryDate": "2026-11-04",
+      "productionDays": 15,
+      "factoryNotes": "Material dourado metalizado separado. Montagem da flatform com pirâmides em andamento.",
+      "trackingCode": "",
+      "createdAt": "2026-10-20T12:36:13.060Z",
+      "updatedAt": "2026-10-20T12:36:13.060Z"
+    },
+    {
+      "id": "ord-1002",
+      "orderCode": "PTS-2026-102",
+      "customerId": "cust-2",
+      "customerName": "Juliana Vasconcelos",
+      "customerWhatsapp": "(62) 98731-5509",
+      "customerEmail": "juliana.vasc@email.com.br",
+      "customerCpf": "129.845.307-10",
+      "shippingAddress": "Rua 1136, 615, Casa 2 - Setor Marista, Goiânia/GO - CEP 74810-100",
+      "items": [
+        {
+          "productId": "prod-ig-02-anabela-piramides-fivela",
+          "sku": "PTS-IG-02",
+          "name": "Anabela Plataforma Pirâmides & Fivela (Preta)",
+          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg",
+          "unitPrice": 150,
+          "quantity": 1,
+          "size": 36,
+          "colorName": "Preto",
+          "colorHex": "#1B191A",
+          "customization": {
+            "heelOption": "Anabela Alta 9,5cm (Meia Pata 3,5cm)",
+            "strapFinish": "Pirâmides Douradas & Fivela Ouro",
+            "footWidth": "Pé Fino (Mais Justa)",
+            "insoleEngraving": "J.V.",
+            "customNotes": "Encomenda para evento no final do mês."
+          }
+        }
+      ],
+      "totalAmount": 150,
+      "depositAmount": 75,
+      "remainingAmount": 75,
+      "paymentStatus": "AGUARDANDO_FINAL_50",
+      "productionStatus": "PRONTA_PARA_ENTREGA",
+      "estimatedDeliveryDate": "2026-10-27",
+      "productionDays": 15,
+      "factoryNotes": "Sandália Anabela Pirâmides finalizada e revisada! Aguardando pagamento dos 50% finais da cliente (Pix ou Cartão).",
+      "trackingCode": "",
+      "createdAt": "2026-10-12T12:36:13.060Z",
+      "updatedAt": "2026-10-26T12:36:13.060Z"
+    }
+  ],
+  "payments": [
+    {
+      "id": "pay-1a",
+      "orderId": "ord-1001",
+      "orderCode": "PTS-2026-101",
+      "installmentType": "ENTRADA_50",
+      "method": "PIX_MERCADO_PAGO",
+      "baseAmount": 65,
+      "feeAmount": 0,
+      "installments": 1,
+      "amount": 65,
+      "status": "APROVADO",
+      "pixCopyPaste": "00020126360014br.gov.bcb.pix0114+5562984998265520400005303986540565.005802BR5914PETERSON SHOES6007GOIANIA62150511PTS2026101E63041D45",
+      "mpReferenceId": "MP-PIX-9841201",
+      "sandboxMode": true,
+      "paidAt": "2026-10-20T12:36:13.060Z",
+      "createdAt": "2026-10-20T12:36:13.060Z"
+    },
+    {
+      "id": "pay-1b",
+      "orderId": "ord-1001",
+      "orderCode": "PTS-2026-101",
+      "installmentType": "FINAL_50",
+      "method": "PIX_MERCADO_PAGO",
+      "baseAmount": 65,
+      "feeAmount": 0,
+      "installments": 1,
+      "amount": 65,
+      "status": "PENDENTE",
+      "pixCopyPaste": "00020126360014br.gov.bcb.pix0114+5562984998265520400005303986540565.005802BR5914PETERSON SHOES6007GOIANIA62150511PTS2026101F6304F397",
+      "mpReferenceId": "MP-PIX-9841202",
+      "sandboxMode": true,
+      "paidAt": null,
+      "createdAt": "2026-10-20T12:36:13.060Z"
+    },
+    {
+      "id": "pay-2a",
+      "orderId": "ord-1002",
+      "orderCode": "PTS-2026-102",
+      "installmentType": "ENTRADA_50",
+      "method": "CARTAO_MERCADO_PAGO",
+      "baseAmount": 75,
+      "feeAmount": 3.74,
+      "installments": 2,
+      "cardBrand": "Mastercard",
+      "cardLast4": "4829",
+      "amount": 78.74,
+      "status": "APROVADO",
+      "pixCopyPaste": "00020126360014br.gov.bcb.pix0114+5562984998265520400005303986540575.005802BR5914PETERSON SHOES6007GOIANIA62150511PTS2026102E6304C059",
+      "mpReferenceId": "MP-CARD-9840911",
+      "sandboxMode": true,
+      "paidAt": "2026-10-12T12:36:13.060Z",
+      "createdAt": "2026-10-12T12:36:13.060Z"
+    },
+    {
+      "id": "pay-2b",
+      "orderId": "ord-1002",
+      "orderCode": "PTS-2026-102",
+      "installmentType": "FINAL_50",
+      "method": "PIX_MERCADO_PAGO",
+      "baseAmount": 75,
+      "feeAmount": 0,
+      "installments": 1,
+      "amount": 75,
+      "status": "PENDENTE",
+      "pixCopyPaste": "00020126360014br.gov.bcb.pix0114+5562984998265520400005303986540575.005802BR5914PETERSON SHOES6007GOIANIA62150511PTS2026102F63042E8B",
+      "mpReferenceId": "MP-PIX-9840912",
+      "sandboxMode": true,
+      "paidAt": null,
+      "createdAt": "2026-10-12T12:36:13.060Z"
+    }
+  ],
+  "settings": {
+    "storeName": "Peterson Shoes",
+    "instagramUrl": "https://www.instagram.com/petersonshoes_/",
+    "whatsappStore": "5562984998265",
+    "whatsappFactory": "5562984998265",
+    "productionDays": 15,
+    "depositPercentage": 50,
+    "creditCardFeePercentage": 4.99,
+    "mercadoPagoLiveEnabled": false,
+    "pixKey": "62984998265"
+  }
+}

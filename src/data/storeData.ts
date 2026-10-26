@@ -162,15 +162,15 @@ export const INITIAL_SETTINGS: StoreSettings = {
 };
 
 export const INITIAL_PRODUCTS: BespokeProduct[] = [
-  // 1. POST 1 (C454LXbOzrn) — Papete Flatform Pirâmides & Fivela
+  // 1. POST 1 (C454LXbOzrn Slide 1) — Papete Flatform Pirâmides & Fivela (Dourada) — R$ 130,00
   {
     id: 'prod-ig-01-papete-piramides',
     sku: 'PTS-IG-01',
-    name: 'Papete Flatform Pirâmides & Fivela',
+    name: 'Papete Flatform Pirâmides & Fivela (Dourada)',
     subtitle:
       'Bico Quadrado Anatômico com Pirâmides Espelhadas & Pulseira no Tornozelo',
     category: 'Flatforms & Papetes',
-    price: 229.9,
+    price: 130,
     image: '/instagram/feed_1_C454LXbOzrn_slide_1.jpg',
     gallery: [
       '/instagram/feed_1_C454LXbOzrn_slide_1.jpg',
@@ -204,20 +204,20 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     craftDetails: [
       'Fabricação própria @petersonshoes_ sob encomenda em até 15 dias (Numeração 34 ao 39)',
       'Disponível em Preto, Branco, Marsala, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor à sua escolha',
-      'Pagamento de 50% de entrada (Pix ou Cartão c/ taxa do banco) e 50% quando ficar pronta',
+      'Pagamento de 50% de entrada (Pix sem taxa ou Cartão c/ taxa do banco) e 50% quando ficar pronta',
     ],
     createdAt: '2026-03-01T12:00:00.000Z',
   },
 
-  // 2. POST 8 Parte A (C4Tc5OnpB_L Slides 1 a 5) — Anabela Plataforma Pirâmides & Fivela
+  // 2. POST 8 Parte A (C4Tc5OnpB_L Slide 1) — Anabela Plataforma Pirâmides & Fivela (Preta) — R$ 150,00
   {
     id: 'prod-ig-02-anabela-piramides-fivela',
     sku: 'PTS-IG-02',
-    name: 'Anabela Plataforma Pirâmides & Fivela',
+    name: 'Anabela Plataforma Pirâmides & Fivela (Preta)',
     subtitle:
       'Plataforma Alta Bico Quadrado com Tiras em Pirâmides & Fechamento por Fivela',
     category: 'Anabelas & Plataformas',
-    price: 279.9,
+    price: 150,
     image: '/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg',
     gallery: [
       '/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg',
@@ -258,15 +258,15 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     createdAt: '2026-03-01T12:00:00.000Z',
   },
 
-  // 3. POST 8 Parte B (C4Tc5OnpB_L Slides 6 a 8) — Anabela Plataforma Pirâmides Gladiadora Amarração
+  // 3. POST 8 Parte B (C4Tc5OnpB_L Slide 6) — Anabela Plataforma Pirâmides Gladiadora (Dourada) — R$ 150,00
   {
     id: 'prod-ig-03-anabela-piramides-amarracao',
     sku: 'PTS-IG-03',
-    name: 'Anabela Plataforma Pirâmides Gladiadora',
+    name: 'Anabela Plataforma Pirâmides Gladiadora (Dourada)',
     subtitle:
       'Plataforma Alta Bico Quadrado com Pirâmides & Amarração Lace-Up na Perna',
     category: 'Anabelas & Plataformas',
-    price: 289.9,
+    price: 150,
     image: '/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg',
     gallery: [
       '/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg',
@@ -303,15 +303,15 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     createdAt: '2026-03-01T12:00:00.000Z',
   },
 
-  // 4. POST 9 (C4Tc1qCpAdX Slides 1 a 3) — Papete Flatform Tratorada Amarração Nó & Strass
+  // 4. POST 9 (C4Tc1qCpAdX Slide 1) — Papete Flatform Tratorada Strass & Amarração (Off-White) — R$ 130,00
   {
     id: 'prod-ig-04-papete-tratorada-strass',
     sku: 'PTS-IG-04',
-    name: 'Papete Flatform Tratorada Strass & Amarração',
+    name: 'Papete Flatform Tratorada Strass & Amarração (Off-White)',
     subtitle:
       'Solado Tratorado Cravejado com Tiras Duplas de Strass & Amarração Nó Frontal',
     category: 'Flatforms & Papetes',
-    price: 249.9,
+    price: 130,
     image: '/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg',
     gallery: [
       '/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg',
@@ -345,15 +345,15 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     createdAt: '2026-03-01T12:00:00.000Z',
   },
 
-  // 5. POST 5 (C4539VxO5om Slides 1 a 2) — Anabela Plataforma Trançada Dourada c/ Esferas
+  // 5. POST 5 (C4539VxO5om Slides 1 a 2) — Anabela Plataforma Trançada Esferas (Dourada) — R$ 150,00
   {
     id: 'prod-ig-05-anabela-trancada-gold',
     sku: 'PTS-IG-05',
-    name: 'Anabela Plataforma Trançada Esferas',
+    name: 'Anabela Plataforma Trançada Esferas (Dourada)',
     subtitle:
       'Salto Plataforma Revestido em Trama Artesanal com Esferas & Fivela',
     category: 'Anabelas & Plataformas',
-    price: 289.9,
+    price: 150,
     image: '/instagram/feed_5_C4539VxO5om_slide_1.jpg',
     gallery: [
       '/instagram/feed_5_C4539VxO5om_slide_1.jpg',
@@ -383,15 +383,15 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     createdAt: '2026-03-01T12:00:00.000Z',
   },
 
-  // 6. POST 10 (C4Tcs31JPdl Slides 1 a 2) — Flatform Gladiadora Tiras Finas Strass & Vira Cravejada
+  // 6. POST 10 (C4Tcs31JPdl Slide 1) — Flatform Gladiadora Tiras Cruzadas Strass (Dourada) — R$ 130,00
   {
     id: 'prod-ig-06-flatform-amarracao-strass',
     sku: 'PTS-IG-06',
-    name: 'Flatform Gladiadora Tiras Cruzadas Strass',
+    name: 'Flatform Gladiadora Tiras Cruzadas Strass (Dourada)',
     subtitle:
-      'Flatform Anatômica com Vira de Strass, Tiras Finas Brilhantes & Amarração',
+      'Flatform Anatômica com Vira de Strass, Tiras Finas Brilhantes & Amarração Gladiadora',
     category: 'Flatforms & Papetes',
-    price: 239.9,
+    price: 130,
     image: '/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg',
     gallery: [
       '/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg',
@@ -426,15 +426,15 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     createdAt: '2026-03-01T12:00:00.000Z',
   },
 
-  // 7. POST 11 (C4TcpFaJ9ll Slides 1 a 2) — Papete Flatform Metalizada Tiras Transpassadas Strass & Fivela
+  // 7. POST 11 (C4TcpFaJ9ll Slide 1) — Papete Flatform Espelhada Tiras Strass (Prata) — R$ 130,00
   {
     id: 'prod-ig-07-papete-metalizada-transpassada',
     sku: 'PTS-IG-07',
-    name: 'Papete Flatform Espelhada Tiras Strass',
+    name: 'Papete Flatform Espelhada Tiras Strass (Prata)',
     subtitle:
       'Acabamento Premium com Tiras Transpassadas em Strass & Fivela no Tornozelo',
     category: 'Flatforms & Papetes',
-    price: 234.9,
+    price: 130,
     image: '/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg',
     gallery: [
       '/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg',
@@ -468,15 +468,15 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     createdAt: '2026-03-01T12:00:00.000Z',
   },
 
-  // 8. POST 7 (C4ayCqZteae) — Papete dos Sonhos Metalizada Tiras de Dedo em Strass
+  // 8. POST 7 (C4ayCqZteae) — Flatform Normal Tira de Dedo Strass Duo — R$ 110,00
   {
     id: 'prod-ig-08-papete-dos-sonhos-strass',
     sku: 'PTS-IG-08',
-    name: 'Papete dos Sonhos Strass Duo',
+    name: 'Flatform Tira de Dedo Strass Duo (Dourada & Prata)',
     subtitle:
-      'Flatform Bico Quadrado com Tiras de Dedo e Peito do Pé Cravejadas em Strass',
+      'Flatform Normal Bico Quadrado com Tiras de Dedo e Peito do Pé Cravejadas em Strass',
     category: 'Flatforms & Papetes',
-    price: 219.9,
+    price: 110,
     image: '/instagram/feed_7_C4ayCqZteae_main.jpg',
     gallery: [
       '/instagram/feed_7_C4ayCqZteae_main.jpg',
@@ -499,24 +499,24 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     featured: false,
     active: true,
     description:
-      '"A papete dos sonhos!" Publicada em nosso Instagram @petersonshoes_, combina calce prático estilo slide com anel de dedo e três tiras superiores inteiramente cravejadas em strass de alto brilho.',
+      'Publicada em nosso Instagram @petersonshoes_, nossa Flatform de Dedo Strass Duo combina calce prático estilo slide com anel de dedo e três tiras superiores inteiramente cravejadas em strass de alto brilho.',
     craftDetails: [
-      'Prática de calçar e super leve para o dia a dia ou eventos',
+      'Flatform normal prática de calçar e super leve para o dia a dia ou eventos',
       'Disponível nas cores padrão ou cor personalizada (Numeração 34 ao 39 BR)',
       'Produzida sob encomenda pela Peterson Shoes em até 15 dias',
     ],
     createdAt: '2026-03-01T12:00:00.000Z',
   },
 
-  // 9. POST 12 (C4TcmhYpO8_) — Chinelo Flatform Nuvem Tira de Dedo em Manta de Strass com Nó
+  // 9. POST 12 (C4TcmhYpO8_) — Flatform Normal Slide Tira de Dedo Nó em Strass — R$ 110,00
   {
     id: 'prod-ig-09-chinelo-flatform-no-strass',
     sku: 'PTS-IG-09',
     name: 'Flatform Slide Tira de Dedo Nó em Strass',
     subtitle:
-      'Solado Anatômico Macio com Tiras Largura Conforto Revestidas em Manta de Strass',
+      'Flatform Normal Anatômica Macia com Tiras Revestidas em Manta de Strass e Nó',
     category: 'Flatforms & Papetes',
-    price: 179.9,
+    price: 110,
     image: '/instagram/feed_12_C4TcmhYpO8__main.jpg',
     gallery: ['/instagram/feed_12_C4TcmhYpO8__main.jpg'],
     instagramPostUrl: 'https://www.instagram.com/p/C4TcmhYpO8_/',
@@ -539,7 +539,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     featured: false,
     active: true,
     description:
-      'Conforto absoluto nos pés com o glamour da manta de strass! Nosso Chinelo Flatform Slide com nó central do Instagram @petersonshoes_ é confeccionado em todas as cores padrão ou sob encomenda na cor que você desejar.',
+      'Conforto absoluto nos pés com o glamour da manta de strass! Nossa Flatform Normal Slide com nó central do Instagram @petersonshoes_ é confeccionada em todas as cores padrão ou sob encomenda na cor que você desejar.',
     craftDetails: [
       'Palmilha anatômica tipo nuvem de altíssima maciez (34 ao 39 BR)',
       'Tiras revestidas em manta de strass com forro interno suave',
@@ -548,14 +548,14 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     createdAt: '2026-03-01T12:00:00.000Z',
   },
 
-  // 10. POST 2 (C454HJKO2oG) — Anabela Espadrille Branca Pirâmides Prateadas & Corda de Juta
+  // 10. POST 2 (C454HJKO2oG) — Anabela Espadrille Branca Pirâmides Prateadas & Corda de Juta — R$ 150,00
   {
     id: 'prod-ig-10-anabela-espadrille-branca',
     sku: 'PTS-IG-10',
-    name: 'Anabela Espadrille Pirâmides & Juta',
+    name: 'Anabela Espadrille Pirâmides & Juta (Branca)',
     subtitle: 'Anabela com Tachas Piramidais Espelhadas & Corda de Juta Natural',
     category: 'Anabelas & Plataformas',
-    price: 269.9,
+    price: 150,
     image: '/instagram/feed_2_C454HJKO2oG_main.jpg',
     gallery: ['/instagram/feed_2_C454HJKO2oG_main.jpg'],
     instagramPostUrl: 'https://www.instagram.com/p/C454HJKO2oG/',
@@ -582,14 +582,14 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     createdAt: '2026-03-01T12:00:00.000Z',
   },
 
-  // 11. POST 4 (C454A4GujcN Slides 1 a 2) — Rasteira Gladiadora Dupla Strass Cristal c/ Amarração
+  // 11. POST 4 (C454A4GujcN Slides 1 a 2) — Rasteira Gladiadora Strass Cristal — R$ 110,00
   {
     id: 'prod-ig-11-rasteira-gladiadora-strass',
     sku: 'PTS-IG-11',
-    name: 'Rasteira Gladiadora Strass Cristal',
-    subtitle: 'Tiras Duplas em Manta de Strass & Amarração Delicada na Perna',
+    name: 'Rasteira Gladiadora Strass Cristal (Prata)',
+    subtitle: 'Tiras Duplas em Manta de Strass & Amarração Gladiadora Delicada na Perna',
     category: 'Rasteiras & Gladiadoras',
-    price: 199.9,
+    price: 110,
     image: '/instagram/feed_4_C454A4GujcN_slide_1.jpg',
     gallery: [
       '/instagram/feed_4_C454A4GujcN_slide_1.jpg',
@@ -619,22 +619,22 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     createdAt: '2026-03-01T12:00:00.000Z',
   },
 
-  // 12. POST 6 (C45360nuL6q Slides 1 a 2) — Tamanco Plataforma Trançado Nó
+  // 12. POST 6 (C45360nuL6q Slides 1 a 2) — Anabela Tamanco Plataforma Trançado Nó — R$ 150,00
   {
     id: 'prod-ig-12-tamanco-plataforma-no',
     sku: 'PTS-IG-12',
-    name: 'Tamanco Plataforma Trançado c/ Nó',
+    name: 'Anabela Tamanco Plataforma Trançado c/ Nó (Off-White)',
     subtitle:
-      'Plataforma Alta Revestida em Trama Artesanal & Tira Larga com Nó Central',
-    category: 'Tamancos & Saltos',
-    price: 259.9,
+      'Anabela Plataforma Alta Revestida em Trama Artesanal & Tira Larga com Nó Central',
+    category: 'Anabelas & Plataformas',
+    price: 150,
     image: '/instagram/feed_6_C45360nuL6q_slide_1.jpg',
     gallery: [
       '/instagram/feed_6_C45360nuL6q_slide_1.jpg',
       '/instagram/feed_6_C45360nuL6q_slide_2.jpg',
     ],
     instagramPostUrl: 'https://www.instagram.com/p/C45360nuL6q/',
-    heelOptions: ['Plataforma Alta 8,5cm', 'Plataforma Média 6,5cm'],
+    heelOptions: ['Anabela Plataforma Alta 8,5cm', 'Anabela Plataforma Média 6,5cm'],
     strapFinishes: ['Napa Macia Sem Metais', 'Detalhe Dourado na Palmilha'],
     colors: buildStandardColors(
       'Branco',
@@ -649,7 +649,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     featured: false,
     active: true,
     description:
-      'Conforto, leveza e altura em um design autoral do nosso Instagram @petersonshoes_! Tamanco Plataforma com base inteiramente revestida em trama trançada e gáspea em napa ultra macia com nó frontal anatômico.',
+      'Conforto, leveza e altura em um modelo tendência do nosso Instagram @petersonshoes_! Anabela Tamanco Plataforma com base inteiramente revestida em trama trançada e gáspea em napa ultra macia com nó frontal anatômico.',
     craftDetails: [
       'Plataforma super leve com estabilidade total ao caminhar (34 ao 39 BR)',
       'Tira larga forrada em espuma macia para zero atrito nos dedos',
@@ -658,15 +658,15 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     createdAt: '2026-03-01T12:00:00.000Z',
   },
 
-  // 13. POST 3 (C454E0zuuFv Slides 1 a 2) — Rasteira Esferas & Medalhão Metalizada
+  // 13. POST 3 (C454E0zuuFv Slide 1) — Outras Rasteiras: Rasteira Esferas & Medalhão Metalizada (Dourada) — R$ 100,00
   {
     id: 'prod-ig-13-rasteira-medalhao-esferas',
     sku: 'PTS-IG-13',
-    name: 'Rasteira Esferas & Medalhão Metalizada',
+    name: 'Rasteira Esferas & Medalhão Metalizada (Dourada)',
     subtitle:
       'Rasteira de Dedo com Tachas Esféricas & Tira Dupla no Tornozelo',
     category: 'Rasteiras & Gladiadoras',
-    price: 189.9,
+    price: 100,
     image: '/instagram/feed_3_C454E0zuuFv_slide_1.jpg',
     gallery: [
       '/instagram/feed_3_C454E0zuuFv_slide_1.jpg',
@@ -700,15 +700,15 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     createdAt: '2026-03-01T12:00:00.000Z',
   },
 
-  // 14. POST 1 Slide 4 em Destaque — Papete Flatform Pirâmides Edição Black & Gold
+  // 14. POST 1 Slide 4 — Papete Flatform Pirâmides Black & Gold (Preta) — R$ 130,00
   {
     id: 'prod-ig-14-papete-piramides-preta',
     sku: 'PTS-IG-14',
-    name: 'Papete Flatform Pirâmides Black & Gold',
+    name: 'Papete Flatform Pirâmides Black & Gold (Preta)',
     subtitle:
       'Edição Preta com Pirâmides Douradas Espelhadas & Solado Anatômico',
     category: 'Flatforms & Papetes',
-    price: 229.9,
+    price: 130,
     image: '/instagram/feed_1_C454LXbOzrn_slide_4.jpg',
     gallery: [
       '/instagram/feed_1_C454LXbOzrn_slide_4.jpg',
@@ -747,15 +747,15 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     createdAt: '2026-03-01T12:00:00.000Z',
   },
 
-  // 15. POST 8 Slide 2 em Destaque — Anabela Plataforma Pirâmides Edição Nude & Ouro
+  // 15. POST 8 Slide 2 — Anabela Plataforma Pirâmides & Fivela (Nude Rosé) — R$ 150,00
   {
     id: 'prod-ig-15-anabela-piramides-nude',
     sku: 'PTS-IG-15',
-    name: 'Anabela Plataforma Pirâmides Nude & Ouro',
+    name: 'Anabela Plataforma Pirâmides & Fivela (Nude Rosé)',
     subtitle:
       'Edição Nude Aveludada com Tachas Piramidais Douradas & Bico Quadrado',
     category: 'Anabelas & Plataformas',
-    price: 279.9,
+    price: 150,
     image: '/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg',
     gallery: [
       '/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg',
@@ -794,6 +794,1348 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     ],
     createdAt: '2026-03-01T12:00:00.000Z',
   },
+
+  // 16. POST 1 Slide 2 — Papete Flatform Pirâmides & Fivela (Off-White / Nude) — R$ 130,00
+  {
+    id: 'prod-ig-16-papete-piramides-nude',
+    sku: 'PTS-IG-16',
+    name: 'Papete Flatform Pirâmides & Fivela (Off-White / Nude)',
+    subtitle:
+      'Palmilha Anatômica Off-White com Pirâmides Douradas & Fivela Ajustável',
+    category: 'Flatforms & Papetes',
+    price: 130,
+    image: '/instagram/feed_1_C454LXbOzrn_slide_2.jpg',
+    gallery: [
+      '/instagram/feed_1_C454LXbOzrn_slide_2.jpg',
+      '/instagram/feed_1_C454LXbOzrn_slide_1.jpg',
+      '/instagram/feed_1_C454LXbOzrn_slide_3.jpg',
+      '/instagram/feed_1_C454LXbOzrn_slide_4.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C454LXbOzrn/',
+    heelOptions: ['Flatform Anatômica 3,5cm', 'Flatform Conforto 2,5cm'],
+    strapFinishes: [
+      'Pirâmides Douradas & Fivela Ouro',
+      'Pirâmides Prata & Fivela Prata',
+    ],
+    colors: buildStandardColors(
+      'Nude',
+      '/instagram/feed_1_C454LXbOzrn_slide_2.jpg',
+      {
+        Nude: '/instagram/feed_1_C454LXbOzrn_slide_2.jpg',
+        Branco: '/instagram/feed_1_C454LXbOzrn_slide_2.jpg',
+        Dourado: '/instagram/feed_1_C454LXbOzrn_slide_1.jpg',
+        Prata: '/instagram/feed_1_C454LXbOzrn_slide_3.jpg',
+        Preto: '/instagram/feed_1_C454LXbOzrn_slide_4.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Versão Off-White / Nude super versátil do nosso Instagram @petersonshoes_! Combina com todos os looks e traz palmilha macia de bico quadrado com tachas piramidais.',
+    craftDetails: [
+      'Fabricação própria em Goiânia - GO sob encomenda (34 ao 39 BR)',
+      'Disponível nas 8 cores padrão ou na cor personalizada que você escrever',
+      'Entrada de 50% (R$ 65,00 no Pix sem taxa) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 17. POST 1 Slide 3 — Papete Flatform Pirâmides & Fivela (Prata Metalizada) — R$ 130,00
+  {
+    id: 'prod-ig-17-papete-piramides-prata',
+    sku: 'PTS-IG-17',
+    name: 'Papete Flatform Pirâmides & Fivela (Prata)',
+    subtitle:
+      'Acabamento Metalizado Prata com Pirâmides Espelhadas & Pulseira no Tornozelo',
+    category: 'Flatforms & Papetes',
+    price: 130,
+    image: '/instagram/feed_1_C454LXbOzrn_slide_3.jpg',
+    gallery: [
+      '/instagram/feed_1_C454LXbOzrn_slide_3.jpg',
+      '/instagram/feed_1_C454LXbOzrn_slide_1.jpg',
+      '/instagram/feed_1_C454LXbOzrn_slide_2.jpg',
+      '/instagram/feed_1_C454LXbOzrn_slide_4.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C454LXbOzrn/',
+    heelOptions: ['Flatform Anatômica 3,5cm', 'Flatform Conforto 2,5cm'],
+    strapFinishes: [
+      'Pirâmides Cromadas & Fivela Prata',
+      'Pirâmides Douradas & Fivela Ouro',
+    ],
+    colors: buildStandardColors(
+      'Prata',
+      '/instagram/feed_1_C454LXbOzrn_slide_3.jpg',
+      {
+        Prata: '/instagram/feed_1_C454LXbOzrn_slide_3.jpg',
+        Dourado: '/instagram/feed_1_C454LXbOzrn_slide_1.jpg',
+        Nude: '/instagram/feed_1_C454LXbOzrn_slide_2.jpg',
+        Preto: '/instagram/feed_1_C454LXbOzrn_slide_4.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Edição Prata Metalizada da nossa Papete Flatform Pirâmides @petersonshoes_! Moderna, confortável e feita sob medida na sua numeração.',
+    craftDetails: [
+      'Confeccionada sob encomenda do 34 ao 39 BR em até 15 dias',
+      'Escolha Prata ou qualquer uma das cores padrão / cor personalizada',
+      'Entrada de 50% (R$ 65,00 no Pix) + 50% na conclusão',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 18. POST 3 Slide 2 — Outras Rasteiras: Rasteira Esferas & Medalhão Metalizada (Prata) — R$ 100,00
+  {
+    id: 'prod-ig-18-rasteira-medalhao-prata',
+    sku: 'PTS-IG-18',
+    name: 'Rasteira Esferas & Medalhão Metalizada (Prata)',
+    subtitle:
+      'Rasteira de Dedo Prateada com Esferas Cromadas & Tira Dupla no Tornozelo',
+    category: 'Rasteiras & Gladiadoras',
+    price: 100,
+    image: '/instagram/feed_3_C454E0zuuFv_slide_2.jpg',
+    gallery: [
+      '/instagram/feed_3_C454E0zuuFv_slide_2.jpg',
+      '/instagram/feed_3_C454E0zuuFv_slide_1.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C454E0zuuFv/',
+    heelOptions: ['Rasteira Conforto 1,5cm', 'Salto Baixo 2,5cm'],
+    strapFinishes: [
+      'Esferas & Medalhões Prateados',
+      'Esferas & Medalhões Dourados',
+    ],
+    colors: buildStandardColors(
+      'Prata',
+      '/instagram/feed_3_C454E0zuuFv_slide_2.jpg',
+      {
+        Prata: '/instagram/feed_3_C454E0zuuFv_slide_2.jpg',
+        Dourado: '/instagram/feed_3_C454E0zuuFv_slide_1.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Versão Prata Metalizada da nossa Rasteira Esferas & Medalhão @petersonshoes_! Leve, fresca e elegante para todas as ocasiões.',
+    craftDetails: [
+      'Fabricação própria sob encomenda em Goiânia - GO (Numeração 34 ao 39)',
+      'Disponível em todas as cores padrão ou outra cor personalizada',
+      'Valor R$ 100,00 · Entrada de 50% (R$ 50,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 19. POST 8 Slide 3 — Anabela Plataforma Pirâmides & Fivela (Prata Champagne) — R$ 150,00
+  {
+    id: 'prod-ig-19-anabela-piramides-prata',
+    sku: 'PTS-IG-19',
+    name: 'Anabela Plataforma Pirâmides & Fivela (Prata Champagne)',
+    subtitle:
+      'Plataforma Alta Metalizada com Tachas Piramidais & Fivela no Tornozelo',
+    category: 'Anabelas & Plataformas',
+    price: 150,
+    image: '/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg',
+    gallery: [
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4Tc5OnpB_L/',
+    heelOptions: ['Anabela Alta 9,5cm (Meia Pata 3,5cm)', 'Anabela Média 7,5cm'],
+    strapFinishes: [
+      'Pirâmides Douradas & Fivela Ouro',
+      'Pirâmides Prata & Fivela Cromada',
+    ],
+    colors: buildStandardColors(
+      'Prata',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg',
+      {
+        Prata: '/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg',
+        Preto: '/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg',
+        Nude: '/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg',
+        Dourado: '/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg',
+        Branco: '/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Brilho sofisticado para festas e eventos! Anabela Plataforma Pirâmides @petersonshoes_ na edição Prata Champagne, confeccionada sob encomenda do 34 ao 39.',
+    craftDetails: [
+      'Meia pata anatômica que garante conforto mesmo em salto alto',
+      'Disponível em todas as cores padrão ou cor personalizada',
+      'Entrada de 50% (R$ 75,00 no Pix) + 50% quando sua Anabela estiver pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 20. POST 8 Slide 4 — Anabela Plataforma Pirâmides & Fivela (Dourada) — R$ 150,00
+  {
+    id: 'prod-ig-20-anabela-piramides-dourada',
+    sku: 'PTS-IG-20',
+    name: 'Anabela Plataforma Pirâmides & Fivela (Dourada)',
+    subtitle:
+      'Edição Ouro Metalizado com Pirâmides Douradas & Pulseira de Fivela',
+    category: 'Anabelas & Plataformas',
+    price: 150,
+    image: '/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg',
+    gallery: [
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4Tc5OnpB_L/',
+    heelOptions: ['Anabela Alta 9,5cm (Meia Pata 3,5cm)', 'Anabela Média 7,5cm'],
+    strapFinishes: [
+      'Pirâmides Douradas & Fivela Ouro',
+      'Pirâmides Prata & Fivela Cromada',
+    ],
+    colors: buildStandardColors(
+      'Dourado',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg',
+      {
+        Dourado: '/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg',
+        Preto: '/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg',
+        Nude: '/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg',
+        Prata: '/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg',
+        Branco: '/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Uma das campeãs de pedidos no Instagram @petersonshoes_! Anabela Plataforma inteiramente dourada com pirâmides espelhadas e fechamento por fivela no tornozelo.',
+    craftDetails: [
+      'Confeccionada sob encomenda na numeração 34 ao 39 BR',
+      'Disponível em Dourado ou qualquer outra cor escolhida por você',
+      'Valor R$ 150,00 · Entrada de 50% (R$ 75,00) + 50% na conclusão',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 21. POST 8 Slide 5 — Anabela Plataforma Pirâmides & Fivela (Branca) — R$ 150,00
+  {
+    id: 'prod-ig-21-anabela-piramides-branca',
+    sku: 'PTS-IG-21',
+    name: 'Anabela Plataforma Pirâmides & Fivela (Branca)',
+    subtitle:
+      'Edição Branca com Tachas Piramidais Douradas & Bico Quadrado Moderno',
+    category: 'Anabelas & Plataformas',
+    price: 150,
+    image: '/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg',
+    gallery: [
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4Tc5OnpB_L/',
+    heelOptions: ['Anabela Alta 9,5cm (Meia Pata 3,5cm)', 'Anabela Média 7,5cm'],
+    strapFinishes: [
+      'Pirâmides Douradas & Fivela Ouro',
+      'Pirâmides Prata & Fivela Cromada',
+    ],
+    colors: buildStandardColors(
+      'Branco',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg',
+      {
+        Branco: '/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg',
+        Preto: '/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg',
+        Nude: '/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg',
+        Prata: '/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg',
+        Dourado: '/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Destaque especial do carrossel @petersonshoes_! A Anabela Plataforma Branca com pirâmides douradas valoriza produções diurnas e noturnas com máximo conforto.',
+    craftDetails: [
+      'Fabricação própria em Goiânia - GO sob encomenda (34 ao 39 BR)',
+      '8 cores padrão + opção Outra Cor personalizada',
+      'Entrada de 50% (R$ 75,00 no Pix) + 50% somente quando estiver pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 22. POST 8 Slide 7 — Anabela Plataforma Pirâmides Gladiadora (Nude Rosé) — R$ 150,00
+  {
+    id: 'prod-ig-22-anabela-gladiadora-nude',
+    sku: 'PTS-IG-22',
+    name: 'Anabela Plataforma Pirâmides Gladiadora (Nude Rosé)',
+    subtitle:
+      'Anabela Bico Quadrado Nude Rosé com Pirâmides Douradas & Amarração na Perna',
+    category: 'Anabelas & Plataformas',
+    price: 150,
+    image: '/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg',
+    gallery: [
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4Tc5OnpB_L/',
+    heelOptions: ['Anabela Alta 9,5cm (Meia Pata 3,5cm)', 'Anabela Média 7,5cm'],
+    strapFinishes: [
+      'Pirâmides Douradas & Ponteiras Ouro',
+      'Pirâmides Prata & Ponteiras Prata',
+    ],
+    colors: buildStandardColors(
+      'Nude',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg',
+      {
+        Nude: '/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg',
+        Rosa: '/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg',
+        Dourado: '/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg',
+        Prata: '/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Delicada e imponente! Anabela Plataforma Pirâmides Gladiadora na cor Nude Rosé com amarração lace-up macia no tornozelo.',
+    craftDetails: [
+      'Produzida sob encomenda na numeração 34 ao 39 BR em até 15 dias',
+      'Disponível em Nude, Rosa, Dourado, Prata, Preto, Branco, Marsala, Vermelho ou Outra Cor',
+      'Valor R$ 150,00 · Entrada de 50% (R$ 75,00) + 50% na entrega',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 23. POST 8 Slide 8 — Anabela Plataforma Pirâmides Gladiadora (Prata) — R$ 150,00
+  {
+    id: 'prod-ig-23-anabela-gladiadora-prata',
+    sku: 'PTS-IG-23',
+    name: 'Anabela Plataforma Pirâmides Gladiadora (Prata)',
+    subtitle:
+      'Anabela Metalizada Prata com Tachas Piramidais & Amarração Gladiadora',
+    category: 'Anabelas & Plataformas',
+    price: 150,
+    image: '/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg',
+    gallery: [
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4Tc5OnpB_L/',
+    heelOptions: ['Anabela Alta 9,5cm (Meia Pata 3,5cm)', 'Anabela Média 7,5cm'],
+    strapFinishes: [
+      'Pirâmides Prata & Ponteiras Prata',
+      'Pirâmides Douradas & Ponteiras Ouro',
+    ],
+    colors: buildStandardColors(
+      'Prata',
+      '/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg',
+      {
+        Prata: '/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg',
+        Dourado: '/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg',
+        Nude: '/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Edição Prata Metalizada da nossa Anabela Plataforma Gladiadora @petersonshoes_! Perfeita para quem busca altura com estabilidade e brilho.',
+    craftDetails: [
+      'Meia pata frontal confortável e amarração ajustável',
+      'Confeccionada sob encomenda do 34 ao 39 BR em Goiânia - GO',
+      'Entrada de 50% (R$ 75,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 24. POST 9 Slide 2 — Papete Flatform Tratorada Strass & Amarração (Preta Onix) — R$ 130,00
+  {
+    id: 'prod-ig-24-papete-tratorada-preta',
+    sku: 'PTS-IG-24',
+    name: 'Papete Flatform Tratorada Strass & Amarração (Preta)',
+    subtitle:
+      'Solado Tratorado Preto com Vira de Strass Cristal & Amarração Nó Central',
+    category: 'Flatforms & Papetes',
+    price: 130,
+    image: '/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg',
+    gallery: [
+      '/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg',
+      '/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg',
+      '/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4Tc1qCpAdX/',
+    heelOptions: ['Flatform Tratorada 4cm', 'Flatform Anatômica 3cm'],
+    strapFinishes: ['Strass Cristal & Vira Cravejada', 'Strass Grafite Onix'],
+    colors: buildStandardColors(
+      'Preto',
+      '/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg',
+      {
+        Preto: '/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg',
+        Branco: '/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg',
+        Dourado: '/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Destaque em preto com strass cristal do nosso Instagram @petersonshoes_! Papete Flatform Tratorada com amarração que abraça o pé com firmeza e maciez.',
+    craftDetails: [
+      'Solado tratorado contornado por filete de strass brilhante',
+      'Disponível do 34 ao 39 BR em todas as cores padrão ou cor personalizada',
+      'Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 25. POST 9 Slide 3 — Papete Flatform Tratorada Strass & Amarração (Dourada) — R$ 130,00
+  {
+    id: 'prod-ig-25-papete-tratorada-dourada',
+    sku: 'PTS-IG-25',
+    name: 'Papete Flatform Tratorada Strass & Amarração (Dourada)',
+    subtitle:
+      'Edição Dourada Metalizada com Tiras Duplas de Strass & Solado Tratorado',
+    category: 'Flatforms & Papetes',
+    price: 130,
+    image: '/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg',
+    gallery: [
+      '/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg',
+      '/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg',
+      '/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4Tc1qCpAdX/',
+    heelOptions: ['Flatform Tratorada 4cm', 'Flatform Anatômica 3cm'],
+    strapFinishes: ['Strass Dourado & Vira Cravejada', 'Strass Cristal'],
+    colors: buildStandardColors(
+      'Dourado',
+      '/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg',
+      {
+        Dourado: '/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg',
+        Branco: '/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg',
+        Preto: '/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Versão Dourada da Papete Tratorada Strass @petersonshoes_! Confeccionada sob encomenda na numeração 34 ao 39 em nossa fábrica própria em Goiânia - GO.',
+    craftDetails: [
+      'Tiras frontais em manta de strass com amarração ajustável',
+      'Disponível nas 8 cores padrão ou na cor personalizada que você digitar',
+      'Entrada de 50% (R$ 65,00 no Pix) + 50% somente na conclusão',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 26. POST 10 Slide 2 — Flatform Gladiadora Tiras Cruzadas Strass (Branca & Prata) — R$ 130,00
+  {
+    id: 'prod-ig-26-flatform-gladiadora-branca',
+    sku: 'PTS-IG-26',
+    name: 'Flatform Gladiadora Tiras Cruzadas Strass (Branca & Prata)',
+    subtitle:
+      'Flatform Gladiadora Branca com Tiras Finas em Strass Cristal & Vira Cravejada',
+    category: 'Flatforms & Papetes',
+    price: 130,
+    image: '/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg',
+    gallery: [
+      '/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg',
+      '/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4Tcs31JPdl/',
+    heelOptions: ['Flatform Anatômica 3,5cm', 'Flatform Conforto 2,5cm'],
+    strapFinishes: [
+      'Strass Prata Cristal & Vira Brilhante',
+      'Strass Dourado',
+    ],
+    colors: buildStandardColors(
+      'Branco',
+      '/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg',
+      {
+        Branco: '/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg',
+        Prata: '/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg',
+        Dourado: '/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Edição Branca & Prata Cristal da nossa Flatform Gladiadora Tiras Cruzadas @petersonshoes_! Delicada, iluminada e super confortável.',
+    craftDetails: [
+      'Fabricação própria sob encomenda em até 15 dias (34 ao 39 BR)',
+      'Escolha Branco, Prata, Dourado ou qualquer outra cor personalizada',
+      'Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 27. POST 11 Slide 2 — Papete Flatform Espelhada Tiras Strass (Dourado Champagne) — R$ 130,00
+  {
+    id: 'prod-ig-27-papete-espelhada-dourada',
+    sku: 'PTS-IG-27',
+    name: 'Papete Flatform Espelhada Tiras Strass (Dourado Champagne)',
+    subtitle:
+      'Palmilha Espelhada Champagne com Tiras Transpassadas em Strass & Fivela',
+    category: 'Flatforms & Papetes',
+    price: 130,
+    image: '/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg',
+    gallery: [
+      '/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg',
+      '/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4TcpFaJ9ll/',
+    heelOptions: ['Flatform Espelhada 3,5cm', 'Flatform Conforto 2,5cm'],
+    strapFinishes: [
+      'Strass Champagne & Fivela Ouro',
+      'Strass Cristal & Fivela Prata',
+    ],
+    colors: buildStandardColors(
+      'Dourado',
+      '/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg',
+      {
+        Dourado: '/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg',
+        Prata: '/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Edição Dourado Champagne da Papete Flatform Espelhada @petersonshoes_! Tiras sinuosas cravejadas de strass sobre o peito do pé e fivela delicada no tornozelo.',
+    craftDetails: [
+      'Produzida sob medida na numeração 34 ao 39 BR em Goiânia - GO',
+      'Disponível em todas as cores padrão ou outra cor personalizada',
+      'Entrada de 50% (R$ 65,00 no Pix) + 50% somente quando estiver pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 28. POST 14 (C4TcgZrplaC) — Papete Flatform Tira Transversal Pirâmides & Fivela — R$ 130,00
+  {
+    id: 'prod-ig-28-papete-transversal-piramides',
+    sku: 'PTS-IG-28',
+    name: 'Papete Flatform Tira Transversal Pirâmides & Fivela (Dourada & Prata)',
+    subtitle:
+      'Bico Quadrado Anatômico com Tira Diagonal Cravejada de Pirâmides & Fivela no Tornozelo',
+    category: 'Flatforms & Papetes',
+    price: 130,
+    image: '/instagram/feed_14_C4TcgZrplaC_slide_1.jpg',
+    gallery: [
+      '/instagram/feed_14_C4TcgZrplaC_slide_1.jpg',
+      '/instagram/feed_14_C4TcgZrplaC_slide_2.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4TcgZrplaC/',
+    heelOptions: ['Flatform Anatômica 3,5cm', 'Flatform Conforto 2,5cm'],
+    strapFinishes: [
+      'Pirâmides Douradas & Fivela Ouro',
+      'Pirâmides Prata & Fivela Cromada',
+    ],
+    colors: buildStandardColors(
+      'Dourado',
+      '/instagram/feed_14_C4TcgZrplaC_slide_1.jpg',
+      {
+        Dourado: '/instagram/feed_14_C4TcgZrplaC_slide_1.jpg',
+        Prata: '/instagram/feed_14_C4TcgZrplaC_slide_2.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'Um dos modelos mais pedidos do Instagram @petersonshoes_! Papete Flatform com tira transversal e pulseira inteiramente aplicadas com pirâmides metalizadas, garantindo firmeza e muito destaque.',
+    craftDetails: [
+      'Confeccionada sob encomenda na numeração 34 ao 39 BR em até 15 dias',
+      'Disponível em Dourado, Prata, Preto, Branco, Marsala, Nude, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 29. POST 15 (C4TceEBpcL2) — Outras Rasteiras: Rasteira Bico Quadrado Tira de Dedo Nó em Strass — R$ 100,00
+  {
+    id: 'prod-ig-29-rasteira-no-strass-bico-quadrado',
+    sku: 'PTS-IG-29',
+    name: 'Rasteira Bico Quadrado Tira de Dedo Nó em Strass',
+    subtitle:
+      'Rasteira Elegante de Bico Quadrado com Tiras em Manta de Strass & Nó Central',
+    category: 'Rasteiras & Gladiadoras',
+    price: 100,
+    image: '/instagram/feed_15_C4TceEBpcL2_main.jpg',
+    gallery: ['/instagram/feed_15_C4TceEBpcL2_main.jpg'],
+    instagramPostUrl: 'https://www.instagram.com/p/C4TceEBpcL2/',
+    heelOptions: ['Rasteira Conforto 1,5cm', 'Salto Baixo 2,5cm'],
+    strapFinishes: [
+      'Manta de Strass Cristal Brilhante',
+      'Manta de Strass Dourado Champagne',
+    ],
+    colors: buildStandardColors(
+      'Preto',
+      '/instagram/feed_15_C4TceEBpcL2_main.jpg',
+      {
+        Preto: '/instagram/feed_15_C4TceEBpcL2_main.jpg',
+        Dourado: '/instagram/feed_15_C4TceEBpcL2_main.jpg',
+        Nude: '/instagram/feed_15_C4TceEBpcL2_main.jpg',
+        Prata: '/instagram/feed_15_C4TceEBpcL2_main.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'Clássica, leve e super brilhante! Rasteira de bico quadrado do nosso perfil @petersonshoes_ com tiras de dedo unidas por nó central cravejado de strass.',
+    craftDetails: [
+      'Produzida sob medida na numeração 34 ao 39 BR em nossa fábrica em Goiânia - GO',
+      'Disponível em Preto, Dourado, Nude, Branco, Marsala, Prata, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 100,00 · Entrada de 50% (R$ 50,00 no Pix) + 50% na conclusão',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 30. POST 16 (C4TccS0J14Z) & POST 44 (C12GJ6QORi4) — Outras Rasteiras: Rasteira Laço Duplo Strass — R$ 100,00
+  {
+    id: 'prod-ig-30-rasteira-laco-duplo-strass',
+    sku: 'PTS-IG-30',
+    name: 'Rasteira Bico Quadrado Laço Duplo Cravejado em Strass',
+    subtitle:
+      'Modelo Tendência com Dois Laços Estruturados em Strass Cristal & Bico Quadrado',
+    category: 'Rasteiras & Gladiadoras',
+    price: 100,
+    image: '/instagram/feed_44_C12GJ6QORi4_slide_1.jpg',
+    gallery: [
+      '/instagram/feed_44_C12GJ6QORi4_slide_1.jpg',
+      '/instagram/feed_16_C4TccS0J14Z_slide_1.jpg',
+      '/instagram/feed_16_C4TccS0J14Z_slide_2.jpg',
+      '/instagram/feed_16_C4TccS0J14Z_slide_3.jpg',
+      '/instagram/feed_44_C12GJ6QORi4_slide_2.jpg',
+      '/instagram/feed_44_C12GJ6QORi4_slide_4.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4TccS0J14Z/',
+    heelOptions: ['Rasteira Conforto 1,5cm', 'Salto Baixo 2,5cm'],
+    strapFinishes: [
+      'Laço Duplo em Manta de Strass Cristal',
+      'Laço Duplo em Strass Dourado',
+    ],
+    colors: buildStandardColors(
+      'Dourado',
+      '/instagram/feed_44_C12GJ6QORi4_slide_1.jpg',
+      {
+        Dourado: '/instagram/feed_44_C12GJ6QORi4_slide_1.jpg',
+        Branco: '/instagram/feed_16_C4TccS0J14Z_slide_3.jpg',
+        Rosa: '/instagram/feed_16_C4TccS0J14Z_slide_1.jpg',
+        Preto: '/instagram/feed_16_C4TccS0J14Z_slide_1.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'Campeã de olhares no perfil @petersonshoes_! Rasteira de bico quadrado com dois laços frontais inteiramente revestidos em strass de alto brilho. Sofisticada, feminina e ultra confortável.',
+    craftDetails: [
+      'Laços duplos estruturados manualmente com manta de strass premium',
+      'Numeração 34 ao 39 BR em todas as cores padrão ou cor personalizada',
+      'Valor R$ 100,00 · Entrada de 50% (R$ 50,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 31. POST 17 (C4TcYo9pYsy) — Outras Rasteiras: Rasteira Tira Transversal Strass & Fivela — R$ 100,00
+  {
+    id: 'prod-ig-31-rasteira-transversal-strass-fivela',
+    sku: 'PTS-IG-31',
+    name: 'Rasteira Bico Quadrado Tira Transversal Strass & Fivela',
+    subtitle:
+      'Tira Diagonal em Manta de Strass, Anel de Dedo & Fechamento por Fivela no Tornozelo',
+    category: 'Rasteiras & Gladiadoras',
+    price: 100,
+    image: '/instagram/feed_17_C4TcYo9pYsy_main.jpg',
+    gallery: ['/instagram/feed_17_C4TcYo9pYsy_main.jpg'],
+    instagramPostUrl: 'https://www.instagram.com/p/C4TcYo9pYsy/',
+    heelOptions: ['Rasteira Conforto 1,5cm', 'Salto Baixo 2,5cm'],
+    strapFinishes: [
+      'Strass Cristal & Fivela Metalizada',
+      'Strass Dourado & Fivela Ouro',
+    ],
+    colors: buildStandardColors(
+      'Dourado',
+      '/instagram/feed_17_C4TcYo9pYsy_main.jpg',
+      {
+        Dourado: '/instagram/feed_17_C4TcYo9pYsy_main.jpg',
+        Branco: '/instagram/feed_17_C4TcYo9pYsy_main.jpg',
+        Prata: '/instagram/feed_17_C4TcYo9pYsy_main.jpg',
+        Preto: '/instagram/feed_17_C4TcYo9pYsy_main.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Delicadeza e segurança ao caminhar! Modelo oficial @petersonshoes_ com tira transversal brilhante no peito do pé e pulseira com fivela ajustável no tornozelo.',
+    craftDetails: [
+      'Fabricação própria em Goiânia - GO sob encomenda (Numeração 34 ao 39 BR)',
+      'Disponível em Dourado, Branco, Prata, Preto, Marsala, Nude, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 100,00 · Entrada de 50% (R$ 50,00 no Pix) + 50% na entrega',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 32. POST 18 (C4TcU91p2E8) & POST 20 (C4TcQjaJejN) — Rasteira Gladiadora Multitiras Nó de Strass — R$ 110,00
+  {
+    id: 'prod-ig-32-rasteira-gladiadora-no-strass',
+    sku: 'PTS-IG-32',
+    name: 'Rasteira Gladiadora Multitiras Nó de Strass & Amarração',
+    subtitle:
+      'Rasteira Gladiadora Bico Quadrado com Tiras Cravejadas, Nó Frontal & Amarração na Perna',
+    category: 'Rasteiras & Gladiadoras',
+    price: 110,
+    image: '/instagram/feed_20_C4TcQjaJejN_main.jpg',
+    gallery: [
+      '/instagram/feed_20_C4TcQjaJejN_main.jpg',
+      '/instagram/feed_18_C4TcU91p2E8_main.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4TcQjaJejN/',
+    heelOptions: ['Rasteira Conforto 1,5cm', 'Salto Baixo 2,5cm'],
+    strapFinishes: [
+      'Strass Cristal & Amarração Macia',
+      'Strass Dourado & Amarração Macia',
+    ],
+    colors: buildStandardColors(
+      'Rosa',
+      '/instagram/feed_20_C4TcQjaJejN_main.jpg',
+      {
+        Rosa: '/instagram/feed_20_C4TcQjaJejN_main.jpg',
+        Preto: '/instagram/feed_20_C4TcQjaJejN_main.jpg',
+        Branco: '/instagram/feed_18_C4TcU91p2E8_main.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'Moderna e super estilosa! Nossa Rasteira Gladiadora com nó de strass e amarração lace-up no tornozelo (@petersonshoes_) valoriza qualquer produção e pode ser feita na sua cor favorita.',
+    craftDetails: [
+      'Tiras finas confortáveis com aplicação de strass e cordões macios para amarração',
+      'Numeração 34 ao 39 BR · Escolha entre as cores padrão ou digite Outra Cor',
+      'Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 33. POST 19 (C4TcSseJ1vr) — Outras Rasteiras: Rasteira Bico Quadrado Tiras Cruzadas X em Pedraria — R$ 100,00
+  {
+    id: 'prod-ig-33-rasteira-tiras-x-pedraria',
+    sku: 'PTS-IG-33',
+    name: 'Rasteira Bico Quadrado Tiras Cruzadas X em Pedraria',
+    subtitle:
+      'Slide Rasteira com Tiras Largas Cruzadas em X Revestidas de Pedraria e Strass',
+    category: 'Rasteiras & Gladiadoras',
+    price: 100,
+    image: '/instagram/feed_19_C4TcSseJ1vr_main.jpg',
+    gallery: ['/instagram/feed_19_C4TcSseJ1vr_main.jpg'],
+    instagramPostUrl: 'https://www.instagram.com/p/C4TcSseJ1vr/',
+    heelOptions: ['Rasteira Conforto 1,5cm', 'Salto Baixo 2,5cm'],
+    strapFinishes: [
+      'Pedraria & Strass no Tom da Sandália',
+      'Pedraria Cristal Prateada',
+    ],
+    colors: buildStandardColors(
+      'Dourado',
+      '/instagram/feed_19_C4TcSseJ1vr_main.jpg',
+      {
+        Dourado: '/instagram/feed_19_C4TcSseJ1vr_main.jpg',
+        Preto: '/instagram/feed_19_C4TcSseJ1vr_main.jpg',
+        Prata: '/instagram/feed_19_C4TcSseJ1vr_main.jpg',
+        Nude: '/instagram/feed_19_C4TcSseJ1vr_main.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Calce fácil e acabamento de joia nos pés! Rasteira de tiras cruzadas em X cravejadas em pedraria e strass, confeccionada sob encomenda pela Peterson Shoes em Goiânia - GO.',
+    craftDetails: [
+      'Tiras largas cruzadas com forro interno acolchoado que abraça o peito do pé',
+      'Numeração 34 ao 39 BR em todas as cores padrão ou cor personalizada',
+      'Valor R$ 100,00 · Entrada de 50% (R$ 50,00 no Pix) + 50% na conclusão',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 34. POST 22 (C4TcJj9Ju9I) — Flatform Normal: Flatform 3 Tiras Finas Assimétricas em Strass — R$ 110,00
+  {
+    id: 'prod-ig-34-flatform-3-tiras-strass',
+    sku: 'PTS-IG-34',
+    name: 'Flatform 3 Tiras Finas Assimétricas em Strass (Branca & Preta)',
+    subtitle:
+      'Flatform Normal Slide com Três Tiras Delicadas em Strass & Vira Brilhante',
+    category: 'Flatforms & Papetes',
+    price: 110,
+    image: '/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg',
+    gallery: [
+      '/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg',
+      '/instagram/feed_22_C4TcJj9Ju9I_slide_4.jpg',
+      '/instagram/feed_22_C4TcJj9Ju9I_slide_2.jpg',
+      '/instagram/feed_22_C4TcJj9Ju9I_slide_3.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4TcJj9Ju9I/',
+    heelOptions: ['Flatform Anatômica 3,5cm', 'Flatform Conforto 2,5cm'],
+    strapFinishes: [
+      'Strass Cristal & Vira Cravejada',
+      'Strass Onix / Dourado',
+    ],
+    colors: buildStandardColors(
+      'Branco',
+      '/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg',
+      {
+        Branco: '/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg',
+        Preto: '/instagram/feed_22_C4TcJj9Ju9I_slide_4.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'Minimalista, iluminada e super confortável! Nossa Flatform Normal de 3 tiras finas em strass (@petersonshoes_) combina praticidade de calce com vira contornada por brilho.',
+    craftDetails: [
+      'Solado flatform macio com filete de strass em toda a borda (34 ao 39 BR)',
+      'Disponível em Branco, Preto, Marsala, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 35. POST 23 (C4TcFzJJLNA) — Flatform Normal: Flatform Tiras Entrelaçadas & Nó Pedraria Espelhada — R$ 110,00
+  {
+    id: 'prod-ig-35-flatform-no-pedraria-espelhada',
+    sku: 'PTS-IG-35',
+    name: 'Flatform Tiras Entrelaçadas & Nó Pedraria Espelhada',
+    subtitle:
+      'Flatform Normal com Palmilha Metalizada, Vira de Strass & Nó Frontal Cravejado',
+    category: 'Flatforms & Papetes',
+    price: 110,
+    image: '/instagram/feed_23_C4TcFzJJLNA_slide_1.jpg',
+    gallery: [
+      '/instagram/feed_23_C4TcFzJJLNA_slide_1.jpg',
+      '/instagram/feed_23_C4TcFzJJLNA_slide_2.jpg',
+      '/instagram/feed_23_C4TcFzJJLNA_slide_3.jpg',
+      '/instagram/feed_23_C4TcFzJJLNA_slide_4.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4TcFzJJLNA/',
+    heelOptions: ['Flatform Espelhada 3,5cm', 'Flatform Conforto 2,5cm'],
+    strapFinishes: [
+      'Pedraria Cristal & Vira de Strass',
+      'Pedraria Dourada & Vira de Strass',
+    ],
+    colors: buildStandardColors(
+      'Dourado',
+      '/instagram/feed_23_C4TcFzJJLNA_slide_2.jpg',
+      {
+        Dourado: '/instagram/feed_23_C4TcFzJJLNA_slide_2.jpg',
+        Nude: '/instagram/feed_23_C4TcFzJJLNA_slide_3.jpg',
+        Preto: '/instagram/feed_23_C4TcFzJJLNA_slide_4.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'Sucesso absoluto no feed @petersonshoes_! Flatform Normal com tiras duplas cravejadas unidas por nó frontal e palmilha com acabamento espelhado de luxo.',
+    craftDetails: [
+      'Confeccionada sob encomenda na numeração 34 ao 39 BR em Goiânia - GO',
+      'Escolha Dourado, Nude, Preto ou qualquer outra cor personalizada',
+      'Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% na conclusão',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 36. POST 24 (C4TcBT1pobH) — Flatform Normal: Flatform Tiras Cruzadas Duplas em Manta de Strass — R$ 110,00
+  {
+    id: 'prod-ig-36-flatform-tiras-cruzadas-duplas',
+    sku: 'PTS-IG-36',
+    name: 'Flatform Tiras Cruzadas Duplas em Manta de Strass',
+    subtitle:
+      'Flatform Normal Anatômica com Duplo X em Manta de Strass & Vira Brilhante',
+    category: 'Flatforms & Papetes',
+    price: 110,
+    image: '/instagram/feed_24_C4TcBT1pobH_slide_1.jpg',
+    gallery: [
+      '/instagram/feed_24_C4TcBT1pobH_slide_1.jpg',
+      '/instagram/feed_24_C4TcBT1pobH_slide_2.jpg',
+      '/instagram/feed_24_C4TcBT1pobH_slide_3.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4TcBT1pobH/',
+    heelOptions: ['Flatform Anatômica 3,5cm', 'Flatform Conforto 2,5cm'],
+    strapFinishes: [
+      'Manta de Strass Cristal & Vira Cravejada',
+      'Manta de Strass Dourado',
+    ],
+    colors: buildStandardColors(
+      'Nude',
+      '/instagram/feed_24_C4TcBT1pobH_slide_1.jpg',
+      {
+        Nude: '/instagram/feed_24_C4TcBT1pobH_slide_1.jpg',
+        Branco: '/instagram/feed_24_C4TcBT1pobH_slide_2.jpg',
+        Preto: '/instagram/feed_24_C4TcBT1pobH_slide_1.jpg',
+        Dourado: '/instagram/feed_24_C4TcBT1pobH_slide_1.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Design que abraça o pé com muito brilho e maciez! Flatform Normal com tiras cruzadas duplas em manta de strass do nosso Instagram @petersonshoes_.',
+    craftDetails: [
+      'Palmilha macia e vira lateral contornada em strass (34 ao 39 BR)',
+      'Disponível em Nude, Branco, Preto, Dourado, Marsala, Prata, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 37. POST 26 (C4Tb7oxJ70j) — Flatform Normal: Flatform Slide de Dedo Nó Central Strass Metalizada — R$ 110,00
+  {
+    id: 'prod-ig-37-flatform-slide-no-dourada',
+    sku: 'PTS-IG-37',
+    name: 'Flatform Slide de Dedo Nó Central Strass Metalizada (Dourada)',
+    subtitle:
+      'Flatform Normal Metalizada com Tiras em Strass Unido por Nó Central & Vira Cravejada',
+    category: 'Flatforms & Papetes',
+    price: 110,
+    image: '/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg',
+    gallery: [
+      '/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg',
+      '/instagram/feed_26_C4Tb7oxJ70j_slide_2.jpg',
+      '/instagram/feed_26_C4Tb7oxJ70j_slide_3.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C4Tb7oxJ70j/',
+    heelOptions: ['Flatform Metalizada 3,5cm', 'Flatform Conforto 2,5cm'],
+    strapFinishes: [
+      'Strass Dourado & Vira Cravejada',
+      'Strass Prata Cristal & Vira Cravejada',
+    ],
+    colors: buildStandardColors(
+      'Dourado',
+      '/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg',
+      {
+        Dourado: '/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Praticidade e glamour para todos os momentos! Nossa Flatform Normal Slide com nó central em strass (@petersonshoes_) é confeccionada sob encomenda do 34 ao 39.',
+    craftDetails: [
+      'Acabamento metalizado espelhado e filete de strass ao redor da sola',
+      'Numeração 34 ao 39 BR em todas as cores padrão ou cor personalizada',
+      'Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% na conclusão',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 38. POST 28 (C12HMIqOt-1) — Papete Flatform Anel de Dedo & Tiras Cruzadas Strass c/ Fivela — R$ 130,00
+  {
+    id: 'prod-ig-38-papete-anel-dedo-strass-fivela',
+    sku: 'PTS-IG-38',
+    name: 'Papete Flatform Anel de Dedo & Tiras Strass c/ Fivela (Dourada)',
+    subtitle:
+      'Papete Metalizada com Anel de Dedo Cravejado, Tira Transversal em Strass & Fivela',
+    category: 'Flatforms & Papetes',
+    price: 130,
+    image: '/instagram/feed_28_C12HMIqOt-1_main.jpg',
+    gallery: ['/instagram/feed_28_C12HMIqOt-1_main.jpg'],
+    instagramPostUrl: 'https://www.instagram.com/p/C12HMIqOt-1/',
+    heelOptions: ['Flatform Espelhada 3,5cm', 'Flatform Conforto 2,5cm'],
+    strapFinishes: [
+      'Strass Dourado & Fivela no Tornozelo',
+      'Strass Prata & Fivela no Tornozelo',
+    ],
+    colors: buildStandardColors(
+      'Dourado',
+      '/instagram/feed_28_C12HMIqOt-1_main.jpg',
+      {
+        Dourado: '/instagram/feed_28_C12HMIqOt-1_main.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Design anatômico que prende o pé com delicadeza e brilho! Papete Flatform @petersonshoes_ com anel de dedo cravejado, tiras de strass e pulseira com fivela no tornozelo.',
+    craftDetails: [
+      'Produzida sob medida na numeração 34 ao 39 BR em nossa fábrica em Goiânia - GO',
+      'Disponível nas 8 cores padrão ou na cor personalizada que você escrever',
+      'Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 39. POST 29 (C12HDhQO1dO) — Papete Flatform Vira de Strass & Duas Tiras Brilhantes c/ Fivela — R$ 130,00
+  {
+    id: 'prod-ig-39-papete-duas-tiras-strass-fivela',
+    sku: 'PTS-IG-39',
+    name: 'Papete Flatform Vira de Strass & Duas Tiras c/ Fivela (Branca)',
+    subtitle:
+      'Papete Branca com Duas Tiras Frontais em Strass, Vira Cravejada & Fivela Traseira',
+    category: 'Flatforms & Papetes',
+    price: 130,
+    image: '/instagram/feed_29_C12HDhQO1dO_slide_1.jpg',
+    gallery: [
+      '/instagram/feed_29_C12HDhQO1dO_slide_1.jpg',
+      '/instagram/feed_29_C12HDhQO1dO_slide_2.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C12HDhQO1dO/',
+    heelOptions: ['Flatform Anatômica 3,5cm', 'Flatform Conforto 2,5cm'],
+    strapFinishes: [
+      'Strass Cristal & Fivela Regulável',
+      'Strass Dourado & Fivela Ouro',
+    ],
+    colors: buildStandardColors(
+      'Branco',
+      '/instagram/feed_29_C12HDhQO1dO_slide_1.jpg',
+      {
+        Branco: '/instagram/feed_29_C12HDhQO1dO_slide_1.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Delicada, romântica e super estável nos pés! Papete Flatform @petersonshoes_ com duas tiras paralelas de strass na frente, contorno brilhante na vira e fechamento por fivela.',
+    craftDetails: [
+      'Confeccionada sob encomenda na numeração 34 ao 39 BR em até 15 dias',
+      'Escolha Branco, Preto, Nude, Dourado, Prata, Marsala, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% na conclusão',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 40. POST 30 (C12HAGoOeUg) — Flatform Gladiadora Multitiras Strass & Amarração Lace-Up — R$ 130,00
+  {
+    id: 'prod-ig-40-flatform-gladiadora-multitiras',
+    sku: 'PTS-IG-40',
+    name: 'Flatform Gladiadora Multitiras Strass & Amarração (Preta & Branca)',
+    subtitle:
+      'Flatform Gladiadora com Tiras Finas Brilhantes, Vira de Strass & Amarração na Perna',
+    category: 'Flatforms & Papetes',
+    price: 130,
+    image: '/instagram/feed_30_C12HAGoOeUg_slide_1.jpg',
+    gallery: [
+      '/instagram/feed_30_C12HAGoOeUg_slide_1.jpg',
+      '/instagram/feed_30_C12HAGoOeUg_slide_2.jpg',
+      '/instagram/feed_30_C12HAGoOeUg_slide_3.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/C12HAGoOeUg/',
+    heelOptions: ['Flatform Anatômica 3,5cm', 'Flatform Conforto 2,5cm'],
+    strapFinishes: [
+      'Strass Cristal & Amarração Gladiadora',
+      'Strass Dourado & Amarração Gladiadora',
+    ],
+    colors: buildStandardColors(
+      'Preto',
+      '/instagram/feed_30_C12HAGoOeUg_slide_1.jpg',
+      {
+        Preto: '/instagram/feed_30_C12HAGoOeUg_slide_1.jpg',
+        Branco: '/instagram/feed_30_C12HAGoOeUg_slide_2.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'Visual marcante direto da nossa fábrica em Goiânia - GO! Flatform Gladiadora @petersonshoes_ com multitiras de strass e amarração ajustável no tornozelo.',
+    craftDetails: [
+      'Vira contornada em strass e palmilha macia (Numeração 34 ao 39 BR)',
+      'Disponível em Preto, Branco, Dourado, Prata, Nude, Marsala, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 41. POST 49 (CzWpulBOVR3) — Flatform Normal: Flatform Metalizada 3 Tiras Tubulares Strass — R$ 110,00
+  {
+    id: 'prod-ig-41-flatform-3-tiras-tubulares-dourada',
+    sku: 'PTS-IG-41',
+    name: 'Flatform Metalizada 3 Tiras Tubulares em Strass (Dourada)',
+    subtitle:
+      'Flatform Normal Slide com Três Tiras Tubulares Cravejadas & Solado Tratorado c/ Strass',
+    category: 'Flatforms & Papetes',
+    price: 110,
+    image: '/instagram/feed_49_CzWpulBOVR3_main.jpg',
+    gallery: ['/instagram/feed_49_CzWpulBOVR3_main.jpg'],
+    instagramPostUrl: 'https://www.instagram.com/p/CzWpulBOVR3/',
+    heelOptions: ['Flatform Tratorada 3,5cm', 'Flatform Anatômica 2,5cm'],
+    strapFinishes: [
+      '3 Tiras Tubulares Strass Champagne',
+      '3 Tiras Tubulares Strass Cristal',
+    ],
+    colors: buildStandardColors(
+      'Dourado',
+      '/instagram/feed_49_CzWpulBOVR3_main.jpg',
+      {
+        Dourado: '/instagram/feed_49_CzWpulBOVR3_main.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Brilho triplo e conforto de nuvem! Nossa Flatform Normal com 3 tiras tubulares de strass (@petersonshoes_) é perfeita para quem ama praticidade sem abrir mão da sofisticação.',
+    craftDetails: [
+      'Confeccionada sob encomenda na numeração 34 ao 39 BR em até 15 dias',
+      'Disponível em todas as cores padrão ou cor personalizada',
+      'Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% na conclusão',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 42. POST 51 (CzWpluLO3Lx — Post mais curtido do perfil!) — Flatform Normal Tiras Cruzadas Pedraria Cristal — R$ 110,00
+  {
+    id: 'prod-ig-42-flatform-pedraria-cristal-espelhada',
+    sku: 'PTS-IG-42',
+    name: 'Flatform Tiras Cruzadas Pedraria Cristal Espelhada',
+    subtitle:
+      'Recordista de Curtidas @petersonshoes_ · Flatform Normal com Pedraria Lapidada & Vira de Strass',
+    category: 'Flatforms & Papetes',
+    price: 110,
+    image: '/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg',
+    gallery: [
+      '/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg',
+      '/instagram/feed_51_CzWpluLO3Lx_slide_2.jpg',
+      '/instagram/feed_51_CzWpluLO3Lx_slide_3.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/CzWpluLO3Lx/',
+    heelOptions: ['Flatform Espelhada 3,5cm', 'Flatform Conforto 2,5cm'],
+    strapFinishes: [
+      'Pedraria Lapidada Cristal & Vira de Strass',
+      'Pedraria Dourada & Vira de Strass',
+    ],
+    colors: buildStandardColors(
+      'Branco',
+      '/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg',
+      {
+        Branco: '/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg',
+        Dourado: '/instagram/feed_51_CzWpluLO3Lx_slide_2.jpg',
+        Prata: '/instagram/feed_51_CzWpluLO3Lx_slide_3.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'O modelo mais curtido do Instagram @petersonshoes_! Flatform Normal com tiras cruzadas ricamente trabalhadas em pedraria cristal lapidada e vira espelhada com strass.',
+    craftDetails: [
+      'Sucesso absoluto de vendas no varejo e atacado (Numeração 34 ao 39 BR)',
+      'Disponível em Branco, Dourado, Prata, Preto, Nude, Marsala, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 43. POST 54 (CzJ_ceLJwx6) — Outras Rasteiras: Rasteira Bico Quadrado Tiras Entrelaçadas em Strass — R$ 100,00
+  {
+    id: 'prod-ig-43-rasteira-tiras-entrelacadas-dourada',
+    sku: 'PTS-IG-43',
+    name: 'Rasteira Bico Quadrado Tiras Entrelaçadas em Strass (Dourada)',
+    subtitle:
+      'Rasteira Metalizada de Bico Quadrado com Tiras Finas Entrelaçadas em Strass',
+    category: 'Rasteiras & Gladiadoras',
+    price: 100,
+    image: '/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg',
+    gallery: [
+      '/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg',
+      '/instagram/feed_54_CzJ_ceLJwx6_slide_2.jpg',
+      '/instagram/feed_54_CzJ_ceLJwx6_slide_3.jpg',
+      '/instagram/feed_54_CzJ_ceLJwx6_slide_4.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/CzJ_ceLJwx6/',
+    heelOptions: ['Rasteira Conforto 1,5cm', 'Salto Baixo 2,5cm'],
+    strapFinishes: [
+      'Tiras Entrelaçadas Strass Dourado',
+      'Tiras Entrelaçadas Strass Cristal',
+    ],
+    colors: buildStandardColors(
+      'Dourado',
+      '/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg',
+      {
+        Dourado: '/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'Elegância atemporal nos pés! Rasteira de bico quadrado do nosso perfil @petersonshoes_ com desenho de tiras finas entrelaçadas em strass sobre o peito do pé.',
+    craftDetails: [
+      'Palmilha metalizada macia e solado antiderrapante (34 ao 39 BR)',
+      'Disponível em Dourado, Prata, Preto, Branco, Nude, Marsala, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 100,00 · Entrada de 50% (R$ 50,00 no Pix) + 50% na conclusão',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 44. POST 62 (CzJ-wYRpoWs) — Flatform Normal: Flatform Slide Tira Larga Nuvem Metalizada — R$ 110,00
+  {
+    id: 'prod-ig-44-flatform-slide-nuvem-metalizada',
+    sku: 'PTS-IG-44',
+    name: 'Flatform Slide Tira Larga Nuvem Metalizada (Dourada & Prata)',
+    subtitle:
+      'Flatform Normal Anatômica Estilo Nuvem com Gáspea Larga Acolchoada Metalizada',
+    category: 'Flatforms & Papetes',
+    price: 110,
+    image: '/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg',
+    gallery: [
+      '/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg',
+      '/instagram/feed_62_CzJ-wYRpoWs_slide_2.jpg',
+      '/instagram/feed_62_CzJ-wYRpoWs_slide_3.jpg',
+      '/instagram/feed_62_CzJ-wYRpoWs_slide_4.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/CzJ-wYRpoWs/',
+    heelOptions: ['Flatform Anatômica 3,5cm', 'Flatform Conforto 2,5cm'],
+    strapFinishes: [
+      'Napa Metalizada Macia Acolchoada',
+      'Napa Fosca Acolchoada',
+    ],
+    colors: buildStandardColors(
+      'Dourado',
+      '/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg',
+      {
+        Dourado: '/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg',
+        Prata: '/instagram/feed_62_CzJ-wYRpoWs_slide_2.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Um dos posts mais amados do nosso Instagram @petersonshoes_! Flatform Normal Slide com tira larga acolchoada e palmilha anatômica super leve para usar o dia inteiro.',
+    craftDetails: [
+      'Conforto absoluto com espuma interna macia (Numeração 34 ao 39 BR)',
+      'Disponível em Dourado, Prata, Preto, Branco, Nude, Marsala, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 110,00 · Entrada de 50% (R$ 55,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 45. POST 69 (Cqk8GO5NMY1) — Flatform Gladiadora Tratorada Tiras Strass & Amarração — R$ 130,00
+  {
+    id: 'prod-ig-45-flatform-gladiadora-tratorada-cores',
+    sku: 'PTS-IG-45',
+    name: 'Flatform Gladiadora Tratorada Tiras Strass & Amarração (Preta, Branca & Nude)',
+    subtitle:
+      'Solado Flatform Tratorado com Vira Brilhante, Tiras Cruzadas em Strass & Amarração',
+    category: 'Flatforms & Papetes',
+    price: 130,
+    image: '/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg',
+    gallery: [
+      '/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg',
+      '/instagram/feed_69_Cqk8GO5NMY1_slide_2.jpg',
+      '/instagram/feed_69_Cqk8GO5NMY1_slide_3.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/Cqk8GO5NMY1/',
+    heelOptions: ['Flatform Tratorada 4cm', 'Flatform Anatômica 3cm'],
+    strapFinishes: [
+      'Strass Cristal & Amarração Longa',
+      'Strass Dourado & Amarração Longa',
+    ],
+    colors: buildStandardColors(
+      'Preto',
+      '/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg',
+      {
+        Preto: '/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg',
+        Branco: '/instagram/feed_69_Cqk8GO5NMY1_slide_2.jpg',
+        Nude: '/instagram/feed_69_Cqk8GO5NMY1_slide_3.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Moderna, imponente e cheia de personalidade! Flatform Gladiadora Tratorada @petersonshoes_ com tiras cruzadas em strass e amarração macia no tornozelo.',
+    craftDetails: [
+      'Produzida sob encomenda na numeração 34 ao 39 BR em nossa fábrica em Goiânia - GO',
+      'Escolha Preto, Branco, Nude ou qualquer outra cor personalizada',
+      'Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% na conclusão',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
+
+  // 46. POST 72 (Cqk6zKsOtGe) — Outras Rasteiras: Rasteira Bico Quadrado Multitiras Finas & Fivela — R$ 100,00
+  {
+    id: 'prod-ig-46-rasteira-multitiras-finas-fivela',
+    sku: 'PTS-IG-46',
+    name: 'Rasteira Bico Quadrado Multitiras Finas & Fivela',
+    subtitle:
+      'Rasteira Delicada de Bico Quadrado com Tiras Finas Assimétricas & Fivela no Tornozelo',
+    category: 'Rasteiras & Gladiadoras',
+    price: 100,
+    image: '/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg',
+    gallery: [
+      '/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg',
+      '/instagram/feed_72_Cqk6zKsOtGe_slide_2.jpg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/p/Cqk6zKsOtGe/',
+    heelOptions: ['Rasteira Conforto 1,5cm', 'Salto Baixo 2,5cm'],
+    strapFinishes: [
+      'Tiras Finas em Napa Macia c/ Fivela',
+      'Tiras Finas Metalizadas c/ Fivela',
+    ],
+    colors: buildStandardColors(
+      'Rosa',
+      '/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg',
+      {
+        Rosa: '/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg',
+        Branco: '/instagram/feed_72_Cqk6zKsOtGe_slide_2.jpg',
+        Preto: '/instagram/feed_72_Cqk6zKsOtGe_slide_2.jpg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Leveza minimalista que valoriza os pés! Rasteira de bico quadrado com multitiras finas e fechamento por fivela do nosso perfil @petersonshoes_.',
+    craftDetails: [
+      'Confeccionada sob encomenda na numeração 34 ao 39 BR em até 15 dias',
+      'Disponível em Rosa, Branco, Preto, Marsala, Nude, Dourado, Prata, Vermelho ou Outra Cor',
+      'Valor R$ 100,00 · Entrada de 50% (R$ 50,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-01T12:00:00.000Z',
+  },
 ];
 
 export function createInitialStoreDatabase(): StoreDatabaseSchema {
@@ -819,7 +2161,7 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
       city: 'Goiânia',
       state: 'GO',
       totalOrders: 1,
-      totalSpent: 229.9,
+      totalSpent: 130,
       createdAt: order1Date,
     },
     {
@@ -836,7 +2178,7 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
       city: 'Goiânia',
       state: 'GO',
       totalOrders: 1,
-      totalSpent: 279.9,
+      totalSpent: 150,
       createdAt: order2Date,
     },
   ];
@@ -848,13 +2190,13 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
       orderCode: 'PTS-2026-101',
       installmentType: 'ENTRADA_50',
       method: 'PIX_MERCADO_PAGO',
-      baseAmount: 114.95,
+      baseAmount: 65,
       feeAmount: 0,
       installments: 1,
-      amount: 114.95,
+      amount: 65,
       status: 'APROVADO',
       pixCopyPaste: generateMercadoPagoPixPayload(
-        114.95,
+        65,
         'PTS2026101E',
         settings.pixKey
       ),
@@ -869,13 +2211,13 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
       orderCode: 'PTS-2026-101',
       installmentType: 'FINAL_50',
       method: 'PIX_MERCADO_PAGO',
-      baseAmount: 114.95,
+      baseAmount: 65,
       feeAmount: 0,
       installments: 1,
-      amount: 114.95,
+      amount: 65,
       status: 'PENDENTE',
       pixCopyPaste: generateMercadoPagoPixPayload(
-        114.95,
+        65,
         'PTS2026101F',
         settings.pixKey
       ),
@@ -890,15 +2232,15 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
       orderCode: 'PTS-2026-102',
       installmentType: 'ENTRADA_50',
       method: 'CARTAO_MERCADO_PAGO',
-      baseAmount: 139.95,
-      feeAmount: 7.35,
+      baseAmount: 75,
+      feeAmount: 3.74,
       installments: 2,
       cardBrand: 'Mastercard',
       cardLast4: '4829',
-      amount: 147.3,
+      amount: 78.74,
       status: 'APROVADO',
       pixCopyPaste: generateMercadoPagoPixPayload(
-        139.95,
+        75,
         'PTS2026102E',
         settings.pixKey
       ),
@@ -913,13 +2255,13 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
       orderCode: 'PTS-2026-102',
       installmentType: 'FINAL_50',
       method: 'PIX_MERCADO_PAGO',
-      baseAmount: 139.95,
+      baseAmount: 75,
       feeAmount: 0,
       installments: 1,
-      amount: 139.95,
+      amount: 75,
       status: 'PENDENTE',
       pixCopyPaste: generateMercadoPagoPixPayload(
-        139.95,
+        75,
         'PTS2026102F',
         settings.pixKey
       ),
@@ -945,9 +2287,9 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
         {
           productId: 'prod-ig-01-papete-piramides',
           sku: 'PTS-IG-01',
-          name: 'Papete Flatform Pirâmides & Fivela',
+          name: 'Papete Flatform Pirâmides & Fivela (Dourada)',
           image: '/instagram/feed_1_C454LXbOzrn_slide_1.jpg',
-          unitPrice: 229.9,
+          unitPrice: 130,
           quantity: 1,
           size: 37,
           colorName: 'Dourado',
@@ -961,9 +2303,9 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
           },
         },
       ],
-      totalAmount: 229.9,
-      depositAmount: 114.95,
-      remainingAmount: 114.95,
+      totalAmount: 130,
+      depositAmount: 65,
+      remainingAmount: 65,
       paymentStatus: 'ENTRADA_50_PAGA',
       productionStatus: 'MONTAGEM_ARTESANAL',
       estimatedDeliveryDate: order1Est,
@@ -988,9 +2330,9 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
         {
           productId: 'prod-ig-02-anabela-piramides-fivela',
           sku: 'PTS-IG-02',
-          name: 'Anabela Plataforma Pirâmides & Fivela',
+          name: 'Anabela Plataforma Pirâmides & Fivela (Preta)',
           image: '/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg',
-          unitPrice: 279.9,
+          unitPrice: 150,
           quantity: 1,
           size: 36,
           colorName: 'Preto',
@@ -1004,9 +2346,9 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
           },
         },
       ],
-      totalAmount: 279.9,
-      depositAmount: 139.95,
-      remainingAmount: 139.95,
+      totalAmount: 150,
+      depositAmount: 75,
+      remainingAmount: 75,
       paymentStatus: 'AGUARDANDO_FINAL_50',
       productionStatus: 'PRONTA_PARA_ENTREGA',
       estimatedDeliveryDate: order2Est,
@@ -1028,7 +2370,7 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
   };
 }
 
-const LOCAL_STORAGE_KEY = 'peterson_shoes_store_v3';
+const LOCAL_STORAGE_KEY = 'peterson_shoes_store_v7';
 
 export function getBrowserStoreDb(): StoreDatabaseSchema {
   if (typeof window === 'undefined') {
@@ -1042,7 +2384,11 @@ export function getBrowserStoreDb(): StoreDatabaseSchema {
       return initial;
     }
     const parsed = JSON.parse(raw) as StoreDatabaseSchema;
-    if (!parsed.products || parsed.products.length === 0) {
+    if (
+      !parsed.products ||
+      parsed.products.length < 46 ||
+      parsed.products[0]?.price !== 130
+    ) {
       const initial = createInitialStoreDatabase();
       window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initial));
       return initial;
