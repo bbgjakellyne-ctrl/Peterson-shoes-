@@ -1,10 +1,11 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import * as dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
-import {
+import type {
   BespokeProduct,
   ColorOption,
   CustomerRecord,
@@ -13,8 +14,8 @@ import {
   StoreSettings,
   PaymentStatus,
   ProductionStatus,
-} from './src/types/peterson';
-import { INITIAL_PRODUCTS as STORE_INITIAL_PRODUCTS } from './src/data/storeData';
+} from './src/types/peterson.ts';
+import { INITIAL_PRODUCTS as STORE_INITIAL_PRODUCTS } from './src/data/storeData.ts';
 
 dotenv.config();
 

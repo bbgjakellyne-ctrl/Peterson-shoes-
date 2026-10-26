@@ -1,4 +1,4 @@
-import {
+import type {
   BespokeOrder,
   BespokeProduct,
   ColorOption,
@@ -8,7 +8,7 @@ import {
   PaymentStatus,
   ProductionStatus,
   StoreSettings,
-} from '../types/peterson';
+} from '../types/peterson.ts';
 
 export interface StoreDatabaseSchema {
   products: BespokeProduct[];
