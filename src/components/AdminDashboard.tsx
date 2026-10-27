@@ -40,6 +40,12 @@ import {
   STANDARD_SIZES,
   updateBrowserOrderAdmin,
 } from '../data/storeData';
+import {
+  apiFetch,
+  getActiveEnvironment,
+  isHomologacao,
+  switchEnvironment,
+} from '../utils/environment';
 
 interface AdminDashboardProps {
   onCloseAdmin: () => void;
@@ -174,13 +180,34 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onCatalogUpdated,
 }) => {
   const [token, setToken] = useState<string | null>(null);
-  const [loginEmail, setLoginEmail] = useState('contato@petersonshoes.com.br');
-  const [loginPassword, setLoginPassword] = useState('peterson2026');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [confirmSetupPassword, setConfirmSetupPassword] = useState('');
   const [loginError, setLoginError] = useState('');
+  const [needsInitialSetup, setNeedsInitialSetup] = useState(false);
+  const [checkingAuthStatus, setCheckingAuthStatus] = useState(true);
 
   const [activeTab, setActiveTab] = useState<
     'PRODUCTS' | 'ORDERS' | 'FINANCE' | 'CUSTOMERS' | 'SETTINGS' | 'SEO'
   >('PRODUCTS');
+
+  React.useEffect(() => {
+    let active = true;
+    apiFetch('/api/admin/auth-status')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (active && data) {
+          setNeedsInitialSetup(Boolean(data.needsInitialSetup));
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (active) setCheckingAuthStatus(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const [products, setProducts] = useState<BespokeProduct[]>([]);
   const [orders, setOrders] = useState<BespokeOrder[]>([]);
@@ -266,25 +293,31 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   const fetchAdminData = async (adminToken: string) => {
     setLoading(true);
-    applyDashboardFromDb(getBrowserStoreDb());
     try {
       const [dashRes, sqlRes] = await Promise.all([
-        fetch('/api/admin/dashboard', {
+        apiFetch('/api/admin/dashboard', {
           headers: { Authorization: `Bearer ${adminToken}` },
         }),
-        fetch('/api/admin/sql-schema', {
+        apiFetch('/api/admin/sql-schema', {
           headers: { Authorization: `Bearer ${adminToken}` },
         }),
       ]);
 
+      if (dashRes.status === 401 || dashRes.status === 403) {
+        setToken(null);
+        setLoginError('Sessão administrativa expirada. Faça login novamente.');
+        return;
+      }
+
       if (dashRes.ok) {
         const data = await dashRes.json();
         if (data?.products && Array.isArray(data.products)) {
-          const localDb = getBrowserStoreDb();
           const updatedDb = {
-            ...localDb,
             products: data.products,
-            settings: data.settings || localDb.settings,
+            customers: data.customers || [],
+            orders: data.orders || [],
+            payments: data.payments || [],
+            settings: data.settings || getBrowserStoreDb().settings,
           };
           saveBrowserStoreDb(updatedDb);
           applyDashboardFromDb(updatedDb);
@@ -295,7 +328,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         setSqlSchema(sqlData.sql || '');
       }
     } catch {
-      // Fallback already populated from getBrowserStoreDb()
+      setLoginError('Não foi possível conectar ao servidor administrativo.');
     } finally {
       setLoading(false);
     }
@@ -304,29 +337,68 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
+
+    if (needsInitialSetup) {
+      if (loginPassword.length < 8) {
+        setLoginError(
+          'Por segurança, escolha uma senha forte com pelo menos 8 caracteres.'
+        );
+        return;
+      }
+      if (loginPassword !== confirmSetupPassword) {
+        setLoginError('A confirmação de senha não confere.');
+        return;
+      }
+      try {
+        const res = await apiFetch('/api/admin/setup-credentials', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: loginEmail.trim(),
+            password: loginPassword,
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.token) {
+          setNeedsInitialSetup(false);
+          setLoginPassword('');
+          setConfirmSetupPassword('');
+          setToken(data.token);
+          fetchAdminData(data.token);
+          return;
+        }
+        setLoginError(
+          data.error || 'Não foi possível configurar as credenciais administrativas.'
+        );
+      } catch {
+        setLoginError('Erro de conexão ao salvar credenciais no servidor.');
+      }
+      return;
+    }
+
     try {
-      const res = await fetch('/api/admin/login', {
+      const res = await apiFetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: loginEmail, password: loginPassword }),
+        body: JSON.stringify({
+          email: loginEmail.trim(),
+          password: loginPassword,
+        }),
       });
-      if (res.ok) {
-        const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.token) {
+        setLoginPassword('');
         setToken(data.token);
         fetchAdminData(data.token);
         return;
       }
-    } catch {
-      // Fallback to local password verification below
-    }
-
-    if (loginPassword.trim() === 'peterson2026') {
-      const fallbackToken = 'peterson-local-admin-token';
-      setToken(fallbackToken);
-      fetchAdminData(fallbackToken);
-    } else {
       setLoginError(
-        'Credenciais inválidas. Para acessar use a senha padrão: peterson2026'
+        data.error ||
+          'E-mail ou senha administrativa inválidos. Acesso permitido apenas à proprietária.'
+      );
+    } catch {
+      setLoginError(
+        'Erro ao validar autenticação no servidor. Verifique sua conexão.'
       );
     }
   };
@@ -341,35 +413,37 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     const roundedPrice = Math.round(numericPrice * 100) / 100;
     setSavingPriceId(productId);
     try {
-      const localDb = getBrowserStoreDb();
-      const updatedProducts = localDb.products.map((p) =>
-        p.id === productId ? { ...p, price: roundedPrice } : p
-      );
-      saveBrowserStoreDb({ ...localDb, products: updatedProducts });
-      setProducts(updatedProducts);
-      setPriceDrafts((prev) => ({
-        ...prev,
-        [productId]: roundedPrice.toFixed(2),
-      }));
+      const res = await apiFetch(`/api/admin/products/${productId}/price`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ price: roundedPrice }),
+      });
 
-      try {
-        await fetch(`/api/admin/products/${productId}/price`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ price: roundedPrice }),
-        });
-      } catch {
-        // Local storage already updated
+      if (res.status === 401 || res.status === 403) {
+        setToken(null);
+        return;
       }
 
-      setSavedPriceId(productId);
-      onCatalogUpdated();
-      setTimeout(() => {
-        setSavedPriceId((curr) => (curr === productId ? null : curr));
-      }, 2500);
+      if (res.ok) {
+        const localDb = getBrowserStoreDb();
+        const updatedProducts = localDb.products.map((p) =>
+          p.id === productId ? { ...p, price: roundedPrice } : p
+        );
+        saveBrowserStoreDb({ ...localDb, products: updatedProducts });
+        setProducts(updatedProducts);
+        setPriceDrafts((prev) => ({
+          ...prev,
+          [productId]: roundedPrice.toFixed(2),
+        }));
+        setSavedPriceId(productId);
+        onCatalogUpdated();
+        setTimeout(() => {
+          setSavedPriceId((curr) => (curr === productId ? null : curr));
+        }, 2500);
+      }
     } finally {
       setSavingPriceId(null);
     }
@@ -385,10 +459,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   ) => {
     if (!token) return;
-    updateBrowserOrderAdmin(orderId, updates);
-    applyDashboardFromDb(getBrowserStoreDb());
     try {
-      const res = await fetch(`/api/admin/orders/${orderId}`, {
+      const res = await apiFetch(`/api/admin/orders/${orderId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -396,11 +468,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         },
         body: JSON.stringify(updates),
       });
+      if (res.status === 401 || res.status === 403) {
+        setToken(null);
+        return;
+      }
       if (res.ok) {
+        updateBrowserOrderAdmin(orderId, updates);
         await fetchAdminData(token);
       }
     } catch {
-      // Local update already applied
+      // Requires valid backend response
     }
   };
 
@@ -441,7 +518,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       const dataUrl = String(reader.result || '');
       setEditingProduct((prev) => (prev ? { ...prev, image: dataUrl } : prev));
       try {
-        const res = await fetch('/api/admin/upload-image', {
+        const res = await apiFetch('/api/admin/upload-image', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -562,38 +639,31 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     };
 
     try {
-      const localDb = getBrowserStoreDb();
       const isExisting = Boolean(editingProduct.id);
-      if (isExisting) {
-        localDb.products = localDb.products.map((p) =>
-          p.id === payload.id ? payload : p
-        );
-      } else {
-        localDb.products.unshift(payload);
-      }
-      saveBrowserStoreDb(localDb);
-      applyDashboardFromDb(localDb);
+      const url = isExisting
+        ? `/api/admin/products/${editingProduct.id}`
+        : '/api/admin/products';
+      const method = isExisting ? 'PUT' : 'POST';
 
-      try {
-        const url = isExisting
-          ? `/api/admin/products/${editingProduct.id}`
-          : '/api/admin/products';
-        const method = isExisting ? 'PUT' : 'POST';
+      const res = await apiFetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
 
-        await fetch(url, {
-          method,
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        });
-      } catch {
-        // Local storage already updated
+      if (res.status === 401 || res.status === 403) {
+        setToken(null);
+        return;
       }
 
-      setEditingProduct(null);
-      onCatalogUpdated();
+      if (res.ok) {
+        await fetchAdminData(token);
+        setEditingProduct(null);
+        onCatalogUpdated();
+      }
     } finally {
       setSavingProduct(false);
     }
@@ -601,19 +671,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   const handleDeleteProduct = async (id: string) => {
     if (!token) return;
-    const localDb = getBrowserStoreDb();
-    localDb.products = localDb.products.filter((p) => p.id !== id);
-    saveBrowserStoreDb(localDb);
-    applyDashboardFromDb(localDb);
     try {
-      await fetch(`/api/admin/products/${id}`, {
+      const res = await apiFetch(`/api/admin/products/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
+      if (res.status === 401 || res.status === 403) {
+        setToken(null);
+        return;
+      }
+      if (res.ok) {
+        await fetchAdminData(token);
+        onCatalogUpdated();
+      }
     } catch {
-      // Local storage already updated
+      // Ignore
     }
-    onCatalogUpdated();
   };
 
   const handleSaveSettings = async (e: React.FormEvent) => {
@@ -622,29 +695,28 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setSavingSettings(true);
     setSettingsSavedMsg('');
     try {
-      const localDb = getBrowserStoreDb();
-      localDb.settings = { ...settings };
-      saveBrowserStoreDb(localDb);
-      applyDashboardFromDb(localDb);
+      const res = await apiFetch('/api/admin/settings', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(settings),
+      });
 
-      try {
-        await fetch('/api/admin/settings', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(settings),
-        });
-      } catch {
-        // Local storage already updated
+      if (res.status === 401 || res.status === 403) {
+        setToken(null);
+        return;
       }
 
-      setSettingsSavedMsg(
-        'Configurações salvas e aplicadas na loja com sucesso!'
-      );
-      onCatalogUpdated();
-      setTimeout(() => setSettingsSavedMsg(''), 3500);
+      if (res.ok) {
+        await fetchAdminData(token);
+        setSettingsSavedMsg(
+          'Configurações salvas e aplicadas na loja com sucesso!'
+        );
+        onCatalogUpdated();
+        setTimeout(() => setSettingsSavedMsg(''), 3500);
+      }
     } finally {
       setSavingSettings(false);
     }
@@ -656,30 +728,47 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setTimeout(() => setCopiedTextId(null), 2500);
   };
 
-  // If not logged in, render Admin Login Screen
+  const activeEnv = getActiveEnvironment();
+
+  // If not logged in, render Protected Admin Login / Initial Setup Screen
   if (!token) {
     return (
       <div className="min-h-screen bg-[#F7F3EC] flex flex-col justify-center items-center p-4">
         <div className="bg-white border border-[#DFD3C3] rounded-xl max-w-md w-full p-8 shadow-xl">
-          <button
-            onClick={onCloseAdmin}
-            className="text-xs font-medium text-[#5B1824] hover:underline flex items-center gap-1 mb-6 cursor-pointer"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            Voltar para a Vitrine da Loja
-          </button>
+          <div className="flex items-center justify-between gap-2 mb-6">
+            <button
+              onClick={onCloseAdmin}
+              className="text-xs font-medium text-[#5B1824] hover:underline flex items-center gap-1 cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Voltar para a Vitrine da Loja
+            </button>
+            <span
+              className={`px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${
+                activeEnv === 'homologacao'
+                  ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                  : 'bg-emerald-100 text-emerald-900 border border-emerald-300'
+              }`}
+            >
+              {activeEnv === 'homologacao' ? '🧪 Homologação' : '🔒 Produção'}
+            </span>
+          </div>
 
           <div className="flex items-center gap-2.5 text-[#5B1824] mb-2">
             <Lock className="w-5 h-5" />
             <span className="text-xs font-semibold tracking-wider uppercase">
-              Acesso Restrito · Peterson Shoes
+              Acesso Restrito · Proprietária Peterson Shoes
             </span>
           </div>
-          <h1 className="text-3xl font-semibold text-[#231619]">
-            Painel Administrativo
+          <h1 className="text-2xl sm:text-3xl font-semibold text-[#231619]">
+            {needsInitialSetup
+              ? 'Cadastrar Nova Senha Administrativa'
+              : 'Painel Administrativo'}
           </h1>
-          <p className="text-xs text-[#6E5A5F] mt-1">
-            Edite manualmente o valor de cada modelo do Instagram em 1 clique. O cálculo de 50% de entrada + 50% final, produção e envio para o WhatsApp ficam 100% automatizados.
+          <p className="text-xs text-[#6E5A5F] mt-1 leading-relaxed">
+            {needsInitialSetup
+              ? 'Nenhuma senha administrativa foi definida ainda. Defina abaixo seu e-mail e uma senha exclusiva e segura (armazenada com criptografia scrypt no servidor) ou configure a variável de ambiente ADMIN_PASSWORD.'
+              : 'Área protegida por autenticação no servidor. Somente a proprietária possui autorização para alterar preços, produtos e aprovar pagamentos de pedidos.'}
           </p>
 
           {loginError && (
@@ -688,41 +777,70 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="mt-6 space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-[#231619] mb-1">
-                E-mail Administrativo
-              </label>
-              <input
-                type="email"
-                required
-                value={loginEmail}
-                onChange={(e) => setLoginEmail(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-[#F7F3EC] border border-[#DFD3C3] rounded-lg text-sm text-[#231619] focus:outline-none focus:border-[#5B1824]"
-              />
+          {checkingAuthStatus ? (
+            <div className="py-8 text-center text-xs text-[#6E5A5F]">
+              Verificando proteção do servidor...
             </div>
-            <div>
-              <label className="block text-xs font-semibold text-[#231619] mb-1">
-                Senha de Acesso
-              </label>
-              <input
-                type="password"
-                required
-                value={loginPassword}
-                onChange={(e) => setLoginPassword(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-[#F7F3EC] border border-[#DFD3C3] rounded-lg text-sm text-[#231619] focus:outline-none focus:border-[#5B1824]"
-              />
-              <p className="text-[11px] text-[#6E5A5F] mt-1">
-                Credencial padrão pré-configurada: <code className="font-mono">peterson2026</code>
-              </p>
-            </div>
-            <button
-              type="submit"
-              className="w-full py-3 px-4 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] font-medium text-sm rounded-lg transition-colors cursor-pointer"
-            >
-              Entrar no Painel de Gestão
-            </button>
-          </form>
+          ) : (
+            <form onSubmit={handleLogin} className="mt-6 space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-[#231619] mb-1">
+                  E-mail Administrativo *
+                </label>
+                <input
+                  type="email"
+                  required
+                  autoComplete="username"
+                  placeholder="seuemail@petersonshoes.com.br"
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-[#F7F3EC] border border-[#DFD3C3] rounded-lg text-sm text-[#231619] focus:outline-none focus:border-[#5B1824]"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-[#231619] mb-1">
+                  {needsInitialSetup
+                    ? 'Criar Senha Forte (mínimo 8 caracteres) *'
+                    : 'Senha de Acesso *'}
+                </label>
+                <input
+                  type="password"
+                  required
+                  autoComplete={
+                    needsInitialSetup ? 'new-password' : 'current-password'
+                  }
+                  placeholder="••••••••••••"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-[#F7F3EC] border border-[#DFD3C3] rounded-lg text-sm text-[#231619] focus:outline-none focus:border-[#5B1824]"
+                />
+              </div>
+              {needsInitialSetup && (
+                <div>
+                  <label className="block text-xs font-semibold text-[#231619] mb-1">
+                    Confirmar Nova Senha *
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    autoComplete="new-password"
+                    placeholder="••••••••••••"
+                    value={confirmSetupPassword}
+                    onChange={(e) => setConfirmSetupPassword(e.target.value)}
+                    className="w-full px-3.5 py-2.5 bg-[#F7F3EC] border border-[#DFD3C3] rounded-lg text-sm text-[#231619] focus:outline-none focus:border-[#5B1824]"
+                  />
+                </div>
+              )}
+              <button
+                type="submit"
+                className="w-full py-3 px-4 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] font-medium text-sm rounded-lg transition-colors cursor-pointer"
+              >
+                {needsInitialSetup
+                  ? 'Salvar Senha Criptografada e Entrar'
+                  : 'Entrar no Painel de Gestão'}
+              </button>
+            </form>
+          )}
         </div>
       </div>
     );
@@ -730,6 +848,34 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   return (
     <div className="min-h-screen bg-[#F7F3EC] text-[#231619]">
+      {/* Environment Banner inside Admin */}
+      <div
+        className={`px-6 py-2 text-xs font-medium flex flex-wrap items-center justify-between gap-3 ${
+          isHomologacao()
+            ? 'bg-amber-950 text-amber-100 border-b border-amber-800'
+            : 'bg-emerald-950 text-emerald-100 border-b border-emerald-800'
+        }`}
+      >
+        <div className="flex items-center gap-2">
+          <span>
+            {isHomologacao()
+              ? '🧪 MODO HOMOLOGAÇÃO ATIVO — Você está editando a base de testes isolada (peterson-db-homolog.json). Os dados reais da produção permanecem intactos.'
+              : '🔒 MODO PRODUÇÃO OFICIAL — Você está visualizando os dados reais do site oficial.'}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() =>
+              switchEnvironment(isHomologacao() ? 'producao' : 'homologacao')
+            }
+            className="px-2.5 py-1 rounded bg-white/15 hover:bg-white/25 text-white text-[11px] font-semibold cursor-pointer"
+          >
+            Alternar para {isHomologacao() ? 'Produção' : 'Homologação'}
+          </button>
+        </div>
+      </div>
+
       {/* Admin Header */}
       <header className="bg-[#5B1824] text-[#F7F3EC] px-6 py-4 border-b border-[#46111B]">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
@@ -746,7 +892,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 Peterson Shoes · Gestão de Preços, Encomendas & Pagamentos
               </h1>
               <p className="text-xs text-[#E5D3B3]">
-                WhatsApp Integrado · Pagamento Automático 50% Entrada + 50% na Conclusão
+                Confirmação Manual de Recebimento (Banco Inter) · 50% Entrada + 50% na Entrega
               </p>
             </div>
           </div>
@@ -760,7 +906,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <span>{loading ? 'Atualizando...' : 'Atualizar Dados'}</span>
             </button>
             <button
-              onClick={() => setToken(null)}
+              onClick={() => {
+                apiFetch('/api/admin/logout', {
+                  method: 'POST',
+                  headers: { Authorization: `Bearer ${token}` },
+                }).catch(() => {});
+                setToken(null);
+              }}
               className="px-3 py-1.5 bg-black/25 hover:bg-black/40 rounded-lg text-xs font-medium flex items-center gap-1.5 cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
@@ -1388,9 +1540,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             </p>
                             <p className="text-[#4A373B]">
                               Cor: <strong>{item.colorName}</strong> · Numeração:{' '}
-                              <strong>{item.size} BR</strong> · Salto:{' '}
-                              <strong>{item.customization.heelOption}</strong> · Acabamento:{' '}
-                              <strong>{item.customization.strapFinish}</strong>
+                              <strong>{item.size} BR</strong>
+                              {item.customization.heelOption ? (
+                                <>
+                                  {' '}
+                                  · Salto: <strong>{item.customization.heelOption}</strong>
+                                </>
+                              ) : null}{' '}
+                              · Acabamento: <strong>{item.customization.strapFinish}</strong>
                             </p>
                             <p className="text-[#6E5A5F]">
                               Forma: <strong>{item.customization.footWidth}</strong>
@@ -1408,7 +1565,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
                     <div>
                       <label className="block text-xs font-semibold text-[#231619] mb-1">
-                        Status do Pagamento (50% / 50%)
+                        Status do Pagamento (50% / 50%) — Confirmação Exclusiva Admin
                       </label>
                       <select
                         value={order.paymentStatus}
@@ -1464,7 +1621,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                     <div>
                       <label className="block text-xs font-semibold text-[#231619] mb-1">
-                        Observações Internas da Fábrica
+                        Observações Internas da Fábrica / Avisos de Pagamento
                       </label>
                       <input
                         type="text"
@@ -1514,7 +1671,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                     <div className="flex flex-wrap items-center gap-2">
                       <a
-                        href={toWhatsAppHref(order.customerWhatsapp, customerReadyMsg)}
+                        href={toWhatsAppHref(order.customerWhatsapp, customerReadyMsg, {
+                          isCustomerRecipient: true,
+                        })}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="px-3.5 py-2 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors whitespace-nowrap"
@@ -1537,10 +1696,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <div className="space-y-6">
             <div>
               <h2 className="text-2xl font-semibold text-[#231619]">
-                Relatório Financeiro & Pagamentos Automatizados (50% Entrada / 50% Final)
+                Relatório Financeiro & Confirmação de Recebimento (50% Entrada / 50% Final)
               </h2>
               <p className="text-xs text-[#6E5A5F]">
-                Cada encomenda gera automaticamente duas parcelas de 50%. A cliente pode pagar via <strong>Pix sem taxa</strong> (Chave: {settings?.pixKey || '62984998265'}) ou via <strong>Cartão de Crédito com repasse da taxa do banco</strong>.
+                Cada encomenda gera duas parcelas de 50%. Nenhum pedido é considerado pago automaticamente pelo clique da cliente: confira o recebimento no seu <strong>Banco Inter</strong> (Chave Pix CNPJ: <strong>{settings?.pixKey || '50.789.636/0001-32'}</strong>) e clique em <strong>Confirmar Recebimento</strong> abaixo.
               </p>
             </div>
 
@@ -1553,7 +1712,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <th className="py-3 px-4 font-semibold">Modalidade / Referência</th>
                     <th className="py-3 px-4 font-semibold">Valor Cobrado</th>
                     <th className="py-3 px-4 font-semibold">Status</th>
-                    <th className="py-3 px-4 font-semibold text-right">Ação</th>
+                    <th className="py-3 px-4 font-semibold text-right">Ação Administrativa</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#EFE7DA]">
@@ -1571,7 +1730,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         <span className="font-semibold text-[#231619]">
                           {pay.method === 'CARTAO_MERCADO_PAGO'
                             ? `Cartão de Crédito (${pay.installments || 1}x)`
-                            : 'Pix Instantâneo'}
+                            : 'Pix Banco Inter'}
                         </span>
                         <span className="block font-mono-tabular text-[11px]">
                           {pay.mpReferenceId}
@@ -1594,17 +1753,42 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                               : 'text-[#8C4A27]'
                           }`}
                         >
-                          {pay.status === 'APROVADO' ? 'Recebido ✓' : 'Pendente'}
+                          {pay.status === 'APROVADO'
+                            ? 'Confirmado pelo Admin ✓'
+                            : 'Aguardando Conferência no Banco Inter'}
                         </span>
                       </td>
                       <td className="py-3 px-4 text-right">
-                        <button
-                          type="button"
-                          onClick={() => copyToClipboard(pay.pixCopyPaste, pay.id)}
-                          className="text-xs font-medium text-[#5B1824] hover:underline cursor-pointer"
-                        >
-                          {copiedTextId === pay.id ? 'Pix Copiado!' : 'Copiar Pix Copia e Cola'}
-                        </button>
+                        <div className="flex items-center justify-end gap-2">
+                          {pay.status !== 'APROVADO' && (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleUpdateOrder(pay.orderId, {
+                                  paymentStatus:
+                                    pay.installmentType === 'FINAL_50'
+                                      ? 'QUITADO_100'
+                                      : 'ENTRADA_50_PAGA',
+                                })
+                              }
+                              className="px-2.5 py-1.5 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-lg text-[11px] font-semibold cursor-pointer"
+                            >
+                              Confirmar Recebimento ✓
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() =>
+                              copyToClipboard(
+                                settings?.pixKey || '50.789.636/0001-32',
+                                pay.id
+                              )
+                            }
+                            className="text-xs font-medium text-[#5B1824] hover:underline cursor-pointer"
+                          >
+                            {copiedTextId === pay.id ? 'Chave Copiada!' : 'Copiar Chave CNPJ'}
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -1652,7 +1836,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         <a
                           href={toWhatsAppHref(
                             c.whatsapp,
-                            `Olá, ${c.name}! Aqui é do atendimento da Peterson Shoes.`
+                            `Olá, ${c.name}! Aqui é do atendimento da Peterson Shoes.`,
+                            { isCustomerRecipient: true }
                           )}
                           target="_blank"
                           rel="noopener noreferrer"

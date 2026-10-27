@@ -46,16 +46,22 @@ function emvField(id: string, value: string): string {
   return `${id}${String(value.length).padStart(2, '0')}${value}`;
 }
 
+export const BANCO_INTER_OFFICIAL_BRCODE =
+  '00020101021126360014br.gov.bcb.pix0114507896360001325204000053039865802BR5912SONHO ANIMAL6007GOIANIA62070503***63049D03';
+
 export function generateMercadoPagoPixPayload(
-  amount: number,
-  reference: string,
+  _amount: number,
+  _reference: string,
   pixKey: string
 ): string {
-  const cleanKey = pixKey.trim() || '50789636000132';
-  const digitsOnly = cleanKey.replace(/\D/g, '');
+  const digitsOnly = (pixKey || '').replace(/\D/g, '');
+  if (!digitsOnly || digitsOnly === '50789636000132') {
+    return BANCO_INTER_OFFICIAL_BRCODE;
+  }
+
+  const cleanKey = pixKey.trim();
   let normalizedKey = cleanKey;
   if (digitsOnly.length === 14 && !cleanKey.includes('@')) {
-    // 14-digit CNPJ Pix key (must be digits only in EMVCo BRCode)
     normalizedKey = digitsOnly;
   } else if (/^\d{10,11}$/.test(cleanKey) && !cleanKey.startsWith('+55')) {
     normalizedKey = `+55${cleanKey}`;
@@ -64,19 +70,15 @@ export function generateMercadoPagoPixPayload(
   const gui = emvField('00', 'br.gov.bcb.pix');
   const keyField = emvField('01', normalizedKey);
   const merchantAccountInfo = emvField('26', `${gui}${keyField}`);
-  const formattedAmount = amount.toFixed(2);
-  const txId =
-    reference.replace(/[^a-zA-Z0-9]/g, '').slice(0, 20) || 'PETERSONSHOES';
-  const additionalData = emvField('62', emvField('05', txId));
+  const additionalData = emvField('62', emvField('05', '***'));
 
   const bodyWithoutCrc =
-    '000201' +
+    '000201010211' +
     merchantAccountInfo +
     '52040000' +
     '5303986' +
-    emvField('54', formattedAmount) +
     '5802BR' +
-    emvField('59', 'JACKELINE PETERSON') +
+    emvField('59', '50789636 JACKELINE GOMES ') +
     emvField('60', 'GOIANIA') +
     additionalData +
     '6304';
@@ -162,10 +164,10 @@ export const INITIAL_SETTINGS: StoreSettings = {
   depositPercentage: 50,
   creditCardFeePercentage: 4.99,
   mercadoPagoLiveEnabled: false,
-  pixKey: '50789636000132',
+  pixKey: '50.789.636/0001-32',
   pixKeyType: 'CNPJ',
-  bankName: 'Banco Inter',
-  bankHolderName: 'Jackeline Peterson',
+  bankName: 'Inter',
+  bankHolderName: '50789636 JACKELINE GOMES PETERSON',
   bankHolderDoc: '50.789.636/0001-32',
   bankAgency: '',
   bankAccount: '',
@@ -2381,17 +2383,38 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
   };
 }
 
-const LOCAL_STORAGE_KEY = 'peterson_shoes_store_v9';
+const STORAGE_KEY_PROD = 'peterson_shoes_store_prod_v10';
+const STORAGE_KEY_HOMOLOG = 'peterson_shoes_store_homolog_v10';
+
+function resolveCurrentStorageKey(): string {
+  if (typeof window === 'undefined') return STORAGE_KEY_HOMOLOG;
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const urlEnv = (params.get('ambiente') || params.get('env') || '').toLowerCase().trim();
+    if (urlEnv === 'producao' || urlEnv === 'prod' || urlEnv === 'oficial') {
+      return STORAGE_KEY_PROD;
+    }
+    if (urlEnv === 'homologacao' || urlEnv === 'homolog' || urlEnv === 'teste') {
+      return STORAGE_KEY_HOMOLOG;
+    }
+    const stored = window.sessionStorage.getItem('peterson_shoes_active_env');
+    if (stored === 'producao') return STORAGE_KEY_PROD;
+    return STORAGE_KEY_HOMOLOG;
+  } catch {
+    return STORAGE_KEY_HOMOLOG;
+  }
+}
 
 export function getBrowserStoreDb(): StoreDatabaseSchema {
   if (typeof window === 'undefined') {
     return createInitialStoreDatabase();
   }
+  const activeKey = resolveCurrentStorageKey();
   try {
-    const raw = window.localStorage.getItem(LOCAL_STORAGE_KEY);
+    const raw = window.localStorage.getItem(activeKey);
     if (!raw) {
       const initial = createInitialStoreDatabase();
-      window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initial));
+      window.localStorage.setItem(activeKey, JSON.stringify(initial));
       return initial;
     }
     const parsed = JSON.parse(raw) as StoreDatabaseSchema;
@@ -2401,9 +2424,18 @@ export function getBrowserStoreDb(): StoreDatabaseSchema {
       parsed.products[0]?.price !== 130
     ) {
       const initial = createInitialStoreDatabase();
-      window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initial));
+      window.localStorage.setItem(activeKey, JSON.stringify(initial));
       return initial;
     }
+    parsed.settings = {
+      ...INITIAL_SETTINGS,
+      ...parsed.settings,
+      bankName: 'Inter',
+      bankHolderName: '50789636 JACKELINE GOMES PETERSON',
+      bankHolderDoc: '50.789.636/0001-32',
+      pixKey: '50.789.636/0001-32',
+      pixKeyType: 'CNPJ',
+    };
     return parsed;
   } catch {
     return createInitialStoreDatabase();
@@ -2412,8 +2444,9 @@ export function getBrowserStoreDb(): StoreDatabaseSchema {
 
 export function saveBrowserStoreDb(db: StoreDatabaseSchema): void {
   if (typeof window === 'undefined') return;
+  const activeKey = resolveCurrentStorageKey();
   try {
-    window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(db));
+    window.localStorage.setItem(activeKey, JSON.stringify(db));
   } catch {
     // Ignore storage quota errors
   }
@@ -2438,6 +2471,7 @@ export function createBrowserBespokeOrder(params: {
   finalPayment: PaymentRecord;
 } {
   const db = getBrowserStoreDb();
+  const isHomolog = resolveCurrentStorageKey() === STORAGE_KEY_HOMOLOG;
   const totalAmount = params.items.reduce(
     (acc, item) => acc + Number(item.unitPrice) * Number(item.quantity),
     0
@@ -2489,7 +2523,9 @@ export function createBrowserBespokeOrder(params: {
   }
 
   const orderNumber = 101 + db.orders.length;
-  const orderCode = `PTS-2026-${orderNumber}`;
+  const orderCode = isHomolog
+    ? `HOMOLOG-PTS-2026-${orderNumber}`
+    : `PTS-2026-${orderNumber}`;
   const orderId = `ord-${Date.now()}`;
   const productionDays = db.settings.productionDays || 15;
   const estimatedDeliveryDate = addDaysISO(productionDays);
@@ -2497,7 +2533,7 @@ export function createBrowserBespokeOrder(params: {
     params.complement ? ` (${params.complement})` : ''
   } - ${params.neighborhood}, ${params.city}/${params.state} - CEP ${params.cep}`;
 
-  const pixKey = db.settings.pixKey || '50789636000132';
+  const pixKey = db.settings.pixKey || '50.789.636/0001-32';
 
   const depositPayment: PaymentRecord = {
     id: `pay-${Date.now()}-1`,
@@ -2515,7 +2551,7 @@ export function createBrowserBespokeOrder(params: {
       `${orderCode}E`,
       pixKey
     ),
-    mpReferenceId: `MP-PIX-${Date.now().toString().slice(-7)}`,
+    mpReferenceId: `PIX-INTER-${Date.now().toString().slice(-7)}`,
     sandboxMode: true,
     paidAt: null,
     createdAt: new Date().toISOString(),
@@ -2537,7 +2573,7 @@ export function createBrowserBespokeOrder(params: {
       `${orderCode}F`,
       pixKey
     ),
-    mpReferenceId: `MP-PIX-${(Date.now() + 1).toString().slice(-7)}`,
+    mpReferenceId: `PIX-INTER-${(Date.now() + 1).toString().slice(-7)}`,
     sandboxMode: true,
     paidAt: null,
     createdAt: new Date().toISOString(),
@@ -2561,7 +2597,7 @@ export function createBrowserBespokeOrder(params: {
     estimatedDeliveryDate,
     productionDays,
     factoryNotes:
-      'Encomenda registrada no site. Aguardando confirmação dos 50% de entrada (Pix ou Cartão de Crédito) para envio à bancada de corte.',
+      'Encomenda registrada no site. Aguardando pagamento dos 50% de entrada e conferência do recebimento pela Peterson Shoes no Banco Inter.',
     trackingCode: '',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -2581,6 +2617,11 @@ export function createBrowserBespokeOrder(params: {
   };
 }
 
+/**
+ * Registra apenas o aviso de que a cliente realizou ou enviou o comprovante do pagamento.
+ * NÃO aprova o pagamento automaticamente: a confirmação só pode ser feita pela administração
+ * da Peterson Shoes após conferir o recebimento real no Banco Inter.
+ */
 export function confirmBrowserOrderPayment(
   orderIdOrCode: string,
   payload: {
@@ -2607,10 +2648,11 @@ export function confirmBrowserOrderPayment(
 
   const chosenMethod = payload.method || 'PIX_MERCADO_PAGO';
 
-  if (payment) {
+  if (payment && payment.status !== 'APROVADO') {
     payment.method = chosenMethod;
-    payment.status = 'APROVADO';
-    payment.paidAt = new Date().toISOString();
+    // Mantém status PENDENTE até conferência manual da administradora
+    payment.status = 'PENDENTE';
+    payment.paidAt = null;
 
     if (chosenMethod === 'CARTAO_MERCADO_PAGO') {
       const baseVal =
@@ -2629,7 +2671,6 @@ export function confirmBrowserOrderPayment(
           : baseVal + (payment.feeAmount || 0);
       payment.cardBrand = payload.cardBrand || 'Cartão';
       payment.cardLast4 = payload.cardLast4 || '0000';
-      payment.mpReferenceId = `MP-CARD-${Date.now().toString().slice(-7)}`;
     } else {
       const baseVal =
         payment.baseAmount ??
@@ -2645,21 +2686,15 @@ export function confirmBrowserOrderPayment(
 
   const methodLabel =
     chosenMethod === 'CARTAO_MERCADO_PAGO'
-      ? `Cartão de Crédito (${payload.installments || 1}x c/ taxa do banco)`
-      : 'Pix Mercado Pago';
+      ? `Cartão de Crédito (${payload.installments || 1}x)`
+      : 'Pix Banco Inter';
 
-  if (payload.installmentType === 'FINAL_50') {
-    order.paymentStatus = 'QUITADO_100';
-    if (order.productionStatus === 'PRONTA_PARA_ENTREGA') {
-      order.factoryNotes = `${order.factoryNotes} | 50% finais confirmados via ${methodLabel}. Liberada para expedição.`;
-    }
-  } else {
-    order.paymentStatus = 'ENTRADA_50_PAGA';
-    if (order.productionStatus === 'AGUARDANDO_CONFIRMACAO') {
-      order.productionStatus = 'CORTE_MODELAGEM';
-      order.factoryNotes = `Entrada de 50% aprovada via ${methodLabel}. Ficha técnica liberada automaticamente para Corte & Modelagem (Prazo: 15 dias).`;
-    }
-  }
+  const etapaLabel =
+    payload.installmentType === 'FINAL_50' ? '50% finais' : '50% de entrada';
+
+  order.factoryNotes = `Cliente informou envio de pagamento (${etapaLabel} via ${methodLabel}) em ${new Date().toLocaleString(
+    'pt-BR'
+  )}. Aguardando conferência e aprovação da Peterson Shoes após verificar o recebimento no Banco Inter.`;
 
   order.updatedAt = new Date().toISOString();
   saveBrowserStoreDb(db);

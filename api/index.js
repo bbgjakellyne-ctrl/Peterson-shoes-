@@ -1884,50 +1884,32 @@ var PORT = Number(process.env.PORT) || 3e3;
 var IS_VERCEL = Boolean(process.env.VERCEL);
 var BUNDLED_DB_FILE = path.resolve(process.cwd(), "data", "peterson-db.json");
 var DATA_DIR = IS_VERCEL ? path.join("/tmp", "peterson-data") : path.resolve(process.cwd(), "data");
-var DB_FILE = path.join(DATA_DIR, "peterson-db.json");
+var DB_FILE_PROD = path.join(DATA_DIR, "peterson-db.json");
+var DB_FILE_HOMOLOG = path.join(DATA_DIR, "peterson-db-homolog.json");
+var ADMIN_AUTH_FILE = path.join(DATA_DIR, "admin-auth.secret.json");
 var SQL_SCHEMA_FILE = path.resolve(process.cwd(), "supabase-schema.sql");
 var INSTAGRAM_PUBLIC_DIR = path.resolve(process.cwd(), "public", "instagram");
+function resolveEnv(req) {
+  if (!req) return "homologacao";
+  const headerEnv = String(req.headers["x-peterson-env"] || "").toLowerCase().trim();
+  const queryEnv = String(req.query?.env || "").toLowerCase().trim();
+  if (headerEnv === "producao" || queryEnv === "producao") {
+    return "producao";
+  }
+  if (headerEnv === "homologacao" || queryEnv === "homologacao") {
+    return "homologacao";
+  }
+  return "producao";
+}
 var STANDARD_SIZES2 = [34, 35, 36, 37, 38, 39];
 function addDaysISO(days) {
   const d = /* @__PURE__ */ new Date();
   d.setDate(d.getDate() + days);
   return d.toISOString().split("T")[0];
 }
-function computeCRC16(payload) {
-  let crc = 65535;
-  for (let i = 0; i < payload.length; i++) {
-    crc ^= payload.charCodeAt(i) << 8;
-    for (let j = 0; j < 8; j++) {
-      if ((crc & 32768) !== 0) {
-        crc = (crc << 1 ^ 4129) & 65535;
-      } else {
-        crc = crc << 1 & 65535;
-      }
-    }
-  }
-  return crc.toString(16).toUpperCase().padStart(4, "0");
-}
-function emvField(id, value) {
-  return `${id}${String(value.length).padStart(2, "0")}${value}`;
-}
-function generateMercadoPagoPixPayload(amount, reference, pixKey) {
-  const cleanKey = pixKey.trim() || "50789636000132";
-  const digitsOnly = cleanKey.replace(/\D/g, "");
-  let normalizedKey = cleanKey;
-  if (digitsOnly.length === 14 && !cleanKey.includes("@")) {
-    normalizedKey = digitsOnly;
-  } else if (/^\d{10,11}$/.test(cleanKey) && !cleanKey.startsWith("+55")) {
-    normalizedKey = `+55${cleanKey}`;
-  }
-  const gui = emvField("00", "br.gov.bcb.pix");
-  const keyField = emvField("01", normalizedKey);
-  const merchantAccountInfo = emvField("26", `${gui}${keyField}`);
-  const formattedAmount = amount.toFixed(2);
-  const txId = reference.replace(/[^a-zA-Z0-9]/g, "").slice(0, 20) || "PETERSONSHOES";
-  const additionalData = emvField("62", emvField("05", txId));
-  const bodyWithoutCrc = "000201" + merchantAccountInfo + "520400005303986" + emvField("54", formattedAmount) + "5802BR" + emvField("59", "JACKELINE PETERSON") + emvField("60", "GOIANIA") + additionalData + "6304";
-  const crc = computeCRC16(bodyWithoutCrc);
-  return `${bodyWithoutCrc}${crc}`;
+var BANCO_INTER_OFFICIAL_BRCODE = "00020101021126360014br.gov.bcb.pix0114507896360001325204000053039865802BR5912SONHO ANIMAL6007GOIANIA62070503***63049D03";
+function generateMercadoPagoPixPayload(_amount, _reference, _pixKey) {
+  return BANCO_INTER_OFFICIAL_BRCODE;
 }
 function buildStandardColors2(defaultColorName, defaultImage, photoByColor = {}) {
   const basePalette = [
@@ -2950,10 +2932,10 @@ function createInitialDatabase() {
     depositPercentage: 50,
     creditCardFeePercentage: 4.99,
     mercadoPagoLiveEnabled: process.env.MERCADO_PAGO_LIVE_CHARGES_ENABLED === "true",
-    pixKey: "50789636000132",
+    pixKey: "50.789.636/0001-32",
     pixKeyType: "CNPJ",
-    bankName: "Banco Inter",
-    bankHolderName: "Jackeline Peterson",
+    bankName: "Inter",
+    bankHolderName: "50789636 JACKELINE GOMES PETERSON",
     bankHolderDoc: "50.789.636/0001-32",
     bankAgency: "",
     bankAccount: "",
@@ -3159,58 +3141,123 @@ function createInitialDatabase() {
     settings
   };
 }
-function loadDb() {
+function getDbFilePath(env) {
+  return env === "homologacao" ? DB_FILE_HOMOLOG : DB_FILE_PROD;
+}
+function loadDb(env = "producao") {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
   }
-  if (!fs.existsSync(DB_FILE)) {
-    if (IS_VERCEL && fs.existsSync(BUNDLED_DB_FILE)) {
+  const targetFile = getDbFilePath(env);
+  if (!fs.existsSync(targetFile)) {
+    if (fs.existsSync(BUNDLED_DB_FILE)) {
       try {
-        fs.copyFileSync(BUNDLED_DB_FILE, DB_FILE);
+        fs.copyFileSync(BUNDLED_DB_FILE, targetFile);
       } catch {
       }
     }
-    if (!fs.existsSync(DB_FILE)) {
+    if (!fs.existsSync(targetFile)) {
       const initial = createInitialDatabase();
-      fs.writeFileSync(DB_FILE, JSON.stringify(initial, null, 2), "utf-8");
+      fs.writeFileSync(targetFile, JSON.stringify(initial, null, 2), "utf-8");
       return initial;
     }
   }
   try {
-    const raw = fs.readFileSync(DB_FILE, "utf-8");
+    const raw = fs.readFileSync(targetFile, "utf-8");
     const parsed = JSON.parse(raw);
-    const needsUpgrade = !parsed.products || parsed.products.length < 46 || parsed.products[0]?.price !== 130 || parsed.settings?.whatsappStore !== "5562984998265" || parsed.products[0]?.availableSizes?.includes(33) || !parsed.products[0]?.colors?.some((c) => c.name === "Marsala") || parsed.settings?.pixKey !== "50789636000132";
+    const needsUpgrade = !parsed.products || parsed.products.length < 46 || parsed.products[0]?.price !== 130 || parsed.settings?.whatsappStore !== "5562984998265" || parsed.products[0]?.availableSizes?.includes(33) || !parsed.products[0]?.colors?.some((c) => c.name === "Marsala");
     if (needsUpgrade) {
       const upgraded = createInitialDatabase();
-      fs.writeFileSync(DB_FILE, JSON.stringify(upgraded, null, 2), "utf-8");
+      fs.writeFileSync(targetFile, JSON.stringify(upgraded, null, 2), "utf-8");
       return upgraded;
     }
     parsed.settings = {
-      bankName: "Banco Inter",
-      bankHolderName: "Jackeline Peterson",
+      ...parsed.settings,
+      bankName: "Inter",
+      bankHolderName: "50789636 JACKELINE GOMES PETERSON",
       bankHolderDoc: "50.789.636/0001-32",
       pixKeyType: "CNPJ",
-      pixKey: "50789636000132",
-      ...parsed.settings
+      pixKey: "50.789.636/0001-32"
     };
     return parsed;
   } catch (err) {
-    console.error("Erro ao ler banco de dados, recriando estado inicial:", err);
+    console.error(`Erro ao ler banco de dados (${env}), recriando estado inicial:`, err);
     const initial = createInitialDatabase();
-    fs.writeFileSync(DB_FILE, JSON.stringify(initial, null, 2), "utf-8");
+    fs.writeFileSync(targetFile, JSON.stringify(initial, null, 2), "utf-8");
     return initial;
   }
 }
-function saveDb(data) {
+function saveDb(data, env = "producao") {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
   }
-  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), "utf-8");
+  const targetFile = getDbFilePath(env);
+  fs.writeFileSync(targetFile, JSON.stringify(data, null, 2), "utf-8");
 }
-var activeAdminTokens = /* @__PURE__ */ new Set();
-function getStatelessAdminToken() {
-  const secret = process.env.ADMIN_PASSWORD || "peterson2026";
-  return crypto.createHmac("sha256", secret).update("peterson-admin-session-v1").digest("hex");
+var activeAdminSessions = /* @__PURE__ */ new Map();
+var loginRateLimiter = /* @__PURE__ */ new Map();
+function loadStoredAdminCredentials() {
+  try {
+    if (fs.existsSync(ADMIN_AUTH_FILE)) {
+      const raw = fs.readFileSync(ADMIN_AUTH_FILE, "utf-8");
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.passwordHash && parsed.salt) {
+        return parsed;
+      }
+    }
+  } catch {
+  }
+  return null;
+}
+function hasEnvAdminPassword() {
+  const envPass = (process.env.ADMIN_PASSWORD || "").trim();
+  return envPass.length >= 6;
+}
+function isAdminConfigured() {
+  return hasEnvAdminPassword() || Boolean(loadStoredAdminCredentials());
+}
+function hashPasswordWithSalt(password, saltHex) {
+  return crypto.scryptSync(password, Buffer.from(saltHex, "hex"), 64).toString("hex");
+}
+function verifyAdminCredentials(emailInput, passwordInput) {
+  const cleanPassword = String(passwordInput || "");
+  const cleanEmail = String(emailInput || "").trim().toLowerCase();
+  if (!cleanPassword) {
+    return { ok: false, email: "" };
+  }
+  if (hasEnvAdminPassword()) {
+    const expectedPass = String(process.env.ADMIN_PASSWORD).trim();
+    const expectedEmail = (process.env.ADMIN_EMAIL || "contato@petersonshoes.com.br").trim().toLowerCase();
+    const passBufA = Buffer.from(cleanPassword);
+    const passBufB = Buffer.from(expectedPass);
+    const passMatches = passBufA.length === passBufB.length && crypto.timingSafeEqual(passBufA, passBufB);
+    const emailMatches = !cleanEmail || cleanEmail === expectedEmail;
+    return {
+      ok: passMatches && emailMatches,
+      email: expectedEmail
+    };
+  }
+  const stored = loadStoredAdminCredentials();
+  if (stored) {
+    const computedHash = hashPasswordWithSalt(cleanPassword, stored.salt);
+    const bufA = Buffer.from(computedHash, "hex");
+    const bufB = Buffer.from(stored.passwordHash, "hex");
+    const passMatches = bufA.length === bufB.length && crypto.timingSafeEqual(bufA, bufB);
+    const emailMatches = !cleanEmail || cleanEmail === stored.email.toLowerCase();
+    return {
+      ok: passMatches && emailMatches,
+      email: stored.email
+    };
+  }
+  return { ok: false, email: "" };
+}
+function issueAdminSessionToken(email) {
+  const token = crypto.randomBytes(32).toString("hex");
+  activeAdminSessions.set(token, {
+    email,
+    expiresAt: Date.now() + 12 * 60 * 60 * 1e3
+  });
+  return token;
 }
 function requireAdminAuth(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -3218,8 +3265,16 @@ function requireAdminAuth(req, res, next) {
     return res.status(401).json({ error: "N\xE3o autorizado: Token administrativo ausente." });
   }
   const token = authHeader.slice("Bearer ".length).trim();
-  if (!activeAdminTokens.has(token) && token !== getStatelessAdminToken() && token !== "peterson-local-admin-token") {
-    return res.status(401).json({ error: "Sess\xE3o administrativa inv\xE1lida ou expirada." });
+  if (!token) {
+    return res.status(401).json({ error: "N\xE3o autorizado: Token administrativo vazio." });
+  }
+  const session = activeAdminSessions.get(token);
+  if (!session) {
+    return res.status(401).json({ error: "Sess\xE3o administrativa inv\xE1lida ou expirada. Fa\xE7a login novamente." });
+  }
+  if (Date.now() > session.expiresAt) {
+    activeAdminSessions.delete(token);
+    return res.status(401).json({ error: "Sess\xE3o administrativa expirada. Fa\xE7a login novamente." });
   }
   next();
 }
@@ -3241,7 +3296,8 @@ app.use((req, _res, next) => {
   next();
 });
 function registerApiRoutes() {
-  loadDb();
+  loadDb("producao");
+  loadDb("homologacao");
   const resolveBaseUrl = (req) => {
     if (process.env.APP_URL) {
       return process.env.APP_URL.replace(/\/+$/, "");
@@ -3315,25 +3371,29 @@ ${productUrlsXml}
     res.setHeader("Content-Type", "application/xml; charset=utf-8");
     res.send(xml);
   });
-  app.get("/api/products", (_req, res) => {
-    const db = loadDb();
+  app.get("/api/products", (req, res) => {
+    const env = resolveEnv(req);
+    const db = loadDb(env);
     const activeProducts = db.products.filter((p) => p.active);
     res.json(activeProducts);
   });
-  app.get("/api/settings", (_req, res) => {
-    const db = loadDb();
+  app.get("/api/settings", (req, res) => {
+    const env = resolveEnv(req);
+    const db = loadDb(env);
     res.json({
       ...db.settings,
       creditCardFeePercentage: db.settings.creditCardFeePercentage ?? 4.99,
       supabaseConfigured: Boolean(
         process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY
       ),
-      mercadoPagoTokenConfigured: Boolean(process.env.MERCADO_PAGO_ACCESS_TOKEN)
+      mercadoPagoTokenConfigured: Boolean(process.env.MERCADO_PAGO_ACCESS_TOKEN),
+      environment: env
     });
   });
   app.post("/api/orders", async (req, res) => {
     try {
-      const db = loadDb();
+      const env = resolveEnv(req);
+      const db = loadDb(env);
       const {
         customerName,
         customerEmail,
@@ -3396,11 +3456,12 @@ ${productUrlsXml}
         db.customers.unshift(customer);
       }
       const orderNumber = 101 + db.orders.length;
-      const orderCode = `PTS-2026-${orderNumber}`;
+      const orderCode = env === "homologacao" ? `PTS-HML-${orderNumber}` : `PTS-2026-${orderNumber}`;
       const orderId = `ord-${Date.now()}`;
       const productionDays = db.settings.productionDays || 15;
       const estimatedDeliveryDate = addDaysISO(productionDays);
       const shippingAddress = `${street}, ${number}${complement ? ` (${complement})` : ""} - ${neighborhood}, ${city}/${state} - CEP ${cep}`;
+      const allowLiveCharges = env === "producao" && db.settings.mercadoPagoLiveEnabled;
       const [mpDeposit, mpFinal] = await Promise.all([
         createMercadoPagoPixPayment({
           amount: depositAmount,
@@ -3409,8 +3470,8 @@ ${productUrlsXml}
           payerName: customerName,
           payerCpf: customerCpf || "",
           externalReference: `${orderCode}E`,
-          pixKey: db.settings.pixKey || "50789636000132",
-          liveEnabled: db.settings.mercadoPagoLiveEnabled
+          pixKey: db.settings.pixKey || "50.789.636/0001-32",
+          liveEnabled: allowLiveCharges
         }),
         createMercadoPagoPixPayment({
           amount: remainingAmount,
@@ -3419,8 +3480,8 @@ ${productUrlsXml}
           payerName: customerName,
           payerCpf: customerCpf || "",
           externalReference: `${orderCode}F`,
-          pixKey: db.settings.pixKey || "50789636000132",
-          liveEnabled: db.settings.mercadoPagoLiveEnabled
+          pixKey: db.settings.pixKey || "50.789.636/0001-32",
+          liveEnabled: allowLiveCharges
         })
       ]);
       const depositPayment = {
@@ -3474,14 +3535,14 @@ ${productUrlsXml}
         productionStatus: "AGUARDANDO_CONFIRMACAO",
         estimatedDeliveryDate,
         productionDays,
-        factoryNotes: "Encomenda registrada no site. Aguardando confirma\xE7\xE3o dos 50% de entrada (Pix ou Cart\xE3o de Cr\xE9dito) para envio \xE0 bancada de corte.",
+        factoryNotes: "Encomenda registrada no site. Aguardando confer\xEAncia do recebimento dos 50% de entrada no Banco Inter pela administra\xE7\xE3o.",
         trackingCode: "",
         createdAt: (/* @__PURE__ */ new Date()).toISOString(),
         updatedAt: (/* @__PURE__ */ new Date()).toISOString()
       };
       db.orders.unshift(newOrder);
       db.payments.unshift(finalPayment, depositPayment);
-      saveDb(db);
+      saveDb(db, env);
       res.status(201).json({
         order: {
           ...newOrder,
@@ -3496,8 +3557,9 @@ ${productUrlsXml}
     }
   });
   app.get("/api/orders/lookup", (req, res) => {
+    const env = resolveEnv(req);
     const query = String(req.query.query || "").trim();
-    const db = loadDb();
+    const db = loadDb(env);
     if (!query) {
       const enriched2 = db.orders.slice(0, 10).map((o) => ({
         ...o,
@@ -3519,7 +3581,8 @@ ${productUrlsXml}
     }));
     res.json(enriched);
   });
-  app.post("/api/orders/:id/confirm-payment", (req, res) => {
+  const handleCustomerNotifyPayment = (req, res) => {
+    const env = resolveEnv(req);
     const { id } = req.params;
     const {
       installmentType,
@@ -3530,7 +3593,7 @@ ${productUrlsXml}
       cardBrand,
       cardLast4
     } = req.body;
-    const db = loadDb();
+    const db = loadDb(env);
     const order = db.orders.find((o) => o.id === id || o.orderCode === id);
     if (!order) {
       return res.status(404).json({ error: "Encomenda n\xE3o encontrada." });
@@ -3539,10 +3602,9 @@ ${productUrlsXml}
       (p) => p.orderId === order.id && p.installmentType === (installmentType || "ENTRADA_50")
     );
     const chosenMethod = method || "PIX_MERCADO_PAGO";
-    if (payment) {
+    if (payment && payment.status !== "APROVADO") {
       payment.method = chosenMethod;
-      payment.status = "APROVADO";
-      payment.paidAt = (/* @__PURE__ */ new Date()).toISOString();
+      payment.status = "PENDENTE";
       if (chosenMethod === "CARTAO_MERCADO_PAGO") {
         const baseVal = payment.baseAmount ?? (installmentType === "FINAL_50" ? order.remainingAmount : order.depositAmount);
         payment.baseAmount = baseVal;
@@ -3551,7 +3613,6 @@ ${productUrlsXml}
         payment.amount = typeof totalCharged === "number" && totalCharged >= baseVal ? totalCharged : baseVal + (payment.feeAmount || 0);
         payment.cardBrand = cardBrand || "Cart\xE3o";
         payment.cardLast4 = cardLast4 || "0000";
-        payment.mpReferenceId = `MP-CARD-${Date.now().toString().slice(-7)}`;
       } else {
         const baseVal = payment.baseAmount ?? (installmentType === "FINAL_50" ? order.remainingAmount : order.depositAmount);
         payment.baseAmount = baseVal;
@@ -3560,33 +3621,38 @@ ${productUrlsXml}
         payment.amount = baseVal;
       }
     }
-    const methodLabel = chosenMethod === "CARTAO_MERCADO_PAGO" ? `Cart\xE3o de Cr\xE9dito (${installments || 1}x c/ taxa do banco)` : "Pix Mercado Pago";
-    if (installmentType === "FINAL_50") {
-      order.paymentStatus = "QUITADO_100";
-      if (order.productionStatus === "PRONTA_PARA_ENTREGA") {
-        order.factoryNotes = `${order.factoryNotes} | 50% finais confirmados via ${methodLabel}. Liberada para expedi\xE7\xE3o.`;
-      }
-    } else {
-      order.paymentStatus = "ENTRADA_50_PAGA";
-      if (order.productionStatus === "AGUARDANDO_CONFIRMACAO") {
-        order.productionStatus = "CORTE_MODELAGEM";
-        order.factoryNotes = `Entrada de 50% aprovada via ${methodLabel}. Ficha t\xE9cnica liberada automaticamente para Corte & Modelagem (Prazo: 15 dias).`;
-      }
-    }
+    const methodLabel = chosenMethod === "CARTAO_MERCADO_PAGO" ? `Cart\xE3o de Cr\xE9dito (${installments || 1}x c/ taxa do banco)` : "Pix Banco Inter";
+    const parcelaLabel = installmentType === "FINAL_50" ? "50% finais" : "50% de entrada";
+    order.factoryNotes = `${order.factoryNotes} | Cliente informou envio de pagamento (${parcelaLabel} via ${methodLabel}) em ${(/* @__PURE__ */ new Date()).toLocaleString("pt-BR")} \u2014 Aguardando confer\xEAncia no Banco Inter pelo Admin.`;
     order.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
-    saveDb(db);
+    saveDb(db, env);
     res.json({
+      notified: true,
+      message: "Aviso de pagamento registrado! O status ser\xE1 atualizado para Pago assim que a Peterson Shoes conferir o recebimento no Banco Inter.",
       order: {
         ...order,
         payments: db.payments.filter((p) => p.orderId === order.id)
       }
     });
-  });
+  };
+  app.post("/api/orders/:id/notify-payment", handleCustomerNotifyPayment);
+  app.post("/api/orders/:id/confirm-payment", handleCustomerNotifyPayment);
   app.post("/api/webhooks/mercadopago", (req, res) => {
     try {
+      const env = resolveEnv(req);
+      if (env === "homologacao") {
+        return res.status(200).json({ received: true, ignoredInHomologacao: true });
+      }
+      const webhookSecret = (process.env.MERCADO_PAGO_WEBHOOK_SECRET || "").trim();
+      const providedSecret = String(
+        req.headers["x-webhook-secret"] || req.query.secret || ""
+      ).trim();
+      if (!webhookSecret || providedSecret !== webhookSecret) {
+        return res.status(401).json({ error: "Webhook n\xE3o autorizado." });
+      }
       const { external_reference, installmentType } = req.body || {};
       if (external_reference) {
-        const db = loadDb();
+        const db = loadDb("producao");
         const cleanCode = String(external_reference).replace(/[EF]$/, "");
         const order = db.orders.find(
           (o) => o.orderCode.replace(/[^a-zA-Z0-9]/g, "") === cleanCode || o.orderCode === cleanCode
@@ -3609,7 +3675,7 @@ ${productUrlsXml}
             }
           }
           order.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
-          saveDb(db);
+          saveDb(db, "producao");
         }
       }
       res.status(200).json({ received: true });
@@ -3634,13 +3700,18 @@ ${productUrlsXml}
       const systemInstruction = `Voc\xEA \xE9 a Consultora Virtual Oficial da **Peterson Shoes** (@petersonshoes_ \u2014 "Seu estilo, sua sand\xE1lia!"), marca de **Goi\xE2nia - Goi\xE1s** especializada em sand\xE1lias femininas de fabrica\xE7\xE3o pr\xF3pria feitas sob encomenda.
 
 INFORMA\xC7\xD5ES REAIS E OBRIGAT\xD3RIAS DA LOJA:
-1. **Localiza\xE7\xE3o & Fabrica\xE7\xE3o Pr\xF3pria**: Somos de **Goi\xE2nia - Goi\xE1s (GO)**, com fabrica\xE7\xE3o pr\xF3pria sob encomenda (Atacado a partir de 6 pares e Varejo). Fazemos entregas em Goi\xE2nia e regi\xE3o e enviamos para todo o Brasil via Correios. O prazo estimado de produ\xE7\xE3o \xE9 de **${db.settings.productionDays} dias**.
+1. **Localiza\xE7\xE3o & Fabrica\xE7\xE3o Pr\xF3pria**: Somos de **Goi\xE2nia - Goi\xE1s (GO)**, com fabrica\xE7\xE3o pr\xF3pria sob encomenda (Atacado a partir de 6 pares e Varejo). O prazo estimado de produ\xE7\xE3o \xE9 de **${db.settings.productionDays} dias**.
 2. **Numera\xE7\xE3o Oficial**: Produzimos do **34 ao 39 BR** (34, 35, 36, 37, 38 e 39).
 3. **Cores Padr\xE3o & Cor Personalizada**: Todos os modelos podem ser feitos nas cores padr\xE3o **Preto, Branco, Marsala, Nude, Dourado, Prata, Vermelho e Rosa**, al\xE9m da op\xE7\xE3o **"Outra Cor"** onde a cliente escreve exatamente qual cor deseja.
 4. **Como Funciona o Pagamento (50% + 50% no Pix ou Cart\xE3o de Cr\xE9dito)**:
-   - A cliente paga **50% de entrada** para confirmar o pedido e os outros **50% restantes** quando a sand\xE1lia estiver **pronta** (em 15 dias).
+   - A cliente paga **50% de entrada da sand\xE1lia** para confirmar o pedido (sem precisar aguardar cota\xE7\xE3o de frete) e os outros **50% da sand\xE1lia na entrega**, quando estiver pronta (em 15 dias).
    - A cliente escolhe se prefere pagar os 50% no **Pix (sem taxa)** ou no **Cart\xE3o de Cr\xE9dito (em at\xE9 6x, com o acr\xE9scimo da taxa cobrada pelo banco/operadora)**.
-5. **Atendimento via WhatsApp**: O site possui bot\xF5es com link direto para o WhatsApp oficial da loja (n\xE3o exiba o n\xFAmero de telefone por extenso na mensagem; oriente a cliente a clicar no bot\xE3o "Falar no WhatsApp" da p\xE1gina) | Instagram: ${db.settings.instagramUrl}.
+5. **Regra de Frete e Entrega (Separado do pre\xE7o da sand\xE1lia)**:
+   - Informe sempre de forma clara: **"O frete \xE9 por conta da cliente. A forma de envio e o valor da entrega ser\xE3o combinados quando a sand\xE1lia estiver pronta."**
+   - Para **Goi\xE2nia e regi\xE3o**, a entrega poder\xE1 ser combinada por **Uber Moto**.
+   - Para **outras cidades**, o envio poder\xE1 ser combinado pelos **Correios**, com o frete pago pela cliente antes da postagem.
+   - Nunca informe frete gr\xE1tis, R$ 0,00 ou valor estimado de frete.
+6. **Atendimento via WhatsApp**: O site possui bot\xF5es com link direto para o WhatsApp oficial da loja (n\xE3o exiba o n\xFAmero de telefone por extenso na mensagem; oriente a cliente a clicar no bot\xE3o "Falar no WhatsApp" da p\xE1gina) | Instagram: ${db.settings.instagramUrl}.
 
 CAT\xC1LOGO COMPLETO DO INSTAGRAM @petersonshoes_ (${activeProducts.length} MODELOS):
 ${catalogSummary}
@@ -3694,24 +3765,96 @@ DIRETRIZES DE ESTILO:
       });
     }
   });
-  app.post("/api/admin/login", (req, res) => {
-    const { email, password } = req.body;
-    const expectedPassword = process.env.ADMIN_PASSWORD || "peterson2026";
-    const expectedEmail = process.env.ADMIN_EMAIL || "contato@petersonshoes.com.br";
-    if (password === expectedPassword && (!email || email.toLowerCase().trim() === expectedEmail.toLowerCase())) {
-      const token = getStatelessAdminToken();
-      activeAdminTokens.add(token);
-      return res.json({
-        token,
-        adminEmail: expectedEmail
-      });
-    }
-    return res.status(401).json({
-      error: "Credenciais inv\xE1lidas. Para demonstra\xE7\xE3o use a senha padr\xE3o: peterson2026"
+  app.get("/api/admin/auth-status", (_req, res) => {
+    res.json({
+      configured: isAdminConfigured(),
+      configuredViaEnv: hasEnvAdminPassword()
     });
   });
-  app.get("/api/admin/dashboard", requireAdminAuth, (_req, res) => {
-    const db = loadDb();
+  app.post("/api/admin/setup-credentials", (req, res) => {
+    if (isAdminConfigured()) {
+      return res.status(403).json({
+        error: "As credenciais administrativas j\xE1 est\xE3o configuradas. Fa\xE7a login com sua senha."
+      });
+    }
+    const { email, password } = req.body;
+    const cleanEmail = String(email || "").trim().toLowerCase();
+    const cleanPassword = String(password || "");
+    if (!cleanEmail || !cleanEmail.includes("@")) {
+      return res.status(400).json({ error: "Informe um e-mail administrativo v\xE1lido." });
+    }
+    if (cleanPassword.length < 8) {
+      return res.status(400).json({
+        error: "A senha administrativa deve ter pelo menos 8 caracteres."
+      });
+    }
+    const salt = crypto.randomBytes(16).toString("hex");
+    const passwordHash = hashPasswordWithSalt(cleanPassword, salt);
+    const sessionSecret = crypto.randomBytes(32).toString("hex");
+    const record = {
+      email: cleanEmail,
+      salt,
+      passwordHash,
+      sessionSecret,
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    fs.writeFileSync(ADMIN_AUTH_FILE, JSON.stringify(record, null, 2), {
+      encoding: "utf-8",
+      mode: 384
+    });
+    const token = issueAdminSessionToken(cleanEmail);
+    return res.status(201).json({
+      token,
+      adminEmail: cleanEmail
+    });
+  });
+  app.post("/api/admin/login", (req, res) => {
+    const clientIp = String(req.headers["x-forwarded-for"] || req.ip || "local");
+    const now = Date.now();
+    const rateRecord = loginRateLimiter.get(clientIp);
+    if (rateRecord && now < rateRecord.resetAt && rateRecord.count >= 8) {
+      return res.status(429).json({
+        error: "Muitas tentativas de login. Aguarde alguns minutos antes de tentar novamente."
+      });
+    }
+    if (!isAdminConfigured()) {
+      return res.status(403).json({
+        error: "A senha administrativa ainda n\xE3o foi configurada. Realize a configura\xE7\xE3o inicial."
+      });
+    }
+    const { email, password } = req.body;
+    const verification = verifyAdminCredentials(email || "", password || "");
+    if (verification.ok) {
+      loginRateLimiter.delete(clientIp);
+      const token = issueAdminSessionToken(verification.email);
+      return res.json({
+        token,
+        adminEmail: verification.email
+      });
+    }
+    const nextCount = rateRecord && now < rateRecord.resetAt ? rateRecord.count + 1 : 1;
+    loginRateLimiter.set(clientIp, {
+      count: nextCount,
+      resetAt: now + 10 * 60 * 1e3
+    });
+    return res.status(401).json({
+      error: "Credenciais inv\xE1lidas. Verifique seu e-mail e senha administrativa."
+    });
+  });
+  app.post("/api/admin/logout", (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      const token = authHeader.slice("Bearer ".length).trim();
+      activeAdminSessions.delete(token);
+    }
+    res.json({ ok: true });
+  });
+  app.get("/api/admin/dashboard", requireAdminAuth, (req, res) => {
+    const env = resolveEnv(req);
+    const db = loadDb(env);
     const enrichedOrders = db.orders.map((o) => ({
       ...o,
       payments: db.payments.filter((p) => p.orderId === o.id)
@@ -3720,6 +3863,7 @@ DIRETRIZES DE ESTILO:
     const totalPaidAmount = db.payments.filter((p) => p.status === "APROVADO").reduce((sum, p) => sum + p.amount, 0);
     const pendingReceivables = db.payments.filter((p) => p.status === "PENDENTE").reduce((sum, p) => sum + p.amount, 0);
     res.json({
+      environment: env,
       products: db.products,
       customers: db.customers,
       orders: enrichedOrders,
@@ -3769,23 +3913,25 @@ DIRETRIZES DE ESTILO:
     }
   });
   app.patch("/api/admin/products/:id/price", requireAdminAuth, (req, res) => {
+    const env = resolveEnv(req);
     const { id } = req.params;
     const { price } = req.body;
     const numericPrice = Number(price);
     if (!numericPrice || isNaN(numericPrice) || numericPrice <= 0) {
       return res.status(400).json({ error: "Informe um valor v\xE1lido maior que zero." });
     }
-    const db = loadDb();
+    const db = loadDb(env);
     const idx = db.products.findIndex((p) => p.id === id);
     if (idx === -1) {
       return res.status(404).json({ error: "Modelo n\xE3o encontrado." });
     }
     db.products[idx].price = Math.round(numericPrice * 100) / 100;
-    saveDb(db);
+    saveDb(db, env);
     return res.json(db.products[idx]);
   });
   app.post("/api/admin/products", requireAdminAuth, (req, res) => {
-    const db = loadDb();
+    const env = resolveEnv(req);
+    const db = loadDb(env);
     const body = req.body;
     if (!body.name || !body.price) {
       return res.status(400).json({ error: "Nome e pre\xE7o da sand\xE1lia s\xE3o obrigat\xF3rios." });
@@ -3816,12 +3962,13 @@ DIRETRIZES DE ESTILO:
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
     db.products.unshift(newProduct);
-    saveDb(db);
+    saveDb(db, env);
     res.status(201).json(newProduct);
   });
   app.put("/api/admin/products/:id", requireAdminAuth, (req, res) => {
+    const env = resolveEnv(req);
     const { id } = req.params;
-    const db = loadDb();
+    const db = loadDb(env);
     const idx = db.products.findIndex((p) => p.id === id);
     if (idx === -1) {
       return res.status(404).json({ error: "Produto n\xE3o encontrado." });
@@ -3833,17 +3980,19 @@ DIRETRIZES DE ESTILO:
       price: Number(req.body.price ?? db.products[idx].price)
     };
     db.products[idx] = updated;
-    saveDb(db);
+    saveDb(db, env);
     res.json(updated);
   });
   app.delete("/api/admin/products/:id", requireAdminAuth, (req, res) => {
+    const env = resolveEnv(req);
     const { id } = req.params;
-    const db = loadDb();
+    const db = loadDb(env);
     db.products = db.products.filter((p) => p.id !== id);
-    saveDb(db);
+    saveDb(db, env);
     res.json({ ok: true });
   });
   app.patch("/api/admin/orders/:id", requireAdminAuth, (req, res) => {
+    const env = resolveEnv(req);
     const { id } = req.params;
     const {
       productionStatus,
@@ -3852,7 +4001,7 @@ DIRETRIZES DE ESTILO:
       trackingCode,
       estimatedDeliveryDate
     } = req.body;
-    const db = loadDb();
+    const db = loadDb(env);
     const order = db.orders.find((o) => o.id === id);
     if (!order) {
       return res.status(404).json({ error: "Encomenda n\xE3o encontrada." });
@@ -3868,6 +4017,12 @@ DIRETRIZES DE ESTILO:
       const orderPayments = db.payments.filter((p) => p.orderId === order.id);
       const depositPay = orderPayments.find((p) => p.installmentType === "ENTRADA_50");
       const finalPay = orderPayments.find((p) => p.installmentType === "FINAL_50");
+      if (paymentStatus === "AGUARDANDO_ENTRADA_50") {
+        if (depositPay) {
+          depositPay.status = "PENDENTE";
+          depositPay.paidAt = null;
+        }
+      }
       if (paymentStatus === "ENTRADA_50_PAGA" && depositPay && depositPay.status !== "APROVADO") {
         depositPay.status = "APROVADO";
         depositPay.paidAt = (/* @__PURE__ */ new Date()).toISOString();
@@ -3887,14 +4042,15 @@ DIRETRIZES DE ESTILO:
     if (trackingCode !== void 0) order.trackingCode = trackingCode;
     if (estimatedDeliveryDate !== void 0) order.estimatedDeliveryDate = estimatedDeliveryDate;
     order.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
-    saveDb(db);
+    saveDb(db, env);
     res.json({
       ...order,
       payments: db.payments.filter((p) => p.orderId === order.id)
     });
   });
   app.put("/api/admin/settings", requireAdminAuth, (req, res) => {
-    const db = loadDb();
+    const env = resolveEnv(req);
+    const db = loadDb(env);
     db.settings = {
       ...db.settings,
       ...req.body,
@@ -3904,7 +4060,7 @@ DIRETRIZES DE ESTILO:
         req.body.creditCardFeePercentage ?? db.settings.creditCardFeePercentage ?? 4.99
       )
     };
-    saveDb(db);
+    saveDb(db, env);
     res.json(db.settings);
   });
   app.get("/api/admin/sql-schema", requireAdminAuth, (_req, res) => {

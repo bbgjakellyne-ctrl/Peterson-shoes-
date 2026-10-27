@@ -39,8 +39,8 @@ function buildSmartLocalReply(question: string): string {
     return 'Na **Peterson Shoes**, trabalhamos sob encomenda com pagamento super seguro e facilitado:\n\n1. **50% de Entrada:** Você paga na hora de confirmar o pedido — pode escolher entre **Pix (sem taxa)** ou **Cartão de Crédito em até 6x** (com o acréscimo da taxa da operadora).\n2. **50% Restantes:** Você só paga quando sua sandália estiver **100% pronta** (em até 15 dias), antes do envio!';
   }
 
-  if (q.includes('prazo') || q.includes('dias') || q.includes('entrega') || q.includes('frete') || q.includes('goiania') || q.includes('goiânia')) {
-    return `Somos de **Goiânia – Goiás** com fabricação própria! Nosso prazo de confecção artesanal sob encomenda é de **${db.settings.productionDays || 15} dias**. Fazemos entregas em Goiânia e região e enviamos para todo o Brasil via Correios.`;
+  if (q.includes('prazo') || q.includes('dias') || q.includes('entrega') || q.includes('frete') || q.includes('envio') || q.includes('uber') || q.includes('correios') || q.includes('goiania') || q.includes('goiânia')) {
+    return `Somos de **Goiânia – Goiás** com fabricação própria! Nosso prazo de confecção artesanal sob encomenda é de **${db.settings.productionDays || 15} dias**.\n\nSobre o frete:\n• **“O frete é por conta da cliente. A forma de envio e o valor da entrega serão combinados quando a sandália estiver pronta.”**\n• Para **Goiânia e região**, a entrega poderá ser combinada por **Uber Moto**.\n• Para **outras cidades**, o envio poderá ser combinado pelos **Correios**, com o frete pago pela cliente antes da postagem.\n• Você conclui seu pedido e paga normalmente os **50% de entrada da sandália** agora, sem aguardar cotação de frete, e os outros **50% da sandália** são pagos na entrega.`;
   }
 
   if (q.includes('cor') || q.includes('marsala') || q.includes('dourad') || q.includes('prata') || q.includes('preta') || q.includes('branca') || q.includes('modelo')) {

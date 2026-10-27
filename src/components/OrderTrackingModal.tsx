@@ -17,6 +17,7 @@ import {
   getBrowserStoreDb,
   lookupBrowserOrders,
 } from '../data/storeData';
+import { apiFetch } from '../utils/environment';
 
 interface OrderTrackingModalProps {
   isOpen: boolean;
@@ -71,6 +72,7 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [confirmingOrderId, setConfirmingOrderId] = useState<string | null>(null);
+  const [notifiedOrderStage, setNotifiedOrderStage] = useState<Record<string, boolean>>({});
   const [cardInstallmentMap, setCardInstallmentMap] = useState<Record<string, number>>(
     {}
   );
@@ -80,17 +82,16 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
     const localMatched = lookupBrowserOrders(searchStr);
     setOrders(localMatched);
     try {
-      const res = await fetch(
+      const res = await apiFetch(
         `/api/orders/lookup?query=${encodeURIComponent(searchStr)}`
       );
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
-          // Merge local + server orders by id
           const mergedMap = new Map<string, BespokeOrder>();
           for (const lo of localMatched) mergedMap.set(lo.id, lo);
           for (const so of data) {
-            if (!mergedMap.has(so.id)) mergedMap.set(so.id, so);
+            mergedMap.set(so.id, so);
           }
           setOrders(Array.from(mergedMap.values()));
         }
@@ -112,9 +113,10 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
   if (!isOpen) return null;
 
   const storeSettings = getBrowserStoreDb().settings;
-  const activeBankName = storeSettings.bankName || 'Banco Inter';
-  const activeHolderName = storeSettings.bankHolderName || 'Jackeline Peterson';
-  const activePixKey = storeSettings.pixKey || '50789636000132';
+  const activeBankName = storeSettings.bankName || 'Inter';
+  const activeHolderName =
+    storeSettings.bankHolderName || '50789636 JACKELINE GOMES PETERSON';
+  const activePixKey = storeSettings.pixKey || '50.789.636/0001-32';
   const activePixKeyType = storeSettings.pixKeyType || 'CNPJ';
 
   const handleConfirmInstallment = async (
@@ -145,7 +147,7 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
       });
 
       try {
-        await fetch(`/api/orders/${orderId}/confirm-payment`, {
+        await apiFetch(`/api/orders/${orderId}/notify-payment`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -161,8 +163,12 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
           }),
         });
       } catch {
-        // Local update already applied
+        // Local notification already recorded
       }
+      setNotifiedOrderStage((prev) => ({
+        ...prev,
+        [`${orderId}-${installmentType}`]: true,
+      }));
       await fetchOrders(query);
     } finally {
       setConfirmingOrderId(null);
@@ -372,8 +378,14 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
                               {item.name} ({item.quantity}x)
                             </p>
                             <p className="text-[#6E5D5F] mt-0.5">
-                              Cor: <strong className="text-[#631421]">{item.colorName}</strong> · Tam: <strong>{item.size} BR</strong> · {item.customization.heelOption} ·{' '}
-                              {item.customization.strapFinish} · Forma: {item.customization.footWidth}
+                              Cor: <strong className="text-[#631421]">{item.colorName}</strong> · Tam: <strong>{item.size} BR</strong>
+                              {item.customization.heelOption
+                                ? ` · ${item.customization.heelOption}`
+                                : ''}
+                              {item.customization.strapFinish
+                                ? ` · ${item.customization.strapFinish}`
+                                : ''}{' '}
+                              · Forma: {item.customization.footWidth}
                             </p>
                           </div>
                         </div>
@@ -422,21 +434,55 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
                       </div>
 
                       {depositPayment && depositPayment.status !== 'APROVADO' && (
-                        <div className="mt-4 pt-3 border-t border-[#E6DDD0] space-y-2">
-                          <div className="p-2.5 rounded-lg bg-white border border-[#E6DDD0] text-[11px] text-[#3D2C30] space-y-0.5">
-                            <p>
-                              <strong>Banco:</strong> {activeBankName} ·{' '}
-                              <strong>Favorecido:</strong> {activeHolderName}
-                            </p>
-                            <p className="font-mono-tabular">
-                              <strong>Chave Pix ({activePixKeyType}):</strong>{' '}
-                              <span className="text-[#631421] font-bold">
-                                {activePixKey}
+                        <div className="mt-4 pt-3 border-t border-[#E6DDD0] space-y-2.5">
+                          <div className="p-2.5 rounded-lg bg-white border border-[#E6DDD0] text-[11px] text-[#3D2C30] space-y-1">
+                            <p className="font-bold text-[#631421]">
+                              ⚠️ O QR Code não possui valor fixo — digite no app do banco:{' '}
+                              <span className="font-mono-tabular underline">
+                                {formatBRL(order.depositAmount)}
                               </span>
                             </p>
+                            <p>
+                              <strong>Banco:</strong> {activeBankName} ·{' '}
+                              <strong>Nome no QR Code:</strong> {activeHolderName}
+                            </p>
+                            <div className="flex items-center justify-between gap-2 pt-1 border-t border-[#F3EDE2]">
+                              <p className="font-mono-tabular">
+                                <strong>Chave Pix ({activePixKeyType}):</strong>{' '}
+                                <span className="text-[#631421] font-bold">
+                                  50.789.636/0001-32
+                                </span>
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleCopyPix(
+                                    '50.789.636/0001-32',
+                                    `key-${depositPayment.id}`
+                                  )
+                                }
+                                className="px-2 py-1 bg-[#F3EDE2] hover:bg-[#E6DDD0] text-[#631421] rounded text-[10px] font-semibold flex items-center gap-1 cursor-pointer"
+                              >
+                                {copiedId === `key-${depositPayment.id}` ? (
+                                  <>
+                                    <Check className="w-3 h-3 text-[#2E6B3E]" />
+                                    <span>Chave Copiada</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Copy className="w-3 h-3" />
+                                    <span>Copiar Chave</span>
+                                  </>
+                                )}
+                              </button>
+                            </div>
                           </div>
                           <div className="flex items-center gap-3">
-                            <QrCodeMatrix seed={depositPayment.pixCopyPaste} size={88} />
+                            <QrCodeMatrix
+                              seed={depositPayment.pixCopyPaste}
+                              size={112}
+                              compact
+                            />
                             <div className="flex-1 space-y-1.5">
                               <button
                                 type="button"
@@ -451,44 +497,35 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
                                 {copiedId === depositPayment.id ? (
                                   <>
                                     <Check className="w-3.5 h-3.5 text-[#2E6B3E]" />
-                                    <span>Pix Copiado!</span>
+                                    <span>Código Copiado!</span>
                                   </>
                                 ) : (
                                   <>
                                     <Copy className="w-3.5 h-3.5" />
-                                    <span>Copiar Pix 50% (Sem Taxa)</span>
+                                    <span>Copiar Código Pix</span>
                                   </>
                                 )}
                               </button>
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  handleConfirmInstallment(
-                                    order.id,
-                                    'ENTRADA_50',
-                                    'PIX_MERCADO_PAGO',
-                                    order.depositAmount
-                                  )
-                                }
-                                className="w-full py-2 px-3 bg-[#631421] hover:bg-[#4D0E18] text-[#FAF7F2] rounded-lg text-xs font-semibold cursor-pointer"
-                              >
-                                Confirmar Entrada via Pix
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  handleConfirmInstallment(
-                                    order.id,
-                                    'ENTRADA_50',
-                                    'CARTAO_MERCADO_PAGO',
-                                    order.depositAmount
-                                  )
-                                }
-                                className="w-full py-2 px-3 bg-[#F3EDE2] hover:bg-[#E6DDD0] text-[#631421] border border-[#D8CBB8] rounded-lg text-xs font-semibold flex items-center justify-center gap-1 cursor-pointer"
-                              >
-                                <CreditCard className="w-3.5 h-3.5" />
-                                <span>Pagar no Cartão (c/ taxa do banco)</span>
-                              </button>
+                              {notifiedOrderStage[`${order.id}-ENTRADA_50`] ? (
+                                <div className="p-2 rounded-lg bg-white border border-[#631421] text-[11px] text-[#631421] font-medium">
+                                  ⏳ Pagamento informado! Aguardando conferência do recebimento pela Peterson Shoes.
+                                </div>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleConfirmInstallment(
+                                      order.id,
+                                      'ENTRADA_50',
+                                      'PIX_MERCADO_PAGO',
+                                      order.depositAmount
+                                    )
+                                  }
+                                  className="w-full py-2 px-3 bg-[#631421] hover:bg-[#4D0E18] text-[#FAF7F2] rounded-lg text-xs font-semibold cursor-pointer"
+                                >
+                                  Já Paguei — Informar p/ Conferência
+                                </button>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -533,20 +570,54 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
                         <div className="mt-4 pt-3 border-t border-[#E6DDD0]">
                           {order.productionStatus === 'PRONTA_PARA_ENTREGA' ? (
                             <div className="space-y-2.5">
-                              <div className="p-2.5 rounded-lg bg-white border border-[#E6DDD0] text-[11px] text-[#3D2C30] space-y-0.5">
-                                <p>
-                                  <strong>Banco:</strong> {activeBankName} ·{' '}
-                                  <strong>Favorecido:</strong> {activeHolderName}
-                                </p>
-                                <p className="font-mono-tabular">
-                                  <strong>Chave Pix ({activePixKeyType}):</strong>{' '}
-                                  <span className="text-[#631421] font-bold">
-                                    {activePixKey}
+                              <div className="p-2.5 rounded-lg bg-white border border-[#E6DDD0] text-[11px] text-[#3D2C30] space-y-1">
+                                <p className="font-bold text-[#631421]">
+                                  ⚠️ O QR Code não possui valor fixo — digite no app do banco:{' '}
+                                  <span className="font-mono-tabular underline">
+                                    {formatBRL(order.remainingAmount)}
                                   </span>
                                 </p>
+                                <p>
+                                  <strong>Banco:</strong> {activeBankName} ·{' '}
+                                  <strong>Nome no QR Code:</strong> {activeHolderName}
+                                </p>
+                                <div className="flex items-center justify-between gap-2 pt-1 border-t border-[#F3EDE2]">
+                                  <p className="font-mono-tabular">
+                                    <strong>Chave Pix ({activePixKeyType}):</strong>{' '}
+                                    <span className="text-[#631421] font-bold">
+                                      50.789.636/0001-32
+                                    </span>
+                                  </p>
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleCopyPix(
+                                        '50.789.636/0001-32',
+                                        `key-${finalPayment.id}`
+                                      )
+                                    }
+                                    className="px-2 py-1 bg-[#F3EDE2] hover:bg-[#E6DDD0] text-[#631421] rounded text-[10px] font-semibold flex items-center gap-1 cursor-pointer"
+                                  >
+                                    {copiedId === `key-${finalPayment.id}` ? (
+                                      <>
+                                        <Check className="w-3 h-3 text-[#2E6B3E]" />
+                                        <span>Chave Copiada</span>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Copy className="w-3 h-3" />
+                                        <span>Copiar Chave</span>
+                                      </>
+                                    )}
+                                  </button>
+                                </div>
                               </div>
                               <div className="flex items-center gap-3">
-                                <QrCodeMatrix seed={finalPayment.pixCopyPaste} size={88} />
+                                <QrCodeMatrix
+                                  seed={finalPayment.pixCopyPaste}
+                                  size={112}
+                                  compact
+                                />
                                 <div className="flex-1 space-y-1.5">
                                   <button
                                     type="button"
@@ -561,88 +632,64 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
                                     {copiedId === finalPayment.id ? (
                                       <>
                                         <Check className="w-3.5 h-3.5 text-[#2E6B3E]" />
-                                        <span>Pix Final Copiado!</span>
+                                        <span>Código Copiado!</span>
                                       </>
                                     ) : (
                                       <>
                                         <Copy className="w-3.5 h-3.5" />
-                                        <span>Copiar Pix 50% Finais (Sem Taxa)</span>
+                                        <span>Copiar Código Pix</span>
                                       </>
                                     )}
                                   </button>
-                                  <button
-                                    type="button"
-                                    disabled={
-                                      confirmingOrderId ===
-                                      `${order.id}-FINAL_50-PIX_MERCADO_PAGO`
-                                    }
-                                    onClick={() =>
-                                      handleConfirmInstallment(
-                                        order.id,
-                                        'FINAL_50',
-                                        'PIX_MERCADO_PAGO',
-                                        order.remainingAmount
-                                      )
-                                    }
-                                    className="w-full py-2 px-3 bg-[#631421] hover:bg-[#4D0E18] text-[#FAF7F2] rounded-lg text-xs font-semibold cursor-pointer"
-                                  >
-                                    Quitar 50% Finais no Pix
-                                  </button>
-                                </div>
-                              </div>
-
-                              {/* Credit Card option for the 50% Final Payment */}
-                              <div className="pt-2 border-t border-[#E6DDD0] space-y-1.5">
-                                <select
-                                  value={selectedFinalInst}
-                                  onChange={(e) =>
-                                    setCardInstallmentMap((prev) => ({
-                                      ...prev,
-                                      [`${order.id}-FINAL_50`]: parseInt(
-                                        e.target.value,
-                                        10
-                                      ),
-                                    }))
-                                  }
-                                  className="w-full px-2.5 py-1.5 bg-white border border-[#E6DDD0] rounded-lg text-[11px] font-mono-tabular"
-                                >
-                                  {finalCardOptions.map((opt) => (
-                                    <option
-                                      key={opt.installments}
-                                      value={opt.installments}
+                                  {notifiedOrderStage[`${order.id}-FINAL_50`] ? (
+                                    <div className="p-2 rounded-lg bg-white border border-[#631421] text-[11px] text-[#631421] font-medium">
+                                      ⏳ Pagamento final informado! Aguardando conferência pela Peterson Shoes.
+                                    </div>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      disabled={
+                                        confirmingOrderId ===
+                                        `${order.id}-FINAL_50-PIX_MERCADO_PAGO`
+                                      }
+                                      onClick={() =>
+                                        handleConfirmInstallment(
+                                          order.id,
+                                          'FINAL_50',
+                                          'PIX_MERCADO_PAGO',
+                                          order.remainingAmount
+                                        )
+                                      }
+                                      className="w-full py-2 px-3 bg-[#631421] hover:bg-[#4D0E18] text-[#FAF7F2] rounded-lg text-xs font-semibold cursor-pointer"
                                     >
-                                      Cartão: {opt.label}
-                                    </option>
-                                  ))}
-                                </select>
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    handleConfirmInstallment(
-                                      order.id,
-                                      'FINAL_50',
-                                      'CARTAO_MERCADO_PAGO',
-                                      order.remainingAmount
-                                    )
-                                  }
-                                  className="w-full py-2 px-3 bg-[#F3EDE2] hover:bg-[#E6DDD0] text-[#631421] border border-[#D8CBB8] rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
-                                >
-                                  <CreditCard className="w-3.5 h-3.5" />
-                                  <span>
-                                    Quitar 50% Finais no Cartão ({currentFinalCardOpt.installments}x de{' '}
-                                    {formatBRL(currentFinalCardOpt.installmentValue)})
-                                  </span>
-                                </button>
+                                      Já Paguei 50% Finais — Informar p/ Conferência
+                                    </button>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           ) : (
                             <p className="text-xs text-[#6E5D5F] italic">
-                              O pagamento dos 50% finais (via Pix ou Cartão de Crédito) é liberado automaticamente assim que sua sandália chega à etapa &ldquo;5. Sandália Pronta!&rdquo;.
+                              O pagamento dos 50% finais da sandália (via Pix ou Cartão de Crédito) é liberado quando sua sandália chega à etapa &ldquo;5. Sandália Pronta!&rdquo;.
                             </p>
                           )}
                         </div>
                       )}
                     </div>
+                  </div>
+
+                  {/* Freight & Delivery Rule Summary (Kept strictly separate from sandal price) */}
+                  <div className="p-3.5 rounded-xl bg-[#F3EDE2] border border-[#E6DDD0] text-xs text-[#3D2C30] space-y-1">
+                    <p className="font-bold text-[#631421]">
+                      Frete e Entrega (separado do preço da sandália):
+                    </p>
+                    <p className="font-semibold text-[#1F1215]">
+                      &ldquo;O frete é por conta da cliente. A forma de envio e o valor da entrega serão combinados quando a sandália estiver pronta.&rdquo;
+                    </p>
+                    <p className="text-[11px] text-[#4A383B]">
+                      • <strong>Goiânia e região:</strong> entrega combinada por <strong>Uber Moto</strong>.<br />
+                      • <strong>Outras cidades:</strong> envio combinado pelos <strong>Correios</strong>, com o frete pago pela cliente antes da postagem.
+                    </p>
                   </div>
                 </div>
               );

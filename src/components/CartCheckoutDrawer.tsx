@@ -35,6 +35,7 @@ import {
   createBrowserBespokeOrder,
   getBrowserStoreDb,
 } from '../data/storeData';
+import { apiFetch } from '../utils/environment';
 
 interface CartCheckoutDrawerProps {
   isOpen: boolean;
@@ -103,23 +104,27 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
   const [cardCvv, setCardCvv] = useState('');
   const [cardError, setCardError] = useState('');
 
-  // Created order & Mercado Pago state
+  // Created order & Pix state
   const [createdOrder, setCreatedOrder] = useState<BespokeOrder | null>(null);
   const [depositPayment, setDepositPayment] = useState<PaymentRecord | null>(null);
   const [copiedPix, setCopiedPix] = useState(false);
   const [copiedDirectKey, setCopiedDirectKey] = useState(false);
+  const [copiedExactAmount, setCopiedExactAmount] = useState(false);
   const [confirmingDeposit, setConfirmingDeposit] = useState(false);
+  const [paymentNotified, setPaymentNotified] = useState(false);
 
   if (!isOpen) return null;
 
   const fallbackSettings = getBrowserStoreDb().settings;
-  const activeBankName =
-    bankName || fallbackSettings.bankName || 'Banco Inter';
+  const activeBankName = bankName || fallbackSettings.bankName || 'Inter';
   const activeHolderName =
-    bankHolderName || fallbackSettings.bankHolderName || 'Jackeline Peterson';
+    bankHolderName ||
+    fallbackSettings.bankHolderName ||
+    '50789636 JACKELINE GOMES PETERSON';
   const activeHolderDoc =
     bankHolderDoc || fallbackSettings.bankHolderDoc || '50.789.636/0001-32';
-  const activePixKey = pixKey || fallbackSettings.pixKey || '50789636000132';
+  const activePixKey =
+    pixKey || fallbackSettings.pixKey || '50.789.636/0001-32';
   const activePixKeyType = pixKeyType || fallbackSettings.pixKeyType || 'CNPJ';
   const activeBankAgency = bankAgency || fallbackSettings.bankAgency || '';
   const activeBankAccount = bankAccount || fallbackSettings.bankAccount || '';
@@ -192,7 +197,7 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
       let finalDeposit = localResult.depositPayment;
 
       try {
-        const res = await fetch('/api/orders', {
+        const res = await apiFetch('/api/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -223,6 +228,7 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
 
       setCreatedOrder(finalOrder);
       setDepositPayment(finalDeposit);
+      setPaymentNotified(false);
       setCardHolder(customerName.toUpperCase());
       onClearCart();
       onOrderCreated(finalOrder);
@@ -252,8 +258,8 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
       }
 
       try {
-        const res = await fetch(
-          `/api/orders/${createdOrder.id}/confirm-payment`,
+        const res = await apiFetch(
+          `/api/orders/${createdOrder.id}/notify-payment`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -275,8 +281,9 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
           }
         }
       } catch {
-        // Local update already applied
+        // Local notification already recorded
       }
+      setPaymentNotified(true);
     } finally {
       setConfirmingDeposit(false);
     }
@@ -325,8 +332,8 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
       }
 
       try {
-        const res = await fetch(
-          `/api/orders/${createdOrder.id}/confirm-payment`,
+        const res = await apiFetch(
+          `/api/orders/${createdOrder.id}/notify-payment`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -353,8 +360,9 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
           }
         }
       } catch {
-        // Local update already applied
+        // Local notification already applied
       }
+      setPaymentNotified(true);
     } finally {
       setConfirmingDeposit(false);
     }
@@ -418,15 +426,23 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                 </div>
               ) : (
                 <>
-                  {/* 50% / 50% Explainer Banner */}
-                  <div className="p-4 rounded-lg bg-[#EFE7DA] border border-[#DFD3C3] text-xs text-[#3E2C30] space-y-1">
+                  {/* 50% / 50% & Freight Explainer Banner */}
+                  <div className="p-4 rounded-lg bg-[#EFE7DA] border border-[#DFD3C3] text-xs text-[#3E2C30] space-y-2">
                     <p className="font-semibold text-[#5B1824] flex items-center gap-1.5">
                       <ShieldCheck className="w-4 h-4" />
-                      <span>Sistema de Encomenda Peterson Shoes (50% + 50%)</span>
+                      <span>Sistema de Encomenda Peterson Shoes (50% Entrada + 50% na Entrega)</span>
                     </p>
                     <p>
-                      Você paga <strong>50% de entrada</strong> hoje para confirmar o pedido (você decide se prefere no <strong>Pix sem taxa</strong> ou no <strong>Cartão de Crédito com a taxa do banco</strong>) e os outros <strong>50% somente quando sua sandália estiver pronta</strong> (prazo estimado de 15 dias).
+                      Você paga <strong>50% de entrada da sandália</strong> hoje para confirmar o pedido (no <strong>Pix sem taxa</strong> ou no <strong>Cartão de Crédito com a taxa do banco</strong>) e os outros <strong>50% da sandália na entrega</strong>, sem aguardar cotação de frete.
                     </p>
+                    <div className="pt-2 border-t border-[#DFD3C3] space-y-1">
+                      <p className="font-semibold text-[#231619]">
+                        &ldquo;O frete é por conta da cliente. A forma de envio e o valor da entrega serão combinados quando a sandália estiver pronta.&rdquo;
+                      </p>
+                      <p className="text-[11px] text-[#4A373B]">
+                        Para <strong>Goiânia e região</strong>, a entrega poderá ser combinada por <strong>Uber Moto</strong>. Para <strong>outras cidades</strong>, o envio poderá ser combinado pelos <strong>Correios</strong>, com o frete pago pela cliente antes da postagem.
+                      </p>
+                    </div>
                   </div>
 
                   {/* Items List */}
@@ -461,8 +477,13 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                             <strong className="text-[#231619]">{item.size} BR</strong>
                           </p>
                           <p className="text-xs text-[#6E5A5F]">
-                            {item.customization.heelOption} · {item.customization.strapFinish} · Forma:{' '}
-                            {item.customization.footWidth}
+                            {[
+                              item.customization.heelOption,
+                              item.customization.strapFinish,
+                              `Forma: ${item.customization.footWidth}`,
+                            ]
+                              .filter(Boolean)
+                              .join(' · ')}
                           </p>
 
                           <div className="mt-3 flex items-center justify-between">
@@ -581,10 +602,22 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                 />
               </div>
 
-              <div className="pt-3 border-t border-[#DFD3C3]">
-                <p className="text-xs font-semibold text-[#5B1824] mb-3">
-                  Endereço de Entrega (Envio após conclusão em 15 dias)
-                </p>
+              <div className="pt-3 border-t border-[#DFD3C3] space-y-3">
+                <div>
+                  <p className="text-xs font-semibold text-[#5B1824]">
+                    Endereço de Entrega (Envio após conclusão em 15 dias)
+                  </p>
+                  <div className="mt-2 p-3.5 rounded-xl bg-[#EFE7DA] border border-[#DFD3C3] space-y-1.5 text-xs text-[#231619]">
+                    <p className="font-bold text-[#5B1824]">
+                      &ldquo;O frete é por conta da cliente. A forma de envio e o valor da entrega serão combinados quando a sandália estiver pronta.&rdquo;
+                    </p>
+                    <p className="text-[11px] text-[#3E2C30] leading-relaxed">
+                      • <strong>Goiânia e região:</strong> a entrega poderá ser combinada por <strong>Uber Moto</strong>.<br />
+                      • <strong>Outras cidades:</strong> o envio poderá ser combinado pelos <strong>Correios</strong>, com o frete pago pela cliente antes da postagem.<br />
+                      • <strong>Sem espera por cotação:</strong> você conclui seu pedido agora e paga normalmente os <strong>50% de entrada da sandália</strong>. Os outros <strong>50% da sandália</strong> serão pagos na entrega (frete separado do preço da sandália).
+                    </p>
+                  </div>
+                </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
                   <div>
@@ -791,10 +824,10 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                     <div className="flex items-center justify-between border-b border-[#DFD3C3] pb-3">
                       <div>
                         <p className="text-xs font-semibold text-[#5B1824]">
-                          Pix Instantâneo (1ª Parcela — 50% sem taxa)
+                          Pix Banco Inter (1ª Parcela — 50% de Entrada)
                         </p>
                         <p className="text-[11px] text-[#6E5A5F]">
-                          Valor exato dos 50% de entrada sem acréscimos
+                          50% de entrada para confirmar o pedido e 50% na entrega
                         </p>
                       </div>
                       <span className="text-xl font-bold text-[#231619] font-mono-tabular">
@@ -802,30 +835,71 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                       </span>
                     </div>
 
+                    {/* Open-Value QR Code Instruction Box */}
+                    <div className="p-3.5 rounded-xl bg-[#FFFDF9] border-2 border-[#5B1824] space-y-2 text-xs">
+                      <p className="font-bold text-[#5B1824] flex items-center justify-between gap-2">
+                        <span>⚠️ Valor exato da entrada (digite no aplicativo do banco):</span>
+                        <span className="text-base font-mono-tabular bg-[#5B1824] text-[#F7F3EC] px-2.5 py-0.5 rounded-md">
+                          {formatBRL(createdOrder.depositAmount)}
+                        </span>
+                      </p>
+                      <p className="text-[#3E2C30] leading-relaxed">
+                        O QR Code do Banco Inter <strong>não contém um valor fixo</strong> (<em>&ldquo;Informe o valor quando for pagar&rdquo;</em>). Ao ler o QR Code ou usar a chave Pix abaixo, <strong>digite exatamente o valor da entrada de 50% ({formatBRL(createdOrder.depositAmount)})</strong> no aplicativo do seu banco.
+                      </p>
+                      <div className="flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              createdOrder.depositAmount.toFixed(2).replace('.', ',')
+                            );
+                            setCopiedExactAmount(true);
+                            setTimeout(() => setCopiedExactAmount(false), 2500);
+                          }}
+                          className="px-2.5 py-1 bg-[#F7F3EC] hover:bg-[#EFE7DA] border border-[#DFD3C3] rounded-md text-[11px] font-semibold text-[#5B1824] flex items-center gap-1 cursor-pointer"
+                        >
+                          {copiedExactAmount ? (
+                            <>
+                              <Check className="w-3 h-3 text-[#2E6B3E]" />
+                              <span>Valor Copiado!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3 h-3" />
+                              <span>
+                                Copiar Valor ({createdOrder.depositAmount.toFixed(2).replace('.', ',')})
+                              </span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
                     {/* Bank & Receiver Verification Card */}
                     <div className="p-3.5 rounded-xl bg-white border border-[#DFD3C3] space-y-2 text-xs">
                       <div className="flex items-center justify-between border-b border-[#EFE7DA] pb-1.5">
                         <span className="font-bold text-[#5B1824] uppercase tracking-wider text-[11px]">
-                          Dados Bancários do Recebedor (Conta Oficial)
+                          Dados para Conferência no Aplicativo do Banco
                         </span>
                         <span className="text-[11px] font-semibold text-[#2E6B3E]">
-                          Pix Verificado ✓
+                          Conta Oficial ✓
                         </span>
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[#231619]">
+                      <div className="space-y-1.5 text-[#231619]">
                         <div>
-                          <span className="text-[#6E5A5F]">Banco / Instituição:</span>{' '}
-                          <strong className="text-[#231619]">{activeBankName}</strong>
+                          <span className="text-[#6E5A5F]">Banco:</span>{' '}
+                          <strong className="text-[#231619]">Inter</strong>
                         </div>
                         <div>
-                          <span className="text-[#6E5A5F]">Favorecido / Titular:</span>{' '}
+                          <span className="text-[#6E5A5F]">
+                            Nome exibido no QR Code:
+                          </span>{' '}
                           <strong className="text-[#231619]">
-                            {activeHolderName}
-                            {activeHolderDoc ? ` (${activeHolderDoc})` : ''}
+                            50789636 JACKELINE GOMES PETERSON
                           </strong>
                         </div>
                         {(activeBankAgency || activeBankAccount) && (
-                          <div className="sm:col-span-2">
+                          <div>
                             <span className="text-[#6E5A5F]">Agência / Conta:</span>{' '}
                             <strong className="font-mono-tabular">
                               {activeBankAgency ? `Ag: ${activeBankAgency}` : ''}{' '}
@@ -834,33 +908,33 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                           </div>
                         )}
                       </div>
-                      <div className="pt-1.5 border-t border-[#EFE7DA] flex items-center justify-between gap-2">
-                        <div className="truncate">
+                      <div className="pt-2 border-t border-[#EFE7DA] flex flex-wrap items-center justify-between gap-2">
+                        <div>
                           <span className="text-[#6E5A5F]">
-                            Chave Pix ({activePixKeyType}):
+                            Chave Pix (CNPJ):
                           </span>{' '}
                           <strong className="font-mono-tabular text-[#5B1824]">
-                            {activePixKey}
+                            50.789.636/0001-32
                           </strong>
                         </div>
                         <button
                           type="button"
                           onClick={() => {
-                            navigator.clipboard.writeText(activePixKey);
+                            navigator.clipboard.writeText('50.789.636/0001-32');
                             setCopiedDirectKey(true);
                             setTimeout(() => setCopiedDirectKey(false), 2500);
                           }}
-                          className="px-2.5 py-1 bg-[#F7F3EC] hover:bg-[#EFE7DA] border border-[#DFD3C3] rounded-md text-[11px] font-semibold text-[#5B1824] flex items-center gap-1 shrink-0 cursor-pointer"
+                          className="px-3 py-1.5 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-[11px] font-semibold flex items-center gap-1.5 shrink-0 cursor-pointer"
                         >
                           {copiedDirectKey ? (
                             <>
-                              <Check className="w-3 h-3 text-[#2E6B3E]" />
-                              <span>Chave Copiada!</span>
+                              <Check className="w-3.5 h-3.5 text-[#E5D3B3]" />
+                              <span>Chave Pix Copiada!</span>
                             </>
                           ) : (
                             <>
-                              <Copy className="w-3 h-3" />
-                              <span>Copiar Chave</span>
+                              <Copy className="w-3.5 h-3.5" />
+                              <span>Copiar Chave Pix (CNPJ)</span>
                             </>
                           )}
                         </button>
@@ -868,9 +942,10 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                     </div>
 
                     <div className="flex flex-col items-center text-center space-y-3">
-                      <QrCodeMatrix seed={depositPayment.pixCopyPaste} size={160} />
+                      <QrCodeMatrix seed={depositPayment.pixCopyPaste} size={230} />
                       <p className="text-xs text-[#4A373B]">
-                        Escaneie o QR Code no aplicativo do seu banco ou copie o código Pix Copia e Cola abaixo:
+                        Escaneie o QR Code oficial do <strong>Banco Inter</strong> acima (e digite o valor de{' '}
+                        <strong>{formatBRL(createdOrder.depositAmount)}</strong>) ou copie a chave Pix / código abaixo:
                       </p>
                       <div className="w-full flex gap-2">
                         <input
@@ -892,22 +967,35 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                           ) : (
                             <>
                               <Copy className="w-3.5 h-3.5" />
-                              <span>Copiar Pix</span>
+                              <span>Copiar Código</span>
                             </>
                           )}
                         </button>
                       </div>
 
-                      <button
-                        type="button"
-                        disabled={confirmingDeposit}
-                        onClick={handleConfirmPixDeposit}
-                        className="w-full py-3 px-4 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-semibold transition-colors cursor-pointer"
-                      >
-                        {confirmingDeposit
-                          ? 'Confirmando pagamento e liberando produção...'
-                          : 'Já Paguei o Pix de 50% — Confirmar e Iniciar Produção'}
-                      </button>
+                      {paymentNotified ? (
+                        <div className="w-full p-3.5 rounded-xl bg-white border border-[#5B1824] text-left space-y-1.5 text-xs">
+                          <p className="font-bold text-[#5B1824]">
+                            ⏳ Pagamento informado — Aguardando confirmação da Peterson Shoes
+                          </p>
+                          <p className="text-[#3E2C30] leading-relaxed">
+                            Registramos o seu aviso! O seu pedido permanecerá com status{' '}
+                            <strong>Aguardando Confirmação</strong> e será confirmado assim que a{' '}
+                            <strong>Peterson Shoes verificar o recebimento de {formatBRL(createdOrder.depositAmount)} no Banco Inter</strong>. Envie também o comprovante no WhatsApp abaixo para agilizar a conferência.
+                          </p>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          disabled={confirmingDeposit}
+                          onClick={handleConfirmPixDeposit}
+                          className="w-full py-3 px-4 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+                        >
+                          {confirmingDeposit
+                            ? 'Registrando aviso de pagamento para conferência...'
+                            : 'Já Realizei o Pix de 50% — Informar para Conferência'}
+                        </button>
+                      )}
                     </div>
                   </>
                 ) : (
@@ -1054,25 +1142,50 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                       </div>
                     </div>
 
-                    <button
-                      type="submit"
-                      disabled={confirmingDeposit}
-                      className="w-full py-3 px-4 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-semibold transition-colors cursor-pointer"
-                    >
-                      {confirmingDeposit
-                        ? 'Processando Cartão junto à Operadora...'
-                        : `Pagar 50% no Cartão (${currentCardOption.installments}x de ${formatBRL(
-                            currentCardOption.installmentValue
-                          )})`}
-                    </button>
+                    {paymentNotified ? (
+                      <div className="w-full p-3.5 rounded-xl bg-white border border-[#5B1824] text-left space-y-1.5 text-xs">
+                        <p className="font-bold text-[#5B1824]">
+                          ⏳ Pagamento informado — Aguardando confirmação da Peterson Shoes
+                        </p>
+                        <p className="text-[#3E2C30] leading-relaxed">
+                          Registramos a sua solicitação de pagamento no cartão! O seu pedido será confirmado assim que a{' '}
+                          <strong>Peterson Shoes verificar o recebimento</strong>. Envie o comprovante pelo WhatsApp abaixo.
+                        </p>
+                      </div>
+                    ) : (
+                      <button
+                        type="submit"
+                        disabled={confirmingDeposit}
+                        className="w-full py-3 px-4 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+                      >
+                        {confirmingDeposit
+                          ? 'Registrando pagamento para conferência...'
+                          : `Solicitar Pagamento de 50% no Cartão (${currentCardOption.installments}x de ${formatBRL(
+                              currentCardOption.installmentValue
+                            )})`}
+                      </button>
+                    )}
                   </form>
                 )}
 
-                <div className="pt-3 border-t border-[#DFD3C3] flex items-center justify-between text-xs text-[#4A373B]">
-                  <span>2ª Parcela (50% quando ficar pronta em 15 dias):</span>
-                  <span className="font-mono-tabular font-semibold">
-                    {formatBRL(createdOrder.remainingAmount)} (Pix ou Cartão)
-                  </span>
+                <div className="pt-3 border-t border-[#DFD3C3] space-y-2 text-xs text-[#4A373B]">
+                  <div className="flex items-center justify-between">
+                    <span>2ª Parcela da Sandália (50% na entrega):</span>
+                    <span className="font-mono-tabular font-semibold text-[#231619]">
+                      {formatBRL(createdOrder.remainingAmount)} (Pix ou Cartão)
+                    </span>
+                  </div>
+                  <div className="p-3 rounded-lg bg-white border border-[#DFD3C3] space-y-1 text-[11px] text-[#3E2C30]">
+                    <p className="font-semibold text-[#5B1824]">
+                      Frete / Entrega (separado do preço da sandália):
+                    </p>
+                    <p className="font-medium text-[#231619]">
+                      &ldquo;O frete é por conta da cliente. A forma de envio e o valor da entrega serão combinados quando a sandália estiver pronta.&rdquo;
+                    </p>
+                    <p className="text-[#6E5A5F]">
+                      Goiânia e região: entrega combinada por <strong>Uber Moto</strong> · Outras cidades: envio combinado pelos <strong>Correios</strong>, com o frete pago pela cliente antes da postagem.
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -1100,13 +1213,13 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
           <div className="p-6 bg-[#EFE7DA] border-t border-[#DFD3C3] space-y-4">
             <div className="space-y-1.5 text-xs">
               <div className="flex justify-between text-[#4A373B]">
-                <span>Valor Total da Encomenda:</span>
+                <span>Valor Total da(s) Sandália(s):</span>
                 <span className="font-mono-tabular font-medium">
                   {formatBRL(totalAmount)}
                 </span>
               </div>
               <div className="flex justify-between text-[#5B1824] font-semibold text-sm">
-                <span>Entrada de 50% Hoje (Pix sem taxa):</span>
+                <span>Entrada de 50% da Sandália Hoje (Pix sem taxa):</span>
                 <span className="font-mono-tabular">{formatBRL(depositAmount)}</span>
               </div>
               <div className="flex justify-between text-[#6E5A5F]">
@@ -1116,8 +1229,19 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                 </span>
               </div>
               <div className="flex justify-between text-[#6E5A5F]">
-                <span>Restante (50% quando ficar pronta — 15 dias):</span>
+                <span>Restante da Sandália (50% pagos na entrega):</span>
                 <span className="font-mono-tabular">{formatBRL(remainingAmount)}</span>
+              </div>
+              <div className="pt-2 mt-2 border-t border-[#DFD3C3] space-y-1 text-[11px] text-[#3E2C30]">
+                <p className="font-semibold text-[#5B1824]">
+                  Frete / Entrega (separado do preço da sandália):
+                </p>
+                <p className="font-semibold text-[#231619]">
+                  &ldquo;O frete é por conta da cliente. A forma de envio e o valor da entrega serão combinados quando a sandália estiver pronta.&rdquo;
+                </p>
+                <p className="text-[#4A373B]">
+                  Goiânia e região: <strong>Uber Moto</strong> · Outras cidades: <strong>Correios</strong> (pago pela cliente antes da postagem).
+                </p>
               </div>
             </div>
 

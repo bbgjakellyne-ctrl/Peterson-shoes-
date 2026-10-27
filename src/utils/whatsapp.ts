@@ -1,5 +1,6 @@
 import { BespokeOrder, BespokeProduct } from '../types/peterson';
 import { formatBRL } from './payment';
+import { isHomologacao } from './environment';
 
 export function cleanWhatsAppPhone(phone: string): string {
   const digits = phone.replace(/\D/g, '');
@@ -16,15 +17,18 @@ export function buildCustomerProductMessage(
   selectedHeel?: string
 ): string {
   const deposit = product.price * 0.5;
+  const prefix = isHomologacao()
+    ? '🧪 *[TESTE EM AMBIENTE DE HOMOLOGAÇÃO]*\n'
+    : '';
   return [
-    `Olá, equipe *Peterson Shoes*! ✨`,
+    `${prefix}Olá, equipe *Peterson Shoes*! ✨`,
     `Gostaria de tirar uma dúvida sobre a sandália sob encomenda:`,
     ``,
     `👠 *Modelo:* ${product.name} (${product.sku})`,
     selectedColor ? `🎨 *Cor escolhida:* ${selectedColor}` : null,
     selectedSize ? `📏 *Numeração:* ${selectedSize} BR (34 ao 39)` : null,
     selectedHeel ? `✨ *Salto / Solado:* ${selectedHeel}` : null,
-    `💎 *Valor Total:* ${formatBRL(product.price)} (Entrada 50%: ${formatBRL(deposit)} no Pix ou no Cartão c/ taxa do banco + 50% quando ficar pronta)`,
+    `💎 *Valor Total:* ${formatBRL(product.price)} (Entrada 50%: ${formatBRL(deposit)} no Pix ou no Cartão c/ taxa do banco + 50% na entrega)`,
     `⏳ *Prazo de produção:* ${product.productionDays} dias`,
   ]
     .filter(Boolean)
@@ -34,14 +38,32 @@ export function buildCustomerProductMessage(
 export function buildCustomerOrderMessage(order: BespokeOrder): string {
   const depositPay = order.payments?.find((p) => p.installmentType === 'ENTRADA_50');
   const isCard = depositPay?.method === 'CARTAO_MERCADO_PAGO';
+  const prefix = isHomologacao()
+    ? '🧪 *[PEDIDO DE TESTE — AMBIENTE DE HOMOLOGAÇÃO]*\n'
+    : '';
 
   const itemsLines = order.items
-    .map(
-      (item, idx) =>
-        `${idx + 1}. *${item.name}* (${item.quantity}x)\n   • Cor: *${item.colorName}* | Tam: *${item.size} BR*\n   • Salto: ${item.customization.heelOption} | Acabamento: ${item.customization.strapFinish}\n   • Forma: ${item.customization.footWidth}${
-          item.customization.customNotes ? `\n   • Obs: ${item.customization.customNotes}` : ''
-        }`
-    )
+    .map((item, idx) => {
+      const specs = [
+        item.customization.heelOption
+          ? `Salto: ${item.customization.heelOption}`
+          : null,
+        item.customization.strapFinish
+          ? `Acabamento: ${item.customization.strapFinish}`
+          : null,
+      ]
+        .filter(Boolean)
+        .join(' | ');
+      return (
+        `${idx + 1}. *${item.name}* (${item.quantity}x)\n` +
+        `   • Cor: *${item.colorName}* | Tam: *${item.size} BR*\n` +
+        (specs ? `   • ${specs}\n` : '') +
+        `   • Forma: ${item.customization.footWidth}` +
+        (item.customization.customNotes
+          ? `\n   • Obs para a Fábrica: ${item.customization.customNotes}`
+          : '')
+      );
+    })
     .join('\n\n');
 
   const depositLine = isCard
@@ -49,11 +71,11 @@ export function buildCustomerOrderMessage(order: BespokeOrder): string {
         depositPay?.amount || order.depositAmount
       )} (Valor 50%: ${formatBRL(order.depositAmount)} + Taxa do banco: ${formatBRL(
         depositPay?.feeAmount || 0
-      )})`
-    : `✅ *Entrada (50% via Pix):* ${formatBRL(order.depositAmount)}`;
+      )}) — Aguardando conferência`
+    : `🏦 *Entrada (50% via Pix Banco Inter):* ${formatBRL(order.depositAmount)} (CNPJ 50.789.636/0001-32 — 50789636 JACKELINE GOMES PETERSON) — Aguardando conferência do recebimento`;
 
   return [
-    `Olá, *Peterson Shoes*! Acabei de realizar minha encomenda pelo site:`,
+    `${prefix}Olá, *Peterson Shoes*! Acabei de realizar minha encomenda pelo site e envio o comprovante para conferência:`,
     ``,
     `📋 *Pedido:* #${order.orderCode}`,
     `👩 *Cliente:* ${order.customerName}`,
@@ -62,15 +84,19 @@ export function buildCustomerOrderMessage(order: BespokeOrder): string {
     `👠 *Itens Sob Encomenda:*`,
     itemsLines,
     ``,
-    `💰 *Total do Pedido:* ${formatBRL(order.totalAmount)}`,
+    `💰 *Total da(s) Sandália(s):* ${formatBRL(order.totalAmount)}`,
     depositLine,
-    `⏳ *Restante (50% quando ficar pronta):* ${formatBRL(order.remainingAmount)} (Pix ou Cartão c/ taxa)`,
+    `⏳ *Restante da Sandália (50% na entrega):* ${formatBRL(order.remainingAmount)}`,
     `🗓️ *Previsão de Conclusão (15 dias):* ${order.estimatedDeliveryDate.split('-').reverse().join('/')}`,
-    `📍 *Entrega:* ${order.shippingAddress}`,
+    `📍 *Endereço de Entrega:* ${order.shippingAddress}`,
+    `🚚 *Frete / Entrega (separado da sandália):* O frete é por conta da cliente. A forma de envio e o valor da entrega serão combinados quando a sandália estiver pronta (Goiânia e região: Uber Moto | Outras cidades: Correios, com o frete pago antes da postagem).`,
   ].join('\n');
 }
 
 export function buildFactoryProductionMessage(order: BespokeOrder): string {
+  const prefix = isHomologacao()
+    ? '🧪 *[TESTE DE HOMOLOGAÇÃO — NÃO PRODUZIR]*\n'
+    : '';
   const itemsLines = order.items
     .map(
       (item, idx) =>
@@ -78,15 +104,17 @@ export function buildFactoryProductionMessage(order: BespokeOrder): string {
         `• Quantidade: ${item.quantity} par(es)\n` +
         `• Numeração: *${item.size} BR*\n` +
         `• Cor Solicitada: *${item.colorName}*\n` +
-        `• Salto / Solado: *${item.customization.heelOption}*\n` +
+        (item.customization.heelOption
+          ? `• Salto / Solado: *${item.customization.heelOption}*\n`
+          : '') +
         `• Metais / Acabamento: *${item.customization.strapFinish}*\n` +
         `• Ajuste de Forma: *${item.customization.footWidth}*\n` +
-        `• Observações Técnicas: ${item.customization.customNotes || 'Padrão de ficha técnica'}`
+        `• Observações para a Fábrica: ${item.customization.customNotes || 'Padrão de ficha técnica'}`
     )
     .join('\n\n');
 
   return [
-    `🛠️ *ORDEM DE PRODUÇÃO — PETERSON SHOES*`,
+    `${prefix}🛠️ *ORDEM DE PRODUÇÃO — PETERSON SHOES*`,
     `━━━━━━━━━━━━━━━━━━━━`,
     `📌 *Código da Encomenda:* #${order.orderCode}`,
     `🗓️ *Data de Entrada:* ${new Date(order.createdAt).toLocaleDateString('pt-BR')}`,
@@ -101,24 +129,37 @@ export function buildFactoryProductionMessage(order: BespokeOrder): string {
 }
 
 export function buildReadyForFinalPaymentMessage(order: BespokeOrder): string {
-  const finalPay = order.payments?.find((p) => p.installmentType === 'FINAL_50');
+  const prefix = isHomologacao()
+    ? '🧪 *[TESTE EM HOMOLOGAÇÃO — SEM COBRANÇA REAL]*\n'
+    : '';
   return [
-    `Olá, *${order.customerName}*! Tudo bem? ✨`,
+    `${prefix}Olá, *${order.customerName}*! Tudo bem? ✨`,
     `Temos uma notícia maravilhosa da *Peterson Shoes*: sua sandália sob encomenda do pedido *#${order.orderCode}* já está *100% pronta* e aprovada pelo nosso controle de qualidade! 👠`,
     ``,
     `Conforme combinado no pedido:`,
-    `• Entrada de 50% já confirmada: *${formatBRL(order.depositAmount)}* ✅`,
-    `• Saldo final de 50% para envio: *${formatBRL(order.remainingAmount)}* (no Pix sem taxa ou no Cartão de Crédito com a taxa do banco)`,
+    `• Entrada de 50% da sandália já confirmada: *${formatBRL(order.depositAmount)}* ✅`,
+    `• Saldo final de 50% da sandália na entrega: *${formatBRL(order.remainingAmount)}*`,
+    `• *Frete / Entrega:* Agora podemos combinar a forma de envio e o valor da entrega para o seu endereço (${order.shippingAddress}) — por *Uber Moto* (Goiânia e região) ou pelos *Correios* (outras cidades, com o frete pago antes da postagem).`,
     ``,
-    `Você pode quitar os 50% finais(Pix ou Cartão) diretamente na aba *"Rastrear Pedido"* em nosso site ou utilizando o código Pix Copia e Cola abaixo:`,
+    `Dados para pagamento via Pix (Banco Inter):`,
+    `• *Banco:* Inter`,
+    `• *Nome:* 50789636 JACKELINE GOMES PETERSON`,
+    `• *Chave Pix (CNPJ):* 50.789.636/0001-32`,
+    `• *Valor dos 50% finais da sandália:* ${formatBRL(order.remainingAmount)}`,
     ``,
-    `${finalPay?.pixCopyPaste || 'Consulte no site com o código ' + order.orderCode}`,
-    ``,
-    `Assim que confirmado, faremos o envio imediato para: ${order.shippingAddress}.`,
+    `Me avise por aqui para combinarmos a entrega!`,
   ].join('\n');
 }
 
-export function toWhatsAppHref(phone: string, text: string): string {
+export function toWhatsAppHref(
+  phone: string,
+  text: string,
+  options?: { isCustomerRecipient?: boolean }
+): string {
+  // Em ambiente de homologação, bloqueia o disparo de mensagens para números de clientes reais
+  if (isHomologacao() && options?.isCustomerRecipient) {
+    return '#homologacao-envio-cliente-bloqueado';
+  }
   const clean = cleanWhatsAppPhone(phone);
   return `https://wa.me/${clean}?text=${encodeURIComponent(text)}`;
 }

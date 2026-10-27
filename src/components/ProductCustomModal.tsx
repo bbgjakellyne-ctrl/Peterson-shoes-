@@ -45,12 +45,10 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
   const [activePhotoUrl, setActivePhotoUrl] = useState<string>('');
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState<number>(36);
-  const [heelOption, setHeelOption] = useState<string>('');
   const [strapFinish, setStrapFinish] = useState<string>('');
   const [footWidth, setFootWidth] = useState<
     'Padrão' | 'Pé Fino (Mais Justa)' | 'Pé Largo (Conforto Extra)'
   >('Padrão');
-  const [insoleEngraving, setInsoleEngraving] = useState('');
   const [customNotes, setCustomNotes] = useState('');
   const [quantity, setQuantity] = useState(1);
 
@@ -71,10 +69,8 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
       setSelectedSize(
         product.availableSizes.includes(36) ? 36 : product.availableSizes[0] || 36
       );
-      setHeelOption(product.heelOptions[0] || 'Padrão');
       setStrapFinish(product.strapFinishes[0] || 'Metais Dourados');
       setFootWidth('Padrão');
-      setInsoleEngraving('');
       setCustomNotes('');
       setQuantity(1);
     }
@@ -134,10 +130,10 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
       colorName: resolvedColorName,
       colorHex: currentColor.hex,
       customization: {
-        heelOption,
+        heelOption: '',
         strapFinish,
         footWidth,
-        insoleEngraving: insoleEngraving.trim().toUpperCase(),
+        insoleEngraving: '',
         customNotes: customNotes.trim(),
         customColorDescription: isCustomColorSelected
           ? customColorText.trim()
@@ -151,8 +147,7 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
   const whatsappMessage = buildCustomerProductMessage(
     product,
     resolvedColorName,
-    selectedSize,
-    heelOption
+    selectedSize
   );
 
   return (
@@ -446,28 +441,11 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
                   </div>
                 </div>
 
-                {/* 3. Personalização de Salto e Metais */}
+                {/* 3. Acabamento de Metais & 4. Largura da Forma */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-[#1F1215] mb-1.5">
-                      3. Altura & Solado / Plataforma
-                    </label>
-                    <select
-                      value={heelOption}
-                      onChange={(e) => setHeelOption(e.target.value)}
-                      className="w-full px-3.5 py-2.5 bg-white border border-[#E6DDD0] rounded-lg text-xs text-[#1F1215] focus:outline-none focus:border-[#631421]"
-                    >
-                      {product.heelOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-[#1F1215] mb-1.5">
-                      4. Acabamento de Pirâmides / Esferas / Fivela
+                      3. Acabamento de Pirâmides / Esferas / Fivela
                     </label>
                     <select
                       value={strapFinish}
@@ -481,13 +459,10 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
                       ))}
                     </select>
                   </div>
-                </div>
 
-                {/* 5. Largura da Forma & Observações para a Fábrica */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-[#1F1215] mb-1.5">
-                      5. Largura da Forma (Anatomia do Pé)
+                      4. Largura da Forma (Anatomia do Pé)
                     </label>
                     <select
                       value={footWidth}
@@ -503,19 +478,38 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
                       </option>
                     </select>
                   </div>
+                </div>
 
-                  <div>
-                    <label className="block text-xs font-semibold text-[#1F1215] mb-1.5">
-                      6. Observações para a Fábrica (Opcional)
-                    </label>
-                    <input
-                      type="text"
-                      value={customNotes}
-                      onChange={(e) => setCustomNotes(e.target.value)}
-                      placeholder="Ex: Preciso para evento, pedido atacado..."
-                      className="w-full px-3.5 py-2.5 bg-white border border-[#E6DDD0] rounded-lg text-xs text-[#1F1215] focus:outline-none focus:border-[#631421]"
-                    />
-                  </div>
+                {/* 5. Observações para a Fábrica (Opcional) */}
+                <div>
+                  <label className="block text-xs font-semibold text-[#1F1215] mb-1.5">
+                    5. Observações para a Fábrica (Opcional)
+                  </label>
+                  <input
+                    type="text"
+                    value={customNotes}
+                    onChange={(e) => setCustomNotes(e.target.value)}
+                    placeholder="Ex: Preferência de altura, solado, plataforma ou outro detalhe..."
+                    className="w-full px-3.5 py-2.5 bg-white border border-[#E6DDD0] rounded-lg text-xs text-[#1F1215] focus:outline-none focus:border-[#631421]"
+                  />
+                  <p className="mt-1.5 text-[11px] text-[#6E5D5F]">
+                    Caso queira informar alguma preferência sobre altura, solado, plataforma ou qualquer outro detalhe, escreva neste campo.
+                  </p>
+                </div>
+
+                {/* Informação clara sobre Frete & Entrega (Separado do valor da sandália) */}
+                <div className="p-3.5 rounded-xl bg-[#F3EDE2] border border-[#D8CBB8] space-y-1.5 text-xs text-[#3D2C30]">
+                  <p className="font-bold text-[#631421]">
+                    Informações sobre Frete e Entrega:
+                  </p>
+                  <p className="font-semibold text-[#1F1215] leading-relaxed">
+                    &ldquo;O frete é por conta da cliente. A forma de envio e o valor da entrega serão combinados quando a sandália estiver pronta.&rdquo;
+                  </p>
+                  <p className="text-[11px] text-[#4A383B] leading-relaxed">
+                    • <strong>Goiânia e região:</strong> a entrega poderá ser combinada por <strong>Uber Moto</strong>.<br />
+                    • <strong>Outras cidades:</strong> o envio poderá ser combinado pelos <strong>Correios</strong>, com o frete pago pela cliente antes da postagem.<br />
+                    • O frete é separado do preço da sandália: você conclui o pedido e paga normalmente os <strong>50% de entrada da sandália</strong> agora, sem aguardar cotação de frete, e os outros <strong>50% da sandália na entrega</strong>.
+                  </p>
                 </div>
               </div>
 

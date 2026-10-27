@@ -23,9 +23,26 @@ const PORT = Number(process.env.PORT) || 3000;
 const IS_VERCEL = Boolean(process.env.VERCEL);
 const BUNDLED_DB_FILE = path.resolve(process.cwd(), 'data', 'peterson-db.json');
 const DATA_DIR = IS_VERCEL ? path.join('/tmp', 'peterson-data') : path.resolve(process.cwd(), 'data');
-const DB_FILE = path.join(DATA_DIR, 'peterson-db.json');
+const DB_FILE_PROD = path.join(DATA_DIR, 'peterson-db.json');
+const DB_FILE_HOMOLOG = path.join(DATA_DIR, 'peterson-db-homolog.json');
+const ADMIN_AUTH_FILE = path.join(DATA_DIR, 'admin-auth.secret.json');
 const SQL_SCHEMA_FILE = path.resolve(process.cwd(), 'supabase-schema.sql');
 const INSTAGRAM_PUBLIC_DIR = path.resolve(process.cwd(), 'public', 'instagram');
+
+export type AppEnvironment = 'homologacao' | 'producao';
+
+function resolveEnv(req?: Request): AppEnvironment {
+  if (!req) return 'homologacao';
+  const headerEnv = String(req.headers['x-peterson-env'] || '').toLowerCase().trim();
+  const queryEnv = String(req.query?.env || '').toLowerCase().trim();
+  if (headerEnv === 'producao' || queryEnv === 'producao') {
+    return 'producao';
+  }
+  if (headerEnv === 'homologacao' || queryEnv === 'homologacao') {
+    return 'homologacao';
+  }
+  return 'producao';
+}
 
 interface DatabaseSchema {
   products: BespokeProduct[];
@@ -43,57 +60,12 @@ function addDaysISO(days: number): string {
   return d.toISOString().split('T')[0];
 }
 
-// Compute standard CRC16-CCITT (0xFFFF) for valid Brazilian Pix EMVCo BRCode payload
-function computeCRC16(payload: string): string {
-  let crc = 0xffff;
-  for (let i = 0; i < payload.length; i++) {
-    crc ^= payload.charCodeAt(i) << 8;
-    for (let j = 0; j < 8; j++) {
-      if ((crc & 0x8000) !== 0) {
-        crc = ((crc << 1) ^ 0x1021) & 0xffff;
-      } else {
-        crc = (crc << 1) & 0xffff;
-      }
-    }
-  }
-  return crc.toString(16).toUpperCase().padStart(4, '0');
-}
+// Payload estático oficial decodificado do QR Code do Banco Inter (CNPJ 50.789.636/0001-32 — 50789636 JACKELINE GOMES PETERSON)
+const BANCO_INTER_OFFICIAL_BRCODE =
+  '00020101021126360014br.gov.bcb.pix0114507896360001325204000053039865802BR5912SONHO ANIMAL6007GOIANIA62070503***63049D03';
 
-function emvField(id: string, value: string): string {
-  return `${id}${String(value.length).padStart(2, '0')}${value}`;
-}
-
-function generateMercadoPagoPixPayload(amount: number, reference: string, pixKey: string): string {
-  const cleanKey = pixKey.trim() || '50789636000132';
-  const digitsOnly = cleanKey.replace(/\D/g, '');
-  let normalizedKey = cleanKey;
-  if (digitsOnly.length === 14 && !cleanKey.includes('@')) {
-    normalizedKey = digitsOnly;
-  } else if (/^\d{10,11}$/.test(cleanKey) && !cleanKey.startsWith('+55')) {
-    normalizedKey = `+55${cleanKey}`;
-  }
-
-  const gui = emvField('00', 'br.gov.bcb.pix');
-  const keyField = emvField('01', normalizedKey);
-  const merchantAccountInfo = emvField('26', `${gui}${keyField}`);
-  const formattedAmount = amount.toFixed(2);
-  const txId = reference.replace(/[^a-zA-Z0-9]/g, '').slice(0, 20) || 'PETERSONSHOES';
-  const additionalData = emvField('62', emvField('05', txId));
-
-  const bodyWithoutCrc =
-    '000201' +
-    merchantAccountInfo +
-    '52040000' +
-    '5303986' +
-    emvField('54', formattedAmount) +
-    '5802BR' +
-    emvField('59', 'JACKELINE PETERSON') +
-    emvField('60', 'GOIANIA') +
-    additionalData +
-    '6304';
-
-  const crc = computeCRC16(bodyWithoutCrc);
-  return `${bodyWithoutCrc}${crc}`;
+function generateMercadoPagoPixPayload(_amount: number, _reference: string, _pixKey: string): string {
+  return BANCO_INTER_OFFICIAL_BRCODE;
 }
 
 /**
@@ -1225,10 +1197,10 @@ function createInitialDatabase(): DatabaseSchema {
     depositPercentage: 50,
     creditCardFeePercentage: 4.99,
     mercadoPagoLiveEnabled: process.env.MERCADO_PAGO_LIVE_CHARGES_ENABLED === 'true',
-    pixKey: '50789636000132',
+    pixKey: '50.789.636/0001-32',
     pixKeyType: 'CNPJ',
-    bankName: 'Banco Inter',
-    bankHolderName: 'Jackeline Peterson',
+    bankName: 'Inter',
+    bankHolderName: '50789636 JACKELINE GOMES PETERSON',
     bankHolderDoc: '50.789.636/0001-32',
     bankAgency: '',
     bankAccount: '',
@@ -1441,75 +1413,164 @@ function createInitialDatabase(): DatabaseSchema {
   };
 }
 
-function loadDb(): DatabaseSchema {
+function getDbFilePath(env: AppEnvironment): string {
+  return env === 'homologacao' ? DB_FILE_HOMOLOG : DB_FILE_PROD;
+}
+
+function loadDb(env: AppEnvironment = 'producao'): DatabaseSchema {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
   }
-  if (!fs.existsSync(DB_FILE)) {
-    if (IS_VERCEL && fs.existsSync(BUNDLED_DB_FILE)) {
+  const targetFile = getDbFilePath(env);
+  if (!fs.existsSync(targetFile)) {
+    if (fs.existsSync(BUNDLED_DB_FILE)) {
       try {
-        fs.copyFileSync(BUNDLED_DB_FILE, DB_FILE);
+        fs.copyFileSync(BUNDLED_DB_FILE, targetFile);
       } catch {
         // Fallback to initial database creation below
       }
     }
-    if (!fs.existsSync(DB_FILE)) {
+    if (!fs.existsSync(targetFile)) {
       const initial = createInitialDatabase();
-      fs.writeFileSync(DB_FILE, JSON.stringify(initial, null, 2), 'utf-8');
+      fs.writeFileSync(targetFile, JSON.stringify(initial, null, 2), 'utf-8');
       return initial;
     }
   }
   try {
-    const raw = fs.readFileSync(DB_FILE, 'utf-8');
+    const raw = fs.readFileSync(targetFile, 'utf-8');
     const parsed = JSON.parse(raw) as DatabaseSchema;
 
-    // Auto-upgrade if DB doesn't have the 46 Instagram models or new price table (Papete R$ 130, Anabela R$ 150, etc.)
     const needsUpgrade =
       !parsed.products ||
       parsed.products.length < 46 ||
       parsed.products[0]?.price !== 130 ||
       parsed.settings?.whatsappStore !== '5562984998265' ||
       parsed.products[0]?.availableSizes?.includes(33) ||
-      !parsed.products[0]?.colors?.some((c) => c.name === 'Marsala') ||
-      parsed.settings?.pixKey !== '50789636000132';
+      !parsed.products[0]?.colors?.some((c) => c.name === 'Marsala');
 
     if (needsUpgrade) {
       const upgraded = createInitialDatabase();
-      fs.writeFileSync(DB_FILE, JSON.stringify(upgraded, null, 2), 'utf-8');
+      fs.writeFileSync(targetFile, JSON.stringify(upgraded, null, 2), 'utf-8');
       return upgraded;
     }
 
     parsed.settings = {
-      bankName: 'Banco Inter',
-      bankHolderName: 'Jackeline Peterson',
+      ...parsed.settings,
+      bankName: 'Inter',
+      bankHolderName: '50789636 JACKELINE GOMES PETERSON',
       bankHolderDoc: '50.789.636/0001-32',
       pixKeyType: 'CNPJ',
-      pixKey: '50789636000132',
-      ...parsed.settings,
+      pixKey: '50.789.636/0001-32',
     };
 
     return parsed;
   } catch (err) {
-    console.error('Erro ao ler banco de dados, recriando estado inicial:', err);
+    console.error(`Erro ao ler banco de dados (${env}), recriando estado inicial:`, err);
     const initial = createInitialDatabase();
-    fs.writeFileSync(DB_FILE, JSON.stringify(initial, null, 2), 'utf-8');
+    fs.writeFileSync(targetFile, JSON.stringify(initial, null, 2), 'utf-8');
     return initial;
   }
 }
 
-function saveDb(data: DatabaseSchema): void {
+function saveDb(data: DatabaseSchema, env: AppEnvironment = 'producao'): void {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
   }
-  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
+  const targetFile = getDbFilePath(env);
+  fs.writeFileSync(targetFile, JSON.stringify(data, null, 2), 'utf-8');
 }
 
-// Active admin tokens in memory + deterministic HMAC token for serverless (Vercel)
-const activeAdminTokens = new Set<string>();
+// ============================================================================
+// HARDENED ADMIN AUTHENTICATION (No hardcoded passwords, no bypass tokens)
+// ============================================================================
 
-function getStatelessAdminToken(): string {
-  const secret = process.env.ADMIN_PASSWORD || 'peterson2026';
-  return crypto.createHmac('sha256', secret).update('peterson-admin-session-v1').digest('hex');
+interface StoredAdminCredentials {
+  email: string;
+  salt: string;
+  passwordHash: string;
+  sessionSecret: string;
+  updatedAt: string;
+}
+
+const activeAdminSessions = new Map<string, { email: string; expiresAt: number }>();
+const loginRateLimiter = new Map<string, { count: number; resetAt: number }>();
+
+function loadStoredAdminCredentials(): StoredAdminCredentials | null {
+  try {
+    if (fs.existsSync(ADMIN_AUTH_FILE)) {
+      const raw = fs.readFileSync(ADMIN_AUTH_FILE, 'utf-8');
+      const parsed = JSON.parse(raw) as StoredAdminCredentials;
+      if (parsed && parsed.passwordHash && parsed.salt) {
+        return parsed;
+      }
+    }
+  } catch {
+    // Ignore read errors
+  }
+  return null;
+}
+
+function hasEnvAdminPassword(): boolean {
+  const envPass = (process.env.ADMIN_PASSWORD || '').trim();
+  return envPass.length >= 6;
+}
+
+function isAdminConfigured(): boolean {
+  return hasEnvAdminPassword() || Boolean(loadStoredAdminCredentials());
+}
+
+function hashPasswordWithSalt(password: string, saltHex: string): string {
+  return crypto.scryptSync(password, Buffer.from(saltHex, 'hex'), 64).toString('hex');
+}
+
+function verifyAdminCredentials(emailInput: string, passwordInput: string): { ok: boolean; email: string } {
+  const cleanPassword = String(passwordInput || '');
+  const cleanEmail = String(emailInput || '').trim().toLowerCase();
+
+  if (!cleanPassword) {
+    return { ok: false, email: '' };
+  }
+
+  // 1. Check environment variables if configured
+  if (hasEnvAdminPassword()) {
+    const expectedPass = String(process.env.ADMIN_PASSWORD).trim();
+    const expectedEmail = (process.env.ADMIN_EMAIL || 'contato@petersonshoes.com.br').trim().toLowerCase();
+    const passBufA = Buffer.from(cleanPassword);
+    const passBufB = Buffer.from(expectedPass);
+    const passMatches =
+      passBufA.length === passBufB.length && crypto.timingSafeEqual(passBufA, passBufB);
+    const emailMatches = !cleanEmail || cleanEmail === expectedEmail;
+    return {
+      ok: passMatches && emailMatches,
+      email: expectedEmail,
+    };
+  }
+
+  // 2. Check hashed credentials file
+  const stored = loadStoredAdminCredentials();
+  if (stored) {
+    const computedHash = hashPasswordWithSalt(cleanPassword, stored.salt);
+    const bufA = Buffer.from(computedHash, 'hex');
+    const bufB = Buffer.from(stored.passwordHash, 'hex');
+    const passMatches = bufA.length === bufB.length && crypto.timingSafeEqual(bufA, bufB);
+    const emailMatches = !cleanEmail || cleanEmail === stored.email.toLowerCase();
+    return {
+      ok: passMatches && emailMatches,
+      email: stored.email,
+    };
+  }
+
+  return { ok: false, email: '' };
+}
+
+function issueAdminSessionToken(email: string): string {
+  const token = crypto.randomBytes(32).toString('hex');
+  // 12-hour session expiration
+  activeAdminSessions.set(token, {
+    email,
+    expiresAt: Date.now() + 12 * 60 * 60 * 1000,
+  });
+  return token;
 }
 
 function requireAdminAuth(req: Request, res: Response, next: NextFunction) {
@@ -1518,13 +1579,20 @@ function requireAdminAuth(req: Request, res: Response, next: NextFunction) {
     return res.status(401).json({ error: 'Não autorizado: Token administrativo ausente.' });
   }
   const token = authHeader.slice('Bearer '.length).trim();
-  if (
-    !activeAdminTokens.has(token) &&
-    token !== getStatelessAdminToken() &&
-    token !== 'peterson-local-admin-token'
-  ) {
-    return res.status(401).json({ error: 'Sessão administrativa inválida ou expirada.' });
+  if (!token) {
+    return res.status(401).json({ error: 'Não autorizado: Token administrativo vazio.' });
   }
+
+  const session = activeAdminSessions.get(token);
+  if (!session) {
+    return res.status(401).json({ error: 'Sessão administrativa inválida ou expirada. Faça login novamente.' });
+  }
+
+  if (Date.now() > session.expiresAt) {
+    activeAdminSessions.delete(token);
+    return res.status(401).json({ error: 'Sessão administrativa expirada. Faça login novamente.' });
+  }
+
   next();
 }
 
@@ -1550,8 +1618,9 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
 
 function registerApiRoutes() {
 
-  // Ensure DB exists on startup
-  loadDb();
+  // Ensure both Production and Homologation DBs exist on startup, completely isolated
+  loadDb('producao');
+  loadDb('homologacao');
 
   // ==========================================================================
   // GOOGLE SEO ENDPOINTS (robots.txt & sitemap.xml with Image Sitemap)
@@ -1654,14 +1723,16 @@ ${productUrlsXml}
   // PUBLIC STOREFRONT ENDPOINTS
   // ==========================================================================
 
-  app.get('/api/products', (_req: Request, res: Response) => {
-    const db = loadDb();
+  app.get('/api/products', (req: Request, res: Response) => {
+    const env = resolveEnv(req);
+    const db = loadDb(env);
     const activeProducts = db.products.filter((p) => p.active);
     res.json(activeProducts);
   });
 
-  app.get('/api/settings', (_req: Request, res: Response) => {
-    const db = loadDb();
+  app.get('/api/settings', (req: Request, res: Response) => {
+    const env = resolveEnv(req);
+    const db = loadDb(env);
     res.json({
       ...db.settings,
       creditCardFeePercentage: db.settings.creditCardFeePercentage ?? 4.99,
@@ -1669,13 +1740,15 @@ ${productUrlsXml}
         process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY
       ),
       mercadoPagoTokenConfigured: Boolean(process.env.MERCADO_PAGO_ACCESS_TOKEN),
+      environment: env,
     });
   });
 
   // Create new bespoke order with automated 50% deposit + 50% final installment
   app.post('/api/orders', async (req: Request, res: Response) => {
     try {
-      const db = loadDb();
+      const env = resolveEnv(req);
+      const db = loadDb(env);
       const {
         customerName,
         customerEmail,
@@ -1747,14 +1820,17 @@ ${productUrlsXml}
       }
 
       const orderNumber = 101 + db.orders.length;
-      const orderCode = `PTS-2026-${orderNumber}`;
+      const orderCode =
+        env === 'homologacao' ? `PTS-HML-${orderNumber}` : `PTS-2026-${orderNumber}`;
       const orderId = `ord-${Date.now()}`;
       const productionDays = db.settings.productionDays || 15;
       const estimatedDeliveryDate = addDaysISO(productionDays);
 
       const shippingAddress = `${street}, ${number}${complement ? ` (${complement})` : ''} - ${neighborhood}, ${city}/${state} - CEP ${cep}`;
 
-      // Create automated 50% Deposit Pix + 50% Final Pix
+      // Em Homologação, cobranças externas nunca são disparadas
+      const allowLiveCharges = env === 'producao' && db.settings.mercadoPagoLiveEnabled;
+
       const [mpDeposit, mpFinal] = await Promise.all([
         createMercadoPagoPixPayment({
           amount: depositAmount,
@@ -1763,8 +1839,8 @@ ${productUrlsXml}
           payerName: customerName,
           payerCpf: customerCpf || '',
           externalReference: `${orderCode}E`,
-          pixKey: db.settings.pixKey || '50789636000132',
-          liveEnabled: db.settings.mercadoPagoLiveEnabled,
+          pixKey: db.settings.pixKey || '50.789.636/0001-32',
+          liveEnabled: allowLiveCharges,
         }),
         createMercadoPagoPixPayment({
           amount: remainingAmount,
@@ -1773,8 +1849,8 @@ ${productUrlsXml}
           payerName: customerName,
           payerCpf: customerCpf || '',
           externalReference: `${orderCode}F`,
-          pixKey: db.settings.pixKey || '50789636000132',
-          liveEnabled: db.settings.mercadoPagoLiveEnabled,
+          pixKey: db.settings.pixKey || '50.789.636/0001-32',
+          liveEnabled: allowLiveCharges,
         }),
       ]);
 
@@ -1832,7 +1908,7 @@ ${productUrlsXml}
         estimatedDeliveryDate,
         productionDays,
         factoryNotes:
-          'Encomenda registrada no site. Aguardando confirmação dos 50% de entrada (Pix ou Cartão de Crédito) para envio à bancada de corte.',
+          'Encomenda registrada no site. Aguardando conferência do recebimento dos 50% de entrada no Banco Inter pela administração.',
         trackingCode: '',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -1840,7 +1916,7 @@ ${productUrlsXml}
 
       db.orders.unshift(newOrder);
       db.payments.unshift(finalPayment, depositPayment);
-      saveDb(db);
+      saveDb(db, env);
 
       res.status(201).json({
         order: {
@@ -1858,8 +1934,9 @@ ${productUrlsXml}
 
   // Lookup orders by Order Code, CPF, or WhatsApp
   app.get('/api/orders/lookup', (req: Request, res: Response) => {
+    const env = resolveEnv(req);
     const query = String(req.query.query || '').trim();
-    const db = loadDb();
+    const db = loadDb(env);
 
     if (!query) {
       const enriched = db.orders.slice(0, 10).map((o) => ({
@@ -1888,8 +1965,11 @@ ${productUrlsXml}
     res.json(enriched);
   });
 
-  // Confirm 50% Deposit or 50% Final Payment (Supports BOTH Pix and Credit Card with Bank Fee)
-  app.post('/api/orders/:id/confirm-payment', (req: Request, res: Response) => {
+  // Customer Payment Notification Endpoint:
+  // IMPORTANT: Never marks an order as paid automatically when the customer clicks a button.
+  // Only records the customer's notification so the store owner (Admin) can verify the receipt in Banco Inter.
+  const handleCustomerNotifyPayment = (req: Request, res: Response) => {
+    const env = resolveEnv(req);
     const { id } = req.params;
     const {
       installmentType,
@@ -1909,7 +1989,7 @@ ${productUrlsXml}
       cardLast4?: string;
     };
 
-    const db = loadDb();
+    const db = loadDb(env);
     const order = db.orders.find((o) => o.id === id || o.orderCode === id);
     if (!order) {
       return res.status(404).json({ error: 'Encomenda não encontrada.' });
@@ -1921,10 +2001,10 @@ ${productUrlsXml}
 
     const chosenMethod = method || 'PIX_MERCADO_PAGO';
 
-    if (payment) {
+    if (payment && payment.status !== 'APROVADO') {
       payment.method = chosenMethod;
-      payment.status = 'APROVADO';
-      payment.paidAt = new Date().toISOString();
+      // Keep status strictly PENDENTE until Admin confirms in Banco Inter
+      payment.status = 'PENDENTE';
 
       if (chosenMethod === 'CARTAO_MERCADO_PAGO') {
         const baseVal =
@@ -1939,7 +2019,6 @@ ${productUrlsXml}
             : baseVal + (payment.feeAmount || 0);
         payment.cardBrand = cardBrand || 'Cartão';
         payment.cardLast4 = cardLast4 || '0000';
-        payment.mpReferenceId = `MP-CARD-${Date.now().toString().slice(-7)}`;
       } else {
         const baseVal =
           payment.baseAmount ??
@@ -1954,38 +2033,49 @@ ${productUrlsXml}
     const methodLabel =
       chosenMethod === 'CARTAO_MERCADO_PAGO'
         ? `Cartão de Crédito (${installments || 1}x c/ taxa do banco)`
-        : 'Pix Mercado Pago';
+        : 'Pix Banco Inter';
 
-    if (installmentType === 'FINAL_50') {
-      order.paymentStatus = 'QUITADO_100';
-      if (order.productionStatus === 'PRONTA_PARA_ENTREGA') {
-        order.factoryNotes = `${order.factoryNotes} | 50% finais confirmados via ${methodLabel}. Liberada para expedição.`;
-      }
-    } else {
-      order.paymentStatus = 'ENTRADA_50_PAGA';
-      if (order.productionStatus === 'AGUARDANDO_CONFIRMACAO') {
-        order.productionStatus = 'CORTE_MODELAGEM';
-        order.factoryNotes = `Entrada de 50% aprovada via ${methodLabel}. Ficha técnica liberada automaticamente para Corte & Modelagem (Prazo: 15 dias).`;
-      }
-    }
+    const parcelaLabel =
+      installmentType === 'FINAL_50' ? '50% finais' : '50% de entrada';
 
+    order.factoryNotes = `${order.factoryNotes} | Cliente informou envio de pagamento (${parcelaLabel} via ${methodLabel}) em ${new Date().toLocaleString('pt-BR')} — Aguardando conferência no Banco Inter pelo Admin.`;
     order.updatedAt = new Date().toISOString();
-    saveDb(db);
+    saveDb(db, env);
 
     res.json({
+      notified: true,
+      message:
+        'Aviso de pagamento registrado! O status será atualizado para Pago assim que a Peterson Shoes conferir o recebimento no Banco Inter.',
       order: {
         ...order,
         payments: db.payments.filter((p) => p.orderId === order.id),
       },
     });
-  });
+  };
 
-  // Mercado Pago Webhook endpoint for automatic confirmation
+  app.post('/api/orders/:id/notify-payment', handleCustomerNotifyPayment);
+  app.post('/api/orders/:id/confirm-payment', handleCustomerNotifyPayment);
+
+  // Mercado Pago Webhook endpoint (Protected by MERCADO_PAGO_WEBHOOK_SECRET and disabled in Homologação)
   app.post('/api/webhooks/mercadopago', (req: Request, res: Response) => {
     try {
+      const env = resolveEnv(req);
+      if (env === 'homologacao') {
+        return res.status(200).json({ received: true, ignoredInHomologacao: true });
+      }
+
+      const webhookSecret = (process.env.MERCADO_PAGO_WEBHOOK_SECRET || '').trim();
+      const providedSecret = String(
+        req.headers['x-webhook-secret'] || req.query.secret || ''
+      ).trim();
+
+      if (!webhookSecret || providedSecret !== webhookSecret) {
+        return res.status(401).json({ error: 'Webhook não autorizado.' });
+      }
+
       const { external_reference, installmentType } = req.body || {};
       if (external_reference) {
-        const db = loadDb();
+        const db = loadDb('producao');
         const cleanCode = String(external_reference).replace(/[EF]$/, '');
         const order = db.orders.find(
           (o) => o.orderCode.replace(/[^a-zA-Z0-9]/g, '') === cleanCode || o.orderCode === cleanCode
@@ -2011,7 +2101,7 @@ ${productUrlsXml}
             }
           }
           order.updatedAt = new Date().toISOString();
-          saveDb(db);
+          saveDb(db, 'producao');
         }
       }
       res.status(200).json({ received: true });
@@ -2056,13 +2146,18 @@ ${productUrlsXml}
       const systemInstruction = `Você é a Consultora Virtual Oficial da **Peterson Shoes** (@petersonshoes_ — "Seu estilo, sua sandália!"), marca de **Goiânia - Goiás** especializada em sandálias femininas de fabricação própria feitas sob encomenda.
 
 INFORMAÇÕES REAIS E OBRIGATÓRIAS DA LOJA:
-1. **Localização & Fabricação Própria**: Somos de **Goiânia - Goiás (GO)**, com fabricação própria sob encomenda (Atacado a partir de 6 pares e Varejo). Fazemos entregas em Goiânia e região e enviamos para todo o Brasil via Correios. O prazo estimado de produção é de **${db.settings.productionDays} dias**.
+1. **Localização & Fabricação Própria**: Somos de **Goiânia - Goiás (GO)**, com fabricação própria sob encomenda (Atacado a partir de 6 pares e Varejo). O prazo estimado de produção é de **${db.settings.productionDays} dias**.
 2. **Numeração Oficial**: Produzimos do **34 ao 39 BR** (34, 35, 36, 37, 38 e 39).
 3. **Cores Padrão & Cor Personalizada**: Todos os modelos podem ser feitos nas cores padrão **Preto, Branco, Marsala, Nude, Dourado, Prata, Vermelho e Rosa**, além da opção **"Outra Cor"** onde a cliente escreve exatamente qual cor deseja.
 4. **Como Funciona o Pagamento (50% + 50% no Pix ou Cartão de Crédito)**:
-   - A cliente paga **50% de entrada** para confirmar o pedido e os outros **50% restantes** quando a sandália estiver **pronta** (em 15 dias).
+   - A cliente paga **50% de entrada da sandália** para confirmar o pedido (sem precisar aguardar cotação de frete) e os outros **50% da sandália na entrega**, quando estiver pronta (em 15 dias).
    - A cliente escolhe se prefere pagar os 50% no **Pix (sem taxa)** ou no **Cartão de Crédito (em até 6x, com o acréscimo da taxa cobrada pelo banco/operadora)**.
-5. **Atendimento via WhatsApp**: O site possui botões com link direto para o WhatsApp oficial da loja (não exiba o número de telefone por extenso na mensagem; oriente a cliente a clicar no botão "Falar no WhatsApp" da página) | Instagram: ${db.settings.instagramUrl}.
+5. **Regra de Frete e Entrega (Separado do preço da sandália)**:
+   - Informe sempre de forma clara: **"O frete é por conta da cliente. A forma de envio e o valor da entrega serão combinados quando a sandália estiver pronta."**
+   - Para **Goiânia e região**, a entrega poderá ser combinada por **Uber Moto**.
+   - Para **outras cidades**, o envio poderá ser combinado pelos **Correios**, com o frete pago pela cliente antes da postagem.
+   - Nunca informe frete grátis, R$ 0,00 ou valor estimado de frete.
+6. **Atendimento via WhatsApp**: O site possui botões com link direto para o WhatsApp oficial da loja (não exiba o número de telefone por extenso na mensagem; oriente a cliente a clicar no botão "Falar no WhatsApp" da página) | Instagram: ${db.settings.instagramUrl}.
 
 CATÁLOGO COMPLETO DO INSTAGRAM @petersonshoes_ (${activeProducts.length} MODELOS):
 ${catalogSummary}
@@ -2126,33 +2221,114 @@ DIRETRIZES DE ESTILO:
   });
 
   // ==========================================================================
-  // SECURE ADMIN ENDPOINTS
+  // SECURE ADMIN ENDPOINTS (Backend Authenticated & Environment Isolated)
   // ==========================================================================
 
-  app.post('/api/admin/login', (req: Request, res: Response) => {
-    const { email, password } = req.body as { email?: string; password?: string };
-    const expectedPassword = process.env.ADMIN_PASSWORD || 'peterson2026';
-    const expectedEmail = process.env.ADMIN_EMAIL || 'contato@petersonshoes.com.br';
-
-    if (
-      password === expectedPassword &&
-      (!email || email.toLowerCase().trim() === expectedEmail.toLowerCase())
-    ) {
-      const token = getStatelessAdminToken();
-      activeAdminTokens.add(token);
-      return res.json({
-        token,
-        adminEmail: expectedEmail,
-      });
-    }
-
-    return res.status(401).json({
-      error: 'Credenciais inválidas. Para demonstração use a senha padrão: peterson2026',
+  app.get('/api/admin/auth-status', (_req: Request, res: Response) => {
+    res.json({
+      configured: isAdminConfigured(),
+      configuredViaEnv: hasEnvAdminPassword(),
     });
   });
 
-  app.get('/api/admin/dashboard', requireAdminAuth, (_req: Request, res: Response) => {
-    const db = loadDb();
+  app.post('/api/admin/setup-credentials', (req: Request, res: Response) => {
+    if (isAdminConfigured()) {
+      return res.status(403).json({
+        error: 'As credenciais administrativas já estão configuradas. Faça login com sua senha.',
+      });
+    }
+
+    const { email, password } = req.body as { email?: string; password?: string };
+    const cleanEmail = String(email || '').trim().toLowerCase();
+    const cleanPassword = String(password || '');
+
+    if (!cleanEmail || !cleanEmail.includes('@')) {
+      return res.status(400).json({ error: 'Informe um e-mail administrativo válido.' });
+    }
+    if (cleanPassword.length < 8) {
+      return res.status(400).json({
+        error: 'A senha administrativa deve ter pelo menos 8 caracteres.',
+      });
+    }
+
+    const salt = crypto.randomBytes(16).toString('hex');
+    const passwordHash = hashPasswordWithSalt(cleanPassword, salt);
+    const sessionSecret = crypto.randomBytes(32).toString('hex');
+
+    const record: StoredAdminCredentials = {
+      email: cleanEmail,
+      salt,
+      passwordHash,
+      sessionSecret,
+      updatedAt: new Date().toISOString(),
+    };
+
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    fs.writeFileSync(ADMIN_AUTH_FILE, JSON.stringify(record, null, 2), {
+      encoding: 'utf-8',
+      mode: 0o600,
+    });
+
+    const token = issueAdminSessionToken(cleanEmail);
+    return res.status(201).json({
+      token,
+      adminEmail: cleanEmail,
+    });
+  });
+
+  app.post('/api/admin/login', (req: Request, res: Response) => {
+    const clientIp = String(req.headers['x-forwarded-for'] || req.ip || 'local');
+    const now = Date.now();
+    const rateRecord = loginRateLimiter.get(clientIp);
+    if (rateRecord && now < rateRecord.resetAt && rateRecord.count >= 8) {
+      return res.status(429).json({
+        error: 'Muitas tentativas de login. Aguarde alguns minutos antes de tentar novamente.',
+      });
+    }
+
+    if (!isAdminConfigured()) {
+      return res.status(403).json({
+        error: 'A senha administrativa ainda não foi configurada. Realize a configuração inicial.',
+      });
+    }
+
+    const { email, password } = req.body as { email?: string; password?: string };
+    const verification = verifyAdminCredentials(email || '', password || '');
+
+    if (verification.ok) {
+      loginRateLimiter.delete(clientIp);
+      const token = issueAdminSessionToken(verification.email);
+      return res.json({
+        token,
+        adminEmail: verification.email,
+      });
+    }
+
+    const nextCount = rateRecord && now < rateRecord.resetAt ? rateRecord.count + 1 : 1;
+    loginRateLimiter.set(clientIp, {
+      count: nextCount,
+      resetAt: now + 10 * 60 * 1000,
+    });
+
+    return res.status(401).json({
+      error: 'Credenciais inválidas. Verifique seu e-mail e senha administrativa.',
+    });
+  });
+
+  app.post('/api/admin/logout', (req: Request, res: Response) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.slice('Bearer '.length).trim();
+      activeAdminSessions.delete(token);
+    }
+    res.json({ ok: true });
+  });
+
+  app.get('/api/admin/dashboard', requireAdminAuth, (req: Request, res: Response) => {
+    const env = resolveEnv(req);
+    const db = loadDb(env);
     const enrichedOrders = db.orders.map((o) => ({
       ...o,
       payments: db.payments.filter((p) => p.orderId === o.id),
@@ -2167,6 +2343,7 @@ DIRETRIZES DE ESTILO:
       .reduce((sum, p) => sum + p.amount, 0);
 
     res.json({
+      environment: env,
       products: db.products,
       customers: db.customers,
       orders: enrichedOrders,
@@ -2227,8 +2404,9 @@ DIRETRIZES DE ESTILO:
     }
   });
 
-  // FAST 1-CLICK MANUAL PRICE UPDATE ENDPOINT ("editar apenas o valor de cada modelo de forma manual")
+  // FAST 1-CLICK MANUAL PRICE UPDATE ENDPOINT
   app.patch('/api/admin/products/:id/price', requireAdminAuth, (req: Request, res: Response) => {
+    const env = resolveEnv(req);
     const { id } = req.params;
     const { price } = req.body as { price?: number };
 
@@ -2237,21 +2415,22 @@ DIRETRIZES DE ESTILO:
       return res.status(400).json({ error: 'Informe um valor válido maior que zero.' });
     }
 
-    const db = loadDb();
+    const db = loadDb(env);
     const idx = db.products.findIndex((p) => p.id === id);
     if (idx === -1) {
       return res.status(404).json({ error: 'Modelo não encontrado.' });
     }
 
     db.products[idx].price = Math.round(numericPrice * 100) / 100;
-    saveDb(db);
+    saveDb(db, env);
 
     return res.json(db.products[idx]);
   });
 
   // Create Product
   app.post('/api/admin/products', requireAdminAuth, (req: Request, res: Response) => {
-    const db = loadDb();
+    const env = resolveEnv(req);
+    const db = loadDb(env);
     const body = req.body as Partial<BespokeProduct>;
 
     if (!body.name || !body.price) {
@@ -2306,14 +2485,15 @@ DIRETRIZES DE ESTILO:
     };
 
     db.products.unshift(newProduct);
-    saveDb(db);
+    saveDb(db, env);
     res.status(201).json(newProduct);
   });
 
   // Update Product
   app.put('/api/admin/products/:id', requireAdminAuth, (req: Request, res: Response) => {
+    const env = resolveEnv(req);
     const { id } = req.params;
-    const db = loadDb();
+    const db = loadDb(env);
     const idx = db.products.findIndex((p) => p.id === id);
     if (idx === -1) {
       return res.status(404).json({ error: 'Produto não encontrado.' });
@@ -2327,21 +2507,23 @@ DIRETRIZES DE ESTILO:
     };
 
     db.products[idx] = updated;
-    saveDb(db);
+    saveDb(db, env);
     res.json(updated);
   });
 
   // Delete Product
   app.delete('/api/admin/products/:id', requireAdminAuth, (req: Request, res: Response) => {
+    const env = resolveEnv(req);
     const { id } = req.params;
-    const db = loadDb();
+    const db = loadDb(env);
     db.products = db.products.filter((p) => p.id !== id);
-    saveDb(db);
+    saveDb(db, env);
     res.json({ ok: true });
   });
 
-  // Update Order Production / Payment Status
+  // Update Order Production / Payment Status (Exclusive Admin Confirmation)
   app.patch('/api/admin/orders/:id', requireAdminAuth, (req: Request, res: Response) => {
+    const env = resolveEnv(req);
     const { id } = req.params;
     const {
       productionStatus,
@@ -2357,7 +2539,7 @@ DIRETRIZES DE ESTILO:
       estimatedDeliveryDate?: string;
     };
 
-    const db = loadDb();
+    const db = loadDb(env);
     const order = db.orders.find((o) => o.id === id);
     if (!order) {
       return res.status(404).json({ error: 'Encomenda não encontrada.' });
@@ -2379,6 +2561,12 @@ DIRETRIZES DE ESTILO:
       const depositPay = orderPayments.find((p) => p.installmentType === 'ENTRADA_50');
       const finalPay = orderPayments.find((p) => p.installmentType === 'FINAL_50');
 
+      if (paymentStatus === 'AGUARDANDO_ENTRADA_50') {
+        if (depositPay) {
+          depositPay.status = 'PENDENTE';
+          depositPay.paidAt = null;
+        }
+      }
       if (paymentStatus === 'ENTRADA_50_PAGA' && depositPay && depositPay.status !== 'APROVADO') {
         depositPay.status = 'APROVADO';
         depositPay.paidAt = new Date().toISOString();
@@ -2400,7 +2588,7 @@ DIRETRIZES DE ESTILO:
     if (estimatedDeliveryDate !== undefined) order.estimatedDeliveryDate = estimatedDeliveryDate;
 
     order.updatedAt = new Date().toISOString();
-    saveDb(db);
+    saveDb(db, env);
 
     res.json({
       ...order,
@@ -2410,7 +2598,8 @@ DIRETRIZES DE ESTILO:
 
   // Update Store Settings
   app.put('/api/admin/settings', requireAdminAuth, (req: Request, res: Response) => {
-    const db = loadDb();
+    const env = resolveEnv(req);
+    const db = loadDb(env);
     db.settings = {
       ...db.settings,
       ...req.body,
@@ -2420,7 +2609,7 @@ DIRETRIZES DE ESTILO:
         req.body.creditCardFeePercentage ?? db.settings.creditCardFeePercentage ?? 4.99
       ),
     };
-    saveDb(db);
+    saveDb(db, env);
     res.json(db.settings);
   });
 

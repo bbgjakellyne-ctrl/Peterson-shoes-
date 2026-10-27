@@ -34,6 +34,11 @@ import {
   INITIAL_SETTINGS,
   saveBrowserStoreDb,
 } from './data/storeData';
+import {
+  apiFetch,
+  isHomologacao,
+  switchEnvironment,
+} from './utils/environment';
 
 const CATEGORIES = [
   'Todos',
@@ -76,7 +81,15 @@ export default function App() {
   const [trackingQuery, setTrackingQuery] = useState('');
   const [isAiOpen, setIsAiOpen] = useState(false);
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
-  const [isAdminView, setIsAdminView] = useState(false);
+  const [isAdminView, setIsAdminView] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const params = new URLSearchParams(window.location.search);
+    return (
+      params.get('acesso') === 'admin' ||
+      window.location.pathname.replace(/\/+$/, '') === '/admin'
+    );
+  });
+  const homologMode = isHomologacao();
   const [quickZoomPhoto, setQuickZoomPhoto] = useState<{
     url: string;
     title: string;
@@ -97,8 +110,8 @@ export default function App() {
 
     try {
       const [prodRes, setRes] = await Promise.all([
-        fetch('/api/products'),
-        fetch('/api/settings'),
+        apiFetch('/api/products'),
+        apiFetch('/api/settings'),
       ]);
       if (prodRes.ok) {
         const prods = await prodRes.json();
@@ -320,7 +333,15 @@ export default function App() {
   if (isAdminView) {
     return (
       <AdminDashboard
-        onCloseAdmin={() => setIsAdminView(false)}
+        onCloseAdmin={() => {
+          const url = new URL(window.location.href);
+          url.searchParams.delete('acesso');
+          if (url.pathname.replace(/\/+$/, '') === '/admin') {
+            url.pathname = '/';
+          }
+          window.history.replaceState({}, '', url.toString());
+          setIsAdminView(false);
+        }}
         onCatalogUpdated={loadStoreData}
       />
     );
@@ -355,6 +376,45 @@ export default function App() {
   return (
     <div translate="no" className="notranslate min-h-screen bg-[#FAF7F2] text-[#1F1215] flex flex-col justify-between">
       {/* =====================================================================
+          HOMOLOGAÇÃO BANNER (Visível apenas quando no ambiente de Homologação)
+      ===================================================================== */}
+      {homologMode && (
+        <div className="bg-[#8C4A27] text-[#FAF7F2] px-4 py-2 text-xs border-b border-[#6E381B]">
+          <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 rounded bg-white/20 font-bold uppercase tracking-wider text-[10px]">
+                Ambiente de Homologação
+              </span>
+              <span>
+                Você está visualizando o ambiente de testes da <strong>Peterson Shoes</strong>. Dados, pedidos e pagamentos estão isolados da produção oficial.
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  const url = new URL(window.location.href);
+                  url.searchParams.set('acesso', 'admin');
+                  window.history.replaceState({}, '', url.toString());
+                  setIsAdminView(true);
+                }}
+                className="px-2.5 py-1 rounded bg-white text-[#8C4A27] font-semibold text-[11px] hover:bg-[#FAF7F2] cursor-pointer"
+              >
+                Painel Admin (Restrito)
+              </button>
+              <button
+                type="button"
+                onClick={() => switchEnvironment('producao')}
+                className="px-2.5 py-1 rounded bg-black/25 hover:bg-black/40 text-white font-medium text-[11px] cursor-pointer"
+              >
+                Ver Produção Oficial
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
           TOP BAR CONTRACT (Strictly 3 Zones separated by gap-8)
       ===================================================================== */}
       <header className="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#E6DDD0]">
@@ -368,7 +428,7 @@ export default function App() {
             PETERSON SHOES
           </a>
 
-          {/* Zone 2: 5 concise single-line navigation links */}
+          {/* Zone 2: Concise single-line public navigation links (no public Admin button) */}
           <nav className="hidden md:flex items-center gap-7 text-xs font-semibold text-[#3D2C30]">
             <a
               href="#catalogo"
@@ -394,17 +454,17 @@ export default function App() {
             </button>
             <button
               type="button"
+              onClick={() => setIsSizeGuideOpen(true)}
+              className="hover:text-[#631421] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            >
+              Guia de Medidas (34 ao 39)
+            </button>
+            <button
+              type="button"
               onClick={() => setIsAiOpen(true)}
               className="hover:text-[#631421] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               Consultora IA
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsAdminView(true)}
-              className="hover:text-[#631421] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-            >
-              Editar Preços / Admin
             </button>
           </nav>
 
@@ -430,7 +490,7 @@ export default function App() {
             SECTION 1: EDITORIAL COUTURE HERO + 4-COLUMN BESPOKE PROCESS STRIP
         =================================================================== */}
         <section className="bg-[#FAF7F2] border-b border-[#E6DDD0]">
-          {/* Mobile Navigation Bar */}
+          {/* Mobile Navigation Bar (Public only — no Admin button) */}
           <div className="md:hidden px-6 pt-3 pb-1 flex items-center gap-2 overflow-x-auto">
             <a
               href="#catalogo"
@@ -467,13 +527,6 @@ export default function App() {
               className="px-3 py-1.5 bg-[#F3EDE2] text-[#1F1215] rounded-lg text-xs font-medium whitespace-nowrap shrink-0 cursor-pointer"
             >
               Guia de Medidas (34 ao 39)
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsAdminView(true)}
-              className="px-3 py-1.5 bg-[#F3EDE2] text-[#631421] rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 cursor-pointer"
-            >
-              Editar Preços / Admin
             </button>
           </div>
 
@@ -750,10 +803,10 @@ export default function App() {
               </div>
               <div className="p-5 rounded-xl bg-[#F3EDE2]/70 border border-[#E6DDD0]">
                 <p className="text-xs font-bold text-[#631421]">
-                  04. 50% Finais na Conclusão
+                  04. 50% na Entrega & Frete Combinado
                 </p>
                 <p className="text-xs text-[#4A383B] mt-1.5 leading-relaxed">
-                  Somente quando sua sandália estiver pronta você paga os 50% restantes (também via Pix ou Cartão de Crédito) para envio ou entrega.
+                  Quando sua sandália estiver pronta, você paga os <strong>50% restantes da sandália</strong> e combinamos a entrega: <strong>Uber Moto</strong> (Goiânia e região) ou <strong>Correios</strong> (outras cidades, com o frete pago pela cliente antes da postagem).
                 </p>
               </div>
             </div>
@@ -1499,8 +1552,7 @@ export default function App() {
               </div>
               <div className="lg:col-span-5">
                 <p className="text-xs sm:text-sm text-[#4A383B] leading-relaxed">
-                  Somos de <strong>Goiânia - Goiás</strong> e produzimos sua sandália sob encomenda na numeração <strong>34 ao 39</strong> em um ciclo cuidadoso de{' '}
-                  <strong>{settings.productionDays} dias</strong>, com entrega em Goiânia e região ou envio para todo o Brasil via Correios.
+                  Somos de <strong>Goiânia - Goiás</strong> e produzimos sua sandália sob encomenda na numeração <strong>34 ao 39</strong> em <strong>{settings.productionDays} dias</strong>. O frete é por conta da cliente e combinado quando a sandália estiver pronta (<strong>Uber Moto</strong> em Goiânia e região ou <strong>Correios</strong> para outras cidades).
                 </p>
               </div>
             </div>
@@ -1622,14 +1674,6 @@ export default function App() {
               className="hover:text-white transition-colors cursor-pointer whitespace-nowrap"
             >
               Rastrear Pedido
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsAdminView(true)}
-              className="hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
-            >
-              <Lock className="w-3.5 h-3.5 text-[#E5D3B3]" />
-              <span>Editar Preços / Painel Admin</span>
             </button>
           </div>
         </div>
