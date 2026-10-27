@@ -54,6 +54,46 @@ interface AdminDashboardProps {
 
 const IMAGE_PRESETS = [
   {
+    label: 'Novo — Scarpin Bico Fino Marsala (Foto 1 nos Pés)',
+    url: '/assets/aistudio/IMG_3086_5529b321.jpeg',
+  },
+  {
+    label: 'Novo — Scarpin Bico Fino Marsala (Foto 2 Lateral)',
+    url: '/assets/aistudio/IMG_3071_c77843a9.jpeg',
+  },
+  {
+    label: 'Novo — Scarpin Bico Fino Marsala (Foto 3 Superior)',
+    url: '/assets/aistudio/IMG_3070_2d89dc6b.jpeg',
+  },
+  {
+    label: 'Novo — Scarpin Slingback Verniz Marrom Café',
+    url: '/assets/aistudio/IMG_3061_70e03cce.jpeg',
+  },
+  {
+    label: 'Novo — Scarpin Slingback Ponteira Dourada & Salto Taça',
+    url: '/assets/aistudio/IMG_3064_d165c2a2.jpeg',
+  },
+  {
+    label: 'Novo — Sandália 3 Tiras Salto Fino Dourado Caramelo',
+    url: '/assets/aistudio/IMG_3067_8bebcc9c.jpeg',
+  },
+  {
+    label: 'Novo — Tamanco Salto Bloco & Fivela Marsala',
+    url: '/assets/aistudio/IMG_3069_b9feb338.jpeg',
+  },
+  {
+    label: 'Novo — Tamanco Anabela Dedo Aplique Dourado Off-White',
+    url: '/assets/aistudio/IMG_3075_2729f411.jpeg',
+  },
+  {
+    label: 'Novo — Tamanco Mule Bico Folha Salto Fino Dourado',
+    url: '/assets/aistudio/IMG_3078_33e91306.jpeg',
+  },
+  {
+    label: 'Novo — Sandália Mule Bico Fino Salto Alto Preta',
+    url: '/assets/aistudio/IMG_3083_28dd9dab.jpeg',
+  },
+  {
     label: 'Post 1 — Papete Flatform Pirâmides Dourada',
     url: '/instagram/feed_1_C454LXbOzrn_slide_1.jpg',
   },
@@ -1196,6 +1236,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       }
                       className="w-full px-3 py-2 bg-[#F7F3EC] border border-[#DFD3C3] rounded-lg text-xs"
                     >
+                      <option value="Scarpins & Saltos">Scarpins & Saltos</option>
                       <option value="Flatforms & Papetes">Flatforms & Papetes</option>
                       <option value="Anabelas & Plataformas">Anabelas & Plataformas</option>
                       <option value="Rasteiras & Gladiadoras">Rasteiras & Gladiadoras</option>

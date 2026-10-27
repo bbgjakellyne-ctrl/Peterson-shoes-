@@ -37,6 +37,294 @@ function buildStandardColors(defaultColorName, defaultImage, photoByColor = {}) 
   return mapped;
 }
 var INITIAL_PRODUCTS = [
+  // NOVO 1 (PTS-IG-49) — 3 FOTOS DO MESMO MODELO JUNTAS (IMG_3086, IMG_3071, IMG_3070) — R$ 130,00
+  {
+    id: "prod-ig-49-scarpin-marsala-pulseira",
+    sku: "PTS-IG-49",
+    name: "Scarpin Bico Fino Salto Alto & Pulseira (Marsala)",
+    subtitle: "Bico Fino Cl\xE1ssico com Calcanhar Fechado, Recorte Lateral & Tira com Fivela Dourada no Tornozelo",
+    category: "Scarpins & Saltos",
+    price: 130,
+    image: "/assets/aistudio/IMG_3086_5529b321.jpeg",
+    gallery: [
+      "/assets/aistudio/IMG_3086_5529b321.jpeg",
+      "/assets/aistudio/IMG_3071_c77843a9.jpeg",
+      "/assets/aistudio/IMG_3070_2d89dc6b.jpeg"
+    ],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Salto Fino Alto 9,5cm", "Salto Fino M\xE9dio 7,5cm"],
+    strapFinishes: [
+      "Fivela Dourada no Tornozelo",
+      "Fivela Prateada no Tornozelo"
+    ],
+    colors: buildStandardColors(
+      "Marsala",
+      "/assets/aistudio/IMG_3086_5529b321.jpeg",
+      {
+        Marsala: "/assets/aistudio/IMG_3086_5529b321.jpeg"
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Eleg\xE2ncia absoluta em cada \xE2ngulo! Nosso Scarpin Bico Fino com calcanhar fechado e tira regul\xE1vel com fivela no tornozelo (@petersonshoes_) une sustenta\xE7\xE3o firme, salto fino alinhado e acabamento artesanal impec\xE1vel. Veja as 3 fotos reais do modelo na galeria!",
+    craftDetails: [
+      "Fabrica\xE7\xE3o pr\xF3pria @petersonshoes_ sob encomenda em at\xE9 15 dias (Numera\xE7\xE3o 34 ao 39 BR)",
+      "Dispon\xEDvel em Marsala, Preto, Branco, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor personalizada",
+      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix sem taxa ou Cart\xE3o) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-05T12:00:00.000Z"
+  },
+  // NOVO 2 (PTS-IG-47) — IMG_3061 — Scarpin Slingback Verniz Salto Fino & Pulseira (Marrom Café / Nude) — R$ 130,00
+  {
+    id: "prod-ig-47-scarpin-slingback-verniz",
+    sku: "PTS-IG-47",
+    name: "Scarpin Slingback Verniz Salto Fino & Pulseira (Marrom Caf\xE9)",
+    subtitle: "Bico Fino em Verniz de Alto Brilho com Calcanhar Slingback & Pulseira Fivela Dourada",
+    category: "Scarpins & Saltos",
+    price: 130,
+    image: "/assets/aistudio/IMG_3061_70e03cce.jpeg",
+    gallery: ["/assets/aistudio/IMG_3061_70e03cce.jpeg"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Salto Fino Alto 9,5cm", "Salto Fino M\xE9dio 7,5cm"],
+    strapFinishes: [
+      "Verniz c/ Fivela Dourada",
+      "Couro Fosco c/ Fivela Dourada"
+    ],
+    colors: buildStandardColors(
+      "Nude",
+      "/assets/aistudio/IMG_3061_70e03cce.jpeg",
+      {
+        Nude: "/assets/aistudio/IMG_3061_70e03cce.jpeg",
+        Marsala: "/assets/aistudio/IMG_3061_70e03cce.jpeg"
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Sofistica\xE7\xE3o e poder que alongam a silhueta! Scarpin Slingback confeccionado em verniz de alto brilho com bico fino, tira traseira confort\xE1vel e pulseira delicada com fivela dourada no tornozelo.",
+    craftDetails: [
+      "Confeccionado sob encomenda na numera\xE7\xE3o 34 ao 39 BR em nossa f\xE1brica em Goi\xE2nia - GO",
+      "Dispon\xEDvel em Nude/Caf\xE9, Preto, Branco, Marsala, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
+      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix) + 50% na conclus\xE3o"
+    ],
+    createdAt: "2026-03-05T12:00:00.000Z"
+  },
+  // NOVO 3 (PTS-IG-48) — IMG_3064 — Scarpin Slingback Ponteira Dourada & Salto Taça (Preto & Ouro) — R$ 130,00
+  {
+    id: "prod-ig-48-scarpin-ponteira-dourada-salto-taca",
+    sku: "PTS-IG-48",
+    name: "Scarpin Slingback Ponteira Dourada & Salto Ta\xE7a (Preto & Ouro)",
+    subtitle: "Bico Fino Cap Toe com Biqueira Metalizada Dourada, Tira Slingback & Salto Ta\xE7a Escultural",
+    category: "Scarpins & Saltos",
+    price: 130,
+    image: "/assets/aistudio/IMG_3064_d165c2a2.jpeg",
+    gallery: ["/assets/aistudio/IMG_3064_d165c2a2.jpeg"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Salto Ta\xE7a Escultural 8,5cm", "Salto Fino Cl\xE1ssico 8,5cm"],
+    strapFinishes: [
+      "Biqueira Dourada & Fivela Ouro",
+      "Biqueira Prateada & Fivela Prata"
+    ],
+    colors: buildStandardColors(
+      "Preto",
+      "/assets/aistudio/IMG_3064_d165c2a2.jpeg",
+      {
+        Preto: "/assets/aistudio/IMG_3064_d165c2a2.jpeg",
+        Dourado: "/assets/aistudio/IMG_3064_d165c2a2.jpeg"
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Design de alta costura nos seus p\xE9s! Scarpin Slingback com ponteira metalizada dourada (Cap Toe) e salto ta\xE7a geom\xE9trico que garante eleg\xE2ncia e estabilidade ao caminhar.",
+    craftDetails: [
+      "Biqueira espelhada dourada e palmilha macia acolchoada (34 ao 39 BR)",
+      "Dispon\xEDvel em Preto c/ Dourado ou nas 8 cores padr\xE3o + op\xE7\xE3o Outra Cor personalizada",
+      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-05T12:00:00.000Z"
+  },
+  // NOVO 4 (PTS-IG-50) — IMG_3067 — Sandália Salto Fino Dourado 3 Tiras & Bico Quadrado (Caramelo Verniz) — R$ 130,00
+  {
+    id: "prod-ig-50-sandalia-3-tiras-salto-dourado",
+    sku: "PTS-IG-50",
+    name: "Sand\xE1lia Salto Fino Dourado 3 Tiras & Bico Quadrado (Caramelo)",
+    subtitle: "Tr\xEAs Tiras Finas Abaulada no Peito do P\xE9, Pulseira Fivela & Salto Fino Metalizado Dourado",
+    category: "Scarpins & Saltos",
+    price: 130,
+    image: "/assets/aistudio/IMG_3067_8bebcc9c.jpeg",
+    gallery: ["/assets/aistudio/IMG_3067_8bebcc9c.jpeg"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Salto Fino Dourado 8,5cm", "Salto Fino M\xE9dio 7cm"],
+    strapFinishes: [
+      "Salto Metalizado Dourado & Fivela Ouro",
+      "Salto no Tom da Sand\xE1lia & Fivela Ouro"
+    ],
+    colors: buildStandardColors(
+      "Nude",
+      "/assets/aistudio/IMG_3067_8bebcc9c.jpeg",
+      {
+        Nude: "/assets/aistudio/IMG_3067_8bebcc9c.jpeg",
+        Dourado: "/assets/aistudio/IMG_3067_8bebcc9c.jpeg"
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Delicada, feminina e super sofisticada! Sand\xE1lia de bico quadrado com tr\xEAs tiras finas abauladas sobre os dedos, pulseira fina no tornozelo e salto fino metalizado dourado de destaque.",
+    craftDetails: [
+      "Fabrica\xE7\xE3o pr\xF3pria em Goi\xE2nia - GO sob encomenda na sua numera\xE7\xE3o (34 ao 39 BR)",
+      "Dispon\xEDvel em Nude/Caramelo, Preto, Branco, Marsala, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
+      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix) + 50% somente quando estiver pronta"
+    ],
+    createdAt: "2026-03-05T12:00:00.000Z"
+  },
+  // NOVO 5 (PTS-IG-51) — IMG_3069 — Tamanco Salto Bloco Bico Quadrado & Fivela Dourada (Marsala) — R$ 130,00
+  {
+    id: "prod-ig-51-tamanco-salto-bloco-marsala",
+    sku: "PTS-IG-51",
+    name: "Tamanco Salto Bloco Bico Quadrado & Fivela (Marsala)",
+    subtitle: "Mule de Salto Bloco M\xE9dio Conforto com Tira no Peito do P\xE9 & Fivela Dourada Lateral",
+    category: "Scarpins & Saltos",
+    price: 130,
+    image: "/assets/aistudio/IMG_3069_b9feb338.jpeg",
+    gallery: ["/assets/aistudio/IMG_3069_b9feb338.jpeg"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Salto Bloco M\xE9dio 6,5cm", "Salto Bloco Baixo 5cm"],
+    strapFinishes: [
+      "Fivela Dourada Retangular",
+      "Fivela Prateada Retangular"
+    ],
+    colors: buildStandardColors(
+      "Marsala",
+      "/assets/aistudio/IMG_3069_b9feb338.jpeg",
+      {
+        Marsala: "/assets/aistudio/IMG_3069_b9feb338.jpeg"
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description: "Praticidade e eleg\xE2ncia para o dia todo! Nosso Tamanco Mule de bico quadrado e salto bloco m\xE9dio oferece m\xE1xima estabilidade com detalhe de fivela dourada lateral no peito do p\xE9.",
+    craftDetails: [
+      "Salto bloco anat\xF4mico perfeito para trabalhar, sair e caminhar com conforto (34 ao 39 BR)",
+      "Dispon\xEDvel em Marsala, Preto, Branco, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
+      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix) + 50% na entrega"
+    ],
+    createdAt: "2026-03-05T12:00:00.000Z"
+  },
+  // NOVO 6 (PTS-IG-52) — IMG_3075 — Tamanco Anabela Dedo Detalhe Orgânico Dourado (Branco Off-White) — R$ 130,00
+  {
+    id: "prod-ig-52-tamanco-anabela-dedo-dourado",
+    sku: "PTS-IG-52",
+    name: "Tamanco Anabela Dedo Aplique Org\xE2nico Dourado (Off-White)",
+    subtitle: "Anabela Escultural Bico Quadrado com Tira Larga Conforto & Joia Org\xE2nica Dourada no Dedo",
+    category: "Anabelas & Plataformas",
+    price: 130,
+    image: "/assets/aistudio/IMG_3075_2729f411.jpeg",
+    gallery: ["/assets/aistudio/IMG_3075_2729f411.jpeg"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Anabela Escultural 8cm", "Anabela M\xE9dia 6,5cm"],
+    strapFinishes: [
+      "Aplique Org\xE2nico Dourado no Dedo",
+      "Aplique Org\xE2nico Prateado no Dedo"
+    ],
+    colors: buildStandardColors(
+      "Branco",
+      "/assets/aistudio/IMG_3075_2729f411.jpeg",
+      {
+        Branco: "/assets/aistudio/IMG_3075_2729f411.jpeg",
+        Nude: "/assets/aistudio/IMG_3075_2729f411.jpeg"
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Tend\xEAncia absoluta da esta\xE7\xE3o! Tamanco Anabela de design escultural com bico quadrado, tira larga macia no peito do p\xE9 e anel de dedo com aplique org\xE2nico dourado espelhado.",
+    craftDetails: [
+      "Design moderno super leve com aplique metalizado polido no dedo (34 ao 39 BR)",
+      "Dispon\xEDvel em Branco/Off-White, Preto, Nude, Marsala, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
+      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-05T12:00:00.000Z"
+  },
+  // NOVO 7 (PTS-IG-53) — IMG_3078 — Tamanco Mule Bico Folha Salto Fino Metalizado (Dourado Champagne) — R$ 130,00
+  {
+    id: "prod-ig-53-mule-bico-folha-salto-fino-dourado",
+    sku: "PTS-IG-53",
+    name: "Tamanco Mule Bico Folha Salto Fino (Dourado Champagne)",
+    subtitle: "Mule Salto Alto Fino com Bico Folha Alongado & Tira Larga em Couro Metalizado Champagne",
+    category: "Scarpins & Saltos",
+    price: 130,
+    image: "/assets/aistudio/IMG_3078_33e91306.jpeg",
+    gallery: ["/assets/aistudio/IMG_3078_33e91306.jpeg"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Salto Fino Alto 9cm", "Salto Fino M\xE9dio 7cm"],
+    strapFinishes: [
+      "Acabamento Metalizado Champagne / Ouro",
+      "Acabamento Couro Liso / Verniz"
+    ],
+    colors: buildStandardColors(
+      "Dourado",
+      "/assets/aistudio/IMG_3078_33e91306.jpeg",
+      {
+        Dourado: "/assets/aistudio/IMG_3078_33e91306.jpeg"
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Minimalismo glamouroso que valoriza os p\xE9s! Tamanco Mule de bico folha alongado e salto fino alto em tom dourado champagne metalizado, perfeito para eventos e produ\xE7\xF5es sofisticadas.",
+    craftDetails: [
+      "G\xE1spea anat\xF4mica forrada que abra\xE7a o p\xE9 com firmeza e maciez (34 ao 39 BR)",
+      "Dispon\xEDvel em Dourado Champagne, Prata, Preto, Branco, Marsala, Nude, Vermelho, Rosa ou Outra Cor",
+      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix) + 50% na conclus\xE3o"
+    ],
+    createdAt: "2026-03-05T12:00:00.000Z"
+  },
+  // NOVO 8 (PTS-IG-54) — IMG_3083 — Sandália Mule Bico Fino Salto Alto & Tira Fivela (Preta) — R$ 130,00
+  {
+    id: "prod-ig-54-sandalia-mule-bico-fino-preta",
+    sku: "PTS-IG-54",
+    name: "Sand\xE1lia Mule Bico Fino Salto Alto & Fivela (Preta)",
+    subtitle: "Design Bico Fino com Calcanhar Aberto, Tira Frontal & Pulseira Ajust\xE1vel com Fivela Dourada",
+    category: "Scarpins & Saltos",
+    price: 130,
+    image: "/assets/aistudio/IMG_3083_28dd9dab.jpeg",
+    gallery: ["/assets/aistudio/IMG_3083_28dd9dab.jpeg"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Salto Fino Alto 9cm", "Salto Fino M\xE9dio 7cm"],
+    strapFinishes: [
+      "Fivela Dourada Lateral",
+      "Fivela Prateada Lateral"
+    ],
+    colors: buildStandardColors(
+      "Preto",
+      "/assets/aistudio/IMG_3083_28dd9dab.jpeg",
+      {
+        Preto: "/assets/aistudio/IMG_3083_28dd9dab.jpeg"
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Sensualidade e firmeza ao caminhar! Sand\xE1lia Mule de bico fino e salto alto fino com tira frontal e al\xE7a regul\xE1vel com fivela dourada sobre o peito do p\xE9.",
+    craftDetails: [
+      "Produzida sob encomenda na numera\xE7\xE3o 34 ao 39 BR em nossa f\xE1brica pr\xF3pria em Goi\xE2nia - GO",
+      "Dispon\xEDvel em Preto, Marsala, Branco, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
+      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-05T12:00:00.000Z"
+  },
   // 1. POST 1 (C454LXbOzrn Slide 1) — Papete Flatform Pirâmides & Fivela (Dourada) — R$ 130,00
   {
     id: "prod-ig-01-papete-piramides",
@@ -3181,9 +3469,21 @@ function loadDb(env = "producao") {
   try {
     const raw = fs.readFileSync(targetFile, "utf-8");
     const parsed = JSON.parse(raw);
-    const needsUpgrade = !parsed.products || parsed.products.length < 46 || parsed.products[0]?.price !== 130 || parsed.settings?.whatsappStore !== "5562984998265" || parsed.products[0]?.availableSizes?.includes(33) || !parsed.products[0]?.colors?.some((c) => c.name === "Marsala");
+    const needsUpgrade = !parsed.products || parsed.products.length < 54 || parsed.products[0]?.price !== 130 || parsed.settings?.whatsappStore !== "5562984998265" || parsed.products[0]?.availableSizes?.includes(33) || !parsed.products[0]?.colors?.some((c) => c.name === "Marsala");
     if (needsUpgrade) {
       const upgraded = createInitialDatabase();
+      if (parsed.orders && parsed.orders.length > 0) {
+        upgraded.orders = parsed.orders;
+      }
+      if (parsed.customers && parsed.customers.length > 0) {
+        upgraded.customers = parsed.customers;
+      }
+      if (parsed.payments && parsed.payments.length > 0) {
+        upgraded.payments = parsed.payments;
+      }
+      if (parsed.analytics) {
+        upgraded.analytics = parsed.analytics;
+      }
       fs.writeFileSync(targetFile, JSON.stringify(upgraded, null, 2), "utf-8");
       return upgraded;
     }
@@ -3373,6 +3673,12 @@ function registerApiRoutes() {
     <lastmod>${today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>${escapeXml(`${baseUrl}/?categoria=Scarpins+%26+Saltos`)}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>${escapeXml(`${baseUrl}/?categoria=Flatforms+%26+Papetes`)}</loc>

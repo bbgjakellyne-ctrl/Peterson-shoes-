@@ -175,6 +175,318 @@ export const INITIAL_SETTINGS: StoreSettings = {
 };
 
 export const INITIAL_PRODUCTS: BespokeProduct[] = [
+  // NOVO 1 (PTS-IG-49) — 3 FOTOS DO MESMO MODELO JUNTAS (IMG_3086, IMG_3071, IMG_3070) — R$ 130,00
+  {
+    id: 'prod-ig-49-scarpin-marsala-pulseira',
+    sku: 'PTS-IG-49',
+    name: 'Scarpin Bico Fino Salto Alto & Pulseira (Marsala)',
+    subtitle:
+      'Bico Fino Clássico com Calcanhar Fechado, Recorte Lateral & Tira com Fivela Dourada no Tornozelo',
+    category: 'Scarpins & Saltos',
+    price: 130,
+    image: '/assets/aistudio/IMG_3086_5529b321.jpeg',
+    gallery: [
+      '/assets/aistudio/IMG_3086_5529b321.jpeg',
+      '/assets/aistudio/IMG_3071_c77843a9.jpeg',
+      '/assets/aistudio/IMG_3070_2d89dc6b.jpeg',
+    ],
+    instagramPostUrl: 'https://www.instagram.com/petersonshoes_/',
+    heelOptions: ['Salto Fino Alto 9,5cm', 'Salto Fino Médio 7,5cm'],
+    strapFinishes: [
+      'Fivela Dourada no Tornozelo',
+      'Fivela Prateada no Tornozelo',
+    ],
+    colors: buildStandardColors(
+      'Marsala',
+      '/assets/aistudio/IMG_3086_5529b321.jpeg',
+      {
+        Marsala: '/assets/aistudio/IMG_3086_5529b321.jpeg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'Elegância absoluta em cada ângulo! Nosso Scarpin Bico Fino com calcanhar fechado e tira regulável com fivela no tornozelo (@petersonshoes_) une sustentação firme, salto fino alinhado e acabamento artesanal impecável. Veja as 3 fotos reais do modelo na galeria!',
+    craftDetails: [
+      'Fabricação própria @petersonshoes_ sob encomenda em até 15 dias (Numeração 34 ao 39 BR)',
+      'Disponível em Marsala, Preto, Branco, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor personalizada',
+      'Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix sem taxa ou Cartão) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-05T12:00:00.000Z',
+  },
+
+  // NOVO 2 (PTS-IG-47) — IMG_3061 — Scarpin Slingback Verniz Salto Fino & Pulseira (Marrom Café / Nude) — R$ 130,00
+  {
+    id: 'prod-ig-47-scarpin-slingback-verniz',
+    sku: 'PTS-IG-47',
+    name: 'Scarpin Slingback Verniz Salto Fino & Pulseira (Marrom Café)',
+    subtitle:
+      'Bico Fino em Verniz de Alto Brilho com Calcanhar Slingback & Pulseira Fivela Dourada',
+    category: 'Scarpins & Saltos',
+    price: 130,
+    image: '/assets/aistudio/IMG_3061_70e03cce.jpeg',
+    gallery: ['/assets/aistudio/IMG_3061_70e03cce.jpeg'],
+    instagramPostUrl: 'https://www.instagram.com/petersonshoes_/',
+    heelOptions: ['Salto Fino Alto 9,5cm', 'Salto Fino Médio 7,5cm'],
+    strapFinishes: [
+      'Verniz c/ Fivela Dourada',
+      'Couro Fosco c/ Fivela Dourada',
+    ],
+    colors: buildStandardColors(
+      'Nude',
+      '/assets/aistudio/IMG_3061_70e03cce.jpeg',
+      {
+        Nude: '/assets/aistudio/IMG_3061_70e03cce.jpeg',
+        Marsala: '/assets/aistudio/IMG_3061_70e03cce.jpeg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'Sofisticação e poder que alongam a silhueta! Scarpin Slingback confeccionado em verniz de alto brilho com bico fino, tira traseira confortável e pulseira delicada com fivela dourada no tornozelo.',
+    craftDetails: [
+      'Confeccionado sob encomenda na numeração 34 ao 39 BR em nossa fábrica em Goiânia - GO',
+      'Disponível em Nude/Café, Preto, Branco, Marsala, Dourado, Prata, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% na conclusão',
+    ],
+    createdAt: '2026-03-05T12:00:00.000Z',
+  },
+
+  // NOVO 3 (PTS-IG-48) — IMG_3064 — Scarpin Slingback Ponteira Dourada & Salto Taça (Preto & Ouro) — R$ 130,00
+  {
+    id: 'prod-ig-48-scarpin-ponteira-dourada-salto-taca',
+    sku: 'PTS-IG-48',
+    name: 'Scarpin Slingback Ponteira Dourada & Salto Taça (Preto & Ouro)',
+    subtitle:
+      'Bico Fino Cap Toe com Biqueira Metalizada Dourada, Tira Slingback & Salto Taça Escultural',
+    category: 'Scarpins & Saltos',
+    price: 130,
+    image: '/assets/aistudio/IMG_3064_d165c2a2.jpeg',
+    gallery: ['/assets/aistudio/IMG_3064_d165c2a2.jpeg'],
+    instagramPostUrl: 'https://www.instagram.com/petersonshoes_/',
+    heelOptions: ['Salto Taça Escultural 8,5cm', 'Salto Fino Clássico 8,5cm'],
+    strapFinishes: [
+      'Biqueira Dourada & Fivela Ouro',
+      'Biqueira Prateada & Fivela Prata',
+    ],
+    colors: buildStandardColors(
+      'Preto',
+      '/assets/aistudio/IMG_3064_d165c2a2.jpeg',
+      {
+        Preto: '/assets/aistudio/IMG_3064_d165c2a2.jpeg',
+        Dourado: '/assets/aistudio/IMG_3064_d165c2a2.jpeg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'Design de alta costura nos seus pés! Scarpin Slingback com ponteira metalizada dourada (Cap Toe) e salto taça geométrico que garante elegância e estabilidade ao caminhar.',
+    craftDetails: [
+      'Biqueira espelhada dourada e palmilha macia acolchoada (34 ao 39 BR)',
+      'Disponível em Preto c/ Dourado ou nas 8 cores padrão + opção Outra Cor personalizada',
+      'Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-05T12:00:00.000Z',
+  },
+
+  // NOVO 4 (PTS-IG-50) — IMG_3067 — Sandália Salto Fino Dourado 3 Tiras & Bico Quadrado (Caramelo Verniz) — R$ 130,00
+  {
+    id: 'prod-ig-50-sandalia-3-tiras-salto-dourado',
+    sku: 'PTS-IG-50',
+    name: 'Sandália Salto Fino Dourado 3 Tiras & Bico Quadrado (Caramelo)',
+    subtitle:
+      'Três Tiras Finas Abaulada no Peito do Pé, Pulseira Fivela & Salto Fino Metalizado Dourado',
+    category: 'Scarpins & Saltos',
+    price: 130,
+    image: '/assets/aistudio/IMG_3067_8bebcc9c.jpeg',
+    gallery: ['/assets/aistudio/IMG_3067_8bebcc9c.jpeg'],
+    instagramPostUrl: 'https://www.instagram.com/petersonshoes_/',
+    heelOptions: ['Salto Fino Dourado 8,5cm', 'Salto Fino Médio 7cm'],
+    strapFinishes: [
+      'Salto Metalizado Dourado & Fivela Ouro',
+      'Salto no Tom da Sandália & Fivela Ouro',
+    ],
+    colors: buildStandardColors(
+      'Nude',
+      '/assets/aistudio/IMG_3067_8bebcc9c.jpeg',
+      {
+        Nude: '/assets/aistudio/IMG_3067_8bebcc9c.jpeg',
+        Dourado: '/assets/aistudio/IMG_3067_8bebcc9c.jpeg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'Delicada, feminina e super sofisticada! Sandália de bico quadrado com três tiras finas abauladas sobre os dedos, pulseira fina no tornozelo e salto fino metalizado dourado de destaque.',
+    craftDetails: [
+      'Fabricação própria em Goiânia - GO sob encomenda na sua numeração (34 ao 39 BR)',
+      'Disponível em Nude/Caramelo, Preto, Branco, Marsala, Dourado, Prata, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% somente quando estiver pronta',
+    ],
+    createdAt: '2026-03-05T12:00:00.000Z',
+  },
+
+  // NOVO 5 (PTS-IG-51) — IMG_3069 — Tamanco Salto Bloco Bico Quadrado & Fivela Dourada (Marsala) — R$ 130,00
+  {
+    id: 'prod-ig-51-tamanco-salto-bloco-marsala',
+    sku: 'PTS-IG-51',
+    name: 'Tamanco Salto Bloco Bico Quadrado & Fivela (Marsala)',
+    subtitle:
+      'Mule de Salto Bloco Médio Conforto com Tira no Peito do Pé & Fivela Dourada Lateral',
+    category: 'Scarpins & Saltos',
+    price: 130,
+    image: '/assets/aistudio/IMG_3069_b9feb338.jpeg',
+    gallery: ['/assets/aistudio/IMG_3069_b9feb338.jpeg'],
+    instagramPostUrl: 'https://www.instagram.com/petersonshoes_/',
+    heelOptions: ['Salto Bloco Médio 6,5cm', 'Salto Bloco Baixo 5cm'],
+    strapFinishes: [
+      'Fivela Dourada Retangular',
+      'Fivela Prateada Retangular',
+    ],
+    colors: buildStandardColors(
+      'Marsala',
+      '/assets/aistudio/IMG_3069_b9feb338.jpeg',
+      {
+        Marsala: '/assets/aistudio/IMG_3069_b9feb338.jpeg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description:
+      'Praticidade e elegância para o dia todo! Nosso Tamanco Mule de bico quadrado e salto bloco médio oferece máxima estabilidade com detalhe de fivela dourada lateral no peito do pé.',
+    craftDetails: [
+      'Salto bloco anatômico perfeito para trabalhar, sair e caminhar com conforto (34 ao 39 BR)',
+      'Disponível em Marsala, Preto, Branco, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% na entrega',
+    ],
+    createdAt: '2026-03-05T12:00:00.000Z',
+  },
+
+  // NOVO 6 (PTS-IG-52) — IMG_3075 — Tamanco Anabela Dedo Detalhe Orgânico Dourado (Branco Off-White) — R$ 130,00
+  {
+    id: 'prod-ig-52-tamanco-anabela-dedo-dourado',
+    sku: 'PTS-IG-52',
+    name: 'Tamanco Anabela Dedo Aplique Orgânico Dourado (Off-White)',
+    subtitle:
+      'Anabela Escultural Bico Quadrado com Tira Larga Conforto & Joia Orgânica Dourada no Dedo',
+    category: 'Anabelas & Plataformas',
+    price: 130,
+    image: '/assets/aistudio/IMG_3075_2729f411.jpeg',
+    gallery: ['/assets/aistudio/IMG_3075_2729f411.jpeg'],
+    instagramPostUrl: 'https://www.instagram.com/petersonshoes_/',
+    heelOptions: ['Anabela Escultural 8cm', 'Anabela Média 6,5cm'],
+    strapFinishes: [
+      'Aplique Orgânico Dourado no Dedo',
+      'Aplique Orgânico Prateado no Dedo',
+    ],
+    colors: buildStandardColors(
+      'Branco',
+      '/assets/aistudio/IMG_3075_2729f411.jpeg',
+      {
+        Branco: '/assets/aistudio/IMG_3075_2729f411.jpeg',
+        Nude: '/assets/aistudio/IMG_3075_2729f411.jpeg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'Tendência absoluta da estação! Tamanco Anabela de design escultural com bico quadrado, tira larga macia no peito do pé e anel de dedo com aplique orgânico dourado espelhado.',
+    craftDetails: [
+      'Design moderno super leve com aplique metalizado polido no dedo (34 ao 39 BR)',
+      'Disponível em Branco/Off-White, Preto, Nude, Marsala, Dourado, Prata, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-05T12:00:00.000Z',
+  },
+
+  // NOVO 7 (PTS-IG-53) — IMG_3078 — Tamanco Mule Bico Folha Salto Fino Metalizado (Dourado Champagne) — R$ 130,00
+  {
+    id: 'prod-ig-53-mule-bico-folha-salto-fino-dourado',
+    sku: 'PTS-IG-53',
+    name: 'Tamanco Mule Bico Folha Salto Fino (Dourado Champagne)',
+    subtitle:
+      'Mule Salto Alto Fino com Bico Folha Alongado & Tira Larga em Couro Metalizado Champagne',
+    category: 'Scarpins & Saltos',
+    price: 130,
+    image: '/assets/aistudio/IMG_3078_33e91306.jpeg',
+    gallery: ['/assets/aistudio/IMG_3078_33e91306.jpeg'],
+    instagramPostUrl: 'https://www.instagram.com/petersonshoes_/',
+    heelOptions: ['Salto Fino Alto 9cm', 'Salto Fino Médio 7cm'],
+    strapFinishes: [
+      'Acabamento Metalizado Champagne / Ouro',
+      'Acabamento Couro Liso / Verniz',
+    ],
+    colors: buildStandardColors(
+      'Dourado',
+      '/assets/aistudio/IMG_3078_33e91306.jpeg',
+      {
+        Dourado: '/assets/aistudio/IMG_3078_33e91306.jpeg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'Minimalismo glamouroso que valoriza os pés! Tamanco Mule de bico folha alongado e salto fino alto em tom dourado champagne metalizado, perfeito para eventos e produções sofisticadas.',
+    craftDetails: [
+      'Gáspea anatômica forrada que abraça o pé com firmeza e maciez (34 ao 39 BR)',
+      'Disponível em Dourado Champagne, Prata, Preto, Branco, Marsala, Nude, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% na conclusão',
+    ],
+    createdAt: '2026-03-05T12:00:00.000Z',
+  },
+
+  // NOVO 8 (PTS-IG-54) — IMG_3083 — Sandália Mule Bico Fino Salto Alto & Tira Fivela (Preta) — R$ 130,00
+  {
+    id: 'prod-ig-54-sandalia-mule-bico-fino-preta',
+    sku: 'PTS-IG-54',
+    name: 'Sandália Mule Bico Fino Salto Alto & Fivela (Preta)',
+    subtitle:
+      'Design Bico Fino com Calcanhar Aberto, Tira Frontal & Pulseira Ajustável com Fivela Dourada',
+    category: 'Scarpins & Saltos',
+    price: 130,
+    image: '/assets/aistudio/IMG_3083_28dd9dab.jpeg',
+    gallery: ['/assets/aistudio/IMG_3083_28dd9dab.jpeg'],
+    instagramPostUrl: 'https://www.instagram.com/petersonshoes_/',
+    heelOptions: ['Salto Fino Alto 9cm', 'Salto Fino Médio 7cm'],
+    strapFinishes: [
+      'Fivela Dourada Lateral',
+      'Fivela Prateada Lateral',
+    ],
+    colors: buildStandardColors(
+      'Preto',
+      '/assets/aistudio/IMG_3083_28dd9dab.jpeg',
+      {
+        Preto: '/assets/aistudio/IMG_3083_28dd9dab.jpeg',
+      }
+    ),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description:
+      'Sensualidade e firmeza ao caminhar! Sandália Mule de bico fino e salto alto fino com tira frontal e alça regulável com fivela dourada sobre o peito do pé.',
+    craftDetails: [
+      'Produzida sob encomenda na numeração 34 ao 39 BR em nossa fábrica própria em Goiânia - GO',
+      'Disponível em Preto, Marsala, Branco, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor',
+      'Valor R$ 130,00 · Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta',
+    ],
+    createdAt: '2026-03-05T12:00:00.000Z',
+  },
+
   // 1. POST 1 (C454LXbOzrn Slide 1) — Papete Flatform Pirâmides & Fivela (Dourada) — R$ 130,00
   {
     id: 'prod-ig-01-papete-piramides',
@@ -2383,8 +2695,8 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
   };
 }
 
-const STORAGE_KEY_PROD = 'peterson_shoes_store_prod_v10';
-const STORAGE_KEY_HOMOLOG = 'peterson_shoes_store_homolog_v10';
+const STORAGE_KEY_PROD = 'peterson_shoes_store_prod_v11';
+const STORAGE_KEY_HOMOLOG = 'peterson_shoes_store_homolog_v11';
 
 function resolveCurrentStorageKey(): string {
   if (typeof window === 'undefined') return STORAGE_KEY_HOMOLOG;
@@ -2420,7 +2732,7 @@ export function getBrowserStoreDb(): StoreDatabaseSchema {
     const parsed = JSON.parse(raw) as StoreDatabaseSchema;
     if (
       !parsed.products ||
-      parsed.products.length < 46 ||
+      parsed.products.length < 54 ||
       parsed.products[0]?.price !== 130
     ) {
       const initial = createInitialStoreDatabase();

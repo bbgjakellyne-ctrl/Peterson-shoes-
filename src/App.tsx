@@ -42,6 +42,7 @@ import {
 
 const CATEGORIES = [
   'Todos',
+  'Scarpins & Saltos',
   'Flatforms & Papetes',
   'Anabelas & Plataformas',
   'Rasteiras & Gladiadoras',
@@ -66,6 +67,9 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCardColorMap, setSelectedCardColorMap] = useState<
     Record<string, number>
+  >({});
+  const [selectedCardPhotoMap, setSelectedCardPhotoMap] = useState<
+    Record<string, string>
   >({});
 
   // Cart & Modals
@@ -232,7 +236,7 @@ export default function App() {
       document.head.appendChild(scriptEl);
     }
 
-    const catalogToIndex = (products.length > 0 ? products : INITIAL_PRODUCTS).slice(0, 46);
+    const catalogToIndex = (products.length > 0 ? products : INITIAL_PRODUCTS).slice(0, 54);
     const dynamicSchema = activeProductModal
       ? {
           '@context': 'https://schema.org',
@@ -737,7 +741,14 @@ export default function App() {
                 const activeColorIdx = selectedCardColorMap[product.id] ?? 0;
                 const activeColor =
                   product.colors[activeColorIdx] || product.colors[0];
-                const cardDisplayImage = activeColor?.image || product.image;
+                const galleryPhotos =
+                  product.gallery && product.gallery.length > 0
+                    ? product.gallery
+                    : [product.image];
+                const cardDisplayImage =
+                  selectedCardPhotoMap[product.id] ||
+                  activeColor?.image ||
+                  product.image;
 
                 return (
                   <article
@@ -761,6 +772,37 @@ export default function App() {
                           alt={`${product.name} - ${activeColor?.name}`}
                           className="w-full h-full object-cover block transition-transform duration-200 group-hover:scale-103"
                         />
+                        {galleryPhotos.length > 1 && (
+                          <div
+                            onClick={(e) => e.stopPropagation()}
+                            className="absolute bottom-2 left-2 flex items-center gap-1 bg-black/55 backdrop-blur-xs p-1 rounded-lg"
+                          >
+                            {galleryPhotos.slice(0, 4).map((gUrl, gIdx) => (
+                              <button
+                                key={gUrl + gIdx}
+                                type="button"
+                                onClick={() =>
+                                  setSelectedCardPhotoMap((prev) => ({
+                                    ...prev,
+                                    [product.id]: gUrl,
+                                  }))
+                                }
+                                title={`Ver ângulo ${gIdx + 1}`}
+                                className={`w-6 h-6 sm:w-7 sm:h-7 rounded overflow-hidden border transition-all cursor-pointer ${
+                                  cardDisplayImage === gUrl
+                                    ? 'border-[#E5D3B3] ring-1 ring-[#E5D3B3] scale-105'
+                                    : 'border-white/40 opacity-80 hover:opacity-100'
+                                }`}
+                              >
+                                <img
+                                  src={gUrl}
+                                  alt={`${product.name} foto ${gIdx + 1}`}
+                                  className="w-full h-full object-cover"
+                                />
+                              </button>
+                            ))}
+                          </div>
+                        )}
                         <button
                           type="button"
                           onClick={(e) => {
@@ -809,12 +851,18 @@ export default function App() {
                               <button
                                 key={c.name}
                                 type="button"
-                                onClick={() =>
+                                onClick={() => {
                                   setSelectedCardColorMap((prev) => ({
                                     ...prev,
                                     [product.id]: cIdx,
-                                  }))
-                                }
+                                  }));
+                                  if (c.image) {
+                                    setSelectedCardPhotoMap((prev) => ({
+                                      ...prev,
+                                      [product.id]: c.image!,
+                                    }));
+                                  }
+                                }}
                                 title={`Cor ${c.name}`}
                                 className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full border transition-transform cursor-pointer ${
                                   isChosen
@@ -925,6 +973,66 @@ export default function App() {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4">
               {[
+                {
+                  img: '/assets/aistudio/IMG_3086_5529b321.jpeg',
+                  title: 'Scarpin Bico Fino Marsala (Foto 1)',
+                  sku: 'PTS-IG-49',
+                  colorIdx: 0,
+                },
+                {
+                  img: '/assets/aistudio/IMG_3071_c77843a9.jpeg',
+                  title: 'Scarpin Bico Fino Marsala (Foto 2)',
+                  sku: 'PTS-IG-49',
+                  colorIdx: 0,
+                },
+                {
+                  img: '/assets/aistudio/IMG_3070_2d89dc6b.jpeg',
+                  title: 'Scarpin Bico Fino Marsala (Foto 3)',
+                  sku: 'PTS-IG-49',
+                  colorIdx: 0,
+                },
+                {
+                  img: '/assets/aistudio/IMG_3061_70e03cce.jpeg',
+                  title: 'Scarpin Slingback Verniz Marrom Café',
+                  sku: 'PTS-IG-47',
+                  colorIdx: 0,
+                },
+                {
+                  img: '/assets/aistudio/IMG_3064_d165c2a2.jpeg',
+                  title: 'Scarpin Slingback Ponteira Dourada & Salto Taça',
+                  sku: 'PTS-IG-48',
+                  colorIdx: 0,
+                },
+                {
+                  img: '/assets/aistudio/IMG_3067_8bebcc9c.jpeg',
+                  title: 'Sandália 3 Tiras Salto Fino Dourado',
+                  sku: 'PTS-IG-50',
+                  colorIdx: 0,
+                },
+                {
+                  img: '/assets/aistudio/IMG_3069_b9feb338.jpeg',
+                  title: 'Tamanco Salto Bloco & Fivela Marsala',
+                  sku: 'PTS-IG-51',
+                  colorIdx: 0,
+                },
+                {
+                  img: '/assets/aistudio/IMG_3075_2729f411.jpeg',
+                  title: 'Tamanco Anabela Aplique Dourado Dedo',
+                  sku: 'PTS-IG-52',
+                  colorIdx: 0,
+                },
+                {
+                  img: '/assets/aistudio/IMG_3078_33e91306.jpeg',
+                  title: 'Tamanco Mule Bico Folha Salto Fino Dourado',
+                  sku: 'PTS-IG-53',
+                  colorIdx: 0,
+                },
+                {
+                  img: '/assets/aistudio/IMG_3083_28dd9dab.jpeg',
+                  title: 'Sandália Mule Bico Fino Salto Alto Preta',
+                  sku: 'PTS-IG-54',
+                  colorIdx: 0,
+                },
                 {
                   img: '/instagram/feed_1_C454LXbOzrn_slide_1.jpg',
                   title: 'Papete Pirâmides Dourada',
@@ -1411,6 +1519,18 @@ export default function App() {
                 Categorias & Links Úteis
               </p>
               <ul className="space-y-2 text-[#C9B9AC]">
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedCategory('Scarpins & Saltos');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="hover:text-white cursor-pointer"
+                  >
+                    Scarpins & Saltos
+                  </button>
+                </li>
                 <li>
                   <button
                     type="button"

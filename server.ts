@@ -1485,7 +1485,7 @@ function loadDb(env: AppEnvironment = 'producao'): DatabaseSchema {
 
     const needsUpgrade =
       !parsed.products ||
-      parsed.products.length < 46 ||
+      parsed.products.length < 54 ||
       parsed.products[0]?.price !== 130 ||
       parsed.settings?.whatsappStore !== '5562984998265' ||
       parsed.products[0]?.availableSizes?.includes(33) ||
@@ -1493,6 +1493,18 @@ function loadDb(env: AppEnvironment = 'producao'): DatabaseSchema {
 
     if (needsUpgrade) {
       const upgraded = createInitialDatabase();
+      if (parsed.orders && parsed.orders.length > 0) {
+        upgraded.orders = parsed.orders;
+      }
+      if (parsed.customers && parsed.customers.length > 0) {
+        upgraded.customers = parsed.customers;
+      }
+      if (parsed.payments && parsed.payments.length > 0) {
+        upgraded.payments = parsed.payments;
+      }
+      if (parsed.analytics) {
+        upgraded.analytics = parsed.analytics;
+      }
       fs.writeFileSync(targetFile, JSON.stringify(upgraded, null, 2), 'utf-8');
       return upgraded;
     }
@@ -1745,6 +1757,12 @@ function registerApiRoutes() {
     <lastmod>${today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>${escapeXml(`${baseUrl}/?categoria=Scarpins+%26+Saltos`)}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>${escapeXml(`${baseUrl}/?categoria=Flatforms+%26+Papetes`)}</loc>
