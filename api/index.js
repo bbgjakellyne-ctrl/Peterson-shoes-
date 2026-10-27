@@ -37,14 +37,14 @@ function buildStandardColors(defaultColorName, defaultImage, photoByColor = {}) 
   return mapped;
 }
 var INITIAL_PRODUCTS = [
-  // NOVO 1 (PTS-IG-49) — 3 FOTOS DO MESMO MODELO JUNTAS (IMG_3086, IMG_3071, IMG_3070) — R$ 130,00
+  // NOVO 1 (PTS-IG-49) — 3 FOTOS DO MESMO MODELO JUNTAS (IMG_3086, IMG_3071, IMG_3070) — R$ 149,90
   {
     id: "prod-ig-49-scarpin-marsala-pulseira",
     sku: "PTS-IG-49",
     name: "Scarpin Bico Fino Salto Alto & Pulseira (Marsala)",
     subtitle: "Bico Fino Cl\xE1ssico com Calcanhar Fechado, Recorte Lateral & Tira com Fivela Dourada no Tornozelo",
     category: "Scarpins & Saltos",
-    price: 130,
+    price: 149.9,
     image: "/assets/aistudio/IMG_3086_5529b321.jpeg",
     gallery: [
       "/assets/aistudio/IMG_3086_5529b321.jpeg",
@@ -72,18 +72,18 @@ var INITIAL_PRODUCTS = [
     craftDetails: [
       "Fabrica\xE7\xE3o pr\xF3pria @petersonshoes_ sob encomenda em at\xE9 15 dias (Numera\xE7\xE3o 34 ao 39 BR)",
       "Dispon\xEDvel em Marsala, Preto, Branco, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor personalizada",
-      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix sem taxa ou Cart\xE3o) + 50% quando ficar pronta"
+      "Valor R$ 149,90 \xB7 Entrada de 50% (R$ 74,95 no Pix sem taxa ou Cart\xE3o) + 50% quando ficar pronta"
     ],
     createdAt: "2026-03-05T12:00:00.000Z"
   },
-  // NOVO 2 (PTS-IG-47) — IMG_3061 — Scarpin Slingback Verniz Salto Fino & Pulseira (Marrom Café / Nude) — R$ 130,00
+  // NOVO 2 (PTS-IG-47) — IMG_3061 — Scarpin Slingback Verniz Salto Fino & Pulseira (Marrom Café / Nude) — R$ 149,90
   {
     id: "prod-ig-47-scarpin-slingback-verniz",
     sku: "PTS-IG-47",
     name: "Scarpin Slingback Verniz Salto Fino & Pulseira (Marrom Caf\xE9)",
     subtitle: "Bico Fino em Verniz de Alto Brilho com Calcanhar Slingback & Pulseira Fivela Dourada",
     category: "Scarpins & Saltos",
-    price: 130,
+    price: 149.9,
     image: "/assets/aistudio/IMG_3061_70e03cce.jpeg",
     gallery: ["/assets/aistudio/IMG_3061_70e03cce.jpeg"],
     instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
@@ -108,18 +108,18 @@ var INITIAL_PRODUCTS = [
     craftDetails: [
       "Confeccionado sob encomenda na numera\xE7\xE3o 34 ao 39 BR em nossa f\xE1brica em Goi\xE2nia - GO",
       "Dispon\xEDvel em Nude/Caf\xE9, Preto, Branco, Marsala, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
-      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix) + 50% na conclus\xE3o"
+      "Valor R$ 149,90 \xB7 Entrada de 50% (R$ 74,95 no Pix) + 50% na conclus\xE3o"
     ],
     createdAt: "2026-03-05T12:00:00.000Z"
   },
-  // NOVO 3 (PTS-IG-48) — IMG_3064 — Scarpin Slingback Ponteira Dourada & Salto Taça (Preto & Ouro) — R$ 130,00
+  // NOVO 3 (PTS-IG-48) — IMG_3064 — Scarpin Slingback Ponteira Dourada & Salto Taça (Preto & Ouro) — R$ 149,90
   {
     id: "prod-ig-48-scarpin-ponteira-dourada-salto-taca",
     sku: "PTS-IG-48",
     name: "Scarpin Slingback Ponteira Dourada & Salto Ta\xE7a (Preto & Ouro)",
     subtitle: "Bico Fino Cap Toe com Biqueira Metalizada Dourada, Tira Slingback & Salto Ta\xE7a Escultural",
     category: "Scarpins & Saltos",
-    price: 130,
+    price: 149.9,
     image: "/assets/aistudio/IMG_3064_d165c2a2.jpeg",
     gallery: ["/assets/aistudio/IMG_3064_d165c2a2.jpeg"],
     instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
@@ -144,18 +144,18 @@ var INITIAL_PRODUCTS = [
     craftDetails: [
       "Biqueira espelhada dourada e palmilha macia acolchoada (34 ao 39 BR)",
       "Dispon\xEDvel em Preto c/ Dourado ou nas 8 cores padr\xE3o + op\xE7\xE3o Outra Cor personalizada",
-      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta"
+      "Valor R$ 149,90 \xB7 Entrada de 50% (R$ 74,95 no Pix) + 50% quando ficar pronta"
     ],
     createdAt: "2026-03-05T12:00:00.000Z"
   },
-  // NOVO 4 (PTS-IG-50) — IMG_3067 — Sandália Salto Fino Dourado 3 Tiras & Bico Quadrado (Caramelo Verniz) — R$ 130,00
+  // NOVO 4 (PTS-IG-50) — IMG_3067 — Sandália Salto Fino Dourado 3 Tiras & Bico Quadrado (Caramelo Verniz) — R$ 149,90
   {
     id: "prod-ig-50-sandalia-3-tiras-salto-dourado",
     sku: "PTS-IG-50",
     name: "Sand\xE1lia Salto Fino Dourado 3 Tiras & Bico Quadrado (Caramelo)",
     subtitle: "Tr\xEAs Tiras Finas Abaulada no Peito do P\xE9, Pulseira Fivela & Salto Fino Metalizado Dourado",
     category: "Scarpins & Saltos",
-    price: 130,
+    price: 149.9,
     image: "/assets/aistudio/IMG_3067_8bebcc9c.jpeg",
     gallery: ["/assets/aistudio/IMG_3067_8bebcc9c.jpeg"],
     instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
@@ -180,18 +180,18 @@ var INITIAL_PRODUCTS = [
     craftDetails: [
       "Fabrica\xE7\xE3o pr\xF3pria em Goi\xE2nia - GO sob encomenda na sua numera\xE7\xE3o (34 ao 39 BR)",
       "Dispon\xEDvel em Nude/Caramelo, Preto, Branco, Marsala, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
-      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix) + 50% somente quando estiver pronta"
+      "Valor R$ 149,90 \xB7 Entrada de 50% (R$ 74,95 no Pix) + 50% somente quando estiver pronta"
     ],
     createdAt: "2026-03-05T12:00:00.000Z"
   },
-  // NOVO 5 (PTS-IG-51) — IMG_3069 — Tamanco Salto Bloco Bico Quadrado & Fivela Dourada (Marsala) — R$ 130,00
+  // NOVO 5 (PTS-IG-51) — IMG_3069 — Tamanco Salto Bloco Bico Quadrado & Fivela Dourada (Marsala) — R$ 149,90
   {
     id: "prod-ig-51-tamanco-salto-bloco-marsala",
     sku: "PTS-IG-51",
     name: "Tamanco Salto Bloco Bico Quadrado & Fivela (Marsala)",
     subtitle: "Mule de Salto Bloco M\xE9dio Conforto com Tira no Peito do P\xE9 & Fivela Dourada Lateral",
     category: "Scarpins & Saltos",
-    price: 130,
+    price: 149.9,
     image: "/assets/aistudio/IMG_3069_b9feb338.jpeg",
     gallery: ["/assets/aistudio/IMG_3069_b9feb338.jpeg"],
     instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
@@ -215,18 +215,18 @@ var INITIAL_PRODUCTS = [
     craftDetails: [
       "Salto bloco anat\xF4mico perfeito para trabalhar, sair e caminhar com conforto (34 ao 39 BR)",
       "Dispon\xEDvel em Marsala, Preto, Branco, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
-      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix) + 50% na entrega"
+      "Valor R$ 149,90 \xB7 Entrada de 50% (R$ 74,95 no Pix) + 50% na entrega"
     ],
     createdAt: "2026-03-05T12:00:00.000Z"
   },
-  // NOVO 6 (PTS-IG-52) — IMG_3075 — Tamanco Anabela Dedo Detalhe Orgânico Dourado (Branco Off-White) — R$ 130,00
+  // NOVO 6 (PTS-IG-52) — IMG_3075 — Tamanco Anabela Dedo Detalhe Orgânico Dourado (Branco Off-White) — R$ 149,90
   {
     id: "prod-ig-52-tamanco-anabela-dedo-dourado",
     sku: "PTS-IG-52",
     name: "Tamanco Anabela Dedo Aplique Org\xE2nico Dourado (Off-White)",
     subtitle: "Anabela Escultural Bico Quadrado com Tira Larga Conforto & Joia Org\xE2nica Dourada no Dedo",
     category: "Anabelas & Plataformas",
-    price: 130,
+    price: 149.9,
     image: "/assets/aistudio/IMG_3075_2729f411.jpeg",
     gallery: ["/assets/aistudio/IMG_3075_2729f411.jpeg"],
     instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
@@ -251,18 +251,18 @@ var INITIAL_PRODUCTS = [
     craftDetails: [
       "Design moderno super leve com aplique metalizado polido no dedo (34 ao 39 BR)",
       "Dispon\xEDvel em Branco/Off-White, Preto, Nude, Marsala, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
-      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta"
+      "Valor R$ 149,90 \xB7 Entrada de 50% (R$ 74,95 no Pix) + 50% quando ficar pronta"
     ],
     createdAt: "2026-03-05T12:00:00.000Z"
   },
-  // NOVO 7 (PTS-IG-53) — IMG_3078 — Tamanco Mule Bico Folha Salto Fino Metalizado (Dourado Champagne) — R$ 130,00
+  // NOVO 7 (PTS-IG-53) — IMG_3078 — Tamanco Mule Bico Folha Salto Fino Metalizado (Dourado Champagne) — R$ 149,90
   {
     id: "prod-ig-53-mule-bico-folha-salto-fino-dourado",
     sku: "PTS-IG-53",
     name: "Tamanco Mule Bico Folha Salto Fino (Dourado Champagne)",
     subtitle: "Mule Salto Alto Fino com Bico Folha Alongado & Tira Larga em Couro Metalizado Champagne",
     category: "Scarpins & Saltos",
-    price: 130,
+    price: 149.9,
     image: "/assets/aistudio/IMG_3078_33e91306.jpeg",
     gallery: ["/assets/aistudio/IMG_3078_33e91306.jpeg"],
     instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
@@ -286,18 +286,18 @@ var INITIAL_PRODUCTS = [
     craftDetails: [
       "G\xE1spea anat\xF4mica forrada que abra\xE7a o p\xE9 com firmeza e maciez (34 ao 39 BR)",
       "Dispon\xEDvel em Dourado Champagne, Prata, Preto, Branco, Marsala, Nude, Vermelho, Rosa ou Outra Cor",
-      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix) + 50% na conclus\xE3o"
+      "Valor R$ 149,90 \xB7 Entrada de 50% (R$ 74,95 no Pix) + 50% na conclus\xE3o"
     ],
     createdAt: "2026-03-05T12:00:00.000Z"
   },
-  // NOVO 8 (PTS-IG-54) — IMG_3083 — Sandália Mule Bico Fino Salto Alto & Tira Fivela (Preta) — R$ 130,00
+  // NOVO 8 (PTS-IG-54) — IMG_3083 — Sandália Mule Bico Fino Salto Alto & Tira Fivela (Preta) — R$ 149,90
   {
     id: "prod-ig-54-sandalia-mule-bico-fino-preta",
     sku: "PTS-IG-54",
     name: "Sand\xE1lia Mule Bico Fino Salto Alto & Fivela (Preta)",
     subtitle: "Design Bico Fino com Calcanhar Aberto, Tira Frontal & Pulseira Ajust\xE1vel com Fivela Dourada",
     category: "Scarpins & Saltos",
-    price: 130,
+    price: 149.9,
     image: "/assets/aistudio/IMG_3083_28dd9dab.jpeg",
     gallery: ["/assets/aistudio/IMG_3083_28dd9dab.jpeg"],
     instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
@@ -321,7 +321,7 @@ var INITIAL_PRODUCTS = [
     craftDetails: [
       "Produzida sob encomenda na numera\xE7\xE3o 34 ao 39 BR em nossa f\xE1brica pr\xF3pria em Goi\xE2nia - GO",
       "Dispon\xEDvel em Preto, Marsala, Branco, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
-      "Valor R$ 130,00 \xB7 Entrada de 50% (R$ 65,00 no Pix) + 50% quando ficar pronta"
+      "Valor R$ 149,90 \xB7 Entrada de 50% (R$ 74,95 no Pix) + 50% quando ficar pronta"
     ],
     createdAt: "2026-03-05T12:00:00.000Z"
   },
@@ -332,7 +332,7 @@ var INITIAL_PRODUCTS = [
     name: "Papete Flatform Pir\xE2mides & Fivela (Dourada)",
     subtitle: "Bico Quadrado Anat\xF4mico com Pir\xE2mides Espelhadas & Pulseira no Tornozelo",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_1_C454LXbOzrn_slide_1.jpg",
     gallery: [
       "/instagram/feed_1_C454LXbOzrn_slide_1.jpg",
@@ -376,7 +376,7 @@ var INITIAL_PRODUCTS = [
     name: "Anabela Plataforma Pir\xE2mides & Fivela (Preta)",
     subtitle: "Plataforma Alta Bico Quadrado com Tiras em Pir\xE2mides & Fechamento por Fivela",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg",
@@ -422,7 +422,7 @@ var INITIAL_PRODUCTS = [
     name: "Anabela Plataforma Pir\xE2mides Gladiadora (Dourada)",
     subtitle: "Plataforma Alta Bico Quadrado com Pir\xE2mides & Amarra\xE7\xE3o Lace-Up na Perna",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg",
@@ -464,7 +464,7 @@ var INITIAL_PRODUCTS = [
     name: "Papete Flatform Tratorada Strass & Amarra\xE7\xE3o (Off-White)",
     subtitle: "Solado Tratorado Cravejado com Tiras Duplas de Strass & Amarra\xE7\xE3o N\xF3 Frontal",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg",
     gallery: [
       "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg",
@@ -503,7 +503,7 @@ var INITIAL_PRODUCTS = [
     name: "Anabela Plataforma Tran\xE7ada Esferas (Dourada)",
     subtitle: "Salto Plataforma Revestido em Trama Artesanal com Esferas & Fivela",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_5_C4539VxO5om_slide_1.jpg",
     gallery: [
       "/instagram/feed_5_C4539VxO5om_slide_1.jpg",
@@ -538,7 +538,7 @@ var INITIAL_PRODUCTS = [
     name: "Flatform Gladiadora Tiras Cruzadas Strass (Dourada)",
     subtitle: "Flatform Anat\xF4mica com Vira de Strass, Tiras Finas Brilhantes & Amarra\xE7\xE3o Gladiadora",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg",
     gallery: [
       "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg",
@@ -578,7 +578,7 @@ var INITIAL_PRODUCTS = [
     name: "Papete Flatform Espelhada Tiras Strass (Prata)",
     subtitle: "Acabamento Premium com Tiras Transpassadas em Strass & Fivela no Tornozelo",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg",
     gallery: [
       "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg",
@@ -617,7 +617,7 @@ var INITIAL_PRODUCTS = [
     name: "Flatform Tira de Dedo Strass Duo (Dourada & Prata)",
     subtitle: "Flatform Normal Bico Quadrado com Tiras de Dedo e Peito do P\xE9 Cravejadas em Strass",
     category: "Flatforms & Papetes",
-    price: 110,
+    price: 109.9,
     image: "/instagram/feed_7_C4ayCqZteae_main.jpg",
     gallery: [
       "/instagram/feed_7_C4ayCqZteae_main.jpg",
@@ -654,7 +654,7 @@ var INITIAL_PRODUCTS = [
     name: "Flatform Slide Tira de Dedo N\xF3 em Strass",
     subtitle: "Flatform Normal Anat\xF4mica Macia com Tiras Revestidas em Manta de Strass e N\xF3",
     category: "Flatforms & Papetes",
-    price: 110,
+    price: 109.9,
     image: "/instagram/feed_12_C4TcmhYpO8__main.jpg",
     gallery: ["/instagram/feed_12_C4TcmhYpO8__main.jpg"],
     instagramPostUrl: "https://www.instagram.com/p/C4TcmhYpO8_/",
@@ -691,7 +691,7 @@ var INITIAL_PRODUCTS = [
     name: "Anabela Espadrille Pir\xE2mides & Juta (Branca)",
     subtitle: "Anabela com Tachas Piramidais Espelhadas & Corda de Juta Natural",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_2_C454HJKO2oG_main.jpg",
     gallery: ["/instagram/feed_2_C454HJKO2oG_main.jpg"],
     instagramPostUrl: "https://www.instagram.com/p/C454HJKO2oG/",
@@ -723,7 +723,7 @@ var INITIAL_PRODUCTS = [
     name: "Rasteira Gladiadora Strass Cristal (Prata)",
     subtitle: "Tiras Duplas em Manta de Strass & Amarra\xE7\xE3o Gladiadora Delicada na Perna",
     category: "Rasteiras & Gladiadoras",
-    price: 110,
+    price: 109.9,
     image: "/instagram/feed_4_C454A4GujcN_slide_1.jpg",
     gallery: [
       "/instagram/feed_4_C454A4GujcN_slide_1.jpg",
@@ -758,7 +758,7 @@ var INITIAL_PRODUCTS = [
     name: "Anabela Tamanco Plataforma Tran\xE7ado c/ N\xF3 (Off-White)",
     subtitle: "Anabela Plataforma Alta Revestida em Trama Artesanal & Tira Larga com N\xF3 Central",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_6_C45360nuL6q_slide_1.jpg",
     gallery: [
       "/instagram/feed_6_C45360nuL6q_slide_1.jpg",
@@ -794,7 +794,7 @@ var INITIAL_PRODUCTS = [
     name: "Rasteira Esferas & Medalh\xE3o Metalizada (Dourada)",
     subtitle: "Rasteira de Dedo com Tachas Esf\xE9ricas & Tira Dupla no Tornozelo",
     category: "Rasteiras & Gladiadoras",
-    price: 100,
+    price: 99.9,
     image: "/instagram/feed_3_C454E0zuuFv_slide_1.jpg",
     gallery: [
       "/instagram/feed_3_C454E0zuuFv_slide_1.jpg",
@@ -833,7 +833,7 @@ var INITIAL_PRODUCTS = [
     name: "Papete Flatform Pir\xE2mides Black & Gold (Preta)",
     subtitle: "Edi\xE7\xE3o Preta com Pir\xE2mides Douradas Espelhadas & Solado Anat\xF4mico",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_1_C454LXbOzrn_slide_4.jpg",
     gallery: [
       "/instagram/feed_1_C454LXbOzrn_slide_4.jpg",
@@ -877,7 +877,7 @@ var INITIAL_PRODUCTS = [
     name: "Anabela Plataforma Pir\xE2mides & Fivela (Nude Ros\xE9)",
     subtitle: "Edi\xE7\xE3o Nude Aveludada com Tachas Piramidais Douradas & Bico Quadrado",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg",
@@ -922,7 +922,7 @@ var INITIAL_PRODUCTS = [
     name: "Papete Flatform Pir\xE2mides & Fivela (Off-White / Nude)",
     subtitle: "Palmilha Anat\xF4mica Off-White com Pir\xE2mides Douradas & Fivela Ajust\xE1vel",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_1_C454LXbOzrn_slide_2.jpg",
     gallery: [
       "/instagram/feed_1_C454LXbOzrn_slide_2.jpg",
@@ -966,7 +966,7 @@ var INITIAL_PRODUCTS = [
     name: "Papete Flatform Pir\xE2mides & Fivela (Prata)",
     subtitle: "Acabamento Metalizado Prata com Pir\xE2mides Espelhadas & Pulseira no Tornozelo",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_1_C454LXbOzrn_slide_3.jpg",
     gallery: [
       "/instagram/feed_1_C454LXbOzrn_slide_3.jpg",
@@ -1009,7 +1009,7 @@ var INITIAL_PRODUCTS = [
     name: "Rasteira Esferas & Medalh\xE3o Metalizada (Prata)",
     subtitle: "Rasteira de Dedo Prateada com Esferas Cromadas & Tira Dupla no Tornozelo",
     category: "Rasteiras & Gladiadoras",
-    price: 100,
+    price: 99.9,
     image: "/instagram/feed_3_C454E0zuuFv_slide_2.jpg",
     gallery: [
       "/instagram/feed_3_C454E0zuuFv_slide_2.jpg",
@@ -1048,7 +1048,7 @@ var INITIAL_PRODUCTS = [
     name: "Anabela Plataforma Pir\xE2mides & Fivela (Prata Champagne)",
     subtitle: "Plataforma Alta Metalizada com Tachas Piramidais & Fivela no Tornozelo",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg",
@@ -1092,7 +1092,7 @@ var INITIAL_PRODUCTS = [
     name: "Anabela Plataforma Pir\xE2mides & Fivela (Dourada)",
     subtitle: "Edi\xE7\xE3o Ouro Metalizado com Pir\xE2mides Douradas & Pulseira de Fivela",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg",
@@ -1136,7 +1136,7 @@ var INITIAL_PRODUCTS = [
     name: "Anabela Plataforma Pir\xE2mides & Fivela (Branca)",
     subtitle: "Edi\xE7\xE3o Branca com Tachas Piramidais Douradas & Bico Quadrado Moderno",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg",
@@ -1180,7 +1180,7 @@ var INITIAL_PRODUCTS = [
     name: "Anabela Plataforma Pir\xE2mides Gladiadora (Nude Ros\xE9)",
     subtitle: "Anabela Bico Quadrado Nude Ros\xE9 com Pir\xE2mides Douradas & Amarra\xE7\xE3o na Perna",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg",
@@ -1222,7 +1222,7 @@ var INITIAL_PRODUCTS = [
     name: "Anabela Plataforma Pir\xE2mides Gladiadora (Prata)",
     subtitle: "Anabela Metalizada Prata com Tachas Piramidais & Amarra\xE7\xE3o Gladiadora",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg",
@@ -1263,7 +1263,7 @@ var INITIAL_PRODUCTS = [
     name: "Papete Flatform Tratorada Strass & Amarra\xE7\xE3o (Preta)",
     subtitle: "Solado Tratorado Preto com Vira de Strass Cristal & Amarra\xE7\xE3o N\xF3 Central",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg",
     gallery: [
       "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg",
@@ -1301,7 +1301,7 @@ var INITIAL_PRODUCTS = [
     name: "Papete Flatform Tratorada Strass & Amarra\xE7\xE3o (Dourada)",
     subtitle: "Edi\xE7\xE3o Dourada Metalizada com Tiras Duplas de Strass & Solado Tratorado",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg",
     gallery: [
       "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg",
@@ -1339,7 +1339,7 @@ var INITIAL_PRODUCTS = [
     name: "Flatform Gladiadora Tiras Cruzadas Strass (Branca & Prata)",
     subtitle: "Flatform Gladiadora Branca com Tiras Finas em Strass Cristal & Vira Cravejada",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg",
     gallery: [
       "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg",
@@ -1379,7 +1379,7 @@ var INITIAL_PRODUCTS = [
     name: "Papete Flatform Espelhada Tiras Strass (Dourado Champagne)",
     subtitle: "Palmilha Espelhada Champagne com Tiras Transpassadas em Strass & Fivela",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg",
     gallery: [
       "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg",
@@ -1418,7 +1418,7 @@ var INITIAL_PRODUCTS = [
     name: "Papete Flatform Tira Transversal Pir\xE2mides & Fivela (Dourada & Prata)",
     subtitle: "Bico Quadrado Anat\xF4mico com Tira Diagonal Cravejada de Pir\xE2mides & Fivela no Tornozelo",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_14_C4TcgZrplaC_slide_1.jpg",
     gallery: [
       "/instagram/feed_14_C4TcgZrplaC_slide_1.jpg",
@@ -1457,7 +1457,7 @@ var INITIAL_PRODUCTS = [
     name: "Rasteira Bico Quadrado Tira de Dedo N\xF3 em Strass",
     subtitle: "Rasteira Elegante de Bico Quadrado com Tiras em Manta de Strass & N\xF3 Central",
     category: "Rasteiras & Gladiadoras",
-    price: 100,
+    price: 99.9,
     image: "/instagram/feed_15_C4TceEBpcL2_main.jpg",
     gallery: ["/instagram/feed_15_C4TceEBpcL2_main.jpg"],
     instagramPostUrl: "https://www.instagram.com/p/C4TceEBpcL2/",
@@ -1495,7 +1495,7 @@ var INITIAL_PRODUCTS = [
     name: "Rasteira Bico Quadrado La\xE7o Duplo Cravejado em Strass",
     subtitle: "Modelo Tend\xEAncia com Dois La\xE7os Estruturados em Strass Cristal & Bico Quadrado",
     category: "Rasteiras & Gladiadoras",
-    price: 100,
+    price: 99.9,
     image: "/instagram/feed_44_C12GJ6QORi4_slide_1.jpg",
     gallery: [
       "/instagram/feed_44_C12GJ6QORi4_slide_1.jpg",
@@ -1540,7 +1540,7 @@ var INITIAL_PRODUCTS = [
     name: "Rasteira Bico Quadrado Tira Transversal Strass & Fivela",
     subtitle: "Tira Diagonal em Manta de Strass, Anel de Dedo & Fechamento por Fivela no Tornozelo",
     category: "Rasteiras & Gladiadoras",
-    price: 100,
+    price: 99.9,
     image: "/instagram/feed_17_C4TcYo9pYsy_main.jpg",
     gallery: ["/instagram/feed_17_C4TcYo9pYsy_main.jpg"],
     instagramPostUrl: "https://www.instagram.com/p/C4TcYo9pYsy/",
@@ -1578,7 +1578,7 @@ var INITIAL_PRODUCTS = [
     name: "Rasteira Gladiadora Multitiras N\xF3 de Strass & Amarra\xE7\xE3o",
     subtitle: "Rasteira Gladiadora Bico Quadrado com Tiras Cravejadas, N\xF3 Frontal & Amarra\xE7\xE3o na Perna",
     category: "Rasteiras & Gladiadoras",
-    price: 110,
+    price: 109.9,
     image: "/instagram/feed_20_C4TcQjaJejN_main.jpg",
     gallery: [
       "/instagram/feed_20_C4TcQjaJejN_main.jpg",
@@ -1618,7 +1618,7 @@ var INITIAL_PRODUCTS = [
     name: "Rasteira Bico Quadrado Tiras Cruzadas X em Pedraria",
     subtitle: "Slide Rasteira com Tiras Largas Cruzadas em X Revestidas de Pedraria e Strass",
     category: "Rasteiras & Gladiadoras",
-    price: 100,
+    price: 99.9,
     image: "/instagram/feed_19_C4TcSseJ1vr_main.jpg",
     gallery: ["/instagram/feed_19_C4TcSseJ1vr_main.jpg"],
     instagramPostUrl: "https://www.instagram.com/p/C4TcSseJ1vr/",
@@ -1656,7 +1656,7 @@ var INITIAL_PRODUCTS = [
     name: "Flatform 3 Tiras Finas Assim\xE9tricas em Strass (Branca & Preta)",
     subtitle: "Flatform Normal Slide com Tr\xEAs Tiras Delicadas em Strass & Vira Brilhante",
     category: "Flatforms & Papetes",
-    price: 110,
+    price: 109.9,
     image: "/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg",
     gallery: [
       "/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg",
@@ -1697,7 +1697,7 @@ var INITIAL_PRODUCTS = [
     name: "Flatform Tiras Entrela\xE7adas & N\xF3 Pedraria Espelhada",
     subtitle: "Flatform Normal com Palmilha Metalizada, Vira de Strass & N\xF3 Frontal Cravejado",
     category: "Flatforms & Papetes",
-    price: 110,
+    price: 109.9,
     image: "/instagram/feed_23_C4TcFzJJLNA_slide_1.jpg",
     gallery: [
       "/instagram/feed_23_C4TcFzJJLNA_slide_1.jpg",
@@ -1739,7 +1739,7 @@ var INITIAL_PRODUCTS = [
     name: "Flatform Tiras Cruzadas Duplas em Manta de Strass",
     subtitle: "Flatform Normal Anat\xF4mica com Duplo X em Manta de Strass & Vira Brilhante",
     category: "Flatforms & Papetes",
-    price: 110,
+    price: 109.9,
     image: "/instagram/feed_24_C4TcBT1pobH_slide_1.jpg",
     gallery: [
       "/instagram/feed_24_C4TcBT1pobH_slide_1.jpg",
@@ -1781,7 +1781,7 @@ var INITIAL_PRODUCTS = [
     name: "Flatform Slide de Dedo N\xF3 Central Strass Metalizada (Dourada)",
     subtitle: "Flatform Normal Metalizada com Tiras em Strass Unido por N\xF3 Central & Vira Cravejada",
     category: "Flatforms & Papetes",
-    price: 110,
+    price: 109.9,
     image: "/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg",
     gallery: [
       "/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg",
@@ -1820,7 +1820,7 @@ var INITIAL_PRODUCTS = [
     name: "Papete Flatform Anel de Dedo & Tiras Strass c/ Fivela (Dourada)",
     subtitle: "Papete Metalizada com Anel de Dedo Cravejado, Tira Transversal em Strass & Fivela",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_28_C12HMIqOt-1_main.jpg",
     gallery: ["/instagram/feed_28_C12HMIqOt-1_main.jpg"],
     instagramPostUrl: "https://www.instagram.com/p/C12HMIqOt-1/",
@@ -1855,7 +1855,7 @@ var INITIAL_PRODUCTS = [
     name: "Papete Flatform Vira de Strass & Duas Tiras c/ Fivela (Branca)",
     subtitle: "Papete Branca com Duas Tiras Frontais em Strass, Vira Cravejada & Fivela Traseira",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_29_C12HDhQO1dO_slide_1.jpg",
     gallery: [
       "/instagram/feed_29_C12HDhQO1dO_slide_1.jpg",
@@ -1893,7 +1893,7 @@ var INITIAL_PRODUCTS = [
     name: "Flatform Gladiadora Multitiras Strass & Amarra\xE7\xE3o (Preta & Branca)",
     subtitle: "Flatform Gladiadora com Tiras Finas Brilhantes, Vira de Strass & Amarra\xE7\xE3o na Perna",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_30_C12HAGoOeUg_slide_1.jpg",
     gallery: [
       "/instagram/feed_30_C12HAGoOeUg_slide_1.jpg",
@@ -1933,7 +1933,7 @@ var INITIAL_PRODUCTS = [
     name: "Flatform Metalizada 3 Tiras Tubulares em Strass (Dourada)",
     subtitle: "Flatform Normal Slide com Tr\xEAs Tiras Tubulares Cravejadas & Solado Tratorado c/ Strass",
     category: "Flatforms & Papetes",
-    price: 110,
+    price: 109.9,
     image: "/instagram/feed_49_CzWpulBOVR3_main.jpg",
     gallery: ["/instagram/feed_49_CzWpulBOVR3_main.jpg"],
     instagramPostUrl: "https://www.instagram.com/p/CzWpulBOVR3/",
@@ -1968,7 +1968,7 @@ var INITIAL_PRODUCTS = [
     name: "Flatform Tiras Cruzadas Pedraria Cristal Espelhada",
     subtitle: "Recordista de Curtidas @petersonshoes_ \xB7 Flatform Normal com Pedraria Lapidada & Vira de Strass",
     category: "Flatforms & Papetes",
-    price: 110,
+    price: 109.9,
     image: "/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg",
     gallery: [
       "/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg",
@@ -2009,7 +2009,7 @@ var INITIAL_PRODUCTS = [
     name: "Rasteira Bico Quadrado Tiras Entrela\xE7adas em Strass (Dourada)",
     subtitle: "Rasteira Metalizada de Bico Quadrado com Tiras Finas Entrela\xE7adas em Strass",
     category: "Rasteiras & Gladiadoras",
-    price: 100,
+    price: 99.9,
     image: "/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg",
     gallery: [
       "/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg",
@@ -2049,7 +2049,7 @@ var INITIAL_PRODUCTS = [
     name: "Flatform Slide Tira Larga Nuvem Metalizada (Dourada & Prata)",
     subtitle: "Flatform Normal Anat\xF4mica Estilo Nuvem com G\xE1spea Larga Acolchoada Metalizada",
     category: "Flatforms & Papetes",
-    price: 110,
+    price: 109.9,
     image: "/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg",
     gallery: [
       "/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg",
@@ -2090,7 +2090,7 @@ var INITIAL_PRODUCTS = [
     name: "Flatform Gladiadora Tratorada Tiras Strass & Amarra\xE7\xE3o (Preta, Branca & Nude)",
     subtitle: "Solado Flatform Tratorado com Vira Brilhante, Tiras Cruzadas em Strass & Amarra\xE7\xE3o",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg",
     gallery: [
       "/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg",
@@ -2131,7 +2131,7 @@ var INITIAL_PRODUCTS = [
     name: "Rasteira Bico Quadrado Multitiras Finas & Fivela",
     subtitle: "Rasteira Delicada de Bico Quadrado com Tiras Finas Assim\xE9tricas & Fivela no Tornozelo",
     category: "Rasteiras & Gladiadoras",
-    price: 100,
+    price: 99.9,
     image: "/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg",
     gallery: [
       "/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg",
@@ -2250,7 +2250,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Papete Flatform Pir\xE2mides & Fivela (Dourada)",
     subtitle: "Bico Quadrado Anat\xF4mico com Pir\xE2mides Espelhadas & Pulseira no Tornozelo",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_1_C454LXbOzrn_slide_1.jpg",
     gallery: [
       "/instagram/feed_1_C454LXbOzrn_slide_1.jpg",
@@ -2287,7 +2287,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Anabela Plataforma Pir\xE2mides & Fivela (Preta)",
     subtitle: "Plataforma Alta Bico Quadrado com Tiras em Pir\xE2mides & Fechamento por Fivela",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg",
@@ -2326,7 +2326,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Anabela Plataforma Pir\xE2mides Gladiadora (Dourada)",
     subtitle: "Plataforma Alta Bico Quadrado com Pir\xE2mides & Amarra\xE7\xE3o Lace-Up na Perna",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg",
@@ -2361,7 +2361,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Papete Flatform Tratorada Strass & Amarra\xE7\xE3o (Off-White)",
     subtitle: "Solado Tratorado Cravejado com Tiras Duplas de Strass & Amarra\xE7\xE3o N\xF3 Frontal",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg",
     gallery: [
       "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg",
@@ -2396,7 +2396,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Anabela Plataforma Tran\xE7ada Esferas (Dourada)",
     subtitle: "Salto Plataforma Revestido em Trama Artesanal com Esferas & Fivela",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_5_C4539VxO5om_slide_1.jpg",
     gallery: [
       "/instagram/feed_5_C4539VxO5om_slide_1.jpg",
@@ -2427,7 +2427,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Flatform Gladiadora Tiras Cruzadas Strass (Dourada)",
     subtitle: "Flatform Anat\xF4mica com Vira de Strass, Tiras Finas Brilhantes & Amarra\xE7\xE3o Gladiadora",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg",
     gallery: [
       "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg",
@@ -2460,7 +2460,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Papete Flatform Espelhada Tiras Strass (Prata)",
     subtitle: "Acabamento Premium com Tiras Transpassadas em Strass & Fivela no Tornozelo",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg",
     gallery: [
       "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg",
@@ -2492,7 +2492,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Flatform Tira de Dedo Strass Duo (Dourada & Prata)",
     subtitle: "Flatform Normal Bico Quadrado com Tiras de Dedo e Peito do P\xE9 Cravejadas em Strass",
     category: "Flatforms & Papetes",
-    price: 110,
+    price: 109.9,
     image: "/instagram/feed_7_C4ayCqZteae_main.jpg",
     gallery: [
       "/instagram/feed_7_C4ayCqZteae_main.jpg",
@@ -2525,7 +2525,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Flatform Slide Tira de Dedo N\xF3 em Strass",
     subtitle: "Flatform Normal Anat\xF4mica Macia com Tiras Revestidas em Manta de Strass e N\xF3",
     category: "Flatforms & Papetes",
-    price: 110,
+    price: 109.9,
     image: "/instagram/feed_12_C4TcmhYpO8__main.jpg",
     gallery: ["/instagram/feed_12_C4TcmhYpO8__main.jpg"],
     instagramPostUrl: "https://www.instagram.com/p/C4TcmhYpO8_/",
@@ -2555,7 +2555,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Anabela Espadrille Pir\xE2mides & Juta (Branca)",
     subtitle: "Anabela com Tachas Piramidais Espelhadas & Corda de Juta Natural",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_2_C454HJKO2oG_main.jpg",
     gallery: ["/instagram/feed_2_C454HJKO2oG_main.jpg"],
     instagramPostUrl: "https://www.instagram.com/p/C454HJKO2oG/",
@@ -2583,7 +2583,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Rasteira Gladiadora Strass Cristal (Prata)",
     subtitle: "Tiras Duplas em Manta de Strass & Amarra\xE7\xE3o Gladiadora Delicada na Perna",
     category: "Rasteiras & Gladiadoras",
-    price: 110,
+    price: 109.9,
     image: "/instagram/feed_4_C454A4GujcN_slide_1.jpg",
     gallery: [
       "/instagram/feed_4_C454A4GujcN_slide_1.jpg",
@@ -2614,7 +2614,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Anabela Tamanco Plataforma Tran\xE7ado c/ N\xF3 (Off-White)",
     subtitle: "Anabela Plataforma Alta Revestida em Trama Artesanal & Tira Larga com N\xF3 Central",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_6_C45360nuL6q_slide_1.jpg",
     gallery: [
       "/instagram/feed_6_C45360nuL6q_slide_1.jpg",
@@ -2646,7 +2646,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Rasteira Esferas & Medalh\xE3o Metalizada (Dourada)",
     subtitle: "Rasteira de Dedo com Tachas Esf\xE9ricas & Tira Dupla no Tornozelo",
     category: "Rasteiras & Gladiadoras",
-    price: 100,
+    price: 99.9,
     image: "/instagram/feed_3_C454E0zuuFv_slide_1.jpg",
     gallery: [
       "/instagram/feed_3_C454E0zuuFv_slide_1.jpg",
@@ -2678,7 +2678,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Papete Flatform Pir\xE2mides Black & Gold (Preta)",
     subtitle: "Edi\xE7\xE3o Preta com Pir\xE2mides Douradas Espelhadas & Solado Anat\xF4mico",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_1_C454LXbOzrn_slide_4.jpg",
     gallery: [
       "/instagram/feed_1_C454LXbOzrn_slide_4.jpg",
@@ -2715,7 +2715,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Anabela Plataforma Pir\xE2mides & Fivela (Nude Ros\xE9)",
     subtitle: "Edi\xE7\xE3o Nude Aveludada com Tachas Piramidais Douradas & Bico Quadrado",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg",
@@ -2753,7 +2753,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Papete Flatform Pir\xE2mides & Fivela (Off-White / Nude)",
     subtitle: "Palmilha Anat\xF4mica Off-White com Pir\xE2mides Douradas & Fivela Ajust\xE1vel",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_1_C454LXbOzrn_slide_2.jpg",
     gallery: [
       "/instagram/feed_1_C454LXbOzrn_slide_2.jpg",
@@ -2790,7 +2790,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Papete Flatform Pir\xE2mides & Fivela (Prata)",
     subtitle: "Acabamento Metalizado Prata com Pir\xE2mides Espelhadas & Pulseira no Tornozelo",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_1_C454LXbOzrn_slide_3.jpg",
     gallery: [
       "/instagram/feed_1_C454LXbOzrn_slide_3.jpg",
@@ -2826,7 +2826,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Rasteira Esferas & Medalh\xE3o Metalizada (Prata)",
     subtitle: "Rasteira de Dedo Prateada com Esferas Cromadas & Tira Dupla no Tornozelo",
     category: "Rasteiras & Gladiadoras",
-    price: 100,
+    price: 99.9,
     image: "/instagram/feed_3_C454E0zuuFv_slide_2.jpg",
     gallery: [
       "/instagram/feed_3_C454E0zuuFv_slide_2.jpg",
@@ -2858,7 +2858,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Anabela Plataforma Pir\xE2mides & Fivela (Prata Champagne)",
     subtitle: "Plataforma Alta Metalizada com Tachas Piramidais & Fivela no Tornozelo",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg",
@@ -2895,7 +2895,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Anabela Plataforma Pir\xE2mides & Fivela (Dourada)",
     subtitle: "Edi\xE7\xE3o Ouro Metalizado com Pir\xE2mides Douradas & Pulseira de Fivela",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg",
@@ -2932,7 +2932,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Anabela Plataforma Pir\xE2mides & Fivela (Branca)",
     subtitle: "Edi\xE7\xE3o Branca com Tachas Piramidais Douradas & Bico Quadrado Moderno",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg",
@@ -2969,7 +2969,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Anabela Plataforma Pir\xE2mides Gladiadora (Nude Ros\xE9)",
     subtitle: "Anabela Bico Quadrado Nude Ros\xE9 com Pir\xE2mides Douradas & Amarra\xE7\xE3o na Perna",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg",
@@ -3004,7 +3004,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Anabela Plataforma Pir\xE2mides Gladiadora (Prata)",
     subtitle: "Anabela Metalizada Prata com Tachas Piramidais & Amarra\xE7\xE3o Gladiadora",
     category: "Anabelas & Plataformas",
-    price: 150,
+    price: 149.9,
     image: "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg",
     gallery: [
       "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg",
@@ -3038,7 +3038,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Papete Flatform Tratorada Strass & Amarra\xE7\xE3o (Preta)",
     subtitle: "Solado Tratorado Preto com Vira de Strass Cristal & Amarra\xE7\xE3o N\xF3 Central",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg",
     gallery: [
       "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg",
@@ -3072,7 +3072,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Papete Flatform Tratorada Strass & Amarra\xE7\xE3o (Dourada)",
     subtitle: "Edi\xE7\xE3o Dourada Metalizada com Tiras Duplas de Strass & Solado Tratorado",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg",
     gallery: [
       "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg",
@@ -3106,7 +3106,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Flatform Gladiadora Tiras Cruzadas Strass (Branca & Prata)",
     subtitle: "Flatform Gladiadora Branca com Tiras Finas em Strass Cristal & Vira Cravejada",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg",
     gallery: [
       "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg",
@@ -3139,7 +3139,7 @@ var INITIAL_PRODUCTS2 = [
     name: "Papete Flatform Espelhada Tiras Strass (Dourado Champagne)",
     subtitle: "Palmilha Espelhada Champagne com Tiras Transpassadas em Strass & Fivela",
     category: "Flatforms & Papetes",
-    price: 130,
+    price: 129.9,
     image: "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg",
     gallery: [
       "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg",
@@ -3469,7 +3469,7 @@ function loadDb(env = "producao") {
   try {
     const raw = fs.readFileSync(targetFile, "utf-8");
     const parsed = JSON.parse(raw);
-    const needsUpgrade = !parsed.products || parsed.products.length < 54 || parsed.products[0]?.price !== 130 || parsed.settings?.whatsappStore !== "5562984998265" || parsed.products[0]?.availableSizes?.includes(33) || !parsed.products[0]?.colors?.some((c) => c.name === "Marsala");
+    const needsUpgrade = !parsed.products || parsed.products.length < 54 || parsed.settings?.whatsappStore !== "5562984998265" || parsed.products[0]?.availableSizes?.includes(33) || !parsed.products[0]?.colors?.some((c) => c.name === "Marsala");
     if (needsUpgrade) {
       const upgraded = createInitialDatabase();
       if (parsed.orders && parsed.orders.length > 0) {
@@ -3486,6 +3486,49 @@ function loadDb(env = "producao") {
       }
       fs.writeFileSync(targetFile, JSON.stringify(upgraded, null, 2), "utf-8");
       return upgraded;
+    }
+    const scarpinSkus = /* @__PURE__ */ new Set([
+      "PTS-IG-47",
+      "PTS-IG-48",
+      "PTS-IG-49",
+      "PTS-IG-50",
+      "PTS-IG-51",
+      "PTS-IG-52",
+      "PTS-IG-53",
+      "PTS-IG-54"
+    ]);
+    const optionAMap = {
+      150: 149.9,
+      130: 129.9,
+      110: 109.9,
+      100: 99.9
+    };
+    let batchUpdated = false;
+    parsed.products = parsed.products.map((prod) => {
+      let targetPrice = null;
+      if (scarpinSkus.has(prod.sku) && (prod.price === 130 || prod.price === 129.9)) {
+        targetPrice = 149.9;
+      } else if (optionAMap[prod.price] !== void 0) {
+        targetPrice = optionAMap[prod.price];
+      }
+      if (targetPrice !== null) {
+        batchUpdated = true;
+        const mCost = Number(prod.manufacturingCost) || 0;
+        const extraExp = Number(prod.additionalExpenses) || 0;
+        const totalCost = Math.round((mCost + extraExp) * 100) / 100;
+        const gProfit = Math.round((targetPrice - totalCost) * 100) / 100;
+        const pMargin = Math.round(gProfit / targetPrice * 1e4) / 100;
+        return {
+          ...prod,
+          price: targetPrice,
+          grossProfit: mCost > 0 || extraExp > 0 ? gProfit : prod.grossProfit,
+          profitMarginPercent: mCost > 0 || extraExp > 0 ? pMargin : prod.profitMarginPercent
+        };
+      }
+      return prod;
+    });
+    if (batchUpdated) {
+      fs.writeFileSync(targetFile, JSON.stringify(parsed, null, 2), "utf-8");
     }
     parsed.settings = {
       ...parsed.settings,
@@ -4315,23 +4358,42 @@ DIRETRIZES DE ESTILO:
       return res.status(500).json({ error: "Falha ao salvar imagem no servidor." });
     }
   });
-  app.patch("/api/admin/products/:id/price", requireAdminAuth, (req, res) => {
+  const handleUpdateProductPricing = (req, res) => {
     const env = resolveEnv(req);
     const { id } = req.params;
-    const { price } = req.body;
-    const numericPrice = Number(price);
-    if (!numericPrice || isNaN(numericPrice) || numericPrice <= 0) {
-      return res.status(400).json({ error: "Informe um valor v\xE1lido maior que zero." });
-    }
+    const {
+      price,
+      manufacturingCost,
+      additionalExpenses
+    } = req.body;
     const db = loadDb(env);
     const idx = db.products.findIndex((p) => p.id === id);
     if (idx === -1) {
       return res.status(404).json({ error: "Modelo n\xE3o encontrado." });
     }
-    db.products[idx].price = Math.round(numericPrice * 100) / 100;
+    const current = db.products[idx];
+    const nextPrice = price !== void 0 ? Math.round(Number(price) * 100) / 100 : current.price;
+    if (!nextPrice || isNaN(nextPrice) || nextPrice <= 0) {
+      return res.status(400).json({ error: "Informe um pre\xE7o de venda v\xE1lido maior que zero." });
+    }
+    const nextManufacturingCost = manufacturingCost !== void 0 ? Math.max(0, Math.round(Number(manufacturingCost) * 100) / 100) : Number(current.manufacturingCost) || 0;
+    const nextAdditionalExpenses = additionalExpenses !== void 0 ? Math.max(0, Math.round(Number(additionalExpenses) * 100) / 100) : Number(current.additionalExpenses) || 0;
+    const totalCost = Math.round((nextManufacturingCost + nextAdditionalExpenses) * 100) / 100;
+    const grossProfit = Math.round((nextPrice - totalCost) * 100) / 100;
+    const profitMarginPercent = nextPrice > 0 ? Math.round(grossProfit / nextPrice * 1e4) / 100 : 0;
+    db.products[idx] = {
+      ...current,
+      price: nextPrice,
+      manufacturingCost: nextManufacturingCost,
+      additionalExpenses: nextAdditionalExpenses,
+      grossProfit,
+      profitMarginPercent
+    };
     saveDb(db, env);
     return res.json(db.products[idx]);
-  });
+  };
+  app.patch("/api/admin/products/:id/price", requireAdminAuth, handleUpdateProductPricing);
+  app.patch("/api/admin/products/:id/pricing", requireAdminAuth, handleUpdateProductPricing);
   app.post("/api/admin/products", requireAdminAuth, (req, res) => {
     const env = resolveEnv(req);
     const db = loadDb(env);
@@ -4340,13 +4402,23 @@ DIRETRIZES DE ESTILO:
       return res.status(400).json({ error: "Nome e pre\xE7o da sand\xE1lia s\xE3o obrigat\xF3rios." });
     }
     const defaultImg = body.image || "/instagram/feed_1_C454LXbOzrn_slide_1.jpg";
+    const salePrice = Math.round(Number(body.price) * 100) / 100;
+    const mCost = Math.max(0, Math.round(Number(body.manufacturingCost || 0) * 100) / 100);
+    const extraExp = Math.max(0, Math.round(Number(body.additionalExpenses || 0) * 100) / 100);
+    const totalCost = Math.round((mCost + extraExp) * 100) / 100;
+    const grossProfit = Math.round((salePrice - totalCost) * 100) / 100;
+    const profitMarginPercent = salePrice > 0 ? Math.round(grossProfit / salePrice * 1e4) / 100 : 0;
     const newProduct = {
       id: `prod-${Date.now()}`,
       sku: body.sku || `PTS-IG-${Math.floor(16 + Math.random() * 80)}`,
       name: body.name,
       subtitle: body.subtitle || "Sand\xE1lia Feminina Feita Sob Encomenda",
       category: body.category || "Flatforms & Papetes",
-      price: Number(body.price),
+      price: salePrice,
+      manufacturingCost: mCost,
+      additionalExpenses: extraExp,
+      grossProfit,
+      profitMarginPercent,
       image: defaultImg,
       gallery: Array.isArray(body.gallery) && body.gallery.length > 0 ? body.gallery : [defaultImg],
       instagramPostUrl: body.instagramPostUrl || "https://www.instagram.com/petersonshoes_/",
@@ -4376,11 +4448,22 @@ DIRETRIZES DE ESTILO:
     if (idx === -1) {
       return res.status(404).json({ error: "Produto n\xE3o encontrado." });
     }
+    const current = db.products[idx];
+    const nextPrice = Math.round(Number(req.body.price ?? current.price) * 100) / 100;
+    const nextMCost = req.body.manufacturingCost !== void 0 ? Math.max(0, Math.round(Number(req.body.manufacturingCost) * 100) / 100) : Number(current.manufacturingCost) || 0;
+    const nextExtraExp = req.body.additionalExpenses !== void 0 ? Math.max(0, Math.round(Number(req.body.additionalExpenses) * 100) / 100) : Number(current.additionalExpenses) || 0;
+    const totalCost = Math.round((nextMCost + nextExtraExp) * 100) / 100;
+    const grossProfit = Math.round((nextPrice - totalCost) * 100) / 100;
+    const profitMarginPercent = nextPrice > 0 ? Math.round(grossProfit / nextPrice * 1e4) / 100 : 0;
     const updated = {
-      ...db.products[idx],
+      ...current,
       ...req.body,
-      id: db.products[idx].id,
-      price: Number(req.body.price ?? db.products[idx].price)
+      id: current.id,
+      price: nextPrice,
+      manufacturingCost: nextMCost,
+      additionalExpenses: nextExtraExp,
+      grossProfit,
+      profitMarginPercent
     };
     db.products[idx] = updated;
     saveDb(db, env);

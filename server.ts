@@ -177,7 +177,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Papete Flatform Pirâmides & Fivela (Dourada)',
     subtitle: 'Bico Quadrado Anatômico com Pirâmides Espelhadas & Pulseira no Tornozelo',
     category: 'Flatforms & Papetes',
-    price: 130,
+    price: 129.9,
     image: '/instagram/feed_1_C454LXbOzrn_slide_1.jpg',
     gallery: [
       '/instagram/feed_1_C454LXbOzrn_slide_1.jpg',
@@ -216,7 +216,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Anabela Plataforma Pirâmides & Fivela (Preta)',
     subtitle: 'Plataforma Alta Bico Quadrado com Tiras em Pirâmides & Fechamento por Fivela',
     category: 'Anabelas & Plataformas',
-    price: 150,
+    price: 149.9,
     image: '/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg',
     gallery: [
       '/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg',
@@ -257,7 +257,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Anabela Plataforma Pirâmides Gladiadora (Dourada)',
     subtitle: 'Plataforma Alta Bico Quadrado com Pirâmides & Amarração Lace-Up na Perna',
     category: 'Anabelas & Plataformas',
-    price: 150,
+    price: 149.9,
     image: '/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg',
     gallery: [
       '/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg',
@@ -294,7 +294,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Papete Flatform Tratorada Strass & Amarração (Off-White)',
     subtitle: 'Solado Tratorado Cravejado com Tiras Duplas de Strass & Amarração Nó Frontal',
     category: 'Flatforms & Papetes',
-    price: 130,
+    price: 129.9,
     image: '/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg',
     gallery: [
       '/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg',
@@ -331,7 +331,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Anabela Plataforma Trançada Esferas (Dourada)',
     subtitle: 'Salto Plataforma Revestido em Trama Artesanal com Esferas & Fivela',
     category: 'Anabelas & Plataformas',
-    price: 150,
+    price: 149.9,
     image: '/instagram/feed_5_C4539VxO5om_slide_1.jpg',
     gallery: [
       '/instagram/feed_5_C4539VxO5om_slide_1.jpg',
@@ -364,7 +364,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Flatform Gladiadora Tiras Cruzadas Strass (Dourada)',
     subtitle: 'Flatform Anatômica com Vira de Strass, Tiras Finas Brilhantes & Amarração Gladiadora',
     category: 'Flatforms & Papetes',
-    price: 130,
+    price: 129.9,
     image: '/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg',
     gallery: [
       '/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg',
@@ -399,7 +399,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Papete Flatform Espelhada Tiras Strass (Prata)',
     subtitle: 'Acabamento Premium com Tiras Transpassadas em Strass & Fivela no Tornozelo',
     category: 'Flatforms & Papetes',
-    price: 130,
+    price: 129.9,
     image: '/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg',
     gallery: [
       '/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg',
@@ -433,7 +433,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Flatform Tira de Dedo Strass Duo (Dourada & Prata)',
     subtitle: 'Flatform Normal Bico Quadrado com Tiras de Dedo e Peito do Pé Cravejadas em Strass',
     category: 'Flatforms & Papetes',
-    price: 110,
+    price: 109.9,
     image: '/instagram/feed_7_C4ayCqZteae_main.jpg',
     gallery: [
       '/instagram/feed_7_C4ayCqZteae_main.jpg',
@@ -468,7 +468,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Flatform Slide Tira de Dedo Nó em Strass',
     subtitle: 'Flatform Normal Anatômica Macia com Tiras Revestidas em Manta de Strass e Nó',
     category: 'Flatforms & Papetes',
-    price: 110,
+    price: 109.9,
     image: '/instagram/feed_12_C4TcmhYpO8__main.jpg',
     gallery: ['/instagram/feed_12_C4TcmhYpO8__main.jpg'],
     instagramPostUrl: 'https://www.instagram.com/p/C4TcmhYpO8_/',
@@ -500,7 +500,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Anabela Espadrille Pirâmides & Juta (Branca)',
     subtitle: 'Anabela com Tachas Piramidais Espelhadas & Corda de Juta Natural',
     category: 'Anabelas & Plataformas',
-    price: 150,
+    price: 149.9,
     image: '/instagram/feed_2_C454HJKO2oG_main.jpg',
     gallery: ['/instagram/feed_2_C454HJKO2oG_main.jpg'],
     instagramPostUrl: 'https://www.instagram.com/p/C454HJKO2oG/',
@@ -530,7 +530,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Rasteira Gladiadora Strass Cristal (Prata)',
     subtitle: 'Tiras Duplas em Manta de Strass & Amarração Gladiadora Delicada na Perna',
     category: 'Rasteiras & Gladiadoras',
-    price: 110,
+    price: 109.9,
     image: '/instagram/feed_4_C454A4GujcN_slide_1.jpg',
     gallery: [
       '/instagram/feed_4_C454A4GujcN_slide_1.jpg',
@@ -563,7 +563,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Anabela Tamanco Plataforma Trançado c/ Nó (Off-White)',
     subtitle: 'Anabela Plataforma Alta Revestida em Trama Artesanal & Tira Larga com Nó Central',
     category: 'Anabelas & Plataformas',
-    price: 150,
+    price: 149.9,
     image: '/instagram/feed_6_C45360nuL6q_slide_1.jpg',
     gallery: [
       '/instagram/feed_6_C45360nuL6q_slide_1.jpg',
@@ -597,7 +597,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Rasteira Esferas & Medalhão Metalizada (Dourada)',
     subtitle: 'Rasteira de Dedo com Tachas Esféricas & Tira Dupla no Tornozelo',
     category: 'Rasteiras & Gladiadoras',
-    price: 100,
+    price: 99.9,
     image: '/instagram/feed_3_C454E0zuuFv_slide_1.jpg',
     gallery: [
       '/instagram/feed_3_C454E0zuuFv_slide_1.jpg',
@@ -631,7 +631,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Papete Flatform Pirâmides Black & Gold (Preta)',
     subtitle: 'Edição Preta com Pirâmides Douradas Espelhadas & Solado Anatômico',
     category: 'Flatforms & Papetes',
-    price: 130,
+    price: 129.9,
     image: '/instagram/feed_1_C454LXbOzrn_slide_4.jpg',
     gallery: [
       '/instagram/feed_1_C454LXbOzrn_slide_4.jpg',
@@ -670,7 +670,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Anabela Plataforma Pirâmides & Fivela (Nude Rosé)',
     subtitle: 'Edição Nude Aveludada com Tachas Piramidais Douradas & Bico Quadrado',
     category: 'Anabelas & Plataformas',
-    price: 150,
+    price: 149.9,
     image: '/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg',
     gallery: [
       '/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg',
@@ -710,7 +710,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Papete Flatform Pirâmides & Fivela (Off-White / Nude)',
     subtitle: 'Palmilha Anatômica Off-White com Pirâmides Douradas & Fivela Ajustável',
     category: 'Flatforms & Papetes',
-    price: 130,
+    price: 129.9,
     image: '/instagram/feed_1_C454LXbOzrn_slide_2.jpg',
     gallery: [
       '/instagram/feed_1_C454LXbOzrn_slide_2.jpg',
@@ -749,7 +749,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Papete Flatform Pirâmides & Fivela (Prata)',
     subtitle: 'Acabamento Metalizado Prata com Pirâmides Espelhadas & Pulseira no Tornozelo',
     category: 'Flatforms & Papetes',
-    price: 130,
+    price: 129.9,
     image: '/instagram/feed_1_C454LXbOzrn_slide_3.jpg',
     gallery: [
       '/instagram/feed_1_C454LXbOzrn_slide_3.jpg',
@@ -787,7 +787,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Rasteira Esferas & Medalhão Metalizada (Prata)',
     subtitle: 'Rasteira de Dedo Prateada com Esferas Cromadas & Tira Dupla no Tornozelo',
     category: 'Rasteiras & Gladiadoras',
-    price: 100,
+    price: 99.9,
     image: '/instagram/feed_3_C454E0zuuFv_slide_2.jpg',
     gallery: [
       '/instagram/feed_3_C454E0zuuFv_slide_2.jpg',
@@ -821,7 +821,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Anabela Plataforma Pirâmides & Fivela (Prata Champagne)',
     subtitle: 'Plataforma Alta Metalizada com Tachas Piramidais & Fivela no Tornozelo',
     category: 'Anabelas & Plataformas',
-    price: 150,
+    price: 149.9,
     image: '/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg',
     gallery: [
       '/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg',
@@ -860,7 +860,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Anabela Plataforma Pirâmides & Fivela (Dourada)',
     subtitle: 'Edição Ouro Metalizado com Pirâmides Douradas & Pulseira de Fivela',
     category: 'Anabelas & Plataformas',
-    price: 150,
+    price: 149.9,
     image: '/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg',
     gallery: [
       '/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg',
@@ -899,7 +899,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Anabela Plataforma Pirâmides & Fivela (Branca)',
     subtitle: 'Edição Branca com Tachas Piramidais Douradas & Bico Quadrado Moderno',
     category: 'Anabelas & Plataformas',
-    price: 150,
+    price: 149.9,
     image: '/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg',
     gallery: [
       '/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg',
@@ -938,7 +938,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Anabela Plataforma Pirâmides Gladiadora (Nude Rosé)',
     subtitle: 'Anabela Bico Quadrado Nude Rosé com Pirâmides Douradas & Amarração na Perna',
     category: 'Anabelas & Plataformas',
-    price: 150,
+    price: 149.9,
     image: '/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg',
     gallery: [
       '/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg',
@@ -975,7 +975,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Anabela Plataforma Pirâmides Gladiadora (Prata)',
     subtitle: 'Anabela Metalizada Prata com Tachas Piramidais & Amarração Gladiadora',
     category: 'Anabelas & Plataformas',
-    price: 150,
+    price: 149.9,
     image: '/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg',
     gallery: [
       '/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg',
@@ -1011,7 +1011,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Papete Flatform Tratorada Strass & Amarração (Preta)',
     subtitle: 'Solado Tratorado Preto com Vira de Strass Cristal & Amarração Nó Central',
     category: 'Flatforms & Papetes',
-    price: 130,
+    price: 129.9,
     image: '/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg',
     gallery: [
       '/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg',
@@ -1047,7 +1047,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Papete Flatform Tratorada Strass & Amarração (Dourada)',
     subtitle: 'Edição Dourada Metalizada com Tiras Duplas de Strass & Solado Tratorado',
     category: 'Flatforms & Papetes',
-    price: 130,
+    price: 129.9,
     image: '/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg',
     gallery: [
       '/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg',
@@ -1083,7 +1083,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Flatform Gladiadora Tiras Cruzadas Strass (Branca & Prata)',
     subtitle: 'Flatform Gladiadora Branca com Tiras Finas em Strass Cristal & Vira Cravejada',
     category: 'Flatforms & Papetes',
-    price: 130,
+    price: 129.9,
     image: '/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg',
     gallery: [
       '/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg',
@@ -1118,7 +1118,7 @@ export const INITIAL_PRODUCTS: BespokeProduct[] = [
     name: 'Papete Flatform Espelhada Tiras Strass (Dourado Champagne)',
     subtitle: 'Palmilha Espelhada Champagne com Tiras Transpassadas em Strass & Fivela',
     category: 'Flatforms & Papetes',
-    price: 130,
+    price: 129.9,
     image: '/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg',
     gallery: [
       '/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg',
@@ -1486,7 +1486,6 @@ function loadDb(env: AppEnvironment = 'producao'): DatabaseSchema {
     const needsUpgrade =
       !parsed.products ||
       parsed.products.length < 54 ||
-      parsed.products[0]?.price !== 130 ||
       parsed.settings?.whatsappStore !== '5562984998265' ||
       parsed.products[0]?.availableSizes?.includes(33) ||
       !parsed.products[0]?.colors?.some((c) => c.name === 'Marsala');
@@ -1507,6 +1506,54 @@ function loadDb(env: AppEnvironment = 'producao'): DatabaseSchema {
       }
       fs.writeFileSync(targetFile, JSON.stringify(upgraded, null, 2), 'utf-8');
       return upgraded;
+    }
+
+    // Apply owner-authorized Option A psychological pricing (.90) across existing integer tiers
+    // while keeping PTS-IG-47..54 at 149.90 and preserving all manufacturing costs & additional expenses
+    const scarpinSkus = new Set([
+      'PTS-IG-47',
+      'PTS-IG-48',
+      'PTS-IG-49',
+      'PTS-IG-50',
+      'PTS-IG-51',
+      'PTS-IG-52',
+      'PTS-IG-53',
+      'PTS-IG-54',
+    ]);
+    const optionAMap: Record<number, number> = {
+      150: 149.9,
+      130: 129.9,
+      110: 109.9,
+      100: 99.9,
+    };
+    let batchUpdated = false;
+    parsed.products = parsed.products.map((prod) => {
+      let targetPrice: number | null = null;
+      if (scarpinSkus.has(prod.sku) && (prod.price === 130 || prod.price === 129.9)) {
+        targetPrice = 149.9;
+      } else if (optionAMap[prod.price] !== undefined) {
+        targetPrice = optionAMap[prod.price];
+      }
+
+      if (targetPrice !== null) {
+        batchUpdated = true;
+        const mCost = Number(prod.manufacturingCost) || 0;
+        const extraExp = Number(prod.additionalExpenses) || 0;
+        const totalCost = Math.round((mCost + extraExp) * 100) / 100;
+        const gProfit = Math.round((targetPrice - totalCost) * 100) / 100;
+        const pMargin = Math.round((gProfit / targetPrice) * 10000) / 100;
+        return {
+          ...prod,
+          price: targetPrice,
+          grossProfit: mCost > 0 || extraExp > 0 ? gProfit : prod.grossProfit,
+          profitMarginPercent:
+            mCost > 0 || extraExp > 0 ? pMargin : prod.profitMarginPercent,
+        };
+      }
+      return prod;
+    });
+    if (batchUpdated) {
+      fs.writeFileSync(targetFile, JSON.stringify(parsed, null, 2), 'utf-8');
     }
 
     parsed.settings = {
@@ -2569,16 +2616,19 @@ DIRETRIZES DE ESTILO:
     }
   });
 
-  // FAST 1-CLICK MANUAL PRICE UPDATE ENDPOINT
-  app.patch('/api/admin/products/:id/price', requireAdminAuth, (req: Request, res: Response) => {
+  // FAST MANUAL PRICING, COST & PROFIT MARGIN UPDATE ENDPOINT
+  const handleUpdateProductPricing = (req: Request, res: Response) => {
     const env = resolveEnv(req);
     const { id } = req.params;
-    const { price } = req.body as { price?: number };
-
-    const numericPrice = Number(price);
-    if (!numericPrice || isNaN(numericPrice) || numericPrice <= 0) {
-      return res.status(400).json({ error: 'Informe um valor válido maior que zero.' });
-    }
+    const {
+      price,
+      manufacturingCost,
+      additionalExpenses,
+    } = req.body as {
+      price?: number;
+      manufacturingCost?: number;
+      additionalExpenses?: number;
+    };
 
     const db = loadDb(env);
     const idx = db.products.findIndex((p) => p.id === id);
@@ -2586,11 +2636,45 @@ DIRETRIZES DE ESTILO:
       return res.status(404).json({ error: 'Modelo não encontrado.' });
     }
 
-    db.products[idx].price = Math.round(numericPrice * 100) / 100;
-    saveDb(db, env);
+    const current = db.products[idx];
 
+    const nextPrice =
+      price !== undefined ? Math.round(Number(price) * 100) / 100 : current.price;
+    if (!nextPrice || isNaN(nextPrice) || nextPrice <= 0) {
+      return res.status(400).json({ error: 'Informe um preço de venda válido maior que zero.' });
+    }
+
+    // Never alter manufacturingCost or additionalExpenses automatically unless explicitly sent
+    const nextManufacturingCost =
+      manufacturingCost !== undefined
+        ? Math.max(0, Math.round(Number(manufacturingCost) * 100) / 100)
+        : Number(current.manufacturingCost) || 0;
+
+    const nextAdditionalExpenses =
+      additionalExpenses !== undefined
+        ? Math.max(0, Math.round(Number(additionalExpenses) * 100) / 100)
+        : Number(current.additionalExpenses) || 0;
+
+    const totalCost = Math.round((nextManufacturingCost + nextAdditionalExpenses) * 100) / 100;
+    const grossProfit = Math.round((nextPrice - totalCost) * 100) / 100;
+    const profitMarginPercent =
+      nextPrice > 0 ? Math.round((grossProfit / nextPrice) * 10000) / 100 : 0;
+
+    db.products[idx] = {
+      ...current,
+      price: nextPrice,
+      manufacturingCost: nextManufacturingCost,
+      additionalExpenses: nextAdditionalExpenses,
+      grossProfit,
+      profitMarginPercent,
+    };
+
+    saveDb(db, env);
     return res.json(db.products[idx]);
-  });
+  };
+
+  app.patch('/api/admin/products/:id/price', requireAdminAuth, handleUpdateProductPricing);
+  app.patch('/api/admin/products/:id/pricing', requireAdminAuth, handleUpdateProductPricing);
 
   // Create Product
   app.post('/api/admin/products', requireAdminAuth, (req: Request, res: Response) => {
@@ -2603,6 +2687,13 @@ DIRETRIZES DE ESTILO:
     }
 
     const defaultImg = body.image || '/instagram/feed_1_C454LXbOzrn_slide_1.jpg';
+    const salePrice = Math.round(Number(body.price) * 100) / 100;
+    const mCost = Math.max(0, Math.round(Number(body.manufacturingCost || 0) * 100) / 100);
+    const extraExp = Math.max(0, Math.round(Number(body.additionalExpenses || 0) * 100) / 100);
+    const totalCost = Math.round((mCost + extraExp) * 100) / 100;
+    const grossProfit = Math.round((salePrice - totalCost) * 100) / 100;
+    const profitMarginPercent =
+      salePrice > 0 ? Math.round((grossProfit / salePrice) * 10000) / 100 : 0;
 
     const newProduct: BespokeProduct = {
       id: `prod-${Date.now()}`,
@@ -2610,7 +2701,11 @@ DIRETRIZES DE ESTILO:
       name: body.name,
       subtitle: body.subtitle || 'Sandália Feminina Feita Sob Encomenda',
       category: body.category || 'Flatforms & Papetes',
-      price: Number(body.price),
+      price: salePrice,
+      manufacturingCost: mCost,
+      additionalExpenses: extraExp,
+      grossProfit,
+      profitMarginPercent,
       image: defaultImg,
       gallery:
         Array.isArray(body.gallery) && body.gallery.length > 0
@@ -2664,11 +2759,30 @@ DIRETRIZES DE ESTILO:
       return res.status(404).json({ error: 'Produto não encontrado.' });
     }
 
+    const current = db.products[idx];
+    const nextPrice = Math.round(Number(req.body.price ?? current.price) * 100) / 100;
+    const nextMCost =
+      req.body.manufacturingCost !== undefined
+        ? Math.max(0, Math.round(Number(req.body.manufacturingCost) * 100) / 100)
+        : Number(current.manufacturingCost) || 0;
+    const nextExtraExp =
+      req.body.additionalExpenses !== undefined
+        ? Math.max(0, Math.round(Number(req.body.additionalExpenses) * 100) / 100)
+        : Number(current.additionalExpenses) || 0;
+    const totalCost = Math.round((nextMCost + nextExtraExp) * 100) / 100;
+    const grossProfit = Math.round((nextPrice - totalCost) * 100) / 100;
+    const profitMarginPercent =
+      nextPrice > 0 ? Math.round((grossProfit / nextPrice) * 10000) / 100 : 0;
+
     const updated: BespokeProduct = {
-      ...db.products[idx],
+      ...current,
       ...req.body,
-      id: db.products[idx].id,
-      price: Number(req.body.price ?? db.products[idx].price),
+      id: current.id,
+      price: nextPrice,
+      manufacturingCost: nextMCost,
+      additionalExpenses: nextExtraExp,
+      grossProfit,
+      profitMarginPercent,
     };
 
     db.products[idx] = updated;

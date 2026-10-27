@@ -1,8 +1,140 @@
 export function formatBRL(value: number): string {
+  const safeVal = Number.isFinite(value) ? value : 0;
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
-  }).format(value);
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(safeVal);
+}
+
+/**
+ * Verifica se o preço já segue a padronização psicológica terminando em ,90
+ */
+export function isPsychological90Price(price: number): boolean {
+  if (!Number.isFinite(price) || price <= 0) return false;
+  const cents = Math.round((price - Math.floor(price)) * 100);
+  return cents === 90;
+}
+
+/**
+ * Gera sugestões de preço psicológico com final ,90 sem aplicar automaticamente:
+ * - equivalent90: Ex: R$ 130,00 -> R$ 129,90 | R$ 150,00 -> R$ 149,90 | R$ 170,00 -> R$ 169,90
+ * - preserveMargin90: Nunca reduz o valor cadastrado (Ex: R$ 130,00 -> R$ 139,90 | R$ 150,00 -> R$ 159,90)
+ */
+export function getPsychologicalPriceSuggestions(currentPrice: number): {
+  already90: boolean;
+  equivalent90: number;
+  preserveMargin90: number;
+} {
+  const safePrice = Number.isFinite(currentPrice) && currentPrice > 0 ? currentPrice : 129.9;
+  if (isPsychological90Price(safePrice)) {
+    return {
+      already90: true,
+      equivalent90: Math.round(safePrice * 100) / 100,
+      preserveMargin90: Math.round(safePrice * 100) / 100,
+    };
+  }
+
+  const intPart = Math.floor(safePrice);
+  const equivalent90 =
+    intPart % 10 === 0 && intPart >= 20
+      ? intPart - 1 + 0.9
+      : Math.max(9.9, intPart - 1 + 0.9);
+
+  const preserveMargin90 =
+    intPart % 10 === 0
+      ? intPart + 9.9
+      : intPart + 0.9 >= safePrice
+      ? intPart + 0.9
+      : intPart + 1.9;
+
+  return {
+    already90: false,
+    equivalent90: Math.round(equivalent90 * 100) / 100,
+    preserveMargin90: Math.round(preserveMargin90 * 100) / 100,
+  };
+}
+
+export interface ProductFinancialMetrics {
+  manufacturingCost: number;
+  additionalExpenses: number;
+  totalCost: number;
+  salePrice: number;
+  deposit50Value: number;
+  grossProfit: number;
+  profitMarginPercent: number;
+  markupPercent: number;
+  depositCoversCost: boolean;
+  depositCostCoverageDiff: number;
+  already90: boolean;
+  suggestedEquivalent90: number;
+  suggestedPreserveMargin90: number;
+}
+
+/**
+ * Calcula automaticamente o custo total, lucro bruto (R$), margem de lucro (%)
+ * e cobertura de custo pela entrada de 50% (produção sob encomenda).
+ */
+export function calculateProductFinancials(params: {
+  salePrice: number;
+  manufacturingCost?: number;
+  additionalExpenses?: number;
+}): ProductFinancialMetrics {
+  const salePrice = Math.max(0, Number(params.salePrice) || 0);
+  const manufacturingCost = Math.max(0, Number(params.manufacturingCost) || 0);
+  const additionalExpenses = Math.max(0, Number(params.additionalExpenses) || 0);
+  const totalCost = Math.round((manufacturingCost + additionalExpenses) * 100) / 100;
+
+  const grossProfit = Math.round((salePrice - totalCost) * 100) / 100;
+  const profitMarginPercent =
+    salePrice > 0 ? Math.round((grossProfit / salePrice) * 10000) / 100 : 0;
+  const markupPercent =
+    totalCost > 0 ? Math.round((grossProfit / totalCost) * 10000) / 100 : 0;
+
+  const deposit50Value = Math.round(salePrice * 0.5 * 100) / 100;
+  const depositCoversCost = totalCost === 0 || deposit50Value >= totalCost;
+  const depositCostCoverageDiff = Math.round((deposit50Value - totalCost) * 100) / 100;
+
+  const psych = getPsychologicalPriceSuggestions(salePrice);
+
+  return {
+    manufacturingCost,
+    additionalExpenses,
+    totalCost,
+    salePrice,
+    deposit50Value,
+    grossProfit,
+    profitMarginPercent,
+    markupPercent,
+    depositCoversCost,
+    depositCostCoverageDiff,
+    already90: psych.already90,
+    suggestedEquivalent90: psych.equivalent90,
+    suggestedPreserveMargin90: psych.preserveMargin90,
+  };
+}
+
+/**
+ * Sugere o preço de venda (com opção padronizada em ,90) a partir do custo total
+ * e da margem de lucro percentual desejada, sem alterar custos.
+ */
+export function suggestSalePriceFromMargin(
+  totalCost: number,
+  desiredMarginPercent: number,
+  roundTo90 = true
+): number {
+  const safeCost = Math.max(0, Number(totalCost) || 0);
+  const clampedMargin = Math.min(95, Math.max(0, Number(desiredMarginPercent) || 0));
+  if (safeCost <= 0) return 0;
+  const rawPrice = safeCost / (1 - clampedMargin / 100);
+  if (!roundTo90) {
+    return Math.round(rawPrice * 100) / 100;
+  }
+  const baseInt = Math.floor(rawPrice);
+  const candidate = baseInt + 0.9;
+  const final90 = candidate >= rawPrice ? candidate : baseInt + 1 + 0.9;
+  return Math.round(final90 * 100) / 100;
 }
 
 export function formatCPF(value: string): string {

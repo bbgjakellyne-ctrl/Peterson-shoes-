@@ -14,9 +14,14 @@ export interface BespokeProduct {
     | 'Flatforms & Papetes'
     | 'Anabelas & Plataformas'
     | 'Rasteiras & Gladiadoras'
+    | 'Scarpins & Saltos'
     | 'Tamancos & Saltos'
     | string;
   price: number;
+  manufacturingCost?: number;
+  additionalExpenses?: number;
+  grossProfit?: number;
+  profitMarginPercent?: number;
   image: string;
   gallery?: string[];
   instagramPostUrl?: string;

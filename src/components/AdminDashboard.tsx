@@ -27,7 +27,13 @@ import {
   ProductionStatus,
   StoreSettings,
 } from '../types/peterson';
-import { formatBRL } from '../utils/payment';
+import {
+  calculateProductFinancials,
+  formatBRL,
+  getPsychologicalPriceSuggestions,
+  isPsychological90Price,
+  suggestSalePriceFromMargin,
+} from '../utils/payment';
 import {
   buildFactoryProductionMessage,
   buildReadyForFinalPaymentMessage,
@@ -297,10 +303,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [loading, setLoading] = useState(false);
   const [copiedTextId, setCopiedTextId] = useState<string | null>(null);
 
-  // Fast manual price editing state per product ID
+  // Fast manual price & cost editing state per product ID
   const [priceDrafts, setPriceDrafts] = useState<Record<string, string>>({});
+  const [costDrafts, setCostDrafts] = useState<Record<string, string>>({});
+  const [expenseDrafts, setExpenseDrafts] = useState<Record<string, string>>({});
+  const [profitDrafts, setProfitDrafts] = useState<Record<string, string>>({});
+  const [marginDrafts, setMarginDrafts] = useState<Record<string, string>>({});
   const [savingPriceId, setSavingPriceId] = useState<string | null>(null);
   const [savedPriceId, setSavedPriceId] = useState<string | null>(null);
+  const [approvingTierKey, setApprovingTierKey] = useState<string | null>(null);
 
   // Product Form Modal / Drawer State
   const [editingProduct, setEditingProduct] = useState<Partial<BespokeProduct> | null>(
@@ -337,11 +348,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       .reduce((sum, p) => sum + p.amount, 0);
 
     setProducts(db.products);
-    const drafts: Record<string, string> = {};
+    const pDrafts: Record<string, string> = {};
+    const cDrafts: Record<string, string> = {};
+    const eDrafts: Record<string, string> = {};
+    const prDrafts: Record<string, string> = {};
+    const mDrafts: Record<string, string> = {};
     for (const p of db.products) {
-      drafts[p.id] = p.price.toFixed(2);
+      pDrafts[p.id] = p.price.toFixed(2);
+      const mCost = p.manufacturingCost ?? 0;
+      const aExp = p.additionalExpenses ?? 0;
+      cDrafts[p.id] = mCost > 0 ? mCost.toFixed(2) : '';
+      eDrafts[p.id] = aExp > 0 ? aExp.toFixed(2) : '';
+      const fin = calculateProductFinancials(p.price, mCost, aExp);
+      prDrafts[p.id] = mCost > 0 || aExp > 0 ? fin.grossProfit.toFixed(2) : '';
+      mDrafts[p.id] = mCost > 0 || aExp > 0 ? fin.profitMarginPercent.toFixed(2) : '';
     }
-    setPriceDrafts(drafts);
+    setPriceDrafts(pDrafts);
+    setCostDrafts(cDrafts);
+    setExpenseDrafts(eDrafts);
+    setProfitDrafts(prDrafts);
+    setMarginDrafts(mDrafts);
     setOrders(enrichedOrders);
     setCustomers(db.customers);
     setPayments(db.payments);
@@ -476,23 +502,119 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   };
 
-  // 1-Click Manual Price Update Handler
-  const handleQuickSavePrice = async (productId: string) => {
+  // Helper to parse localized numbers
+  const parseNumInput = (val: string | undefined): number => {
+    if (!val || val.trim() === '') return 0;
+    const parsed = parseFloat(val.replace(',', '.'));
+    return isNaN(parsed) ? 0 : Math.max(0, parsed);
+  };
+
+  // Real-time financial recalculation when Price, Manufacturing Cost, or Additional Expenses change
+  const handleFinancialFieldChange = (
+    productId: string,
+    field: 'price' | 'cost' | 'expenses',
+    rawValue: string
+  ) => {
+    const prod = products.find((p) => p.id === productId);
+    const nextPriceStr = field === 'price' ? rawValue : priceDrafts[productId] ?? String(prod?.price ?? 0);
+    const nextCostStr = field === 'cost' ? rawValue : costDrafts[productId] ?? '';
+    const nextExpStr = field === 'expenses' ? rawValue : expenseDrafts[productId] ?? '';
+
+    if (field === 'price') {
+      setPriceDrafts((prev) => ({ ...prev, [productId]: rawValue }));
+    } else if (field === 'cost') {
+      setCostDrafts((prev) => ({ ...prev, [productId]: rawValue }));
+    } else {
+      setExpenseDrafts((prev) => ({ ...prev, [productId]: rawValue }));
+    }
+
+    const salePrice = parseNumInput(nextPriceStr);
+    const mCost = parseNumInput(nextCostStr);
+    const aExp = parseNumInput(nextExpStr);
+
+    if (salePrice > 0 && (mCost > 0 || aExp > 0 || nextCostStr.trim() !== '' || nextExpStr.trim() !== '')) {
+      const fin = calculateProductFinancials(salePrice, mCost, aExp);
+      setProfitDrafts((prev) => ({ ...prev, [productId]: fin.grossProfit.toFixed(2) }));
+      setMarginDrafts((prev) => ({ ...prev, [productId]: fin.profitMarginPercent.toFixed(2) }));
+    } else {
+      setProfitDrafts((prev) => ({ ...prev, [productId]: '' }));
+      setMarginDrafts((prev) => ({ ...prev, [productId]: '' }));
+    }
+  };
+
+  // Real-time simulation when Gross Profit (R$) or Profit Margin (%) is edited by the admin
+  const handleTargetProfitOrMarginChange = (
+    productId: string,
+    mode: 'profit' | 'margin',
+    rawValue: string
+  ) => {
+    const mCost = parseNumInput(costDrafts[productId]);
+    const aExp = parseNumInput(expenseDrafts[productId]);
+    const totalCost = mCost + aExp;
+
+    if (mode === 'profit') {
+      setProfitDrafts((prev) => ({ ...prev, [productId]: rawValue }));
+      const desiredProfit = parseFloat(rawValue.replace(',', '.'));
+      if (!isNaN(desiredProfit) && totalCost > 0) {
+        const rawTargetPrice = totalCost + desiredProfit;
+        if (rawTargetPrice > 0) {
+          const fin = calculateProductFinancials(rawTargetPrice, mCost, aExp);
+          setMarginDrafts((prev) => ({
+            ...prev,
+            [productId]: fin.profitMarginPercent.toFixed(2),
+          }));
+        }
+      }
+    } else {
+      setMarginDrafts((prev) => ({ ...prev, [productId]: rawValue }));
+      const desiredMargin = parseFloat(rawValue.replace(',', '.'));
+      if (!isNaN(desiredMargin) && desiredMargin > 0 && desiredMargin < 95 && totalCost > 0) {
+        const suggestedPrice = suggestSalePriceFromMargin(mCost, aExp, desiredMargin, true);
+        const fin = calculateProductFinancials(suggestedPrice, mCost, aExp);
+        setProfitDrafts((prev) => ({
+          ...prev,
+          [productId]: fin.grossProfit.toFixed(2),
+        }));
+      }
+    }
+  };
+
+  // 1-Click Manual Pricing & Cost Save Handler (Requires explicit owner action)
+  const handleQuickSavePrice = async (
+    productId: string,
+    overrideSalePrice?: number
+  ) => {
     if (!token) return;
-    const rawVal = (priceDrafts[productId] || '').replace(',', '.');
+    const rawVal =
+      overrideSalePrice !== undefined
+        ? String(overrideSalePrice)
+        : (priceDrafts[productId] || '').replace(',', '.');
     const numericPrice = parseFloat(rawVal);
     if (isNaN(numericPrice) || numericPrice <= 0) return;
 
     const roundedPrice = Math.round(numericPrice * 100) / 100;
+    const costRaw = (costDrafts[productId] || '').trim();
+    const expRaw = (expenseDrafts[productId] || '').trim();
+    const hasCostInput = costRaw !== '' || expRaw !== '';
+    const mCost = parseNumInput(costRaw);
+    const aExp = parseNumInput(expRaw);
+    const fin = calculateProductFinancials(roundedPrice, mCost, aExp);
+
     setSavingPriceId(productId);
     try {
+      const payloadBody: Record<string, number> = { price: roundedPrice };
+      if (hasCostInput) {
+        payloadBody.manufacturingCost = mCost;
+        payloadBody.additionalExpenses = aExp;
+      }
+
       const res = await apiFetch(`/api/admin/products/${productId}/price`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ price: roundedPrice }),
+        body: JSON.stringify(payloadBody),
       });
 
       if (res.status === 401 || res.status === 403) {
@@ -502,15 +624,39 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       if (res.ok) {
         const localDb = getBrowserStoreDb();
-        const updatedProducts = localDb.products.map((p) =>
-          p.id === productId ? { ...p, price: roundedPrice } : p
-        );
+        const updatedProducts = localDb.products.map((p) => {
+          if (p.id !== productId) return p;
+          const nextCost = hasCostInput ? mCost : p.manufacturingCost ?? 0;
+          const nextExp = hasCostInput ? aExp : p.additionalExpenses ?? 0;
+          const calc = calculateProductFinancials(roundedPrice, nextCost, nextExp);
+          return {
+            ...p,
+            price: roundedPrice,
+            manufacturingCost: hasCostInput ? mCost : p.manufacturingCost,
+            additionalExpenses: hasCostInput ? aExp : p.additionalExpenses,
+            grossProfit: nextCost > 0 || nextExp > 0 ? calc.grossProfit : p.grossProfit,
+            profitMarginPercent:
+              nextCost > 0 || nextExp > 0
+                ? calc.profitMarginPercent
+                : p.profitMarginPercent,
+          };
+        });
         saveBrowserStoreDb({ ...localDb, products: updatedProducts });
         setProducts(updatedProducts);
         setPriceDrafts((prev) => ({
           ...prev,
           [productId]: roundedPrice.toFixed(2),
         }));
+        if (hasCostInput || mCost > 0 || aExp > 0) {
+          setProfitDrafts((prev) => ({
+            ...prev,
+            [productId]: fin.grossProfit.toFixed(2),
+          }));
+          setMarginDrafts((prev) => ({
+            ...prev,
+            [productId]: fin.profitMarginPercent.toFixed(2),
+          }));
+        }
         setSavedPriceId(productId);
         onCatalogUpdated();
         setTimeout(() => {
@@ -519,6 +665,50 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       }
     } finally {
       setSavingPriceId(null);
+    }
+  };
+
+  // Batch approval handler for a price tier (e.g., R$ 150,00 -> R$ 149,90) upon owner's click
+  const handleApprovePriceTierBatch = async (fromPrice: number, toPrice: number) => {
+    if (!token) return;
+    const matchingProducts = products.filter(
+      (p) => Math.abs(p.price - fromPrice) < 0.01
+    );
+    if (matchingProducts.length === 0) return;
+
+    const tierKey = `${fromPrice}->${toPrice}`;
+    setApprovingTierKey(tierKey);
+    try {
+      for (const prod of matchingProducts) {
+        await apiFetch(`/api/admin/products/${prod.id}/price`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ price: toPrice }),
+        });
+      }
+
+      const localDb = getBrowserStoreDb();
+      const updatedProducts = localDb.products.map((p) => {
+        if (Math.abs(p.price - fromPrice) >= 0.01) return p;
+        const mCost = p.manufacturingCost ?? 0;
+        const aExp = p.additionalExpenses ?? 0;
+        const calc = calculateProductFinancials(toPrice, mCost, aExp);
+        return {
+          ...p,
+          price: toPrice,
+          grossProfit: mCost > 0 || aExp > 0 ? calc.grossProfit : p.grossProfit,
+          profitMarginPercent:
+            mCost > 0 || aExp > 0 ? calc.profitMarginPercent : p.profitMarginPercent,
+        };
+      });
+      saveBrowserStoreDb({ ...localDb, products: updatedProducts });
+      applyDashboardFromDb({ ...localDb, products: updatedProducts });
+      onCatalogUpdated();
+    } finally {
+      setApprovingTierKey(null);
     }
   };
 
@@ -660,6 +850,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     const defaultImg =
       editingProduct.image || '/instagram/feed_1_C454LXbOzrn_slide_1.jpg';
 
+    const numericPrice = Number(editingProduct.price || 149.9);
+    const numericMfgCost = Number(editingProduct.manufacturingCost || 0);
+    const numericAddExp = Number(editingProduct.additionalExpenses || 0);
+    const prodFinancials = calculateProductFinancials(
+      numericPrice,
+      numericMfgCost,
+      numericAddExp
+    );
+
     const payload: BespokeProduct = {
       id: editingProduct.id || `prod-${Date.now()}`,
       sku:
@@ -668,7 +867,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       subtitle:
         editingProduct.subtitle || 'Sandália Feminina Feita Sob Encomenda',
       category: editingProduct.category || 'Flatforms & Papetes',
-      price: Number(editingProduct.price || 229.9),
+      price: numericPrice,
+      manufacturingCost:
+        numericMfgCost > 0 ? numericMfgCost : existingProd?.manufacturingCost,
+      additionalExpenses:
+        numericAddExp > 0 ? numericAddExp : existingProd?.additionalExpenses,
+      grossProfit:
+        numericMfgCost > 0 || numericAddExp > 0
+          ? prodFinancials.grossProfit
+          : existingProd?.grossProfit,
+      profitMarginPercent:
+        numericMfgCost > 0 || numericAddExp > 0
+          ? prodFinancials.profitMarginPercent
+          : existingProd?.profitMarginPercent,
       image: defaultImg,
       gallery:
         Array.isArray(editingProduct.gallery) &&
@@ -1144,22 +1355,24 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </button>
         </div>
 
-        {/* TAB 1: PRODUCTS CATALOG & 1-CLICK MANUAL PRICE EDITOR */}
+        {/* TAB 1: PRODUCTS CATALOG, COST/PROFIT CALCULATOR & PSYCHOLOGICAL PRICING (.90) */}
         {activeTab === 'PRODUCTS' && (
           <div className="space-y-6">
             <div className="p-5 bg-white border border-[#DFD3C3] rounded-xl flex flex-wrap items-center justify-between gap-4">
               <div className="space-y-1">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#5B1824]">
-                  Edição Manual de Valores · Restante 100% Automatizado
+                  Gestão Estratégica de Custos, Lucro, Margem & Precificação Psicológica (,90)
                 </span>
                 <h2 className="text-2xl font-semibold text-[#231619]">
-                  Todos os {products.length} Modelos do Instagram @petersonshoes_
+                  Todos os {products.length} Modelos Sob Encomenda @petersonshoes_
                 </h2>
-                <p className="text-xs text-[#6E5A5F] max-w-2xl">
-                  Para alterar o preço de qualquer sandália, basta digitar o novo valor no campo{' '}
-                  <strong>&ldquo;Valor Total (R$)&rdquo;</strong> abaixo de cada modelo e clicar em{' '}
-                  <strong>&ldquo;Salvar Valor&rdquo;</strong>. O sistema recalcula sozinho os{' '}
-                  <strong>50% de entrada (Pix)</strong> e os <strong>50% finais</strong> na loja!
+                <p className="text-xs text-[#6E5A5F] max-w-3xl">
+                  Cadastre e edite o <strong>Custo de Fabricação</strong>,{' '}
+                  <strong>Despesas Adicionais por Produto</strong> e o{' '}
+                  <strong>Preço de Venda (R$)</strong>. O sistema calcula automaticamente o{' '}
+                  <strong>Lucro Bruto (R$)</strong> e a <strong>Margem de Lucro (%)</strong> sem
+                  nunca alterar seus custos automaticamente e sem modificar nenhum preço cadastrado sem
+                  a sua autorização.
                 </p>
               </div>
               <button
@@ -1171,6 +1384,127 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <span>Adicionar Novo Modelo</span>
               </button>
             </div>
+
+            {/* PAINEL DE SUGESTÕES DE PADRONIZAÇÃO PSICOLÓGICA (,90) PARA APROVAÇÃO DA PROPRIETÁRIA */}
+            {(() => {
+              const nonStandardProducts = products.filter(
+                (p) => !isPsychological90Price(p.price)
+              );
+              const standardCount = products.length - nonStandardProducts.length;
+              const tierGroups = [150, 130, 110, 100]
+                .map((basePrice) => ({
+                  basePrice,
+                  items: nonStandardProducts.filter(
+                    (p) => Math.abs(p.price - basePrice) < 0.01
+                  ),
+                  psychPrice: basePrice - 0.1, // Ex: 150 -> 149,90 | 130 -> 129,90
+                  upTierPrice: basePrice + 9.9, // Ex: 150 -> 159,90 | 130 -> 139,90 (zero redução)
+                }))
+                .filter((g) => g.items.length > 0);
+
+              return (
+                <div className="p-5 bg-[#FAF6F0] border-2 border-[#5B1824]/25 rounded-xl space-y-4">
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-0.5 rounded-md bg-[#5B1824] text-[#F7F3EC] text-[10px] font-bold uppercase tracking-wider">
+                          Estratégia Psicológica Final ,90
+                        </span>
+                        <span className="text-xs font-semibold text-[#2E6B3E]">
+                          {standardCount} de {products.length} modelos já padronizados com final ,90
+                        </span>
+                      </div>
+                      <h3 className="text-base font-semibold text-[#231619]">
+                        Sugestões de Padronização de Preços (Aguardando Sua Aprovação)
+                      </h3>
+                      <p className="text-xs text-[#6E5A5F] max-w-3xl">
+                        Os 8 novos modelos de Scarpins & Saltos (<code className="font-mono-tabular">PTS-IG-47</code> a{' '}
+                        <code className="font-mono-tabular">PTS-IG-54</code>) já foram atualizados para{' '}
+                        <strong className="text-[#5B1824]">R$ 149,90</strong> conforme solicitado. Os demais{' '}
+                        <strong>{nonStandardProducts.length} modelos</strong> permanecem nos valores originais até
+                        que você aprove uma sugestão abaixo ou ajuste individualmente no card de cada produto:
+                      </p>
+                    </div>
+                  </div>
+
+                  {tierGroups.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                      {tierGroups.map((group) => (
+                        <div
+                          key={group.basePrice}
+                          className="p-3.5 bg-white border border-[#DFD3C3] rounded-xl flex flex-col justify-between gap-3"
+                        >
+                          <div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-[11px] font-bold uppercase tracking-wider text-[#6E5A5F]">
+                                Faixa Atual: {formatBRL(group.basePrice)}
+                              </span>
+                              <span className="px-2 py-0.5 rounded bg-[#F7F3EC] text-[#5B1824] text-[11px] font-bold font-mono-tabular">
+                                {group.items.length} modelo(s)
+                              </span>
+                            </div>
+                            <p className="text-xs text-[#4A373B] mt-1.5">
+                              Sugestão Psicológica:{' '}
+                              <strong className="text-[#231619] font-mono-tabular">
+                                {formatBRL(group.basePrice)} → {formatBRL(group.psychPrice)}
+                              </strong>
+                            </p>
+                            <p className="text-[11px] text-[#6E5A5F] mt-0.5">
+                              Ou manter/elevar margem:{' '}
+                              <strong className="text-[#2E6B3E] font-mono-tabular">
+                                {formatBRL(group.upTierPrice)}
+                              </strong>
+                            </p>
+                          </div>
+
+                          <div className="flex flex-col gap-1.5 pt-2 border-t border-[#EFE7DA]">
+                            <button
+                              type="button"
+                              disabled={approvingTierKey !== null}
+                              onClick={() =>
+                                handleApprovePriceTierBatch(
+                                  group.basePrice,
+                                  group.psychPrice
+                                )
+                              }
+                              className="w-full py-1.5 px-2.5 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-[11px] font-semibold cursor-pointer transition-colors"
+                            >
+                              {approvingTierKey ===
+                              `${group.basePrice}->${group.psychPrice}`
+                                ? 'Aplicando...'
+                                : `Aprovar ${formatBRL(group.psychPrice)} (${group.items.length})`}
+                            </button>
+                            <button
+                              type="button"
+                              disabled={approvingTierKey !== null}
+                              onClick={() =>
+                                handleApprovePriceTierBatch(
+                                  group.basePrice,
+                                  group.upTierPrice
+                                )
+                              }
+                              className="w-full py-1.5 px-2.5 bg-[#EFE7DA] hover:bg-[#E2D4C0] text-[#231619] rounded-lg text-[11px] font-semibold cursor-pointer transition-colors"
+                            >
+                              {approvingTierKey ===
+                              `${group.basePrice}->${group.upTierPrice}`
+                                ? 'Aplicando...'
+                                : `Aprovar ${formatBRL(group.upTierPrice)} (Sem Reduzir)`}
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="p-3 bg-[#2E6B3E]/10 border border-[#2E6B3E]/30 rounded-lg text-xs text-[#2E6B3E] font-semibold flex items-center gap-2">
+                      <Check className="w-4 h-4 shrink-0" />
+                      <span>
+                        Todos os produtos do catálogo já estão padronizados com precificação psicológica final ,90!
+                      </span>
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* Full Product Editor Modal/Form (Optional when editing full details) */}
             {editingProduct && (
@@ -1245,25 +1579,101 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-[#231619] mb-1">
-                      Preço Total (R$) * — Entrada será 50%
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      required
-                      value={editingProduct.price ?? 229.9}
-                      onChange={(e) =>
-                        setEditingProduct({
-                          ...editingProduct,
-                          price: parseFloat(e.target.value),
-                        })
-                      }
-                      className="w-full px-3 py-2 bg-[#F7F3EC] border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular"
-                    />
-                  </div>
+                {/* Bloco de Custos, Preço de Venda, Lucro Bruto e Margem no Modal */}
+                {(() => {
+                  const modalPrice = Number(editingProduct.price ?? 149.9);
+                  const modalCost = Number(editingProduct.manufacturingCost ?? 0);
+                  const modalExp = Number(editingProduct.additionalExpenses ?? 0);
+                  const modalFin = calculateProductFinancials(
+                    modalPrice,
+                    modalCost,
+                    modalExp
+                  );
+                  return (
+                    <div className="p-4 rounded-xl bg-[#FAF6F0] border border-[#DFD3C3] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#231619] mb-1">
+                          Custo de Fabricação (R$)
+                        </label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          placeholder="Ex: 55.00"
+                          value={editingProduct.manufacturingCost ?? ''}
+                          onChange={(e) =>
+                            setEditingProduct({
+                              ...editingProduct,
+                              manufacturingCost:
+                                e.target.value === ''
+                                  ? undefined
+                                  : parseFloat(e.target.value),
+                            })
+                          }
+                          className="w-full px-3 py-2 bg-white border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#231619] mb-1">
+                          Despesas Adicionais (R$)
+                        </label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          placeholder="Embalagem, etc."
+                          value={editingProduct.additionalExpenses ?? ''}
+                          onChange={(e) =>
+                            setEditingProduct({
+                              ...editingProduct,
+                              additionalExpenses:
+                                e.target.value === ''
+                                  ? undefined
+                                  : parseFloat(e.target.value),
+                            })
+                          }
+                          className="w-full px-3 py-2 bg-white border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-[#5B1824] mb-1">
+                          Preço de Venda (R$) *
+                        </label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          required
+                          value={editingProduct.price ?? 149.9}
+                          onChange={(e) =>
+                            setEditingProduct({
+                              ...editingProduct,
+                              price: parseFloat(e.target.value),
+                            })
+                          }
+                          className="w-full px-3 py-2 bg-white border-2 border-[#5B1824] rounded-lg text-xs font-mono-tabular font-bold"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#2E6B3E] mb-1">
+                          Lucro Bruto (R$)
+                        </label>
+                        <div className="w-full px-3 py-2 bg-[#EFE7DA]/60 border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular font-bold text-[#2E6B3E]">
+                          {formatBRL(modalFin.grossProfit)}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#2E6B3E] mb-1">
+                          Margem de Lucro (%)
+                        </label>
+                        <div className="w-full px-3 py-2 bg-[#EFE7DA]/60 border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular font-bold text-[#2E6B3E]">
+                          {modalFin.profitMarginPercent.toFixed(1).replace('.', ',')}%
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-[#231619] mb-1">
                       Subtítulo / Material
@@ -1282,7 +1692,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-[#231619] mb-1">
-                      Prazo de Produção (Dias)
+                      Prazo de Produção Sob Encomenda (Dias)
                     </label>
                     <input
                       type="number"
@@ -1301,7 +1711,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-[#231619] mb-1">
-                      Foto do Produto (30 Fotos Reais @petersonshoes_ ou Enviar Nova Foto)
+                      Foto do Produto (Fotos Reais @petersonshoes_ ou Enviar Nova Foto)
                     </label>
                     <select
                       value={editingProduct.image || IMAGE_PRESETS[0].url}
@@ -1425,15 +1835,46 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </form>
             )}
 
-            {/* Products Grid with Direct Manual Price Input on Every Card */}
+            {/* Products Grid with Cost, Expenses, Sale Price, Profit, Margin & Psychological .90 Suggestions */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {products.map((prod) => {
                 const draftVal = priceDrafts[prod.id] ?? prod.price.toFixed(2);
+                const costVal = costDrafts[prod.id] ?? '';
+                const expVal = expenseDrafts[prod.id] ?? '';
+                const profitVal = profitDrafts[prod.id] ?? '';
+                const marginVal = marginDrafts[prod.id] ?? '';
+
                 const numericDraft = parseFloat(String(draftVal).replace(',', '.'));
-                const previewDeposit = !isNaN(numericDraft)
-                  ? numericDraft * 0.5
-                  : prod.price * 0.5;
+                const activeSalePrice = !isNaN(numericDraft) && numericDraft > 0
+                  ? numericDraft
+                  : prod.price;
+                const numericCost = parseNumInput(costVal);
+                const numericExp = parseNumInput(expVal);
+                const totalUnitCost = numericCost + numericExp;
+                const liveFinancials = calculateProductFinancials(
+                  activeSalePrice,
+                  numericCost,
+                  numericExp
+                );
+                const previewDeposit = activeSalePrice * 0.5;
                 const isJustSaved = savedPriceId === prod.id;
+                const hasPsych90 = isPsychological90Price(prod.price);
+                const psychSuggestions = getPsychologicalPriceSuggestions(prod.price);
+
+                // Check if admin simulated a different profit or margin that suggests a new .90 sale price
+                const desiredMarginNum = parseFloat(String(marginVal).replace(',', '.'));
+                const suggestedPriceFromMargin =
+                  totalUnitCost > 0 &&
+                  !isNaN(desiredMarginNum) &&
+                  desiredMarginNum > 0 &&
+                  desiredMarginNum < 95
+                    ? suggestSalePriceFromMargin(
+                        numericCost,
+                        numericExp,
+                        desiredMarginNum,
+                        true
+                      )
+                    : null;
 
                 return (
                   <div
@@ -1450,13 +1891,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         <div className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-md bg-black/65 text-white text-[11px] font-mono-tabular">
                           {prod.sku} · {prod.colors.length} cor(es)
                         </div>
+                        <div
+                          className={`absolute top-2.5 right-2.5 px-2.5 py-1 rounded-md text-[11px] font-bold font-mono-tabular ${
+                            hasPsych90
+                              ? 'bg-[#2E6B3E] text-white'
+                              : 'bg-[#5B1824] text-[#F7F3EC]'
+                          }`}
+                        >
+                          {formatBRL(prod.price)}
+                        </div>
                       </div>
 
                       <div className="p-4 space-y-3">
                         <div>
-                          <p className="text-[11px] font-semibold uppercase tracking-wider text-[#5B1824]">
-                            {prod.category}
-                          </p>
+                          <div className="flex items-center justify-between gap-2">
+                            <p className="text-[11px] font-semibold uppercase tracking-wider text-[#5B1824]">
+                              {prod.category}
+                            </p>
+                            <span className="text-[10px] font-medium text-[#6E5A5F]">
+                              Sob Encomenda ({prod.productionDays}d)
+                            </span>
+                          </div>
                           <h3 className="text-base font-semibold text-[#231619] mt-0.5">
                             {prod.name}
                           </h3>
@@ -1465,58 +1920,286 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           </p>
                         </div>
 
-                        {/* INLINE MANUAL PRICE EDITOR BOX */}
-                        <div className="p-3.5 rounded-xl bg-[#F7F3EC] border border-[#DFD3C3] space-y-2">
+                        {/* PAINEL DE PRECIFICAÇÃO, CUSTO DE FABRICAÇÃO, DESPESAS, LUCRO E MARGEM */}
+                        <div className="p-3.5 rounded-xl bg-[#F7F3EC] border border-[#DFD3C3] space-y-3">
                           <div className="flex items-center justify-between">
-                            <label
-                              htmlFor={`price-input-${prod.id}`}
-                              className="text-xs font-bold text-[#5B1824]"
-                            >
-                              Editar Valor Manual (R$):
-                            </label>
+                            <span className="text-xs font-bold text-[#5B1824]">
+                              Precificação & Estrutura de Lucro
+                            </span>
                             {isJustSaved && (
                               <span className="text-[11px] font-semibold text-[#2E6B3E] flex items-center gap-1">
                                 <Check className="w-3.5 h-3.5" />
-                                Salvo na loja!
+                                Salvo com sucesso!
                               </span>
                             )}
                           </div>
 
-                          <div className="flex items-center gap-2">
-                            <div className="relative flex-1">
-                              <span className="text-xs font-semibold text-[#6E5A5F] absolute left-3 top-1/2 -translate-y-1/2">
-                                R$
-                              </span>
-                              <input
-                                id={`price-input-${prod.id}`}
-                                type="number"
-                                step="0.10"
-                                value={draftVal}
-                                onChange={(e) =>
-                                  setPriceDrafts((prev) => ({
-                                    ...prev,
-                                    [prod.id]: e.target.value,
-                                  }))
-                                }
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Enter') {
-                                    e.preventDefault();
-                                    handleQuickSavePrice(prod.id);
+                          {/* Linha 1: Custo de Fabricação + Despesas Adicionais */}
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label
+                                htmlFor={`cost-input-${prod.id}`}
+                                className="block text-[10px] font-semibold text-[#4A373B] mb-1"
+                              >
+                                Custo de Fabricação (R$)
+                              </label>
+                              <div className="relative">
+                                <span className="text-[10px] font-semibold text-[#6E5A5F] absolute left-2.5 top-1/2 -translate-y-1/2">
+                                  R$
+                                </span>
+                                <input
+                                  id={`cost-input-${prod.id}`}
+                                  type="number"
+                                  step="0.10"
+                                  min="0"
+                                  placeholder="0,00"
+                                  value={costVal}
+                                  onChange={(e) =>
+                                    handleFinancialFieldChange(
+                                      prod.id,
+                                      'cost',
+                                      e.target.value
+                                    )
                                   }
-                                }}
-                                className="w-full pl-8 pr-3 py-2 bg-white border border-[#DFD3C3] focus:border-[#5B1824] rounded-lg text-sm font-mono-tabular font-bold text-[#231619] focus:outline-none"
-                              />
+                                  className="w-full pl-7 pr-2 py-1.5 bg-white border border-[#DFD3C3] focus:border-[#5B1824] rounded-lg text-xs font-mono-tabular text-[#231619] focus:outline-none"
+                                />
+                              </div>
                             </div>
 
-                            <button
-                              type="button"
-                              disabled={savingPriceId === prod.id}
-                              onClick={() => handleQuickSavePrice(prod.id)}
-                              className="px-3.5 py-2 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-semibold cursor-pointer whitespace-nowrap shrink-0 transition-colors"
-                            >
-                              {savingPriceId === prod.id ? 'Salvando...' : 'Salvar Valor'}
-                            </button>
+                            <div>
+                              <label
+                                htmlFor={`exp-input-${prod.id}`}
+                                className="block text-[10px] font-semibold text-[#4A373B] mb-1"
+                              >
+                                Despesas Adicionais (R$)
+                              </label>
+                              <div className="relative">
+                                <span className="text-[10px] font-semibold text-[#6E5A5F] absolute left-2.5 top-1/2 -translate-y-1/2">
+                                  R$
+                                </span>
+                                <input
+                                  id={`exp-input-${prod.id}`}
+                                  type="number"
+                                  step="0.10"
+                                  min="0"
+                                  placeholder="0,00"
+                                  value={expVal}
+                                  onChange={(e) =>
+                                    handleFinancialFieldChange(
+                                      prod.id,
+                                      'expenses',
+                                      e.target.value
+                                    )
+                                  }
+                                  className="w-full pl-7 pr-2 py-1.5 bg-white border border-[#DFD3C3] focus:border-[#5B1824] rounded-lg text-xs font-mono-tabular text-[#231619] focus:outline-none"
+                                />
+                              </div>
+                            </div>
                           </div>
+
+                          {/* Linha 2: Lucro Bruto (R$) + Margem de Lucro (%) — Calculados automaticamente e editáveis */}
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label
+                                htmlFor={`profit-input-${prod.id}`}
+                                className="block text-[10px] font-semibold text-[#2E6B3E] mb-1"
+                              >
+                                Lucro Bruto (R$)
+                              </label>
+                              <div className="relative">
+                                <span className="text-[10px] font-semibold text-[#2E6B3E] absolute left-2.5 top-1/2 -translate-y-1/2">
+                                  R$
+                                </span>
+                                <input
+                                  id={`profit-input-${prod.id}`}
+                                  type="number"
+                                  step="0.10"
+                                  placeholder={liveFinancials.grossProfit.toFixed(2)}
+                                  value={
+                                    profitVal !== ''
+                                      ? profitVal
+                                      : totalUnitCost > 0
+                                        ? liveFinancials.grossProfit.toFixed(2)
+                                        : ''
+                                  }
+                                  onChange={(e) =>
+                                    handleTargetProfitOrMarginChange(
+                                      prod.id,
+                                      'profit',
+                                      e.target.value
+                                    )
+                                  }
+                                  className="w-full pl-7 pr-2 py-1.5 bg-white border border-[#2E6B3E]/40 focus:border-[#2E6B3E] rounded-lg text-xs font-mono-tabular font-semibold text-[#2E6B3E] focus:outline-none"
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <label
+                                htmlFor={`margin-input-${prod.id}`}
+                                className="block text-[10px] font-semibold text-[#2E6B3E] mb-1"
+                              >
+                                Margem de Lucro (%)
+                              </label>
+                              <div className="relative">
+                                <input
+                                  id={`margin-input-${prod.id}`}
+                                  type="number"
+                                  step="0.5"
+                                  placeholder={liveFinancials.profitMarginPercent.toFixed(1)}
+                                  value={
+                                    marginVal !== ''
+                                      ? marginVal
+                                      : totalUnitCost > 0
+                                        ? liveFinancials.profitMarginPercent.toFixed(2)
+                                        : ''
+                                  }
+                                  onChange={(e) =>
+                                    handleTargetProfitOrMarginChange(
+                                      prod.id,
+                                      'margin',
+                                      e.target.value
+                                    )
+                                  }
+                                  className="w-full pl-2.5 pr-6 py-1.5 bg-white border border-[#2E6B3E]/40 focus:border-[#2E6B3E] rounded-lg text-xs font-mono-tabular font-semibold text-[#2E6B3E] focus:outline-none"
+                                />
+                                <span className="text-[10px] font-semibold text-[#2E6B3E] absolute right-2.5 top-1/2 -translate-y-1/2">
+                                  %
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Resumo Automático de Custo Total, Lucro Bruto e Margem */}
+                          <div className="px-2.5 py-2 rounded-lg bg-white/80 border border-[#E6DDD0] flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono-tabular">
+                            <span className="text-[#6E5A5F]">
+                              Custo Total:{' '}
+                              <strong className="text-[#231619]">
+                                {formatBRL(totalUnitCost)}
+                              </strong>
+                            </span>
+                            <span className="text-[#2E6B3E]">
+                              Lucro:{' '}
+                              <strong>{formatBRL(liveFinancials.grossProfit)}</strong> (
+                              <strong>
+                                {liveFinancials.profitMarginPercent
+                                  .toFixed(1)
+                                  .replace('.', ',')}
+                                %
+                              </strong>
+                              )
+                            </span>
+                          </div>
+
+                          {/* Sugestão automática caso a proprietária simule uma margem específica */}
+                          {suggestedPriceFromMargin !== null &&
+                            Math.abs(suggestedPriceFromMargin - activeSalePrice) >= 0.1 && (
+                              <div className="p-2 rounded-lg bg-[#2E6B3E]/10 border border-[#2E6B3E]/30 flex items-center justify-between gap-2">
+                                <span className="text-[11px] text-[#231619]">
+                                  Preço sugerido p/ margem de{' '}
+                                  <strong>{desiredMarginNum.toFixed(1).replace('.', ',')}%</strong>:{' '}
+                                  <strong className="text-[#2E6B3E] font-mono-tabular">
+                                    {formatBRL(suggestedPriceFromMargin)}
+                                  </strong>
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleFinancialFieldChange(
+                                      prod.id,
+                                      'price',
+                                      suggestedPriceFromMargin.toFixed(2)
+                                    )
+                                  }
+                                  className="px-2 py-1 bg-[#2E6B3E] text-white rounded text-[10px] font-semibold cursor-pointer shrink-0"
+                                >
+                                  Usar {formatBRL(suggestedPriceFromMargin)}
+                                </button>
+                              </div>
+                            )}
+
+                          {/* Linha 3: Preço de Venda (R$) + Botão Salvar */}
+                          <div>
+                            <label
+                              htmlFor={`price-input-${prod.id}`}
+                              className="block text-[11px] font-bold text-[#5B1824] mb-1"
+                            >
+                              Preço de Venda no Site (R$):
+                            </label>
+                            <div className="flex items-center gap-2">
+                              <div className="relative flex-1">
+                                <span className="text-xs font-semibold text-[#6E5A5F] absolute left-3 top-1/2 -translate-y-1/2">
+                                  R$
+                                </span>
+                                <input
+                                  id={`price-input-${prod.id}`}
+                                  type="number"
+                                  step="0.10"
+                                  value={draftVal}
+                                  onChange={(e) =>
+                                    handleFinancialFieldChange(
+                                      prod.id,
+                                      'price',
+                                      e.target.value
+                                    )
+                                  }
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                      e.preventDefault();
+                                      handleQuickSavePrice(prod.id);
+                                    }
+                                  }}
+                                  className="w-full pl-8 pr-3 py-2 bg-white border border-[#DFD3C3] focus:border-[#5B1824] rounded-lg text-sm font-mono-tabular font-bold text-[#231619] focus:outline-none"
+                                />
+                              </div>
+
+                              <button
+                                type="button"
+                                disabled={savingPriceId === prod.id}
+                                onClick={() => handleQuickSavePrice(prod.id)}
+                                className="px-3.5 py-2 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-semibold cursor-pointer whitespace-nowrap shrink-0 transition-colors"
+                              >
+                                {savingPriceId === prod.id ? 'Salvando...' : 'Salvar Dados'}
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Sugestão individual de padronização ,90 (caso o preço atual não termine em ,90) */}
+                          {!hasPsych90 && (
+                            <div className="p-2.5 rounded-lg bg-white border border-[#5B1824]/25 space-y-1.5">
+                              <p className="text-[10px] font-bold uppercase tracking-wider text-[#5B1824]">
+                                Sugestão Psicológica (,90) — Aprovação Manual:
+                              </p>
+                              <div className="flex flex-wrap items-center gap-1.5">
+                                <button
+                                  type="button"
+                                  disabled={savingPriceId === prod.id}
+                                  onClick={() =>
+                                    handleQuickSavePrice(
+                                      prod.id,
+                                      psychSuggestions.nearestPsychological
+                                    )
+                                  }
+                                  className="px-2.5 py-1 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-md text-[11px] font-semibold font-mono-tabular cursor-pointer"
+                                >
+                                  Aprovar {formatBRL(psychSuggestions.nearestPsychological)}
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={savingPriceId === prod.id}
+                                  onClick={() =>
+                                    handleQuickSavePrice(
+                                      prod.id,
+                                      psychSuggestions.marginPreservingUp
+                                    )
+                                  }
+                                  className="px-2.5 py-1 bg-[#EFE7DA] hover:bg-[#E2D4C0] text-[#231619] rounded-md text-[11px] font-semibold font-mono-tabular cursor-pointer"
+                                >
+                                  Aprovar {formatBRL(psychSuggestions.marginPreservingUp)}
+                                </button>
+                              </div>
+                            </div>
+                          )}
 
                           <div className="flex items-center justify-between text-[11px] text-[#4A373B] pt-1 border-t border-[#E6DDD0] font-mono-tabular">
                             <span>
