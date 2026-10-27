@@ -4146,7 +4146,7 @@
             "heelOption": "Flatform Anatômica 3,5cm",
             "strapFinish": "Pirâmides Douradas & Fivela Ouro",
             "footWidth": "Padrão",
-            "insoleEngraving": "C.M.",
+            "insoleEngraving": "",
             "customNotes": "Favor deixar a tira do tornozelo com 1 furo extra."
           }
         }
@@ -4187,7 +4187,7 @@
             "heelOption": "Anabela Alta 9,5cm (Meia Pata 3,5cm)",
             "strapFinish": "Pirâmides Douradas & Fivela Ouro",
             "footWidth": "Pé Fino (Mais Justa)",
-            "insoleEngraving": "J.V.",
+            "insoleEngraving": "",
             "customNotes": "Encomenda para evento no final do mês."
           }
         }
@@ -4217,7 +4217,7 @@
       "installments": 1,
       "amount": 65,
       "status": "APROVADO",
-      "pixCopyPaste": "00020126360014br.gov.bcb.pix0114+5562984998265520400005303986540565.005802BR5914PETERSON SHOES6007GOIANIA62150511PTS2026101E63041D45",
+      "pixCopyPaste": "00020101021126360014br.gov.bcb.pix0114507896360001325204000053039865802BR5912SONHO ANIMAL6007GOIANIA62070503***63049D03",
       "mpReferenceId": "MP-PIX-9841201",
       "sandboxMode": true,
       "paidAt": "2026-10-20T12:36:13.060Z",
@@ -4234,7 +4234,7 @@
       "installments": 1,
       "amount": 65,
       "status": "PENDENTE",
-      "pixCopyPaste": "00020126360014br.gov.bcb.pix0114+5562984998265520400005303986540565.005802BR5914PETERSON SHOES6007GOIANIA62150511PTS2026101F6304F397",
+      "pixCopyPaste": "00020101021126360014br.gov.bcb.pix0114507896360001325204000053039865802BR5912SONHO ANIMAL6007GOIANIA62070503***63049D03",
       "mpReferenceId": "MP-PIX-9841202",
       "sandboxMode": true,
       "paidAt": null,
@@ -4253,7 +4253,7 @@
       "cardLast4": "4829",
       "amount": 78.74,
       "status": "APROVADO",
-      "pixCopyPaste": "00020126360014br.gov.bcb.pix0114+5562984998265520400005303986540575.005802BR5914PETERSON SHOES6007GOIANIA62150511PTS2026102E6304C059",
+      "pixCopyPaste": "00020101021126360014br.gov.bcb.pix0114507896360001325204000053039865802BR5912SONHO ANIMAL6007GOIANIA62070503***63049D03",
       "mpReferenceId": "MP-CARD-9840911",
       "sandboxMode": true,
       "paidAt": "2026-10-12T12:36:13.060Z",
@@ -4270,7 +4270,7 @@
       "installments": 1,
       "amount": 75,
       "status": "PENDENTE",
-      "pixCopyPaste": "00020126360014br.gov.bcb.pix0114+5562984998265520400005303986540575.005802BR5914PETERSON SHOES6007GOIANIA62150511PTS2026102F63042E8B",
+      "pixCopyPaste": "00020101021126360014br.gov.bcb.pix0114507896360001325204000053039865802BR5912SONHO ANIMAL6007GOIANIA62070503***63049D03",
       "mpReferenceId": "MP-PIX-9840912",
       "sandboxMode": true,
       "paidAt": null,
@@ -4286,6 +4286,10 @@
     "depositPercentage": 50,
     "creditCardFeePercentage": 4.99,
     "mercadoPagoLiveEnabled": false,
-    "pixKey": "62984998265"
+    "bankName": "Inter",
+    "bankHolderName": "50789636 JACKELINE GOMES PETERSON",
+    "bankHolderDoc": "50.789.636/0001-32",
+    "pixKeyType": "CNPJ",
+    "pixKey": "50.789.636/0001-32"
   }
 }

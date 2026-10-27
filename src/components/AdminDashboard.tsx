@@ -188,7 +188,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [checkingAuthStatus, setCheckingAuthStatus] = useState(true);
 
   const [activeTab, setActiveTab] = useState<
-    'PRODUCTS' | 'ORDERS' | 'FINANCE' | 'CUSTOMERS' | 'SETTINGS' | 'SEO'
+    'PRODUCTS' | 'ORDERS' | 'FINANCE' | 'CUSTOMERS' | 'SETTINGS' | 'ANALYTICS' | 'SEO'
   >('PRODUCTS');
 
   React.useEffect(() => {
@@ -223,6 +223,36 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     pendingReceivables: number;
     readyForFinalPaymentCount: number;
   } | null>(null);
+  const [analytics, setAnalytics] = useState<{
+    totalVisits: number;
+    uniqueVisitorsCount: number;
+    dailyVisits: Record<string, number>;
+    sources: {
+      google: number;
+      instagram: number;
+      whatsapp: number;
+      direto: number;
+    };
+    productViews: Record<string, { sku: string; name: string; count: number }>;
+    whatsappClicks: number;
+    cartAdditions: number;
+    recentEvents: Array<{
+      id: string;
+      type: 'VISITA' | 'PRODUTO' | 'SACOLA' | 'WHATSAPP';
+      label: string;
+      source: string;
+      timestamp: string;
+    }>;
+  }>({
+    totalVisits: 0,
+    uniqueVisitorsCount: 0,
+    dailyVisits: {},
+    sources: { google: 0, instagram: 0, whatsapp: 0, direto: 0 },
+    productViews: {},
+    whatsappClicks: 0,
+    cartAdditions: 0,
+    recentEvents: [],
+  });
   const [sqlSchema, setSqlSchema] = useState('');
   const [loading, setLoading] = useState(false);
   const [copiedTextId, setCopiedTextId] = useState<string | null>(null);
@@ -321,6 +351,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           };
           saveBrowserStoreDb(updatedDb);
           applyDashboardFromDb(updatedDb);
+        }
+        if (data?.analytics) {
+          setAnalytics(data.analytics);
         }
       }
       if (sqlRes.ok) {
@@ -923,9 +956,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       </header>
 
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
-        {/* Financial Summary KPI Strip */}
+        {/* Financial & Visitor Summary KPI Strip */}
         {metrics && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div
+              onClick={() => setActiveTab('ANALYTICS')}
+              className="bg-white border-2 border-[#5B1824]/30 hover:border-[#5B1824] rounded-xl p-5 cursor-pointer transition-colors"
+            >
+              <p className="text-xs font-semibold text-[#5B1824]">
+                Acessos & Visitantes no Site
+              </p>
+              <p className="text-2xl font-bold text-[#231619] font-mono-tabular mt-1">
+                {analytics.totalVisits} Visitas
+              </p>
+              <p className="text-xs text-[#6E5A5F] mt-1">
+                {analytics.uniqueVisitorsCount} visitante(s) único(s) · Hoje:{' '}
+                {analytics.dailyVisits[new Date().toISOString().split('T')[0]] || 0}
+              </p>
+            </div>
+
             <div className="bg-white border border-[#DFD3C3] rounded-xl p-5">
               <p className="text-xs text-[#6E5A5F]">Modelos do Instagram Ativos</p>
               <p className="text-2xl font-bold text-[#5B1824] font-mono-tabular mt-1">
@@ -1028,6 +1077,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           >
             <DollarSign className="w-4 h-4" />
             <span>Cadastrar Banco, Chave Pix & Cartão</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('ANALYTICS')}
+            className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap ${
+              activeTab === 'ANALYTICS'
+                ? 'bg-[#5B1824] text-[#F7F3EC] shadow-xs'
+                : 'text-[#5B1824] bg-[#5B1824]/10 hover:bg-[#5B1824]/20'
+            }`}
+          >
+            <Users className="w-4 h-4" />
+            <span>Acessos & Visitantes ({analytics.totalVisits})</span>
           </button>
 
           <button
@@ -2362,6 +2423,181 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <strong>@petersonshoes_</strong>. Quando o Google percebe acessos reais vindos do Instagram e WhatsApp, ele sobe a posição do site nas pesquisas muito mais rápido.
                   </p>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 7: REAL-TIME VISITOR & ACCESS ANALYTICS */}
+        {activeTab === 'ANALYTICS' && (
+          <div className="space-y-6">
+            <div className="bg-white border border-[#DFD3C3] rounded-xl p-6 space-y-6">
+              <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[#EFE7DA] pb-4">
+                <div className="space-y-1">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#5B1824]">
+                    Monitoramento em Tempo Real · Contador de Acessos Integrado
+                  </span>
+                  <h2 className="text-2xl font-semibold text-[#231619]">
+                    Quantas Pessoas Acessam o Site da Peterson Shoes
+                  </h2>
+                  <p className="text-xs text-[#6E5A5F] max-w-3xl leading-relaxed">
+                    Acompanhe abaixo em tempo real todas as visitas na loja, de onde as clientes estão vindo (Google, Instagram ou WhatsApp) e quais modelos de sandálias são os mais clicados.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => token && fetchAdminData(token)}
+                  className="px-4 py-2 bg-[#5B1824] hover:bg-[#46111B] text-white rounded-lg text-xs font-semibold flex items-center gap-2 cursor-pointer"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span>Atualizar Contador Agora</span>
+                </button>
+              </div>
+
+              {/* 4 Main Visitor Metrics */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="p-4 rounded-xl bg-[#F7F3EC] border border-[#DFD3C3]">
+                  <p className="text-xs text-[#6E5A5F]">Total de Visitas no Site</p>
+                  <p className="text-3xl font-bold text-[#5B1824] font-mono-tabular mt-1">
+                    {analytics.totalVisits}
+                  </p>
+                  <p className="text-[11px] text-[#6E5A5F] mt-1">
+                    Acessos acumulados na loja
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#F7F3EC] border border-[#DFD3C3]">
+                  <p className="text-xs text-[#6E5A5F]">Visitantes Únicos (Pessoas)</p>
+                  <p className="text-3xl font-bold text-[#231619] font-mono-tabular mt-1">
+                    {analytics.uniqueVisitorsCount}
+                  </p>
+                  <p className="text-[11px] text-[#6E5A5F] mt-1">
+                    Clientes diferentes que abriram o site
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#F7F3EC] border border-[#DFD3C3]">
+                  <p className="text-xs text-[#6E5A5F]">Acessos de Hoje</p>
+                  <p className="text-3xl font-bold text-[#2E6B3E] font-mono-tabular mt-1">
+                    {analytics.dailyVisits[new Date().toISOString().split('T')[0]] || 0}
+                  </p>
+                  <p className="text-[11px] text-[#6E5A5F] mt-1">
+                    Visitas registradas na data de hoje
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#F7F3EC] border border-[#DFD3C3]">
+                  <p className="text-xs text-[#6E5A5F]">Sandálias Adicionadas à Sacola</p>
+                  <p className="text-3xl font-bold text-[#8C4A27] font-mono-tabular mt-1">
+                    {analytics.cartAdditions}
+                  </p>
+                  <p className="text-[11px] text-[#6E5A5F] mt-1">
+                    Intenções de compra iniciadas
+                  </p>
+                </div>
+              </div>
+
+              {/* Traffic Sources Breakdown */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="p-5 rounded-xl bg-[#F7F3EC] border border-[#DFD3C3] space-y-4">
+                  <div>
+                    <h3 className="text-base font-semibold text-[#231619]">
+                      De Onde Vêm os Acessos (Origem das Clientes)
+                    </h3>
+                    <p className="text-xs text-[#6E5A5F]">
+                      Identificação automática de como a cliente chegou ao site
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="p-3.5 bg-white rounded-lg border border-[#DFD3C3]">
+                      <p className="text-xs font-semibold text-[#2E6B3E]">Busca do Google</p>
+                      <p className="text-2xl font-bold text-[#231619] font-mono-tabular mt-1">
+                        {analytics.sources?.google || 0}
+                      </p>
+                    </div>
+                    <div className="p-3.5 bg-white rounded-lg border border-[#DFD3C3]">
+                      <p className="text-xs font-semibold text-[#5B1824]">
+                        Instagram (@petersonshoes_)
+                      </p>
+                      <p className="text-2xl font-bold text-[#231619] font-mono-tabular mt-1">
+                        {analytics.sources?.instagram || 0}
+                      </p>
+                    </div>
+                    <div className="p-3.5 bg-white rounded-lg border border-[#DFD3C3]">
+                      <p className="text-xs font-semibold text-[#231619]">WhatsApp</p>
+                      <p className="text-2xl font-bold text-[#231619] font-mono-tabular mt-1">
+                        {analytics.sources?.whatsapp || 0}
+                      </p>
+                    </div>
+                    <div className="p-3.5 bg-white rounded-lg border border-[#DFD3C3]">
+                      <p className="text-xs font-semibold text-[#6E5A5F]">
+                        Link Direto / Favoritos
+                      </p>
+                      <p className="text-2xl font-bold text-[#231619] font-mono-tabular mt-1">
+                        {analytics.sources?.direto || 0}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Top Viewed Sandals */}
+                <div className="p-5 rounded-xl bg-[#F7F3EC] border border-[#DFD3C3] space-y-4">
+                  <div>
+                    <h3 className="text-base font-semibold text-[#231619]">
+                      Sandálias Mais Clicadas pelas Clientes
+                    </h3>
+                    <p className="text-xs text-[#6E5A5F]">
+                      Modelos que despertaram mais interesse na loja
+                    </p>
+                  </div>
+                  {Object.values(analytics.productViews || {}).length === 0 ? (
+                    <p className="text-xs text-[#6E5A5F] py-6 text-center bg-white rounded-lg border border-[#DFD3C3]">
+                      Assim que as clientes clicarem nas sandálias para escolher cor e numeração, o ranking aparecerá aqui.
+                    </p>
+                  ) : (
+                    <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+                      {Object.values(analytics.productViews || {})
+                        .sort((a, b) => b.count - a.count)
+                        .slice(0, 8)
+                        .map((item, idx) => (
+                          <div
+                            key={item.sku}
+                            className="flex items-center justify-between p-2.5 bg-white rounded-lg border border-[#DFD3C3] text-xs"
+                          >
+                            <div className="flex items-center gap-2.5 truncate">
+                              <span className="w-5 h-5 rounded-full bg-[#5B1824] text-white font-bold flex items-center justify-center text-[10px] shrink-0">
+                                {idx + 1}
+                              </span>
+                              <span className="font-semibold text-[#231619] truncate">
+                                {item.name}
+                              </span>
+                            </div>
+                            <span className="font-mono font-bold text-[#5B1824] shrink-0 ml-2">
+                              {item.count} {item.count === 1 ? 'visualização' : 'visualizações'}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Google Search Console Guide */}
+              <div className="p-5 rounded-xl bg-[#2E6B3E]/10 border border-[#2E6B3E]/30 space-y-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#2E6B3E]">
+                  Dica Extra · Como Ver as Pesquisas no Google Search Console
+                </span>
+                <h3 className="text-base font-semibold text-[#231619]">
+                  Acompanhar quantas vezes seu site apareceu no Google
+                </h3>
+                <p className="text-xs text-[#231619] leading-relaxed">
+                  Além deste contador automático aqui do seu Painel Administrativo, você também pode abrir o{' '}
+                  <strong>Google Search Console</strong> (que já está conectado ao seu site) e clicar em{' '}
+                  <strong>&ldquo;Desempenho&rdquo;</strong> no menu lateral esquerdo. Lá o Google mostra:
+                  <br />• <strong>Total de cliques</strong>: quantas pessoas pesquisaram no Google e entraram na loja.
+                  <br />• <strong>Total de impressões</strong>: quantas vezes a Peterson Shoes apareceu nos resultados de busca.
+                  <br />• <strong>Consultas</strong>: quais palavras exatas as clientes digitaram para encontrar suas sandálias.
+                </p>
               </div>
             </div>
           </div>

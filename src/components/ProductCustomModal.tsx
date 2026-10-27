@@ -185,11 +185,11 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
         <div className="overflow-y-auto flex-1">
           <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
             {/* Left Column: Real Instagram Product Imagery & Gallery */}
-            <div className="lg:col-span-5 bg-[#F3EDE2] flex flex-col justify-between p-6 md:p-8 border-b lg:border-b-0 lg:border-r border-[#E6DDD0]">
+            <div className="lg:col-span-5 bg-[#F3EDE2] flex flex-col justify-between p-4 sm:p-6 md:p-8 border-b lg:border-b-0 lg:border-r border-[#E6DDD0]">
               <div>
                 <div
                   onClick={() => setIsLightboxOpen(true)}
-                  className="w-full h-[360px] sm:h-[420px] rounded-xl overflow-hidden bg-white border border-[#E6DDD0] shadow-xs relative group cursor-zoom-in"
+                  className="w-full h-[230px] sm:h-[380px] rounded-xl overflow-hidden bg-white border border-[#E6DDD0] shadow-xs relative group cursor-zoom-in"
                   title="Clique para ampliar a foto em tela cheia"
                 >
                   <img
@@ -203,7 +203,7 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
                       e.stopPropagation();
                       setIsLightboxOpen(true);
                     }}
-                    className="absolute bottom-3 right-3 px-3 py-1.5 bg-black/70 hover:bg-black/85 text-[#FAF7F2] text-[11px] font-medium rounded-lg flex items-center gap-1.5 backdrop-blur-xs transition-colors cursor-pointer"
+                    className="absolute bottom-2.5 right-2.5 px-2.5 py-1.5 bg-black/70 hover:bg-black/85 text-[#FAF7F2] text-[11px] font-medium rounded-lg flex items-center gap-1.5 backdrop-blur-xs transition-colors cursor-pointer"
                   >
                     <ZoomIn className="w-3.5 h-3.5 text-[#E5D3B3]" />
                     <span>Ampliar Foto</span>
@@ -212,9 +212,9 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
 
                 {/* Multi-Photo Instagram Carousel Thumbnails */}
                 {galleryList.length > 1 && (
-                  <div className="mt-3">
-                    <p className="text-[11px] font-medium text-[#6E5D5F] mb-1.5">
-                      Fotos reais deste modelo no Instagram @petersonshoes_ ({galleryList.length} fotos):
+                  <div className="mt-2.5">
+                    <p className="text-[11px] font-medium text-[#6E5D5F] mb-1">
+                      Fotos reais deste modelo ({galleryList.length} fotos):
                     </p>
                     <div className="grid grid-cols-4 gap-2">
                       {galleryList.map((imgUrl, idx) => {
@@ -226,7 +226,7 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
                             onClick={() => {
                               setActivePhotoUrl(imgUrl);
                             }}
-                            className={`h-20 w-full rounded-lg overflow-hidden border-2 transition-all cursor-pointer bg-white ${
+                            className={`h-16 sm:h-20 w-full rounded-lg overflow-hidden border-2 transition-all cursor-pointer bg-white ${
                               isSelectedThumb
                                 ? 'border-[#631421] shadow-xs scale-102'
                                 : 'border-[#E6DDD0] opacity-85 hover:opacity-100'
@@ -244,7 +244,7 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
                   </div>
                 )}
 
-                <div className="mt-5">
+                <div className="hidden sm:block mt-5">
                   <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#6E5D5F]">
                     <div className="flex flex-wrap items-center gap-1.5">
                       <span>{product.category}</span>
@@ -269,7 +269,7 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
                 </div>
               </div>
 
-              <div className="mt-6 pt-5 border-t border-[#E6DDD0]">
+              <div className="hidden sm:block mt-6 pt-5 border-t border-[#E6DDD0]">
                 <p className="text-xs font-semibold text-[#631421] tracking-wide mb-2.5">
                   Diferenciais de Fabricação Própria @petersonshoes_
                 </p>
@@ -285,7 +285,7 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
             </div>
 
             {/* Right Column: Bespoke Customization & 50%/50% Checkout */}
-            <div className="lg:col-span-7 p-6 md:p-8 flex flex-col justify-between bg-[#FAF7F2]">
+            <div className="lg:col-span-7 p-4 sm:p-6 md:p-8 flex flex-col justify-between bg-[#FAF7F2]">
               <div className="space-y-5">
                 {/* Price & 50% / 50% Payment Rule Box (Pix OR Credit Card with Bank Fee) */}
                 <div className="p-4 sm:p-5 rounded-xl bg-[#F3EDE2] border border-[#E6DDD0]">

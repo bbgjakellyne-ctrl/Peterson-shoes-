@@ -32,16 +32,38 @@ const INSTAGRAM_PUBLIC_DIR = path.resolve(process.cwd(), 'public', 'instagram');
 export type AppEnvironment = 'homologacao' | 'producao';
 
 function resolveEnv(req?: Request): AppEnvironment {
-  if (!req) return 'homologacao';
+  if (!req) return 'producao';
   const headerEnv = String(req.headers['x-peterson-env'] || '').toLowerCase().trim();
   const queryEnv = String(req.query?.env || '').toLowerCase().trim();
-  if (headerEnv === 'producao' || queryEnv === 'producao') {
-    return 'producao';
-  }
   if (headerEnv === 'homologacao' || queryEnv === 'homologacao') {
     return 'homologacao';
   }
   return 'producao';
+}
+
+export interface AnalyticsEventItem {
+  id: string;
+  type: 'VISITA' | 'PRODUTO' | 'SACOLA' | 'WHATSAPP';
+  label: string;
+  source: string;
+  timestamp: string;
+}
+
+export interface AnalyticsData {
+  totalVisits: number;
+  uniqueVisitorsCount: number;
+  visitorIds: string[];
+  dailyVisits: Record<string, number>;
+  sources: {
+    google: number;
+    instagram: number;
+    whatsapp: number;
+    direto: number;
+  };
+  productViews: Record<string, { sku: string; name: string; count: number }>;
+  whatsappClicks: number;
+  cartAdditions: number;
+  recentEvents: AnalyticsEventItem[];
 }
 
 interface DatabaseSchema {
@@ -50,6 +72,26 @@ interface DatabaseSchema {
   orders: BespokeOrder[];
   payments: PaymentRecord[];
   settings: StoreSettings;
+  analytics?: AnalyticsData;
+}
+
+function createEmptyAnalytics(): AnalyticsData {
+  return {
+    totalVisits: 0,
+    uniqueVisitorsCount: 0,
+    visitorIds: [],
+    dailyVisits: {},
+    sources: {
+      google: 0,
+      instagram: 0,
+      whatsapp: 0,
+      direto: 0,
+    },
+    productViews: {},
+    whatsappClicks: 0,
+    cartAdditions: 0,
+    recentEvents: [],
+  };
 }
 
 const STANDARD_SIZES = [34, 35, 36, 37, 38, 39];
@@ -1410,6 +1452,7 @@ function createInitialDatabase(): DatabaseSchema {
     orders,
     payments,
     settings,
+    analytics: createEmptyAnalytics(),
   };
 }
 
@@ -1462,6 +1505,21 @@ function loadDb(env: AppEnvironment = 'producao'): DatabaseSchema {
       pixKeyType: 'CNPJ',
       pixKey: '50.789.636/0001-32',
     };
+
+    if (!parsed.analytics) {
+      parsed.analytics = createEmptyAnalytics();
+    } else {
+      parsed.analytics.sources = parsed.analytics.sources || {
+        google: 0,
+        instagram: 0,
+        whatsapp: 0,
+        direto: 0,
+      };
+      parsed.analytics.dailyVisits = parsed.analytics.dailyVisits || {};
+      parsed.analytics.productViews = parsed.analytics.productViews || {};
+      parsed.analytics.visitorIds = parsed.analytics.visitorIds || [];
+      parsed.analytics.recentEvents = parsed.analytics.recentEvents || [];
+    }
 
     return parsed;
   } catch (err) {
@@ -1626,16 +1684,10 @@ function registerApiRoutes() {
   // GOOGLE SEO ENDPOINTS (robots.txt & sitemap.xml with Image Sitemap)
   // ==========================================================================
 
-  const resolveBaseUrl = (req: Request): string => {
-    if (process.env.APP_URL) {
-      return process.env.APP_URL.replace(/\/+$/, '');
-    }
-    const proto = (req.headers['x-forwarded-proto'] as string) || req.protocol || 'https';
-    const host =
-      (req.headers['x-forwarded-host'] as string) ||
-      req.headers.host ||
-      'ais-pre-hjb47jbbnfvcnibk2wkogq-443983653592.us-east1.run.app';
-    return `${proto.split(',')[0].trim()}://${host.split(',')[0].trim()}`;
+  const OFFICIAL_PUBLIC_DOMAIN = 'https://peterson-shoes-goiania.ai.studio';
+
+  const resolveBaseUrl = (_req: Request): string => {
+    return OFFICIAL_PUBLIC_DOMAIN;
   };
 
   app.get(['/robots.txt', '/api/robots.txt'], (req: Request, res: Response) => {
@@ -1742,6 +1794,100 @@ ${productUrlsXml}
       mercadoPagoTokenConfigured: Boolean(process.env.MERCADO_PAGO_ACCESS_TOKEN),
       environment: env,
     });
+  });
+
+  // Public Visitor & Product Click Analytics Tracker
+  app.post('/api/analytics/event', (req: Request, res: Response) => {
+    try {
+      const env = resolveEnv(req);
+      const db = loadDb(env);
+      if (!db.analytics) {
+        db.analytics = createEmptyAnalytics();
+      }
+      const {
+        type,
+        visitorId,
+        referrer,
+        productId,
+        productSku,
+        productName,
+        label,
+      } = req.body as {
+        type?: 'VISITA' | 'PRODUTO' | 'SACOLA' | 'WHATSAPP';
+        visitorId?: string;
+        referrer?: string;
+        productId?: string;
+        productSku?: string;
+        productName?: string;
+        label?: string;
+      };
+
+      const refLower = String(referrer || '').toLowerCase();
+      let sourceKey: 'google' | 'instagram' | 'whatsapp' | 'direto' = 'direto';
+      let sourceLabel = 'Acesso Direto / Link';
+      if (refLower.includes('google.')) {
+        sourceKey = 'google';
+        sourceLabel = 'Busca do Google';
+      } else if (refLower.includes('instagram.') || refLower.includes('ig')) {
+        sourceKey = 'instagram';
+        sourceLabel = 'Instagram (@petersonshoes_)';
+      } else if (refLower.includes('whatsapp') || refLower.includes('wa.me')) {
+        sourceKey = 'whatsapp';
+        sourceLabel = 'WhatsApp';
+      }
+
+      const todayKey = new Date().toISOString().split('T')[0];
+
+      if (type === 'VISITA') {
+        db.analytics.totalVisits = (db.analytics.totalVisits || 0) + 1;
+        db.analytics.dailyVisits[todayKey] = (db.analytics.dailyVisits[todayKey] || 0) + 1;
+        db.analytics.sources[sourceKey] = (db.analytics.sources[sourceKey] || 0) + 1;
+
+        if (visitorId && !db.analytics.visitorIds.includes(visitorId)) {
+          db.analytics.visitorIds.push(visitorId);
+          if (db.analytics.visitorIds.length > 3000) {
+            db.analytics.visitorIds = db.analytics.visitorIds.slice(-3000);
+          }
+          db.analytics.uniqueVisitorsCount = (db.analytics.uniqueVisitorsCount || 0) + 1;
+        }
+      } else if (type === 'PRODUTO' && (productId || productSku)) {
+        const key = String(productSku || productId);
+        const existing = db.analytics.productViews[key] || {
+          sku: String(productSku || key),
+          name: String(productName || 'Sandália Peterson Shoes'),
+          count: 0,
+        };
+        existing.count += 1;
+        if (productName) existing.name = productName;
+        db.analytics.productViews[key] = existing;
+      } else if (type === 'SACOLA') {
+        db.analytics.cartAdditions = (db.analytics.cartAdditions || 0) + 1;
+      } else if (type === 'WHATSAPP') {
+        db.analytics.whatsappClicks = (db.analytics.whatsappClicks || 0) + 1;
+      }
+
+      const eventItem: AnalyticsEventItem = {
+        id: `evt-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        type: type || 'VISITA',
+        label:
+          label ||
+          (type === 'PRODUTO'
+            ? `Visualizou ${productName || productSku || 'sandália'}`
+            : type === 'SACOLA'
+            ? `Adicionou ${productName || 'sandália'} à sacola`
+            : type === 'WHATSAPP'
+            ? 'Clicou para atendimento no WhatsApp'
+            : 'Acessou a loja online'),
+        source: sourceLabel,
+        timestamp: new Date().toISOString(),
+      };
+
+      db.analytics.recentEvents = [eventItem, ...(db.analytics.recentEvents || [])].slice(0, 40);
+      saveDb(db, env);
+      res.json({ ok: true });
+    } catch {
+      res.json({ ok: false });
+    }
   });
 
   // Create new bespoke order with automated 50% deposit + 50% final installment
@@ -2356,6 +2502,7 @@ DIRETRIZES DE ESTILO:
         ),
         mercadoPagoTokenConfigured: Boolean(process.env.MERCADO_PAGO_ACCESS_TOKEN),
       },
+      analytics: db.analytics || createEmptyAnalytics(),
       metrics: {
         totalOrdersCount: db.orders.length,
         totalCustomersCount: db.customers.length,

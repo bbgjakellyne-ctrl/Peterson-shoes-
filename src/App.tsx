@@ -295,9 +295,61 @@ export default function App() {
     scriptEl.textContent = JSON.stringify(dynamicSchema);
   }, [activeProductModal, selectedCategory, products]);
 
+  // Helper to obtain/create a persistent anonymous visitor ID and send analytics events
+  const trackStoreEvent = useCallback(
+    (payload: {
+      type: 'VISITA' | 'PRODUTO' | 'SACOLA' | 'WHATSAPP';
+      productId?: string;
+      productSku?: string;
+      productName?: string;
+      label?: string;
+    }) => {
+      try {
+        let visitorId = localStorage.getItem('peterson_visitor_id');
+        if (!visitorId) {
+          visitorId = `vis-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+          localStorage.setItem('peterson_visitor_id', visitorId);
+        }
+        const referrer = document.referrer || window.location.search || '';
+        apiFetch('/api/analytics/event', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...payload,
+            visitorId,
+            referrer,
+          }),
+        }).catch(() => {});
+      } catch {
+        // Ignore storage errors
+      }
+    },
+    []
+  );
+
+  // Track initial storefront visit once per session
+  useEffect(() => {
+    if (isAdminView) return;
+    try {
+      const logged = sessionStorage.getItem('peterson_visit_logged');
+      if (!logged) {
+        sessionStorage.setItem('peterson_visit_logged', '1');
+        trackStoreEvent({ type: 'VISITA' });
+      }
+    } catch {
+      trackStoreEvent({ type: 'VISITA' });
+    }
+  }, [isAdminView, trackStoreEvent]);
+
   const handleAddToCart = (newItem: OrderItem) => {
     setCart((prev) => [...prev, newItem]);
     setIsCartOpen(true);
+    trackStoreEvent({
+      type: 'SACOLA',
+      productId: newItem.productId,
+      productSku: newItem.sku,
+      productName: newItem.name,
+    });
   };
 
   const handleUpdateQuantity = (index: number, delta: number) => {
@@ -328,6 +380,12 @@ export default function App() {
     setActiveModalColorIdx(colorIdx);
     setActiveModalPhotoUrl(photoUrl);
     setActiveProductModal(product);
+    trackStoreEvent({
+      type: 'PRODUTO',
+      productId: product.id,
+      productSku: product.sku,
+      productName: product.name,
+    });
   };
 
   if (isAdminView) {
@@ -415,26 +473,26 @@ export default function App() {
       )}
 
       {/* =====================================================================
-          TOP BAR CONTRACT (Strictly 3 Zones separated by gap-8)
+          TOP BAR CONTRACT (Strictly 3 Zones separated by gap-4 sm:gap-8)
       ===================================================================== */}
       <header className="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#E6DDD0]">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-8 px-6 py-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 sm:gap-8 px-4 sm:px-6 py-3 sm:py-4">
           {/* Zone 1: Single text element wordmark */}
           <a
             href="#top"
             translate="no"
-            className="notranslate font-serif-display text-2xl sm:text-[1.7rem] font-semibold tracking-tight text-[#631421] whitespace-nowrap shrink-0"
+            className="notranslate font-serif-display text-xl sm:text-[1.7rem] font-semibold tracking-tight text-[#631421] whitespace-nowrap shrink-0"
           >
             PETERSON SHOES
           </a>
 
-          {/* Zone 2: Concise single-line public navigation links (no public Admin button) */}
+          {/* Zone 2: Concise single-line public navigation links (Desktop) */}
           <nav className="hidden md:flex items-center gap-7 text-xs font-semibold text-[#3D2C30]">
             <a
               href="#catalogo"
               className="hover:text-[#631421] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0"
             >
-              Coleção Instagram ({products.length})
+              Catálogo ({products.length})
             </a>
             <a
               href="#galeria-instagram"
@@ -473,36 +531,32 @@ export default function App() {
             <button
               type="button"
               onClick={() => setIsCartOpen(true)}
-              className="px-4 py-2.5 bg-[#631421] hover:bg-[#4D0E18] text-[#FAF7F2] text-xs font-semibold rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap shrink-0 cursor-pointer shadow-xs"
+              className="px-3.5 sm:px-4 py-2 sm:py-2.5 bg-[#631421] hover:bg-[#4D0E18] text-[#FAF7F2] text-xs font-semibold rounded-xl transition-colors flex items-center gap-1.5 sm:gap-2 whitespace-nowrap shrink-0 cursor-pointer shadow-xs"
             >
               <ShoppingBag className="w-3.5 h-3.5 text-[#E5D3B3]" />
               <span>
                 Sacola ({cartCount})
-                {cartCount > 0 ? ` · 50% ${formatBRL(cartDepositTotal)}` : ''}
+                <span className="hidden sm:inline">
+                  {cartCount > 0 ? ` · 50% ${formatBRL(cartDepositTotal)}` : ''}
+                </span>
               </span>
             </button>
           </div>
         </div>
       </header>
 
-      <main id="top">
+      <main id="top" className="pb-16 sm:pb-0">
         {/* ===================================================================
-            SECTION 1: EDITORIAL COUTURE HERO + 4-COLUMN BESPOKE PROCESS STRIP
+            SECTION 1: RESPONSIVE HERO (Clean & Visual on Mobile, Full Editorial on PC)
         =================================================================== */}
         <section className="bg-[#FAF7F2] border-b border-[#E6DDD0]">
-          {/* Mobile Navigation Bar (Public only — no Admin button) */}
-          <div className="md:hidden px-6 pt-3 pb-1 flex items-center gap-2 overflow-x-auto">
+          {/* Compact Mobile Quick-Access Bar */}
+          <div className="md:hidden px-4 py-2 bg-[#F3EDE2]/75 border-b border-[#E6DDD0] flex items-center justify-between gap-1.5 overflow-x-auto">
             <a
               href="#catalogo"
-              className="px-3 py-1.5 bg-[#F3EDE2] text-[#1F1215] rounded-lg text-xs font-medium whitespace-nowrap shrink-0"
+              className="px-2.5 py-1.5 bg-[#631421] text-[#FAF7F2] rounded-lg text-[11px] font-semibold whitespace-nowrap shrink-0"
             >
-              Modelos Instagram ({products.length})
-            </a>
-            <a
-              href="#galeria-instagram"
-              className="px-3 py-1.5 bg-[#F3EDE2] text-[#1F1215] rounded-lg text-xs font-medium whitespace-nowrap shrink-0"
-            >
-              @petersonshoes_
+              Ver Sandálias ({products.length})
             </a>
             <button
               type="button"
@@ -510,39 +564,40 @@ export default function App() {
                 setTrackingQuery('');
                 setIsTrackingOpen(true);
               }}
-              className="px-3 py-1.5 bg-[#F3EDE2] text-[#1F1215] rounded-lg text-xs font-medium whitespace-nowrap shrink-0 cursor-pointer"
+              className="px-2.5 py-1.5 bg-white text-[#1F1215] border border-[#DFD3C3] rounded-lg text-[11px] font-medium whitespace-nowrap shrink-0 cursor-pointer"
             >
               Rastrear Pedido
             </button>
             <button
               type="button"
-              onClick={() => setIsAiOpen(true)}
-              className="px-3 py-1.5 bg-[#F3EDE2] text-[#631421] rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 cursor-pointer"
+              onClick={() => setIsSizeGuideOpen(true)}
+              className="px-2.5 py-1.5 bg-white text-[#1F1215] border border-[#DFD3C3] rounded-lg text-[11px] font-medium whitespace-nowrap shrink-0 cursor-pointer"
             >
-              Consultora IA
+              Medidas 34–39
             </button>
             <button
               type="button"
-              onClick={() => setIsSizeGuideOpen(true)}
-              className="px-3 py-1.5 bg-[#F3EDE2] text-[#1F1215] rounded-lg text-xs font-medium whitespace-nowrap shrink-0 cursor-pointer"
+              onClick={() => setIsAiOpen(true)}
+              className="px-2.5 py-1.5 bg-white text-[#631421] border border-[#DFD3C3] rounded-lg text-[11px] font-semibold whitespace-nowrap shrink-0 cursor-pointer"
             >
-              Guia de Medidas (34 ao 39)
+              Ajuda IA
             </button>
           </div>
 
-          <div className="max-w-7xl mx-auto px-6 py-10 lg:py-16">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 sm:py-10 lg:py-14">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-8 lg:gap-12 items-stretch">
               {/* Left Column: High-Fashion Typography & Value Proposition */}
-              <div className="lg:col-span-6 flex flex-col justify-between space-y-6">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
+              <div className="lg:col-span-6 flex flex-col justify-between space-y-4 sm:space-y-6">
+                <div className="space-y-3 sm:space-y-4">
+                  {/* Brand Identity Line */}
+                  <div className="flex items-center gap-2.5">
                     <img
                       src="/instagram/profile_pic.jpg"
                       alt="Logo Peterson Shoes"
-                      className="w-10 h-10 rounded-full object-cover border border-[#631421]/30 shrink-0"
+                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover border border-[#631421]/30 shrink-0"
                     />
-                    <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-[#631421]">
-                      <span>Fabricação Própria · Goiânia - Goiás</span>
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] sm:text-xs font-medium text-[#631421]">
+                      <span>Fabricação Própria · Goiânia - GO</span>
                       <span aria-hidden="true">·</span>
                       <a
                         href={settings.instagramUrl}
@@ -552,7 +607,7 @@ export default function App() {
                       >
                         @petersonshoes_
                       </a>
-                      <span aria-hidden="true">·</span>
+                      <span aria-hidden="true" className="hidden sm:inline">·</span>
                       <a
                         href={toWhatsAppHref(
                           settings.whatsappStore,
@@ -560,43 +615,59 @@ export default function App() {
                         )}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-bold text-[#2E6B3E] hover:underline flex items-center gap-1"
+                        className="hidden sm:inline-flex font-bold text-[#2E6B3E] hover:underline items-center gap-1"
                       >
                         <MessageCircle className="w-3.5 h-3.5" />
-                        <span>Atendimento via WhatsApp</span>
+                        <span>Atendimento WhatsApp</span>
                       </a>
                     </div>
                   </div>
 
+                  {/* Hero Headline */}
                   <h1
-                    className="font-serif-display text-4xl sm:text-5xl lg:text-[3.5rem] font-semibold leading-[1.08] text-[#1F1215]"
+                    className="font-serif-display text-3xl sm:text-5xl lg:text-[3.4rem] font-semibold leading-[1.08] text-[#1F1215]"
                     style={{ textWrap: 'balance' }}
                   >
                     A elegância começa pelos pés.
                   </h1>
 
-                  <p className="text-base sm:text-lg font-semibold text-[#631421] leading-snug max-w-xl">
-                    Sofisticação, personalidade e exclusividade em cada passo.
+                  {/* Mobile Concise Summary (Avoids wall of text on smartphones) */}
+                  <p className="sm:hidden text-xs text-[#4A383B] leading-relaxed">
+                    Sandálias femininas artesanais sob encomenda (<strong className="text-[#1F1215]">34 ao 39 BR</strong>). Escolha sua cor preferida e confirme com <strong className="text-[#631421]">50% de entrada</strong> no Pix ou Cartão.
                   </p>
 
-                  <div className="space-y-3 text-sm sm:text-base text-[#4A383B] leading-relaxed max-w-xl">
-                    <p>
-                      Na <strong className="text-[#1F1215]">Peterson Shoes</strong>, cada sandália é mais do que um acessório: é uma expressão do seu estilo.
+                  {/* Tablet & Desktop Editorial Copy */}
+                  <div className="hidden sm:block space-y-2.5">
+                    <p className="text-base sm:text-lg font-semibold text-[#631421] leading-snug max-w-xl">
+                      Sofisticação, personalidade e exclusividade em cada passo.
                     </p>
-                    <p>
-                      Descubra modelos que encantam, detalhes que fazem a diferença e o charme de uma produção artesanal feita especialmente para você.
-                    </p>
-                    <p className="font-semibold text-[#1F1215] pt-0.5">
-                      Peterson Shoes — Porque cada detalhe do seu estilo importa.
+                    <p className="text-sm sm:text-base text-[#4A383B] leading-relaxed max-w-xl">
+                      Na <strong className="text-[#1F1215]">Peterson Shoes</strong>, cada sandália é uma expressão do seu estilo. Modelos artesanais produzidos sob encomenda em Goiânia–GO com envio para todo o Brasil.
                     </p>
                   </div>
 
-                  {/* Clean Luxury Atelier Specification Highlights */}
-                  <div className="bg-[#F3EDE2]/85 border border-[#E6DDD0] rounded-xl p-4 space-y-2.5 max-w-xl">
+                  {/* Mobile Compact 3-Key Highlights Row */}
+                  <div className="sm:hidden grid grid-cols-3 gap-1.5 pt-0.5">
+                    <div className="p-2 rounded-lg bg-[#F3EDE2] border border-[#E6DDD0] text-center">
+                      <p className="text-[11px] font-bold text-[#631421]">34 ao 39 BR</p>
+                      <p className="text-[10px] text-[#4A383B]">Sob encomenda</p>
+                    </div>
+                    <div className="p-2 rounded-lg bg-[#F3EDE2] border border-[#E6DDD0] text-center">
+                      <p className="text-[11px] font-bold text-[#631421]">8 Cores + Sua</p>
+                      <p className="text-[10px] text-[#4A383B]">Personalizável</p>
+                    </div>
+                    <div className="p-2 rounded-lg bg-[#F3EDE2] border border-[#E6DDD0] text-center">
+                      <p className="text-[11px] font-bold text-[#631421]">50% + 50%</p>
+                      <p className="text-[10px] text-[#4A383B]">Pix ou Cartão</p>
+                    </div>
+                  </div>
+
+                  {/* Desktop Specification Box */}
+                  <div className="hidden sm:block bg-[#F3EDE2]/85 border border-[#E6DDD0] rounded-xl p-4 space-y-2 max-w-xl">
                     <div className="flex items-start gap-2.5 text-xs sm:text-[13px] text-[#3D2C30]">
                       <Check className="w-4 h-4 text-[#631421] shrink-0 mt-0.5" />
                       <span>
-                        <strong className="text-[#1F1215]">Sob Medida (34 ao 39 BR):</strong> Todos os modelos do nosso Instagram confeccionados exclusivamente na sua numeração.
+                        <strong className="text-[#1F1215]">Sob Medida (34 ao 39 BR):</strong> Todos os modelos confeccionados exclusivamente na sua numeração.
                       </span>
                     </div>
                     <div className="flex items-start gap-2.5 text-xs sm:text-[13px] text-[#3D2C30]">
@@ -610,22 +681,22 @@ export default function App() {
                       <Check className="w-4 h-4 text-[#631421] shrink-0 mt-0.5" />
                       <span>
                         <strong className="text-[#1F1215]">Pagamento 50% + 50%:</strong> Confirme com{' '}
-                        <strong className="text-[#631421]">50% de entrada</strong> (no Pix sem taxa ou no Cartão de Crédito com taxa da operadora) e pague os{' '}
-                        <strong className="text-[#631421]">50% restantes somente quando ficar pronta</strong>.
+                        <strong className="text-[#631421]">50% de entrada</strong> (Pix sem taxa ou Cartão) e pague os{' '}
+                        <strong className="text-[#631421]">50% restantes quando ficar pronta</strong>.
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Action Controls & Bespoke Guarantees */}
-                <div className="space-y-5 pt-2">
-                  <div className="flex flex-wrap items-center gap-3">
+                {/* Action Controls */}
+                <div className="space-y-3 sm:space-y-4 pt-1">
+                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2.5 sm:gap-3">
                     <a
                       href="#catalogo"
-                      className="px-6 py-3.5 bg-[#631421] hover:bg-[#4D0E18] text-[#FAF7F2] text-xs sm:text-sm font-bold tracking-wider uppercase rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap shrink-0 shadow-sm"
+                      className="px-4 sm:px-6 py-3 sm:py-3.5 bg-[#631421] hover:bg-[#4D0E18] text-[#FAF7F2] text-xs sm:text-sm font-bold tracking-wider uppercase rounded-xl transition-colors flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap shrink-0 shadow-sm"
                     >
-                      <span>✨ EXPLORAR COLEÇÃO</span>
-                      <ArrowRight className="w-4 h-4 text-[#E5D3B3]" />
+                      <span>Ver Catálogo</span>
+                      <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#E5D3B3]" />
                     </a>
 
                     <button
@@ -634,14 +705,14 @@ export default function App() {
                         setTrackingQuery('');
                         setIsTrackingOpen(true);
                       }}
-                      className="px-5 py-3.5 bg-[#F3EDE2] hover:bg-[#E6DDD0] text-[#1F1215] border border-[#D8CBB8] text-xs sm:text-sm font-semibold rounded-xl transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                      className="px-3 sm:px-5 py-3 sm:py-3.5 bg-[#F3EDE2] hover:bg-[#E6DDD0] text-[#1F1215] border border-[#D8CBB8] text-xs sm:text-sm font-semibold rounded-xl transition-colors whitespace-nowrap shrink-0 cursor-pointer text-center"
                     >
-                      Acompanhar Pedido / Quitar 50%
+                      Rastrear / Quitar 50%
                     </button>
                   </div>
 
-                  {/* Quick Interactive Tools Strip */}
-                  <div className="pt-4 border-t border-[#E6DDD0] flex flex-wrap items-center gap-5 text-xs text-[#6E5D5F]">
+                  {/* Quick Interactive Tools Strip (Desktop) */}
+                  <div className="hidden sm:flex pt-3 border-t border-[#E6DDD0] flex-wrap items-center gap-5 text-xs text-[#6E5D5F]">
                     <button
                       type="button"
                       onClick={() => setIsSizeGuideOpen(true)}
@@ -671,7 +742,7 @@ export default function App() {
 
               {/* Right Column: Interactive Real Instagram Showcase Card */}
               <div className="lg:col-span-6 flex">
-                <div className="w-full rounded-2xl overflow-hidden border border-[#E6DDD0] bg-[#2B0910] relative h-[440px] sm:h-[500px] shadow-lg group">
+                <div className="w-full rounded-2xl overflow-hidden border border-[#E6DDD0] bg-[#2B0910] relative h-[300px] sm:h-[460px] lg:h-[490px] shadow-md group">
                   {currentHeroProduct ? (
                     <>
                       <img
@@ -686,11 +757,11 @@ export default function App() {
                         }
                         className="w-full h-full object-cover block cursor-pointer transition-transform duration-300 group-hover:scale-102"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#1A0509]/95 via-[#1A0509]/25 to-black/25 flex flex-col justify-between p-5 sm:p-7 pointer-events-none">
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#1A0509]/95 via-[#1A0509]/25 to-black/25 flex flex-col justify-between p-3.5 sm:p-6 pointer-events-none">
                         {/* Top switcher inside showcase */}
-                        <div className="flex flex-wrap items-center justify-between gap-2 pointer-events-auto">
-                          <span className="text-xs text-[#E5D3B3] font-medium bg-black/55 backdrop-blur-xs px-3 py-1 rounded-lg border border-white/15">
-                            Foto Real @petersonshoes_ · Goiânia - GO
+                        <div className="flex items-center justify-between gap-2 pointer-events-auto overflow-x-auto">
+                          <span className="hidden sm:inline-block text-xs text-[#E5D3B3] font-medium bg-black/55 backdrop-blur-xs px-3 py-1 rounded-lg border border-white/15 whitespace-nowrap">
+                            Foto Real @petersonshoes_
                           </span>
                           {heroProducts.length > 1 && (
                             <div className="flex items-center gap-1 bg-black/55 backdrop-blur-xs p-1 rounded-lg border border-white/15">
@@ -699,7 +770,7 @@ export default function App() {
                                   key={hp.id}
                                   type="button"
                                   onClick={() => setHeroSlideIdx(idx)}
-                                  className={`px-2.5 py-1 rounded text-[11px] font-medium transition-colors cursor-pointer whitespace-nowrap ${
+                                  className={`px-2 py-1 rounded text-[10px] sm:text-[11px] font-medium transition-colors cursor-pointer whitespace-nowrap ${
                                     heroSlideIdx === idx
                                       ? 'bg-[#FAF7F2] text-[#631421]'
                                       : 'text-[#FAF7F2]/80 hover:text-white'
@@ -710,7 +781,7 @@ export default function App() {
                                     : idx === 1
                                       ? 'Anabela Fivela'
                                       : idx === 2
-                                        ? 'Anabela Gladiadora'
+                                        ? 'Gladiadora'
                                         : 'Papete Strass'}
                                 </button>
                               ))}
@@ -719,23 +790,23 @@ export default function App() {
                         </div>
 
                         {/* Bottom info & direct customizer button */}
-                        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-12 pointer-events-auto">
-                          <div>
-                            <p className="text-xs text-[#E5D3B3]">
-                              {currentHeroProduct.category} · Numerações 34 ao 39 BR
+                        <div className="flex items-end justify-between gap-3 pt-6 pointer-events-auto">
+                          <div className="min-w-0">
+                            <p className="text-[11px] sm:text-xs text-[#E5D3B3] truncate">
+                              {currentHeroProduct.category} · 34 ao 39 BR
                             </p>
-                            <h2 className="font-serif-display text-2xl sm:text-3xl font-semibold text-[#FAF7F2] mt-0.5">
+                            <h2 className="font-serif-display text-lg sm:text-2xl font-semibold text-[#FAF7F2] truncate">
                               {currentHeroProduct.name}
                             </h2>
-                            <p className="text-xs text-[#FAF7F2]/90 mt-1 font-mono-tabular">
-                              Valor Total: {formatBRL(currentHeroProduct.price)} ·{' '}
+                            <p className="text-[11px] sm:text-xs text-[#FAF7F2]/90 mt-0.5 font-mono-tabular">
+                              {formatBRL(currentHeroProduct.price)} ·{' '}
                               <strong className="text-[#E5D3B3]">
-                                Entrada 50% (Pix ou Cartão): {formatBRL(currentHeroProduct.price / 2)}
+                                50% Entrada: {formatBRL(currentHeroProduct.price / 2)}
                               </strong>
                             </p>
                           </div>
 
-                          <div className="flex items-center gap-2 shrink-0">
+                          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                             <button
                               type="button"
                               onClick={() =>
@@ -747,11 +818,11 @@ export default function App() {
                                   colorIdx: 0,
                                 })
                               }
-                              className="px-3 py-2.5 bg-black/55 hover:bg-black/75 text-[#FAF7F2] border border-white/20 text-xs font-semibold rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer"
+                              className="p-2.5 sm:px-3 sm:py-2.5 bg-black/55 hover:bg-black/75 text-[#FAF7F2] border border-white/20 text-xs font-semibold rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer"
                               title="Ampliar foto da sandália"
                             >
                               <ZoomIn className="w-3.5 h-3.5 text-[#E5D3B3]" />
-                              <span>Ver Foto</span>
+                              <span className="hidden sm:inline">Ver Foto</span>
                             </button>
                             <button
                               type="button"
@@ -762,9 +833,9 @@ export default function App() {
                                   currentHeroProduct.image
                                 )
                               }
-                              className="px-4 py-2.5 bg-[#FAF7F2] hover:bg-[#F3EDE2] text-[#631421] text-xs font-semibold rounded-xl transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                              className="px-3.5 sm:px-4 py-2.5 bg-[#FAF7F2] hover:bg-[#F3EDE2] text-[#631421] text-xs font-semibold rounded-xl transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                             >
-                              Personalizar Modelo
+                              Encomendar
                             </button>
                           </div>
                         </div>
@@ -775,38 +846,38 @@ export default function App() {
               </div>
             </div>
 
-            {/* Full-Width 4-Column Bespoke Process Bar Below Hero Split */}
-            <div className="mt-12 pt-8 border-t border-[#E6DDD0] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="p-5 rounded-xl bg-[#F3EDE2]/70 border border-[#E6DDD0]">
+            {/* Full-Width 4-Column Bespoke Process Bar (Desktop only above catalog; on Mobile it stays in #como-funciona below catalog so products appear immediately) */}
+            <div className="hidden lg:grid mt-10 pt-8 border-t border-[#E6DDD0] grid-cols-4 gap-5">
+              <div className="p-4 rounded-xl bg-[#F3EDE2]/70 border border-[#E6DDD0]">
                 <p className="text-xs font-bold text-[#631421]">
                   01. Modelo, Cor & Tam. 34 ao 39
                 </p>
-                <p className="text-xs text-[#4A383B] mt-1.5 leading-relaxed">
-                  Escolha entre as 8 cores padrão (Preto, Branco, Marsala, Nude, Dourado, Prata, Vermelho, Rosa) ou clique em <strong>Outra Cor</strong> e escreva a cor que deseja na numeração 34 ao 39.
+                <p className="text-xs text-[#4A383B] mt-1 leading-relaxed">
+                  Escolha entre as 8 cores padrão ou clique em <strong>Outra Cor</strong> na numeração 34 ao 39.
                 </p>
               </div>
-              <div className="p-5 rounded-xl bg-[#F3EDE2]/70 border border-[#E6DDD0]">
+              <div className="p-4 rounded-xl bg-[#F3EDE2]/70 border border-[#E6DDD0]">
                 <p className="text-xs font-bold text-[#631421]">
                   02. 50% Entrada (Pix ou Cartão)
                 </p>
-                <p className="text-xs text-[#4A383B] mt-1.5 leading-relaxed">
-                  Você escolhe como pagar os 50% de entrada: <strong>Pix sem taxa</strong> ou <strong>Cartão de Crédito em até 6x</strong> (com acréscimo da taxa cobrada pelo banco/operadora).
+                <p className="text-xs text-[#4A383B] mt-1 leading-relaxed">
+                  Pague 50% de entrada via <strong>Pix sem taxa</strong> ou <strong>Cartão em até 6x</strong>.
                 </p>
               </div>
-              <div className="p-5 rounded-xl bg-[#F3EDE2]/70 border border-[#E6DDD0]">
+              <div className="p-4 rounded-xl bg-[#F3EDE2]/70 border border-[#E6DDD0]">
                 <p className="text-xs font-bold text-[#631421]">
                   03. Fabricação em {settings.productionDays} Dias
                 </p>
-                <p className="text-xs text-[#4A383B] mt-1.5 leading-relaxed">
-                  Produção própria com materiais selecionados. Acompanhe corte, montagem e acabamento pelo código do seu pedido ou WhatsApp.
+                <p className="text-xs text-[#4A383B] mt-1 leading-relaxed">
+                  Produção artesanal própria em Goiânia. Acompanhe o status pelo código do pedido.
                 </p>
               </div>
-              <div className="p-5 rounded-xl bg-[#F3EDE2]/70 border border-[#E6DDD0]">
+              <div className="p-4 rounded-xl bg-[#F3EDE2]/70 border border-[#E6DDD0]">
                 <p className="text-xs font-bold text-[#631421]">
-                  04. 50% na Entrega & Frete Combinado
+                  04. 50% na Entrega & Envio
                 </p>
-                <p className="text-xs text-[#4A383B] mt-1.5 leading-relaxed">
-                  Quando sua sandália estiver pronta, você paga os <strong>50% restantes da sandália</strong> e combinamos a entrega: <strong>Uber Moto</strong> (Goiânia e região) ou <strong>Correios</strong> (outras cidades, com o frete pago pela cliente antes da postagem).
+                <p className="text-xs text-[#4A383B] mt-1 leading-relaxed">
+                  Pague os 50% finais quando ficar pronta. Envio por <strong>Uber Moto</strong> (Goiânia) ou <strong>Correios</strong>.
                 </p>
               </div>
             </div>
@@ -816,48 +887,48 @@ export default function App() {
         {/* ===================================================================
             SECTION 2: BESPOKE CATALOG WITH ALL REAL INSTAGRAM MODELS
         =================================================================== */}
-        <section id="catalogo" className="max-w-7xl mx-auto px-6 py-16 space-y-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-[#E6DDD0]">
+        <section id="catalogo" className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-14 space-y-5 sm:space-y-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pb-4 sm:pb-6 border-b border-[#E6DDD0]">
             <div>
-              <p className="text-xs text-[#631421] font-semibold tracking-wide">
-                Todos os {products.length} Modelos Oficiais @petersonshoes_ · Numeração 34 ao 39 · Cores Padrão ou Outra Cor Sob Medida
+              <p className="text-[11px] sm:text-xs text-[#631421] font-semibold tracking-wide">
+                {products.length} Modelos Oficiais @petersonshoes_ · Numeração 34 ao 39 BR
               </p>
-              <h2 className="font-serif-display text-3xl sm:text-4xl font-semibold text-[#1F1215] mt-1">
-                Catálogo Completo do Instagram Peterson Shoes
+              <h2 className="font-serif-display text-2xl sm:text-4xl font-semibold text-[#1F1215] mt-0.5">
+                Catálogo de Sandálias
               </h2>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <button
                 type="button"
                 onClick={() => setIsAdminView(true)}
-                className="px-4 py-2.5 bg-[#F3EDE2] hover:bg-[#E6DDD0] text-[#631421] border border-[#D8CBB8] rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                className="px-3 sm:px-4 py-2 bg-[#F3EDE2] hover:bg-[#E6DDD0] text-[#631421] border border-[#D8CBB8] rounded-xl text-[11px] sm:text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <Lock className="w-3.5 h-3.5 text-[#631421]" />
-                <span>Editar Valores Manualmente</span>
+                <span>Painel Admin</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setIsSizeGuideOpen(true)}
-                className="px-4 py-2.5 bg-[#F3EDE2] hover:bg-[#E6DDD0] text-[#1F1215] border border-[#D8CBB8] rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                className="px-3 sm:px-4 py-2 bg-[#F3EDE2] hover:bg-[#E6DDD0] text-[#1F1215] border border-[#D8CBB8] rounded-xl text-[11px] sm:text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <Ruler className="w-3.5 h-3.5 text-[#631421]" />
-                <span>Provador de Medidas (34 ao 39)</span>
+                <span>Tabela de Medidas</span>
               </button>
             </div>
           </div>
 
-          {/* Interactive Filter Controls */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          {/* Interactive Filter Controls — Single-Row Scrollable on Mobile */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4">
             {/* Category Segmented Controls */}
-            <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-[#F3EDE2] border border-[#E6DDD0] rounded-xl">
+            <div className="flex items-center gap-1.5 p-1 bg-[#F3EDE2] border border-[#E6DDD0] rounded-xl overflow-x-auto">
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat}
                   type="button"
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                  className={`px-3 py-2 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                     selectedCategory === cat
                       ? 'bg-[#631421] text-[#FAF7F2] shadow-xs'
                       : 'text-[#4A383B] hover:text-[#1F1215]'
@@ -869,10 +940,10 @@ export default function App() {
             </div>
 
             {/* Size Filter + Search */}
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-1.5 flex-wrap">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-3">
+              <div className="flex items-center gap-1 overflow-x-auto pb-0.5 sm:pb-0">
                 <span className="text-xs font-medium text-[#6E5D5F] whitespace-nowrap mr-1">
-                  Tam. (34 ao 39):
+                  Tam.:
                 </span>
                 {[34, 35, 36, 37, 38, 39].map((sz) => (
                   <button
@@ -881,7 +952,7 @@ export default function App() {
                     onClick={() =>
                       setSelectedSizeFilter(selectedSizeFilter === sz ? null : sz)
                     }
-                    className={`w-8 h-8 rounded-lg text-xs font-mono-tabular font-semibold border transition-colors cursor-pointer ${
+                    className={`w-8 h-8 rounded-lg text-xs font-mono-tabular font-semibold border transition-colors cursor-pointer shrink-0 ${
                       selectedSizeFilter === sz
                         ? 'bg-[#631421] text-[#FAF7F2] border-[#631421]'
                         : 'bg-white text-[#3D2C30] border-[#E6DDD0] hover:border-[#631421]'
@@ -901,26 +972,26 @@ export default function App() {
                 )}
               </div>
 
-              <div className="relative min-w-[230px] flex-1 sm:flex-initial">
-                <Search className="w-3.5 h-3.5 text-[#6E5D5F] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <div className="relative min-w-[200px] flex-1 sm:flex-initial">
+                <Search className="w-3.5 h-3.5 text-[#6E5D5F] absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Buscar papete, anabela, marsala, dourado..."
-                  className="w-full pl-9 pr-3.5 py-2 bg-white border border-[#E6DDD0] rounded-xl text-xs text-[#1F1215] focus:outline-none focus:border-[#631421]"
+                  placeholder="Buscar papete, anabela, dourado..."
+                  className="w-full pl-8 pr-3 py-2 bg-white border border-[#E6DDD0] rounded-xl text-xs text-[#1F1215] focus:outline-none focus:border-[#631421]"
                 />
               </div>
             </div>
           </div>
 
-          {/* 3-Column Product Grid */}
+          {/* Responsive Product Grid (1 col mobile, 2 col tablet, 3 col desktop) */}
           {loadingCatalog ? (
-            <div className="py-16 text-center text-sm text-[#6E5D5F]">
+            <div className="py-12 text-center text-sm text-[#6E5D5F]">
               Carregando todos os modelos reais @petersonshoes_...
             </div>
           ) : filteredProducts.length === 0 ? (
-            <div className="py-12 text-center bg-[#F3EDE2] border border-[#E6DDD0] rounded-2xl p-6">
+            <div className="py-10 text-center bg-[#F3EDE2] border border-[#E6DDD0] rounded-2xl p-6">
               <p className="text-sm font-semibold text-[#1F1215]">
                 Nenhuma sandália encontrada para o filtro selecionado.
               </p>
@@ -937,7 +1008,7 @@ export default function App() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
               {filteredProducts.map((product) => {
                 const depositValue = product.price * 0.5;
                 const activeColorIdx = selectedCardColorMap[product.id] ?? 0;
@@ -951,7 +1022,7 @@ export default function App() {
                     className="bg-white border border-[#E6DDD0] rounded-2xl overflow-hidden flex flex-col justify-between transition-transform duration-150 hover:-translate-y-0.5 hover:shadow-md"
                   >
                     <div>
-                      {/* Product Image with explicit height so it never collapses */}
+                      {/* Product Image */}
                       <div
                         onClick={() =>
                           openProductCustomizer(
@@ -960,7 +1031,7 @@ export default function App() {
                             cardDisplayImage
                           )
                         }
-                        className="w-full h-[340px] sm:h-[380px] bg-[#F3EDE2] overflow-hidden cursor-pointer relative border-b border-[#E6DDD0] group"
+                        className="w-full h-[290px] sm:h-[350px] bg-[#F3EDE2] overflow-hidden cursor-pointer relative border-b border-[#E6DDD0] group"
                       >
                         <img
                           src={cardDisplayImage}
@@ -979,53 +1050,49 @@ export default function App() {
                               colorIdx: activeColorIdx,
                             });
                           }}
-                          className="absolute bottom-3 right-3 px-2.5 py-1.5 bg-black/65 hover:bg-black/85 text-[#FAF7F2] text-[11px] font-medium rounded-lg flex items-center gap-1.5 backdrop-blur-xs transition-colors cursor-pointer"
+                          className="absolute bottom-2.5 right-2.5 px-2.5 py-1.5 bg-black/65 hover:bg-black/85 text-[#FAF7F2] text-[11px] font-medium rounded-lg flex items-center gap-1.5 backdrop-blur-xs transition-colors cursor-pointer"
                           title="Ampliar foto em tela cheia"
                         >
                           <ZoomIn className="w-3.5 h-3.5 text-[#E5D3B3]" />
-                          <span>Ampliar Foto</span>
+                          <span>Ampliar</span>
                         </button>
                       </div>
 
                       {/* Card Content */}
-                      <div className="p-6 space-y-3.5">
-                        {/* Clean unboxed metadata with typographic separators */}
-                        <div className="flex flex-wrap items-center gap-1.5 text-xs text-[#6E5D5F]">
-                          <span className="uppercase tracking-wider font-medium text-[#631421]">
+                      <div className="p-4 sm:p-5 space-y-2.5">
+                        {/* Clean unboxed metadata */}
+                        <div className="flex items-center justify-between gap-2 text-[11px] text-[#6E5D5F]">
+                          <span className="uppercase tracking-wider font-semibold text-[#631421] truncate">
                             {product.category}
                           </span>
-                          <span aria-hidden="true">·</span>
-                          <span>Produção: {product.productionDays} dias</span>
-                          <span aria-hidden="true">·</span>
-                          <span>
-                            Tam. {product.availableSizes[0]} ao{' '}
-                            {product.availableSizes[product.availableSizes.length - 1]}
+                          <span className="shrink-0">
+                            Tam. 34 ao 39 · {product.productionDays}d
                           </span>
                         </div>
 
                         <div>
                           <h3
                             onClick={() => openProductCustomizer(product, activeColorIdx)}
-                            className="font-serif-display text-xl font-semibold text-[#1F1215] hover:text-[#631421] transition-colors cursor-pointer leading-snug"
+                            className="font-serif-display text-lg sm:text-xl font-semibold text-[#1F1215] hover:text-[#631421] transition-colors cursor-pointer leading-snug"
                           >
                             {product.name}
                           </h3>
-                          <p className="text-xs text-[#6E5D5F] mt-1 line-clamp-2">
+                          <p className="text-xs text-[#6E5D5F] mt-0.5 line-clamp-1">
                             {product.subtitle}
                           </p>
                         </div>
 
                         {/* Interactive Color Swatches + Outra Cor Trigger */}
-                        <div className="pt-1 space-y-2">
+                        <div className="pt-1 space-y-1.5">
                           <div className="flex items-center justify-between text-xs">
                             <span className="text-[#6E5D5F]">
-                              Cor Selecionada:{' '}
+                              Cor:{' '}
                               <strong className="text-[#1F1215]">
                                 {activeColor?.name}
                               </strong>
                             </span>
                             <span className="text-[11px] text-[#631421] font-medium">
-                              8 cores + Outra Cor
+                              Escolha a cor
                             </span>
                           </div>
                           <div className="flex flex-wrap items-center gap-1.5">
@@ -1041,8 +1108,8 @@ export default function App() {
                                     key={c.name}
                                     type="button"
                                     onClick={() => openProductCustomizer(product, cIdx)}
-                                    title="Escolher outra cor personalizada e digitar qual cor você quer"
-                                    className="px-2 py-1 rounded-md border border-dashed border-[#631421] bg-[#FAF7F2] hover:bg-[#F3EDE2] text-[10px] font-semibold text-[#631421] transition-colors cursor-pointer whitespace-nowrap"
+                                    title="Escolher outra cor personalizada"
+                                    className="px-2 py-0.5 rounded-md border border-dashed border-[#631421] bg-[#FAF7F2] hover:bg-[#F3EDE2] text-[10px] font-semibold text-[#631421] transition-colors cursor-pointer whitespace-nowrap"
                                   >
                                     + Outra Cor
                                   </button>
@@ -1076,21 +1143,21 @@ export default function App() {
                     </div>
 
                     {/* Price & Bespoke Action */}
-                    <div className="px-6 pb-6 pt-4 border-t border-[#F3EDE2] space-y-3.5 bg-[#FAF7F2]/50">
+                    <div className="px-4 sm:px-5 pb-4 sm:pb-5 pt-3 border-t border-[#F3EDE2] space-y-3 bg-[#FAF7F2]/50">
                       <div className="flex items-baseline justify-between gap-2">
                         <div>
-                          <span className="text-[11px] text-[#6E5D5F] block">
-                            Valor Total Sob Encomenda
+                          <span className="text-[10px] sm:text-[11px] text-[#6E5D5F] block">
+                            Valor Total
                           </span>
-                          <span className="text-base font-semibold text-[#1F1215] font-mono-tabular">
+                          <span className="text-sm sm:text-base font-semibold text-[#1F1215] font-mono-tabular">
                             {formatBRL(product.price)}
                           </span>
                         </div>
                         <div className="text-right">
-                          <span className="text-[11px] font-semibold text-[#631421] block">
-                            50% Entrada (Pix ou Cartão*)
+                          <span className="text-[10px] sm:text-[11px] font-semibold text-[#631421] block">
+                            50% Entrada (Pix ou Cartão)
                           </span>
-                          <span className="text-lg font-bold text-[#631421] font-mono-tabular">
+                          <span className="text-base sm:text-lg font-bold text-[#631421] font-mono-tabular">
                             {formatBRL(depositValue)}
                           </span>
                         </div>
@@ -1100,9 +1167,9 @@ export default function App() {
                         <button
                           type="button"
                           onClick={() => openProductCustomizer(product, activeColorIdx)}
-                          className="flex-1 py-2.5 px-4 bg-[#631421] hover:bg-[#4D0E18] text-[#FAF7F2] text-xs font-semibold rounded-xl transition-colors cursor-pointer whitespace-nowrap"
+                          className="flex-1 py-2.5 px-3 bg-[#631421] hover:bg-[#4D0E18] text-[#FAF7F2] text-xs font-semibold rounded-xl transition-colors cursor-pointer whitespace-nowrap"
                         >
-                          Personalizar & Encomendar
+                          Escolher Cor & Numeração
                         </button>
 
                         <a

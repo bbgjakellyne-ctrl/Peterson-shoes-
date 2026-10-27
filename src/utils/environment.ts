@@ -1,10 +1,10 @@
 export type AppEnvironment = 'homologacao' | 'producao';
 
-const ENV_SESSION_KEY = 'peterson_shoes_active_env';
+const ENV_SESSION_KEY = 'peterson_shoes_active_env_v2';
 
 export function getActiveEnvironment(): AppEnvironment {
   if (typeof window === 'undefined') {
-    return 'homologacao';
+    return 'producao';
   }
 
   try {
@@ -25,21 +25,11 @@ export function getActiveEnvironment(): AppEnvironment {
     if (stored === 'homologacao' || stored === 'producao') {
       return stored;
     }
-
-    const host = window.location.hostname.toLowerCase();
-    // No preview de desenvolvimento (ais-dev / localhost), inicia em Homologação por segurança
-    if (
-      host.includes('ais-dev') ||
-      host.includes('localhost') ||
-      host.includes('127.0.0.1')
-    ) {
-      return 'homologacao';
-    }
   } catch {
     // Fallback
   }
 
-  return 'homologacao';
+  return 'producao';
 }
 
 export function isHomologacao(): boolean {
