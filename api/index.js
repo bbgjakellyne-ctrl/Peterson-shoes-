@@ -3671,7 +3671,7 @@ app.use((req, _res, next) => {
 function registerApiRoutes() {
   loadDb("producao");
   loadDb("homologacao");
-  const OFFICIAL_PUBLIC_DOMAIN = "https://peterson-shoes-goiania.ai.studio";
+  const OFFICIAL_PUBLIC_DOMAIN = "https://peterson-shoes.vercel.app";
   const resolveBaseUrl = (_req) => {
     return OFFICIAL_PUBLIC_DOMAIN;
   };

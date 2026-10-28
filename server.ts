@@ -1743,7 +1743,7 @@ function registerApiRoutes() {
   // GOOGLE SEO ENDPOINTS (robots.txt & sitemap.xml with Image Sitemap)
   // ==========================================================================
 
-  const OFFICIAL_PUBLIC_DOMAIN = 'https://peterson-shoes-goiania.ai.studio';
+  const OFFICIAL_PUBLIC_DOMAIN = 'https://peterson-shoes.vercel.app';
 
   const resolveBaseUrl = (_req: Request): string => {
     return OFFICIAL_PUBLIC_DOMAIN;

@@ -169,9 +169,9 @@ export default function App() {
   useEffect(() => {
     const origin = window.location.origin;
     const baseTitle =
-      'Peterson Shoes - Goiânia | Sandálias Femininas (34 ao 39)';
+      'Peterson Shoes - Goiânia | Fábrica e Loja de Calçados';
     const baseDescription =
-      'Peterson Shoes - Goiânia (@petersonshoes_): sandálias femininas de fabricação própria em Goiânia - GO sob encomenda do 34 ao 39. Papetes, Anabelas e Rasteiras com 50% de entrada.';
+      'Peterson Shoes - Goiânia (Av. C-7, Setor Sudoeste, Goiânia - GO). Fábrica e loja de sandálias e scarpins femininos sob encomenda do 34 ao 39 no atacado e varejo.';
 
     let nextTitle = baseTitle;
     let nextDescription = baseDescription;
@@ -1464,13 +1464,16 @@ export default function App() {
             {/* Col 1: Brand & Location */}
             <div className="space-y-2.5">
               <p className="font-serif-display text-2xl font-semibold text-[#FAF7F2]">
-                Peterson Shoes
+                Peterson Shoes - Goiânia
               </p>
               <p className="text-[#C9B9AC] leading-relaxed">
-                Fabricação própria de calçados femininos artesanais em <strong>Goiânia – Goiás</strong>. Sandálias e scarpins personalizados sob encomenda na numeração 34 ao 39 BR.
+                Fabricante e loja de calçados femininos em <strong>Goiânia – Goiás</strong> (Atacado e Varejo). Sandálias e scarpins personalizados sob encomenda na numeração 34 ao 39 BR.
               </p>
-              <p className="text-[11px] text-[#E5D3B3] font-mono-tabular">
-                CNPJ: {settings.bankHolderDoc || '50.789.636/0001-32'} · Goiânia/GO
+              <p className="text-[11px] text-[#E5D3B3]">
+                📍 Av. C-7, Setor Sudoeste, Goiânia - GO, 74305-080
+              </p>
+              <p className="text-[11px] text-[#C9B9AC] font-mono-tabular">
+                CNPJ: {settings.bankHolderDoc || '50.789.636/0001-32'} · Seg a Sáb: 8h às 19h
               </p>
             </div>
 
