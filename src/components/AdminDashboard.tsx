@@ -234,8 +234,82 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [checkingAuthStatus, setCheckingAuthStatus] = useState(true);
 
   const [activeTab, setActiveTab] = useState<
-    'PRODUCTS' | 'ORDERS' | 'FINANCE' | 'CUSTOMERS' | 'SETTINGS' | 'ANALYTICS' | 'SEO'
+    'PRODUCTS' | 'ORDERS' | 'FINANCE' | 'CUSTOMERS' | 'SETTINGS' | 'ANALYTICS' | 'SEO' | 'REELS'
   >('PRODUCTS');
+  const [showQuickReelsModal, setShowQuickReelsModal] = useState(true);
+  const [downloadingMobileVideo, setDownloadingMobileVideo] = useState(false);
+  const [mobileVideoStatus, setMobileVideoStatus] = useState('');
+
+  const handleMobileVideoDownload = async (mode: 'share' | 'download') => {
+    setDownloadingMobileVideo(true);
+    setMobileVideoStatus('Preparando vídeo em alta definição para o seu celular...');
+    try {
+      const response = await fetch('/assets/peterson-reels-privado-admin.mp4?v=editorial-novo');
+      if (!response.ok) {
+        throw new Error('Falha ao carregar o arquivo de vídeo');
+      }
+      const blob = await response.blob();
+      const videoFile = new File([blob], 'peterson-shoes-reels-campanha-nova.mp4', {
+        type: 'video/mp4',
+      });
+
+      if (
+        mode === 'share' &&
+        typeof navigator !== 'undefined' &&
+        navigator.share &&
+        (!navigator.canShare || navigator.canShare({ files: [videoFile] }))
+      ) {
+        await navigator.share({
+          title: 'Peterson Shoes — Vídeo Reels Instagram',
+          text: 'Vídeo Comercial Peterson Shoes (@petersonshoes_)',
+          files: [videoFile],
+        });
+        setMobileVideoStatus('✅ Menu do celular aberto! Toque em "Salvar Vídeo" ou "Instagram".');
+        return;
+      }
+
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = 'peterson-shoes-reels-campanha-nova.mp4';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 15000);
+      setMobileVideoStatus('✅ Download iniciado! Verifique a pasta Downloads/Arquivos do seu celular.');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : '';
+      if (msg.toLowerCase().includes('abort') || msg.toLowerCase().includes('cancel')) {
+        setMobileVideoStatus('');
+      } else {
+        window.location.href = '/api/download-reels-mp4';
+        setMobileVideoStatus('⬇️ Iniciando download direto do vídeo MP4...');
+      }
+    } finally {
+      setDownloadingMobileVideo(false);
+    }
+  };
+
+  const REELS_CAPTION_TEXT = `✨ Elegância, conforto e poder em cada passo! Conheça os novos lançamentos da Peterson Shoes (@petersonshoes_) feitos sob encomenda especialmente para você.
+
+👠 Destaques do Vídeo (Numeração 34 ao 39):
+• Scarpin Bico Fino & Pulseira Marsala — R$ 149,90
+• Scarpin Slingback Ponteira Dourada & Salto Taça — R$ 149,90
+• Scarpin Slingback Verniz Marrom Café — R$ 149,90
+• Sandália 3 Tiras Salto Fino Dourada — R$ 149,90
+• Papetes, Rasteiras & Anabelas — a partir de R$ 99,90
+
+💳 Facilidade Direto da Fábrica:
+• 50% de entrada no Pix (R$ 74,95 nos modelos de R$ 149,90) + 50% somente quando sua sandália ficar pronta!
+• Ou parcele em até 6x no cartão.
+• Escolha sua cor favorita e sua numeração (34 ao 39).
+
+📍 Fábrica e Loja em Goiânia - GO (Av. C-7, Setor Sudoeste)
+🚚 Entregas rápidas em Goiânia e Região + Envio para todo o Brasil!
+
+📲 Garanta já o seu par! Clique no link da bio (peterson-shoes.vercel.app) ou chame agora no WhatsApp: (62) 98499-8265
+
+#petersonshoes #calçadosfemininos #sandaliasgoiania #scarpin #slingback #modagoiania #fabricadecalcados #goiania #papetes #sapatosfemininos`;
 
   React.useEffect(() => {
     let active = true;
@@ -250,6 +324,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       .finally(() => {
         if (active) setCheckingAuthStatus(false);
       });
+
+    apiFetch('/api/analytics/summary')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (active && data && typeof data.totalVisits === 'number') {
+          setAnalytics(data);
+        }
+      })
+      .catch(() => {});
+
     return () => {
       active = false;
     };
@@ -1125,6 +1209,155 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </button>
             </form>
           )}
+
+          {/* Quick-Access Owner Reels Studio inside Admin Area (Hidden from Public Storefront) */}
+          <div className="mt-6 pt-5 border-t border-[#EFE7DA]">
+            <button
+              type="button"
+              onClick={() => setShowQuickReelsModal((prev) => !prev)}
+              className="w-full py-2.5 px-4 bg-[#231619] hover:bg-[#3A2429] text-[#E5D3B3] border border-[#D4AF37]/50 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+            >
+              <span>🎬 {showQuickReelsModal ? 'Ocultar Vídeo Reels do Instagram' : 'Baixar Vídeo Reels Instagram Pronto (MP4 1080x1920)'}</span>
+            </button>
+
+            {showQuickReelsModal && (
+              <div className="mt-4 p-4 rounded-xl bg-[#F7F3EC] border border-[#DFD3C3] space-y-4">
+                <div className="space-y-1">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#5B1824]">
+                    Uso Exclusivo da Loja · Oculto da Vitrine Pública
+                  </span>
+                  <h3 className="text-sm font-semibold text-[#231619]">
+                    Vídeo Comercial Reels 9:16 Full HD (18s com Trilha Sonora)
+                  </h3>
+                  <p className="text-[11px] text-[#6E5A5F] leading-relaxed">
+                    Este vídeo fica <strong>somente aqui no Painel Administrativo</strong> (nenhum cliente na vitrine vê este arquivo).
+                  </p>
+                </div>
+
+                <div className="max-w-[230px] mx-auto rounded-xl overflow-hidden border-2 border-[#5B1824] shadow-md bg-black">
+                  <video
+                    src="/assets/peterson-reels-privado-admin.mp4?v=editorial-novo"
+                    controls
+                    playsInline
+                    preload="metadata"
+                    className="w-full aspect-[9/16] object-cover"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <button
+                    type="button"
+                    disabled={downloadingMobileVideo}
+                    onClick={() => handleMobileVideoDownload('share')}
+                    className="w-full py-3.5 px-4 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-lg text-xs font-bold text-center transition-colors shadow-sm cursor-pointer"
+                  >
+                    {downloadingMobileVideo
+                      ? '⏳ Preparando Vídeo para o Celular...'
+                      : '📲 Salvar Vídeo na Galeria do Celular (iPhone / Android)'}
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={downloadingMobileVideo}
+                    onClick={() => handleMobileVideoDownload('download')}
+                    className="w-full py-2.5 px-4 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-bold text-center transition-colors cursor-pointer"
+                  >
+                    ⬇️ Baixar Arquivo MP4 Direto no Aparelho
+                  </button>
+
+                  {mobileVideoStatus && (
+                    <p className="text-[11px] font-semibold text-[#2E6B3E] text-center bg-white p-2 rounded border border-[#2E6B3E]/30">
+                      {mobileVideoStatus}
+                    </p>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(REELS_CAPTION_TEXT, 'login-reels-caption')}
+                    className="w-full py-2.5 px-4 bg-white hover:bg-[#EFE7DA] text-[#231619] border border-[#DFD3C3] rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    {copiedTextId === 'login-reels-caption' ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-[#2E6B3E]" />
+                        <span>Legenda e Hashtags Copiadas!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>Copiar Legenda Pronta + Hashtags</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Real-Time Clicks & Visits Summary inside Quick Admin View */}
+                <div className="pt-3 border-t border-[#DFD3C3] space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-[#5B1824] uppercase tracking-wider">
+                      📊 Desempenho em Tempo Real (Cliques no Site):
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        apiFetch('/api/analytics/summary')
+                          .then((r) => (r.ok ? r.json() : null))
+                          .then((d) => d && setAnalytics(d))
+                          .catch(() => {})
+                      }
+                      className="text-[10px] font-semibold text-[#5B1824] underline cursor-pointer"
+                    >
+                      Atualizar agora
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-center">
+                    <div className="p-2.5 bg-white rounded-lg border border-[#DFD3C3]">
+                      <p className="text-lg font-bold text-[#231619] font-mono-tabular">
+                        {analytics.totalVisits}
+                      </p>
+                      <p className="text-[10px] text-[#6E5A5F]">Total de Visitas</p>
+                    </div>
+                    <div className="p-2.5 bg-white rounded-lg border border-[#DFD3C3]">
+                      <p className="text-lg font-bold text-[#5B1824] font-mono-tabular">
+                        {analytics.uniqueVisitorsCount}
+                      </p>
+                      <p className="text-[10px] text-[#6E5A5F]">Pessoas Únicas</p>
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-[#6E5A5F] leading-relaxed">
+                    💡 <strong>Por que o Google Search Console mostra 0 cliques?</strong> Porque o Google Search Console só mostra cliques feitos dentro da busca do Google (com atraso de 24h a 48h) e não conta cliques vindos do WhatsApp ou Instagram. Já este painel acima conta <strong>todos os cliques em tempo real</strong>!
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-[#DFD3C3] space-y-2">
+                  <p className="text-[11px] font-bold text-[#231619]">
+                    📸 Baixar também as 6 Fotos Novas de Campanha (Stories / Carrossel):
+                  </p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { url: '/assets/campanha/cena1-scarpin-marsala.jpg', name: 'foto1-scarpin-marsala.jpg', label: '1. Scarpin Marsala' },
+                      { url: '/assets/campanha/cena2-slingback-ponteira-dourada.jpg', name: 'foto2-slingback-ouro.jpg', label: '2. Slingback Ouro' },
+                      { url: '/assets/campanha/cena3-slingback-cafe-mule-preta.jpg', name: 'foto3-slingback-cafe.jpg', label: '3. Verniz Café' },
+                      { url: '/assets/campanha/cena4-sandalia-mule-dourada.jpg', name: 'foto4-sandalia-dourada.jpg', label: '4. Salto Dourado' },
+                      { url: '/assets/campanha/cena5-anabela-tamanco-marsala.jpg', name: 'foto5-anabela-tamanco.jpg', label: '5. Anabela & Tamanco' },
+                      { url: '/assets/campanha/cena6-papete-anabela-piramides.jpg', name: 'foto6-papete-piramides.jpg', label: '6. Papete & Anabela' },
+                    ].map((foto) => (
+                      <a
+                        key={foto.name}
+                        href={foto.url}
+                        download={foto.name}
+                        className="group block rounded-lg overflow-hidden border border-[#DFD3C3] bg-white hover:border-[#5B1824] transition-colors"
+                      >
+                        <img src={foto.url} alt={foto.label} className="w-full aspect-[9/16] object-cover" />
+                        <span className="block py-1 px-1 text-[9px] font-bold text-center text-[#5B1824] bg-[#F7F3EC] truncate">
+                          ⬇️ {foto.label}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -1352,6 +1585,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           >
             <ShieldCheck className="w-4 h-4" />
             <span>Google & SEO (Aparecer nas Buscas)</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('REELS')}
+            className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap ${
+              activeTab === 'REELS'
+                ? 'bg-[#231619] text-[#E5D3B3] shadow-xs'
+                : 'text-[#5B1824] bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30'
+            }`}
+          >
+            <span>🎬 Vídeo Reels Instagram (Exclusivo Loja)</span>
           </button>
         </div>
 
@@ -3322,6 +3566,121 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <br />• <strong>Total de impressões</strong>: quantas vezes a Peterson Shoes apareceu nos resultados de busca.
                   <br />• <strong>Consultas</strong>: quais palavras exatas as clientes digitaram para encontrar suas sandálias.
                 </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 8: REELS VIDEO & INSTAGRAM MARKETING STUDIO (ADMIN ONLY) */}
+        {activeTab === 'REELS' && (
+          <div className="space-y-6">
+            <div className="bg-white border border-[#DFD3C3] rounded-xl p-6 space-y-6">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#EFE7DA] pb-4">
+                <div>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#5B1824] mb-1">
+                    <span>🎬 Estúdio Exclusivo da Proprietária · Oculto dos Clientes</span>
+                  </span>
+                  <h2 className="text-2xl font-semibold text-[#231619]">
+                    Vídeo Comercial Reels & Stories Pronto para Postar (@petersonshoes_)
+                  </h2>
+                  <p className="text-xs text-[#6E5A5F] max-w-3xl mt-1">
+                    Vídeo vertical em <strong>Alta Definição Full HD (1080x1920 · 9:16 · 18 segundos com trilha sonora)</strong> apresentando os novos lançamentos de <strong>R$ 149,90 (Entrada de R$ 74,95 no Pix)</strong> e as campeãs de vendas a partir de <strong>R$ 99,90</strong>.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    disabled={downloadingMobileVideo}
+                    onClick={() => handleMobileVideoDownload('share')}
+                    className="px-4 py-3 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-xl text-xs font-bold transition-colors shadow-sm cursor-pointer"
+                  >
+                    📲 Salvar na Galeria do Celular (iPhone / Android)
+                  </button>
+                  <button
+                    type="button"
+                    disabled={downloadingMobileVideo}
+                    onClick={() => handleMobileVideoDownload('download')}
+                    className="px-4 py-3 bg-[#5B1824] hover:bg-[#46111B] text-white rounded-xl text-xs font-bold transition-colors shadow-sm cursor-pointer"
+                  >
+                    ⬇️ Baixar MP4 Direto
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <div className="lg:col-span-4 flex flex-col items-center space-y-3">
+                  <div className="w-full max-w-[280px] rounded-2xl overflow-hidden border-4 border-[#231619] shadow-xl bg-black">
+                    <video
+                      src="/assets/peterson-reels-privado-admin.mp4?v=editorial-novo"
+                      controls
+                      playsInline
+                      preload="metadata"
+                      className="w-full aspect-[9/16] object-cover"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    disabled={downloadingMobileVideo}
+                    onClick={() => handleMobileVideoDownload('share')}
+                    className="w-full max-w-[280px] py-3 px-4 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-xl text-xs font-bold text-center transition-colors cursor-pointer"
+                  >
+                    📲 Salvar Vídeo na Galeria do Celular
+                  </button>
+                  <button
+                    type="button"
+                    disabled={downloadingMobileVideo}
+                    onClick={() => handleMobileVideoDownload('download')}
+                    className="w-full max-w-[280px] py-2.5 px-4 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-xl text-xs font-bold text-center transition-colors cursor-pointer"
+                  >
+                    ⬇️ Baixar Arquivo MP4 no Aparelho
+                  </button>
+                </div>
+
+                <div className="lg:col-span-8 space-y-4">
+                  <div className="p-5 rounded-xl bg-[#F7F3EC] border border-[#DFD3C3] space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <h3 className="text-base font-semibold text-[#231619]">
+                        Legenda Pronta para Instagram Reels & Feed
+                      </h3>
+                      <button
+                        type="button"
+                        onClick={() => copyToClipboard(REELS_CAPTION_TEXT, 'tab-reels-caption')}
+                        className="px-3.5 py-2 bg-[#5B1824] hover:bg-[#46111B] text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+                      >
+                        {copiedTextId === 'tab-reels-caption' ? (
+                          <>
+                            <Check className="w-3.5 h-3.5" />
+                            <span>Legenda Copiada!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3.5 h-3.5" />
+                            <span>Copiar Legenda Completa</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                    <pre className="p-4 bg-white border border-[#DFD3C3] rounded-lg text-xs text-[#231619] whitespace-pre-wrap font-sans leading-relaxed">
+                      {REELS_CAPTION_TEXT}
+                    </pre>
+                  </div>
+
+                  <div className="p-5 rounded-xl bg-white border border-[#DFD3C3] space-y-2">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#2E6B3E]">
+                      Configuração Recomendada para Tráfego Pago Local (Turbinar / Meta Ads)
+                    </span>
+                    <h4 className="text-sm font-semibold text-[#231619]">
+                      Como atrair clientes reais de Goiânia e região todos os dias:
+                    </h4>
+                    <ul className="text-xs text-[#4A373B] space-y-1.5 leading-relaxed">
+                      <li>• <strong>Objetivo do Anúncio:</strong> Mensagens no WhatsApp <code className="font-mono">(62) 98499-8265</code> ou Visitas ao Perfil/Site.</li>
+                      <li>• <strong>Localização:</strong> Goiânia - GO + Aparecida de Goiânia + Senador Canedo (raio de 25 km do Setor Sudoeste).</li>
+                      <li>• <strong>Público:</strong> Mulheres, 20 a 54 anos · Interesses: Calçados femininos, Sandálias, Moda feminina, Compras na internet.</li>
+                      <li>• <strong>Orçamento sugerido:</strong> R$ 15,00 a R$ 25,00 por dia nos horários de pico (11h às 14h e 18h às 22h).</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

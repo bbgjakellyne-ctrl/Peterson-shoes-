@@ -3830,10 +3830,36 @@ ${productUrlsXml}
       };
       db.analytics.recentEvents = [eventItem, ...db.analytics.recentEvents || []].slice(0, 40);
       saveDb(db, env);
-      res.json({ ok: true });
+      res.json({ ok: true, analytics: db.analytics });
     } catch {
       res.json({ ok: false });
     }
+  });
+  app.get("/api/analytics/summary", (req, res) => {
+    try {
+      const env = resolveEnv(req);
+      const db = loadDb(env);
+      res.json(db.analytics || createEmptyAnalytics());
+    } catch {
+      res.json(createEmptyAnalytics());
+    }
+  });
+  app.get("/api/download-reels-mp4", (_req, res) => {
+    const mp4Candidates = [
+      path.resolve(process.cwd(), "public", "assets", "peterson-reels-privado-admin.mp4"),
+      path.resolve(process.cwd(), "dist", "assets", "peterson-reels-privado-admin.mp4")
+    ];
+    const targetMp4 = mp4Candidates.find((p) => fs.existsSync(p));
+    if (!targetMp4) {
+      return res.redirect("/assets/peterson-reels-privado-admin.mp4");
+    }
+    res.setHeader("Content-Type", "video/mp4");
+    res.setHeader(
+      "Content-Disposition",
+      'attachment; filename="peterson-shoes-reels-campanha-nova.mp4"'
+    );
+    res.setHeader("Cache-Control", "no-store");
+    return res.sendFile(targetMp4);
   });
   app.post("/api/orders", async (req, res) => {
     try {

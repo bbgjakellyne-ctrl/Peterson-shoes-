@@ -3,6 +3,21 @@
   "installCommand": "npm install",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "headers": [
+    {
+      "source": "/assets/peterson-reels-privado-admin.mp4",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "video/mp4"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "attachment; filename=\"peterson-shoes-reels-campanha-nova.mp4\""
+        }
+      ]
+    }
+  ],
   "rewrites": [
     {
       "source": "/sitemap.xml",
