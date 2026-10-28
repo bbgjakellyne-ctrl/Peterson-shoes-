@@ -3222,10 +3222,6 @@ async function createMercadoPagoPixPayment(params) {
   };
 }
 function createInitialDatabase() {
-  const order1Date = new Date(Date.now() - 6 * 864e5).toISOString();
-  const order1Est = addDaysISO(9);
-  const order2Date = new Date(Date.now() - 14 * 864e5).toISOString();
-  const order2Est = addDaysISO(1);
   const settings = {
     storeName: "PETERSON SHOES",
     instagramUrl: "https://www.instagram.com/petersonshoes_/",
@@ -3244,198 +3240,9 @@ function createInitialDatabase() {
     bankAccount: "",
     cardPaymentLink: ""
   };
-  const customers = [
-    {
-      id: "cust-1",
-      name: "Carolina Mendon\xE7a",
-      email: "carolina.mendonca@email.com.br",
-      whatsapp: "(62) 99412-8831",
-      cpf: "348.912.408-22",
-      cep: "74150-040",
-      street: "Av. T-63",
-      number: "1420",
-      complement: "Apto 82",
-      neighborhood: "Setor Bueno",
-      city: "Goi\xE2nia",
-      state: "GO",
-      totalOrders: 1,
-      totalSpent: 130,
-      createdAt: order1Date
-    },
-    {
-      id: "cust-2",
-      name: "Juliana Vasconcelos",
-      email: "juliana.vasc@email.com.br",
-      whatsapp: "(62) 98731-5509",
-      cpf: "129.845.307-10",
-      cep: "74810-100",
-      street: "Rua 1136",
-      number: "615",
-      complement: "Casa 2",
-      neighborhood: "Setor Marista",
-      city: "Goi\xE2nia",
-      state: "GO",
-      totalOrders: 1,
-      totalSpent: 150,
-      createdAt: order2Date
-    }
-  ];
-  const payments = [
-    {
-      id: "pay-1a",
-      orderId: "ord-1001",
-      orderCode: "PTS-2026-101",
-      installmentType: "ENTRADA_50",
-      method: "PIX_MERCADO_PAGO",
-      baseAmount: 65,
-      feeAmount: 0,
-      installments: 1,
-      amount: 65,
-      status: "APROVADO",
-      pixCopyPaste: generateMercadoPagoPixPayload(65, "PTS2026101E", settings.pixKey),
-      mpReferenceId: "MP-PIX-9841201",
-      sandboxMode: true,
-      paidAt: order1Date,
-      createdAt: order1Date
-    },
-    {
-      id: "pay-1b",
-      orderId: "ord-1001",
-      orderCode: "PTS-2026-101",
-      installmentType: "FINAL_50",
-      method: "PIX_MERCADO_PAGO",
-      baseAmount: 65,
-      feeAmount: 0,
-      installments: 1,
-      amount: 65,
-      status: "PENDENTE",
-      pixCopyPaste: generateMercadoPagoPixPayload(65, "PTS2026101F", settings.pixKey),
-      mpReferenceId: "MP-PIX-9841202",
-      sandboxMode: true,
-      paidAt: null,
-      createdAt: order1Date
-    },
-    {
-      id: "pay-2a",
-      orderId: "ord-1002",
-      orderCode: "PTS-2026-102",
-      installmentType: "ENTRADA_50",
-      method: "CARTAO_MERCADO_PAGO",
-      baseAmount: 75,
-      feeAmount: 3.74,
-      installments: 2,
-      cardBrand: "Mastercard",
-      cardLast4: "4829",
-      amount: 78.74,
-      status: "APROVADO",
-      pixCopyPaste: generateMercadoPagoPixPayload(75, "PTS2026102E", settings.pixKey),
-      mpReferenceId: "MP-CARD-9840911",
-      sandboxMode: true,
-      paidAt: order2Date,
-      createdAt: order2Date
-    },
-    {
-      id: "pay-2b",
-      orderId: "ord-1002",
-      orderCode: "PTS-2026-102",
-      installmentType: "FINAL_50",
-      method: "PIX_MERCADO_PAGO",
-      baseAmount: 75,
-      feeAmount: 0,
-      installments: 1,
-      amount: 75,
-      status: "PENDENTE",
-      pixCopyPaste: generateMercadoPagoPixPayload(75, "PTS2026102F", settings.pixKey),
-      mpReferenceId: "MP-PIX-9840912",
-      sandboxMode: true,
-      paidAt: null,
-      createdAt: order2Date
-    }
-  ];
-  const orders = [
-    {
-      id: "ord-1001",
-      orderCode: "PTS-2026-101",
-      customerId: "cust-1",
-      customerName: "Carolina Mendon\xE7a",
-      customerWhatsapp: "(62) 99412-8831",
-      customerEmail: "carolina.mendonca@email.com.br",
-      customerCpf: "348.912.408-22",
-      shippingAddress: "Av. T-63, 1420, Apto 82 - Setor Bueno, Goi\xE2nia/GO - CEP 74150-040",
-      items: [
-        {
-          productId: "prod-ig-01-papete-piramides",
-          sku: "PTS-IG-01",
-          name: "Papete Flatform Pir\xE2mides & Fivela (Dourada)",
-          image: "/instagram/feed_1_C454LXbOzrn_slide_1.jpg",
-          unitPrice: 130,
-          quantity: 1,
-          size: 37,
-          colorName: "Dourado",
-          colorHex: "#D4AF37",
-          customization: {
-            heelOption: "Flatform Anat\xF4mica 3,5cm",
-            strapFinish: "Pir\xE2mides Douradas & Fivela Ouro",
-            footWidth: "Padr\xE3o",
-            insoleEngraving: "C.M.",
-            customNotes: "Favor deixar a tira do tornozelo com 1 furo extra."
-          }
-        }
-      ],
-      totalAmount: 130,
-      depositAmount: 65,
-      remainingAmount: 65,
-      paymentStatus: "ENTRADA_50_PAGA",
-      productionStatus: "MONTAGEM_ARTESANAL",
-      estimatedDeliveryDate: order1Est,
-      productionDays: 15,
-      factoryNotes: "Material dourado metalizado separado. Montagem da flatform com pir\xE2mides em andamento.",
-      trackingCode: "",
-      createdAt: order1Date,
-      updatedAt: order1Date
-    },
-    {
-      id: "ord-1002",
-      orderCode: "PTS-2026-102",
-      customerId: "cust-2",
-      customerName: "Juliana Vasconcelos",
-      customerWhatsapp: "(62) 98731-5509",
-      customerEmail: "juliana.vasc@email.com.br",
-      customerCpf: "129.845.307-10",
-      shippingAddress: "Rua 1136, 615, Casa 2 - Setor Marista, Goi\xE2nia/GO - CEP 74810-100",
-      items: [
-        {
-          productId: "prod-ig-02-anabela-piramides-fivela",
-          sku: "PTS-IG-02",
-          name: "Anabela Plataforma Pir\xE2mides & Fivela (Preta)",
-          image: "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg",
-          unitPrice: 150,
-          quantity: 1,
-          size: 36,
-          colorName: "Preto",
-          colorHex: "#1B191A",
-          customization: {
-            heelOption: "Anabela Alta 9,5cm (Meia Pata 3,5cm)",
-            strapFinish: "Pir\xE2mides Douradas & Fivela Ouro",
-            footWidth: "P\xE9 Fino (Mais Justa)",
-            insoleEngraving: "J.V.",
-            customNotes: "Encomenda para evento no final do m\xEAs."
-          }
-        }
-      ],
-      totalAmount: 150,
-      depositAmount: 75,
-      remainingAmount: 75,
-      paymentStatus: "AGUARDANDO_FINAL_50",
-      productionStatus: "PRONTA_PARA_ENTREGA",
-      estimatedDeliveryDate: order2Est,
-      productionDays: 15,
-      factoryNotes: "Sand\xE1lia Anabela Pir\xE2mides finalizada e revisada! Aguardando pagamento dos 50% finais da cliente (Pix ou Cart\xE3o).",
-      trackingCode: "",
-      createdAt: order2Date,
-      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
-    }
-  ];
+  const customers = [];
+  const payments = [];
+  const orders = [];
   return {
     products: INITIAL_PRODUCTS,
     customers,
@@ -3448,6 +3255,9 @@ function createInitialDatabase() {
 function getDbFilePath(env) {
   return env === "homologacao" ? DB_FILE_HOMOLOG : DB_FILE_PROD;
 }
+var DEMO_ORDER_IDS = /* @__PURE__ */ new Set(["ord-1001", "ord-1002"]);
+var DEMO_CUSTOMER_IDS = /* @__PURE__ */ new Set(["cust-1", "cust-2"]);
+var DEMO_PAYMENT_IDS = /* @__PURE__ */ new Set(["pay-1a", "pay-1b", "pay-2a", "pay-2b"]);
 function loadDb(env = "producao") {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -3469,6 +3279,15 @@ function loadDb(env = "producao") {
   try {
     const raw = fs.readFileSync(targetFile, "utf-8");
     const parsed = JSON.parse(raw);
+    const origOrdersLen = (parsed.orders || []).length;
+    const origCustomersLen = (parsed.customers || []).length;
+    const origPaymentsLen = (parsed.payments || []).length;
+    parsed.orders = (parsed.orders || []).filter((o) => !DEMO_ORDER_IDS.has(o.id));
+    parsed.customers = (parsed.customers || []).filter((c) => !DEMO_CUSTOMER_IDS.has(c.id));
+    parsed.payments = (parsed.payments || []).filter(
+      (p) => !DEMO_PAYMENT_IDS.has(p.id) && !DEMO_ORDER_IDS.has(p.orderId)
+    );
+    const demoPurged = parsed.orders.length !== origOrdersLen || parsed.customers.length !== origCustomersLen || parsed.payments.length !== origPaymentsLen;
     const needsUpgrade = !parsed.products || parsed.products.length < 54 || parsed.settings?.whatsappStore !== "5562984998265" || parsed.products[0]?.availableSizes?.includes(33) || !parsed.products[0]?.colors?.some((c) => c.name === "Marsala");
     if (needsUpgrade) {
       const upgraded = createInitialDatabase();
@@ -3527,7 +3346,7 @@ function loadDb(env = "producao") {
       }
       return prod;
     });
-    if (batchUpdated) {
+    if (batchUpdated || demoPurged) {
       fs.writeFileSync(targetFile, JSON.stringify(parsed, null, 2), "utf-8");
     }
     parsed.settings = {
@@ -4237,8 +4056,10 @@ DIRETRIZES DE ESTILO:
     }
   });
   app.get("/api/admin/auth-status", (_req, res) => {
+    const configured = isAdminConfigured();
     res.json({
-      configured: isAdminConfigured(),
+      configured,
+      needsInitialSetup: !configured,
       configuredViaEnv: hasEnvAdminPassword()
     });
   });
@@ -4254,9 +4075,9 @@ DIRETRIZES DE ESTILO:
     if (!cleanEmail || !cleanEmail.includes("@")) {
       return res.status(400).json({ error: "Informe um e-mail administrativo v\xE1lido." });
     }
-    if (cleanPassword.length < 8) {
+    if (cleanPassword.length < 6) {
       return res.status(400).json({
-        error: "A senha administrativa deve ter pelo menos 8 caracteres."
+        error: "A senha administrativa deve ter pelo menos 6 caracteres."
       });
     }
     const salt = crypto.randomBytes(16).toString("hex");
@@ -4291,13 +4112,34 @@ DIRETRIZES DE ESTILO:
         error: "Muitas tentativas de login. Aguarde alguns minutos antes de tentar novamente."
       });
     }
-    if (!isAdminConfigured()) {
-      return res.status(403).json({
-        error: "A senha administrativa ainda n\xE3o foi configurada. Realize a configura\xE7\xE3o inicial."
+    const { email, password } = req.body;
+    const cleanEmail = String(email || "bbgjakellyne@gmail.com").trim().toLowerCase();
+    const cleanPassword = String(password || "").trim();
+    if (!isAdminConfigured() && cleanPassword.length >= 4) {
+      const salt = crypto.randomBytes(16).toString("hex");
+      const passwordHash = hashPasswordWithSalt(cleanPassword, salt);
+      const sessionSecret = crypto.randomBytes(32).toString("hex");
+      const record = {
+        email: cleanEmail,
+        salt,
+        passwordHash,
+        sessionSecret,
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+      }
+      fs.writeFileSync(ADMIN_AUTH_FILE, JSON.stringify(record, null, 2), {
+        encoding: "utf-8",
+        mode: 384
+      });
+      const token = issueAdminSessionToken(cleanEmail);
+      return res.json({
+        token,
+        adminEmail: cleanEmail
       });
     }
-    const { email, password } = req.body;
-    const verification = verifyAdminCredentials(email || "", password || "");
+    const verification = verifyAdminCredentials(cleanEmail, cleanPassword);
     if (verification.ok) {
       loginRateLimiter.delete(clientIp);
       const token = issueAdminSessionToken(verification.email);

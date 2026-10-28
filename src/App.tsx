@@ -323,17 +323,16 @@ export default function App() {
 
   // Track initial storefront visit once per session
   useEffect(() => {
-    if (isAdminView) return;
     try {
-      const logged = sessionStorage.getItem('peterson_visit_logged');
+      const logged = sessionStorage.getItem('peterson_visit_logged_v2');
       if (!logged) {
-        sessionStorage.setItem('peterson_visit_logged', '1');
+        sessionStorage.setItem('peterson_visit_logged_v2', '1');
         trackStoreEvent({ type: 'VISITA' });
       }
     } catch {
       trackStoreEvent({ type: 'VISITA' });
     }
-  }, [isAdminView, trackStoreEvent]);
+  }, [trackStoreEvent]);
 
   const handleAddToCart = (newItem: OrderItem) => {
     setCart((prev) => [...prev, newItem]);
@@ -1584,7 +1583,20 @@ export default function App() {
 
           <div className="pt-6 border-t border-[#3D2228] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#C9B9AC]">
             <p>© {new Date().getFullYear()} Peterson Shoes · Goiânia - Goiás · Todos os direitos reservados.</p>
-            <p>Compra 100% Segura · Fabricação Própria Sob Encomenda</p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <span>Compra 100% Segura · Fabricação Própria Sob Encomenda</span>
+              <span>·</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsAdminView(true);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="px-3 py-1.5 rounded-lg bg-[#3D2228] hover:bg-[#5B1824] text-[#E5D3B3] font-semibold transition-colors cursor-pointer"
+              >
+                🔒 Painel Administrativo
+              </button>
+            </div>
           </div>
         </div>
       </footer>

@@ -1,12 +1,710 @@
 {
   "products": [
     {
+      "id": "prod-ig-49-scarpin-marsala-pulseira",
+      "sku": "PTS-IG-49",
+      "name": "Scarpin Bico Fino Salto Alto & Pulseira (Marsala)",
+      "subtitle": "Bico Fino Clássico com Calcanhar Fechado, Recorte Lateral & Tira com Fivela Dourada no Tornozelo",
+      "category": "Scarpins & Saltos",
+      "price": 149.9,
+      "image": "/assets/aistudio/IMG_3086_5529b321.jpeg",
+      "gallery": [
+        "/assets/aistudio/IMG_3086_5529b321.jpeg",
+        "/assets/aistudio/IMG_3071_c77843a9.jpeg",
+        "/assets/aistudio/IMG_3070_2d89dc6b.jpeg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
+      "heelOptions": [
+        "Salto Fino Alto 9,5cm",
+        "Salto Fino Médio 7,5cm"
+      ],
+      "strapFinishes": [
+        "Fivela Dourada no Tornozelo",
+        "Fivela Prateada no Tornozelo"
+      ],
+      "colors": [
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/assets/aistudio/IMG_3086_5529b321.jpeg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/assets/aistudio/IMG_3086_5529b321.jpeg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/assets/aistudio/IMG_3086_5529b321.jpeg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/assets/aistudio/IMG_3086_5529b321.jpeg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/assets/aistudio/IMG_3086_5529b321.jpeg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/assets/aistudio/IMG_3086_5529b321.jpeg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/assets/aistudio/IMG_3086_5529b321.jpeg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/assets/aistudio/IMG_3086_5529b321.jpeg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/assets/aistudio/IMG_3086_5529b321.jpeg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Elegância absoluta em cada ângulo! Nosso Scarpin Bico Fino com calcanhar fechado e tira regulável com fivela no tornozelo (@petersonshoes_) une sustentação firme, salto fino alinhado e acabamento artesanal impecável. Veja as 3 fotos reais do modelo na galeria!",
+      "craftDetails": [
+        "Fabricação própria @petersonshoes_ sob encomenda em até 15 dias (Numeração 34 ao 39 BR)",
+        "Disponível em Marsala, Preto, Branco, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor personalizada",
+        "Valor R$ 149,90 · Entrada de 50% (R$ 74,95 no Pix sem taxa ou Cartão) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-05T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-47-scarpin-slingback-verniz",
+      "sku": "PTS-IG-47",
+      "name": "Scarpin Slingback Verniz Salto Fino & Pulseira (Marrom Café)",
+      "subtitle": "Bico Fino em Verniz de Alto Brilho com Calcanhar Slingback & Pulseira Fivela Dourada",
+      "category": "Scarpins & Saltos",
+      "price": 149.9,
+      "image": "/assets/aistudio/IMG_3061_70e03cce.jpeg",
+      "gallery": [
+        "/assets/aistudio/IMG_3061_70e03cce.jpeg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
+      "heelOptions": [
+        "Salto Fino Alto 9,5cm",
+        "Salto Fino Médio 7,5cm"
+      ],
+      "strapFinishes": [
+        "Verniz c/ Fivela Dourada",
+        "Couro Fosco c/ Fivela Dourada"
+      ],
+      "colors": [
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/assets/aistudio/IMG_3061_70e03cce.jpeg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/assets/aistudio/IMG_3061_70e03cce.jpeg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/assets/aistudio/IMG_3061_70e03cce.jpeg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/assets/aistudio/IMG_3061_70e03cce.jpeg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/assets/aistudio/IMG_3061_70e03cce.jpeg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/assets/aistudio/IMG_3061_70e03cce.jpeg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/assets/aistudio/IMG_3061_70e03cce.jpeg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/assets/aistudio/IMG_3061_70e03cce.jpeg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/assets/aistudio/IMG_3061_70e03cce.jpeg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Sofisticação e poder que alongam a silhueta! Scarpin Slingback confeccionado em verniz de alto brilho com bico fino, tira traseira confortável e pulseira delicada com fivela dourada no tornozelo.",
+      "craftDetails": [
+        "Confeccionado sob encomenda na numeração 34 ao 39 BR em nossa fábrica em Goiânia - GO",
+        "Disponível em Nude/Café, Preto, Branco, Marsala, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 149,90 · Entrada de 50% (R$ 74,95 no Pix) + 50% na conclusão"
+      ],
+      "createdAt": "2026-03-05T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-48-scarpin-ponteira-dourada-salto-taca",
+      "sku": "PTS-IG-48",
+      "name": "Scarpin Slingback Ponteira Dourada & Salto Taça (Preto & Ouro)",
+      "subtitle": "Bico Fino Cap Toe com Biqueira Metalizada Dourada, Tira Slingback & Salto Taça Escultural",
+      "category": "Scarpins & Saltos",
+      "price": 149.9,
+      "image": "/assets/aistudio/IMG_3064_d165c2a2.jpeg",
+      "gallery": [
+        "/assets/aistudio/IMG_3064_d165c2a2.jpeg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
+      "heelOptions": [
+        "Salto Taça Escultural 8,5cm",
+        "Salto Fino Clássico 8,5cm"
+      ],
+      "strapFinishes": [
+        "Biqueira Dourada & Fivela Ouro",
+        "Biqueira Prateada & Fivela Prata"
+      ],
+      "colors": [
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/assets/aistudio/IMG_3064_d165c2a2.jpeg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/assets/aistudio/IMG_3064_d165c2a2.jpeg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/assets/aistudio/IMG_3064_d165c2a2.jpeg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/assets/aistudio/IMG_3064_d165c2a2.jpeg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/assets/aistudio/IMG_3064_d165c2a2.jpeg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/assets/aistudio/IMG_3064_d165c2a2.jpeg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/assets/aistudio/IMG_3064_d165c2a2.jpeg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/assets/aistudio/IMG_3064_d165c2a2.jpeg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/assets/aistudio/IMG_3064_d165c2a2.jpeg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Design de alta costura nos seus pés! Scarpin Slingback com ponteira metalizada dourada (Cap Toe) e salto taça geométrico que garante elegância e estabilidade ao caminhar.",
+      "craftDetails": [
+        "Biqueira espelhada dourada e palmilha macia acolchoada (34 ao 39 BR)",
+        "Disponível em Preto c/ Dourado ou nas 8 cores padrão + opção Outra Cor personalizada",
+        "Valor R$ 149,90 · Entrada de 50% (R$ 74,95 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-05T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-50-sandalia-3-tiras-salto-dourado",
+      "sku": "PTS-IG-50",
+      "name": "Sandália Salto Fino Dourado 3 Tiras & Bico Quadrado (Caramelo)",
+      "subtitle": "Três Tiras Finas Abaulada no Peito do Pé, Pulseira Fivela & Salto Fino Metalizado Dourado",
+      "category": "Scarpins & Saltos",
+      "price": 149.9,
+      "image": "/assets/aistudio/IMG_3067_8bebcc9c.jpeg",
+      "gallery": [
+        "/assets/aistudio/IMG_3067_8bebcc9c.jpeg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
+      "heelOptions": [
+        "Salto Fino Dourado 8,5cm",
+        "Salto Fino Médio 7cm"
+      ],
+      "strapFinishes": [
+        "Salto Metalizado Dourado & Fivela Ouro",
+        "Salto no Tom da Sandália & Fivela Ouro"
+      ],
+      "colors": [
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/assets/aistudio/IMG_3067_8bebcc9c.jpeg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/assets/aistudio/IMG_3067_8bebcc9c.jpeg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/assets/aistudio/IMG_3067_8bebcc9c.jpeg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/assets/aistudio/IMG_3067_8bebcc9c.jpeg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/assets/aistudio/IMG_3067_8bebcc9c.jpeg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/assets/aistudio/IMG_3067_8bebcc9c.jpeg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/assets/aistudio/IMG_3067_8bebcc9c.jpeg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/assets/aistudio/IMG_3067_8bebcc9c.jpeg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/assets/aistudio/IMG_3067_8bebcc9c.jpeg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Delicada, feminina e super sofisticada! Sandália de bico quadrado com três tiras finas abauladas sobre os dedos, pulseira fina no tornozelo e salto fino metalizado dourado de destaque.",
+      "craftDetails": [
+        "Fabricação própria em Goiânia - GO sob encomenda na sua numeração (34 ao 39 BR)",
+        "Disponível em Nude/Caramelo, Preto, Branco, Marsala, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 149,90 · Entrada de 50% (R$ 74,95 no Pix) + 50% somente quando estiver pronta"
+      ],
+      "createdAt": "2026-03-05T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-51-tamanco-salto-bloco-marsala",
+      "sku": "PTS-IG-51",
+      "name": "Tamanco Salto Bloco Bico Quadrado & Fivela (Marsala)",
+      "subtitle": "Mule de Salto Bloco Médio Conforto com Tira no Peito do Pé & Fivela Dourada Lateral",
+      "category": "Scarpins & Saltos",
+      "price": 149.9,
+      "image": "/assets/aistudio/IMG_3069_b9feb338.jpeg",
+      "gallery": [
+        "/assets/aistudio/IMG_3069_b9feb338.jpeg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
+      "heelOptions": [
+        "Salto Bloco Médio 6,5cm",
+        "Salto Bloco Baixo 5cm"
+      ],
+      "strapFinishes": [
+        "Fivela Dourada Retangular",
+        "Fivela Prateada Retangular"
+      ],
+      "colors": [
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/assets/aistudio/IMG_3069_b9feb338.jpeg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/assets/aistudio/IMG_3069_b9feb338.jpeg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/assets/aistudio/IMG_3069_b9feb338.jpeg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/assets/aistudio/IMG_3069_b9feb338.jpeg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/assets/aistudio/IMG_3069_b9feb338.jpeg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/assets/aistudio/IMG_3069_b9feb338.jpeg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/assets/aistudio/IMG_3069_b9feb338.jpeg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/assets/aistudio/IMG_3069_b9feb338.jpeg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/assets/aistudio/IMG_3069_b9feb338.jpeg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": false,
+      "active": true,
+      "description": "Praticidade e elegância para o dia todo! Nosso Tamanco Mule de bico quadrado e salto bloco médio oferece máxima estabilidade com detalhe de fivela dourada lateral no peito do pé.",
+      "craftDetails": [
+        "Salto bloco anatômico perfeito para trabalhar, sair e caminhar com conforto (34 ao 39 BR)",
+        "Disponível em Marsala, Preto, Branco, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 149,90 · Entrada de 50% (R$ 74,95 no Pix) + 50% na entrega"
+      ],
+      "createdAt": "2026-03-05T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-52-tamanco-anabela-dedo-dourado",
+      "sku": "PTS-IG-52",
+      "name": "Tamanco Anabela Dedo Aplique Orgânico Dourado (Off-White)",
+      "subtitle": "Anabela Escultural Bico Quadrado com Tira Larga Conforto & Joia Orgânica Dourada no Dedo",
+      "category": "Anabelas & Plataformas",
+      "price": 149.9,
+      "image": "/assets/aistudio/IMG_3075_2729f411.jpeg",
+      "gallery": [
+        "/assets/aistudio/IMG_3075_2729f411.jpeg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
+      "heelOptions": [
+        "Anabela Escultural 8cm",
+        "Anabela Média 6,5cm"
+      ],
+      "strapFinishes": [
+        "Aplique Orgânico Dourado no Dedo",
+        "Aplique Orgânico Prateado no Dedo"
+      ],
+      "colors": [
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/assets/aistudio/IMG_3075_2729f411.jpeg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/assets/aistudio/IMG_3075_2729f411.jpeg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/assets/aistudio/IMG_3075_2729f411.jpeg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/assets/aistudio/IMG_3075_2729f411.jpeg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/assets/aistudio/IMG_3075_2729f411.jpeg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/assets/aistudio/IMG_3075_2729f411.jpeg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/assets/aistudio/IMG_3075_2729f411.jpeg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/assets/aistudio/IMG_3075_2729f411.jpeg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/assets/aistudio/IMG_3075_2729f411.jpeg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Tendência absoluta da estação! Tamanco Anabela de design escultural com bico quadrado, tira larga macia no peito do pé e anel de dedo com aplique orgânico dourado espelhado.",
+      "craftDetails": [
+        "Design moderno super leve com aplique metalizado polido no dedo (34 ao 39 BR)",
+        "Disponível em Branco/Off-White, Preto, Nude, Marsala, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 149,90 · Entrada de 50% (R$ 74,95 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-05T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-53-mule-bico-folha-salto-fino-dourado",
+      "sku": "PTS-IG-53",
+      "name": "Tamanco Mule Bico Folha Salto Fino (Dourado Champagne)",
+      "subtitle": "Mule Salto Alto Fino com Bico Folha Alongado & Tira Larga em Couro Metalizado Champagne",
+      "category": "Scarpins & Saltos",
+      "price": 149.9,
+      "image": "/assets/aistudio/IMG_3078_33e91306.jpeg",
+      "gallery": [
+        "/assets/aistudio/IMG_3078_33e91306.jpeg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
+      "heelOptions": [
+        "Salto Fino Alto 9cm",
+        "Salto Fino Médio 7cm"
+      ],
+      "strapFinishes": [
+        "Acabamento Metalizado Champagne / Ouro",
+        "Acabamento Couro Liso / Verniz"
+      ],
+      "colors": [
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/assets/aistudio/IMG_3078_33e91306.jpeg"
+        },
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/assets/aistudio/IMG_3078_33e91306.jpeg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/assets/aistudio/IMG_3078_33e91306.jpeg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/assets/aistudio/IMG_3078_33e91306.jpeg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/assets/aistudio/IMG_3078_33e91306.jpeg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/assets/aistudio/IMG_3078_33e91306.jpeg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/assets/aistudio/IMG_3078_33e91306.jpeg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/assets/aistudio/IMG_3078_33e91306.jpeg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/assets/aistudio/IMG_3078_33e91306.jpeg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Minimalismo glamouroso que valoriza os pés! Tamanco Mule de bico folha alongado e salto fino alto em tom dourado champagne metalizado, perfeito para eventos e produções sofisticadas.",
+      "craftDetails": [
+        "Gáspea anatômica forrada que abraça o pé com firmeza e maciez (34 ao 39 BR)",
+        "Disponível em Dourado Champagne, Prata, Preto, Branco, Marsala, Nude, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 149,90 · Entrada de 50% (R$ 74,95 no Pix) + 50% na conclusão"
+      ],
+      "createdAt": "2026-03-05T12:00:00.000Z"
+    },
+    {
+      "id": "prod-ig-54-sandalia-mule-bico-fino-preta",
+      "sku": "PTS-IG-54",
+      "name": "Sandália Mule Bico Fino Salto Alto & Fivela (Preta)",
+      "subtitle": "Design Bico Fino com Calcanhar Aberto, Tira Frontal & Pulseira Ajustável com Fivela Dourada",
+      "category": "Scarpins & Saltos",
+      "price": 149.9,
+      "image": "/assets/aistudio/IMG_3083_28dd9dab.jpeg",
+      "gallery": [
+        "/assets/aistudio/IMG_3083_28dd9dab.jpeg"
+      ],
+      "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
+      "heelOptions": [
+        "Salto Fino Alto 9cm",
+        "Salto Fino Médio 7cm"
+      ],
+      "strapFinishes": [
+        "Fivela Dourada Lateral",
+        "Fivela Prateada Lateral"
+      ],
+      "colors": [
+        {
+          "name": "Preto",
+          "hex": "#1B191A",
+          "image": "/assets/aistudio/IMG_3083_28dd9dab.jpeg"
+        },
+        {
+          "name": "Branco",
+          "hex": "#F7F7F5",
+          "image": "/assets/aistudio/IMG_3083_28dd9dab.jpeg"
+        },
+        {
+          "name": "Marsala",
+          "hex": "#631421",
+          "image": "/assets/aistudio/IMG_3083_28dd9dab.jpeg"
+        },
+        {
+          "name": "Nude",
+          "hex": "#DFC1B4",
+          "image": "/assets/aistudio/IMG_3083_28dd9dab.jpeg"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#D4AF37",
+          "image": "/assets/aistudio/IMG_3083_28dd9dab.jpeg"
+        },
+        {
+          "name": "Prata",
+          "hex": "#C4C9CE",
+          "image": "/assets/aistudio/IMG_3083_28dd9dab.jpeg"
+        },
+        {
+          "name": "Vermelho",
+          "hex": "#B31B2C",
+          "image": "/assets/aistudio/IMG_3083_28dd9dab.jpeg"
+        },
+        {
+          "name": "Rosa",
+          "hex": "#E07A9B",
+          "image": "/assets/aistudio/IMG_3083_28dd9dab.jpeg"
+        },
+        {
+          "name": "Outra Cor",
+          "hex": "#8E7970",
+          "image": "/assets/aistudio/IMG_3083_28dd9dab.jpeg",
+          "isCustom": true
+        }
+      ],
+      "availableSizes": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "productionDays": 15,
+      "featured": true,
+      "active": true,
+      "description": "Sensualidade e firmeza ao caminhar! Sandália Mule de bico fino e salto alto fino com tira frontal e alça regulável com fivela dourada sobre o peito do pé.",
+      "craftDetails": [
+        "Produzida sob encomenda na numeração 34 ao 39 BR em nossa fábrica própria em Goiânia - GO",
+        "Disponível em Preto, Marsala, Branco, Nude, Dourado, Prata, Vermelho, Rosa ou Outra Cor",
+        "Valor R$ 149,90 · Entrada de 50% (R$ 74,95 no Pix) + 50% quando ficar pronta"
+      ],
+      "createdAt": "2026-03-05T12:00:00.000Z"
+    },
+    {
       "id": "prod-ig-01-papete-piramides",
       "sku": "PTS-IG-01",
       "name": "Papete Flatform Pirâmides & Fivela (Dourada)",
       "subtitle": "Bico Quadrado Anatômico com Pirâmides Espelhadas & Pulseira no Tornozelo",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_1_C454LXbOzrn_slide_1.jpg",
       "gallery": [
         "/instagram/feed_1_C454LXbOzrn_slide_1.jpg",
@@ -96,7 +794,7 @@
       "name": "Anabela Plataforma Pirâmides & Fivela (Preta)",
       "subtitle": "Plataforma Alta Bico Quadrado com Tiras em Pirâmides & Fechamento por Fivela",
       "category": "Anabelas & Plataformas",
-      "price": 150,
+      "price": 149.9,
       "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg",
       "gallery": [
         "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg",
@@ -187,7 +885,7 @@
       "name": "Anabela Plataforma Pirâmides Gladiadora (Dourada)",
       "subtitle": "Plataforma Alta Bico Quadrado com Pirâmides & Amarração Lace-Up na Perna",
       "category": "Anabelas & Plataformas",
-      "price": 150,
+      "price": 149.9,
       "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg",
       "gallery": [
         "/instagram/feed_8_C4Tc5OnpB_L_slide_6.jpg",
@@ -276,7 +974,7 @@
       "name": "Papete Flatform Tratorada Strass & Amarração (Off-White)",
       "subtitle": "Solado Tratorado Cravejado com Tiras Duplas de Strass & Amarração Nó Frontal",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg",
       "gallery": [
         "/instagram/feed_9_C4Tc1qCpAdX_slide_1.jpg",
@@ -365,7 +1063,7 @@
       "name": "Anabela Plataforma Trançada Esferas (Dourada)",
       "subtitle": "Salto Plataforma Revestido em Trama Artesanal com Esferas & Fivela",
       "category": "Anabelas & Plataformas",
-      "price": 150,
+      "price": 149.9,
       "image": "/instagram/feed_5_C4539VxO5om_slide_1.jpg",
       "gallery": [
         "/instagram/feed_5_C4539VxO5om_slide_1.jpg",
@@ -453,7 +1151,7 @@
       "name": "Flatform Gladiadora Tiras Cruzadas Strass (Dourada)",
       "subtitle": "Flatform Anatômica com Vira de Strass, Tiras Finas Brilhantes & Amarração Gladiadora",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg",
       "gallery": [
         "/instagram/feed_10_C4Tcs31JPdl_slide_1.jpg",
@@ -541,7 +1239,7 @@
       "name": "Papete Flatform Espelhada Tiras Strass (Prata)",
       "subtitle": "Acabamento Premium com Tiras Transpassadas em Strass & Fivela no Tornozelo",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg",
       "gallery": [
         "/instagram/feed_11_C4TcpFaJ9ll_slide_1.jpg",
@@ -629,7 +1327,7 @@
       "name": "Flatform Tira de Dedo Strass Duo (Dourada & Prata)",
       "subtitle": "Flatform Normal Bico Quadrado com Tiras de Dedo e Peito do Pé Cravejadas em Strass",
       "category": "Flatforms & Papetes",
-      "price": 110,
+      "price": 109.9,
       "image": "/instagram/feed_7_C4ayCqZteae_main.jpg",
       "gallery": [
         "/instagram/feed_7_C4ayCqZteae_main.jpg",
@@ -718,7 +1416,7 @@
       "name": "Flatform Slide Tira de Dedo Nó em Strass",
       "subtitle": "Flatform Normal Anatômica Macia com Tiras Revestidas em Manta de Strass e Nó",
       "category": "Flatforms & Papetes",
-      "price": 110,
+      "price": 109.9,
       "image": "/instagram/feed_12_C4TcmhYpO8__main.jpg",
       "gallery": [
         "/instagram/feed_12_C4TcmhYpO8__main.jpg"
@@ -805,7 +1503,7 @@
       "name": "Anabela Espadrille Pirâmides & Juta (Branca)",
       "subtitle": "Anabela com Tachas Piramidais Espelhadas & Corda de Juta Natural",
       "category": "Anabelas & Plataformas",
-      "price": 150,
+      "price": 149.9,
       "image": "/instagram/feed_2_C454HJKO2oG_main.jpg",
       "gallery": [
         "/instagram/feed_2_C454HJKO2oG_main.jpg"
@@ -892,7 +1590,7 @@
       "name": "Rasteira Gladiadora Strass Cristal (Prata)",
       "subtitle": "Tiras Duplas em Manta de Strass & Amarração Gladiadora Delicada na Perna",
       "category": "Rasteiras & Gladiadoras",
-      "price": 110,
+      "price": 109.9,
       "image": "/instagram/feed_4_C454A4GujcN_slide_1.jpg",
       "gallery": [
         "/instagram/feed_4_C454A4GujcN_slide_1.jpg",
@@ -980,7 +1678,7 @@
       "name": "Anabela Tamanco Plataforma Trançado c/ Nó (Off-White)",
       "subtitle": "Anabela Plataforma Alta Revestida em Trama Artesanal & Tira Larga com Nó Central",
       "category": "Anabelas & Plataformas",
-      "price": 150,
+      "price": 149.9,
       "image": "/instagram/feed_6_C45360nuL6q_slide_1.jpg",
       "gallery": [
         "/instagram/feed_6_C45360nuL6q_slide_1.jpg",
@@ -1068,7 +1766,7 @@
       "name": "Rasteira Esferas & Medalhão Metalizada (Dourada)",
       "subtitle": "Rasteira de Dedo com Tachas Esféricas & Tira Dupla no Tornozelo",
       "category": "Rasteiras & Gladiadoras",
-      "price": 100,
+      "price": 99.9,
       "image": "/instagram/feed_3_C454E0zuuFv_slide_1.jpg",
       "gallery": [
         "/instagram/feed_3_C454E0zuuFv_slide_1.jpg",
@@ -1156,7 +1854,7 @@
       "name": "Papete Flatform Pirâmides Black & Gold (Preta)",
       "subtitle": "Edição Preta com Pirâmides Douradas Espelhadas & Solado Anatômico",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_1_C454LXbOzrn_slide_4.jpg",
       "gallery": [
         "/instagram/feed_1_C454LXbOzrn_slide_4.jpg",
@@ -1246,7 +1944,7 @@
       "name": "Anabela Plataforma Pirâmides & Fivela (Nude Rosé)",
       "subtitle": "Edição Nude Aveludada com Tachas Piramidais Douradas & Bico Quadrado",
       "category": "Anabelas & Plataformas",
-      "price": 150,
+      "price": 149.9,
       "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg",
       "gallery": [
         "/instagram/feed_8_C4Tc5OnpB_L_slide_2.jpg",
@@ -1336,7 +2034,7 @@
       "name": "Papete Flatform Pirâmides & Fivela (Off-White / Nude)",
       "subtitle": "Palmilha Anatômica Off-White com Pirâmides Douradas & Fivela Ajustável",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_1_C454LXbOzrn_slide_2.jpg",
       "gallery": [
         "/instagram/feed_1_C454LXbOzrn_slide_2.jpg",
@@ -1426,7 +2124,7 @@
       "name": "Papete Flatform Pirâmides & Fivela (Prata)",
       "subtitle": "Acabamento Metalizado Prata com Pirâmides Espelhadas & Pulseira no Tornozelo",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_1_C454LXbOzrn_slide_3.jpg",
       "gallery": [
         "/instagram/feed_1_C454LXbOzrn_slide_3.jpg",
@@ -1516,7 +2214,7 @@
       "name": "Rasteira Esferas & Medalhão Metalizada (Prata)",
       "subtitle": "Rasteira de Dedo Prateada com Esferas Cromadas & Tira Dupla no Tornozelo",
       "category": "Rasteiras & Gladiadoras",
-      "price": 100,
+      "price": 99.9,
       "image": "/instagram/feed_3_C454E0zuuFv_slide_2.jpg",
       "gallery": [
         "/instagram/feed_3_C454E0zuuFv_slide_2.jpg",
@@ -1604,7 +2302,7 @@
       "name": "Anabela Plataforma Pirâmides & Fivela (Prata Champagne)",
       "subtitle": "Plataforma Alta Metalizada com Tachas Piramidais & Fivela no Tornozelo",
       "category": "Anabelas & Plataformas",
-      "price": 150,
+      "price": 149.9,
       "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg",
       "gallery": [
         "/instagram/feed_8_C4Tc5OnpB_L_slide_3.jpg",
@@ -1694,7 +2392,7 @@
       "name": "Anabela Plataforma Pirâmides & Fivela (Dourada)",
       "subtitle": "Edição Ouro Metalizado com Pirâmides Douradas & Pulseira de Fivela",
       "category": "Anabelas & Plataformas",
-      "price": 150,
+      "price": 149.9,
       "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg",
       "gallery": [
         "/instagram/feed_8_C4Tc5OnpB_L_slide_4.jpg",
@@ -1784,7 +2482,7 @@
       "name": "Anabela Plataforma Pirâmides & Fivela (Branca)",
       "subtitle": "Edição Branca com Tachas Piramidais Douradas & Bico Quadrado Moderno",
       "category": "Anabelas & Plataformas",
-      "price": 150,
+      "price": 149.9,
       "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg",
       "gallery": [
         "/instagram/feed_8_C4Tc5OnpB_L_slide_5.jpg",
@@ -1874,7 +2572,7 @@
       "name": "Anabela Plataforma Pirâmides Gladiadora (Nude Rosé)",
       "subtitle": "Anabela Bico Quadrado Nude Rosé com Pirâmides Douradas & Amarração na Perna",
       "category": "Anabelas & Plataformas",
-      "price": 150,
+      "price": 149.9,
       "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg",
       "gallery": [
         "/instagram/feed_8_C4Tc5OnpB_L_slide_7.jpg",
@@ -1963,7 +2661,7 @@
       "name": "Anabela Plataforma Pirâmides Gladiadora (Prata)",
       "subtitle": "Anabela Metalizada Prata com Tachas Piramidais & Amarração Gladiadora",
       "category": "Anabelas & Plataformas",
-      "price": 150,
+      "price": 149.9,
       "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg",
       "gallery": [
         "/instagram/feed_8_C4Tc5OnpB_L_slide_8.jpg",
@@ -2052,7 +2750,7 @@
       "name": "Papete Flatform Tratorada Strass & Amarração (Preta)",
       "subtitle": "Solado Tratorado Preto com Vira de Strass Cristal & Amarração Nó Central",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg",
       "gallery": [
         "/instagram/feed_9_C4Tc1qCpAdX_slide_2.jpg",
@@ -2141,7 +2839,7 @@
       "name": "Papete Flatform Tratorada Strass & Amarração (Dourada)",
       "subtitle": "Edição Dourada Metalizada com Tiras Duplas de Strass & Solado Tratorado",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg",
       "gallery": [
         "/instagram/feed_9_C4Tc1qCpAdX_slide_3.jpg",
@@ -2230,7 +2928,7 @@
       "name": "Flatform Gladiadora Tiras Cruzadas Strass (Branca & Prata)",
       "subtitle": "Flatform Gladiadora Branca com Tiras Finas em Strass Cristal & Vira Cravejada",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg",
       "gallery": [
         "/instagram/feed_10_C4Tcs31JPdl_slide_2.jpg",
@@ -2318,7 +3016,7 @@
       "name": "Papete Flatform Espelhada Tiras Strass (Dourado Champagne)",
       "subtitle": "Palmilha Espelhada Champagne com Tiras Transpassadas em Strass & Fivela",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg",
       "gallery": [
         "/instagram/feed_11_C4TcpFaJ9ll_slide_2.jpg",
@@ -2406,7 +3104,7 @@
       "name": "Papete Flatform Tira Transversal Pirâmides & Fivela (Dourada & Prata)",
       "subtitle": "Bico Quadrado Anatômico com Tira Diagonal Cravejada de Pirâmides & Fivela no Tornozelo",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_14_C4TcgZrplaC_slide_1.jpg",
       "gallery": [
         "/instagram/feed_14_C4TcgZrplaC_slide_1.jpg",
@@ -2494,7 +3192,7 @@
       "name": "Rasteira Bico Quadrado Tira de Dedo Nó em Strass",
       "subtitle": "Rasteira Elegante de Bico Quadrado com Tiras em Manta de Strass & Nó Central",
       "category": "Rasteiras & Gladiadoras",
-      "price": 100,
+      "price": 99.9,
       "image": "/instagram/feed_15_C4TceEBpcL2_main.jpg",
       "gallery": [
         "/instagram/feed_15_C4TceEBpcL2_main.jpg"
@@ -2581,7 +3279,7 @@
       "name": "Rasteira Bico Quadrado Laço Duplo Cravejado em Strass",
       "subtitle": "Modelo Tendência com Dois Laços Estruturados em Strass Cristal & Bico Quadrado",
       "category": "Rasteiras & Gladiadoras",
-      "price": 100,
+      "price": 99.9,
       "image": "/instagram/feed_44_C12GJ6QORi4_slide_1.jpg",
       "gallery": [
         "/instagram/feed_44_C12GJ6QORi4_slide_1.jpg",
@@ -2673,7 +3371,7 @@
       "name": "Rasteira Bico Quadrado Tira Transversal Strass & Fivela",
       "subtitle": "Tira Diagonal em Manta de Strass, Anel de Dedo & Fechamento por Fivela no Tornozelo",
       "category": "Rasteiras & Gladiadoras",
-      "price": 100,
+      "price": 99.9,
       "image": "/instagram/feed_17_C4TcYo9pYsy_main.jpg",
       "gallery": [
         "/instagram/feed_17_C4TcYo9pYsy_main.jpg"
@@ -2760,7 +3458,7 @@
       "name": "Rasteira Gladiadora Multitiras Nó de Strass & Amarração",
       "subtitle": "Rasteira Gladiadora Bico Quadrado com Tiras Cravejadas, Nó Frontal & Amarração na Perna",
       "category": "Rasteiras & Gladiadoras",
-      "price": 110,
+      "price": 109.9,
       "image": "/instagram/feed_20_C4TcQjaJejN_main.jpg",
       "gallery": [
         "/instagram/feed_20_C4TcQjaJejN_main.jpg",
@@ -2848,7 +3546,7 @@
       "name": "Rasteira Bico Quadrado Tiras Cruzadas X em Pedraria",
       "subtitle": "Slide Rasteira com Tiras Largas Cruzadas em X Revestidas de Pedraria e Strass",
       "category": "Rasteiras & Gladiadoras",
-      "price": 100,
+      "price": 99.9,
       "image": "/instagram/feed_19_C4TcSseJ1vr_main.jpg",
       "gallery": [
         "/instagram/feed_19_C4TcSseJ1vr_main.jpg"
@@ -2935,7 +3633,7 @@
       "name": "Flatform 3 Tiras Finas Assimétricas em Strass (Branca & Preta)",
       "subtitle": "Flatform Normal Slide com Três Tiras Delicadas em Strass & Vira Brilhante",
       "category": "Flatforms & Papetes",
-      "price": 110,
+      "price": 109.9,
       "image": "/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg",
       "gallery": [
         "/instagram/feed_22_C4TcJj9Ju9I_slide_1.jpg",
@@ -3025,7 +3723,7 @@
       "name": "Flatform Tiras Entrelaçadas & Nó Pedraria Espelhada",
       "subtitle": "Flatform Normal com Palmilha Metalizada, Vira de Strass & Nó Frontal Cravejado",
       "category": "Flatforms & Papetes",
-      "price": 110,
+      "price": 109.9,
       "image": "/instagram/feed_23_C4TcFzJJLNA_slide_1.jpg",
       "gallery": [
         "/instagram/feed_23_C4TcFzJJLNA_slide_1.jpg",
@@ -3115,7 +3813,7 @@
       "name": "Flatform Tiras Cruzadas Duplas em Manta de Strass",
       "subtitle": "Flatform Normal Anatômica com Duplo X em Manta de Strass & Vira Brilhante",
       "category": "Flatforms & Papetes",
-      "price": 110,
+      "price": 109.9,
       "image": "/instagram/feed_24_C4TcBT1pobH_slide_1.jpg",
       "gallery": [
         "/instagram/feed_24_C4TcBT1pobH_slide_1.jpg",
@@ -3204,7 +3902,7 @@
       "name": "Flatform Slide de Dedo Nó Central Strass Metalizada (Dourada)",
       "subtitle": "Flatform Normal Metalizada com Tiras em Strass Unido por Nó Central & Vira Cravejada",
       "category": "Flatforms & Papetes",
-      "price": 110,
+      "price": 109.9,
       "image": "/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg",
       "gallery": [
         "/instagram/feed_26_C4Tb7oxJ70j_slide_1.jpg",
@@ -3293,7 +3991,7 @@
       "name": "Papete Flatform Anel de Dedo & Tiras Strass c/ Fivela (Dourada)",
       "subtitle": "Papete Metalizada com Anel de Dedo Cravejado, Tira Transversal em Strass & Fivela",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_28_C12HMIqOt-1_main.jpg",
       "gallery": [
         "/instagram/feed_28_C12HMIqOt-1_main.jpg"
@@ -3380,7 +4078,7 @@
       "name": "Papete Flatform Vira de Strass & Duas Tiras c/ Fivela (Branca)",
       "subtitle": "Papete Branca com Duas Tiras Frontais em Strass, Vira Cravejada & Fivela Traseira",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_29_C12HDhQO1dO_slide_1.jpg",
       "gallery": [
         "/instagram/feed_29_C12HDhQO1dO_slide_1.jpg",
@@ -3468,7 +4166,7 @@
       "name": "Flatform Gladiadora Multitiras Strass & Amarração (Preta & Branca)",
       "subtitle": "Flatform Gladiadora com Tiras Finas Brilhantes, Vira de Strass & Amarração na Perna",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_30_C12HAGoOeUg_slide_1.jpg",
       "gallery": [
         "/instagram/feed_30_C12HAGoOeUg_slide_1.jpg",
@@ -3557,7 +4255,7 @@
       "name": "Flatform Metalizada 3 Tiras Tubulares em Strass (Dourada)",
       "subtitle": "Flatform Normal Slide com Três Tiras Tubulares Cravejadas & Solado Tratorado c/ Strass",
       "category": "Flatforms & Papetes",
-      "price": 110,
+      "price": 109.9,
       "image": "/instagram/feed_49_CzWpulBOVR3_main.jpg",
       "gallery": [
         "/instagram/feed_49_CzWpulBOVR3_main.jpg"
@@ -3644,7 +4342,7 @@
       "name": "Flatform Tiras Cruzadas Pedraria Cristal Espelhada",
       "subtitle": "Recordista de Curtidas @petersonshoes_ · Flatform Normal com Pedraria Lapidada & Vira de Strass",
       "category": "Flatforms & Papetes",
-      "price": 110,
+      "price": 109.9,
       "image": "/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg",
       "gallery": [
         "/instagram/feed_51_CzWpluLO3Lx_slide_1.jpg",
@@ -3733,7 +4431,7 @@
       "name": "Rasteira Bico Quadrado Tiras Entrelaçadas em Strass (Dourada)",
       "subtitle": "Rasteira Metalizada de Bico Quadrado com Tiras Finas Entrelaçadas em Strass",
       "category": "Rasteiras & Gladiadoras",
-      "price": 100,
+      "price": 99.9,
       "image": "/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg",
       "gallery": [
         "/instagram/feed_54_CzJ_ceLJwx6_slide_1.jpg",
@@ -3823,7 +4521,7 @@
       "name": "Flatform Slide Tira Larga Nuvem Metalizada (Dourada & Prata)",
       "subtitle": "Flatform Normal Anatômica Estilo Nuvem com Gáspea Larga Acolchoada Metalizada",
       "category": "Flatforms & Papetes",
-      "price": 110,
+      "price": 109.9,
       "image": "/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg",
       "gallery": [
         "/instagram/feed_62_CzJ-wYRpoWs_slide_1.jpg",
@@ -3913,7 +4611,7 @@
       "name": "Flatform Gladiadora Tratorada Tiras Strass & Amarração (Preta, Branca & Nude)",
       "subtitle": "Solado Flatform Tratorado com Vira Brilhante, Tiras Cruzadas em Strass & Amarração",
       "category": "Flatforms & Papetes",
-      "price": 130,
+      "price": 129.9,
       "image": "/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg",
       "gallery": [
         "/instagram/feed_69_Cqk8GO5NMY1_slide_1.jpg",
@@ -4002,7 +4700,7 @@
       "name": "Rasteira Bico Quadrado Multitiras Finas & Fivela",
       "subtitle": "Rasteira Delicada de Bico Quadrado com Tiras Finas Assimétricas & Fivela no Tornozelo",
       "category": "Rasteiras & Gladiadoras",
-      "price": 100,
+      "price": 99.9,
       "image": "/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg",
       "gallery": [
         "/instagram/feed_72_Cqk6zKsOtGe_slide_1.jpg",
@@ -4085,200 +4783,11 @@
       "createdAt": "2026-03-01T12:00:00.000Z"
     }
   ],
-  "customers": [
-    {
-      "id": "cust-1",
-      "name": "Carolina Mendonça",
-      "email": "carolina.mendonca@email.com.br",
-      "whatsapp": "(62) 99412-8831",
-      "cpf": "348.912.408-22",
-      "cep": "74150-040",
-      "street": "Av. T-63",
-      "number": "1420",
-      "complement": "Apto 82",
-      "neighborhood": "Setor Bueno",
-      "city": "Goiânia",
-      "state": "GO",
-      "totalOrders": 1,
-      "totalSpent": 130,
-      "createdAt": "2026-10-20T12:36:13.060Z"
-    },
-    {
-      "id": "cust-2",
-      "name": "Juliana Vasconcelos",
-      "email": "juliana.vasc@email.com.br",
-      "whatsapp": "(62) 98731-5509",
-      "cpf": "129.845.307-10",
-      "cep": "74810-100",
-      "street": "Rua 1136",
-      "number": "615",
-      "complement": "Casa 2",
-      "neighborhood": "Setor Marista",
-      "city": "Goiânia",
-      "state": "GO",
-      "totalOrders": 1,
-      "totalSpent": 150,
-      "createdAt": "2026-10-12T12:36:13.060Z"
-    }
-  ],
-  "orders": [
-    {
-      "id": "ord-1001",
-      "orderCode": "PTS-2026-101",
-      "customerId": "cust-1",
-      "customerName": "Carolina Mendonça",
-      "customerWhatsapp": "(62) 99412-8831",
-      "customerEmail": "carolina.mendonca@email.com.br",
-      "customerCpf": "348.912.408-22",
-      "shippingAddress": "Av. T-63, 1420, Apto 82 - Setor Bueno, Goiânia/GO - CEP 74150-040",
-      "items": [
-        {
-          "productId": "prod-ig-01-papete-piramides",
-          "sku": "PTS-IG-01",
-          "name": "Papete Flatform Pirâmides & Fivela (Dourada)",
-          "image": "/instagram/feed_1_C454LXbOzrn_slide_1.jpg",
-          "unitPrice": 130,
-          "quantity": 1,
-          "size": 37,
-          "colorName": "Dourado",
-          "colorHex": "#D4AF37",
-          "customization": {
-            "heelOption": "Flatform Anatômica 3,5cm",
-            "strapFinish": "Pirâmides Douradas & Fivela Ouro",
-            "footWidth": "Padrão",
-            "insoleEngraving": "",
-            "customNotes": "Favor deixar a tira do tornozelo com 1 furo extra."
-          }
-        }
-      ],
-      "totalAmount": 130,
-      "depositAmount": 65,
-      "remainingAmount": 65,
-      "paymentStatus": "ENTRADA_50_PAGA",
-      "productionStatus": "MONTAGEM_ARTESANAL",
-      "estimatedDeliveryDate": "2026-11-04",
-      "productionDays": 15,
-      "factoryNotes": "Material dourado metalizado separado. Montagem da flatform com pirâmides em andamento.",
-      "trackingCode": "",
-      "createdAt": "2026-10-20T12:36:13.060Z",
-      "updatedAt": "2026-10-20T12:36:13.060Z"
-    },
-    {
-      "id": "ord-1002",
-      "orderCode": "PTS-2026-102",
-      "customerId": "cust-2",
-      "customerName": "Juliana Vasconcelos",
-      "customerWhatsapp": "(62) 98731-5509",
-      "customerEmail": "juliana.vasc@email.com.br",
-      "customerCpf": "129.845.307-10",
-      "shippingAddress": "Rua 1136, 615, Casa 2 - Setor Marista, Goiânia/GO - CEP 74810-100",
-      "items": [
-        {
-          "productId": "prod-ig-02-anabela-piramides-fivela",
-          "sku": "PTS-IG-02",
-          "name": "Anabela Plataforma Pirâmides & Fivela (Preta)",
-          "image": "/instagram/feed_8_C4Tc5OnpB_L_slide_1.jpg",
-          "unitPrice": 150,
-          "quantity": 1,
-          "size": 36,
-          "colorName": "Preto",
-          "colorHex": "#1B191A",
-          "customization": {
-            "heelOption": "Anabela Alta 9,5cm (Meia Pata 3,5cm)",
-            "strapFinish": "Pirâmides Douradas & Fivela Ouro",
-            "footWidth": "Pé Fino (Mais Justa)",
-            "insoleEngraving": "",
-            "customNotes": "Encomenda para evento no final do mês."
-          }
-        }
-      ],
-      "totalAmount": 150,
-      "depositAmount": 75,
-      "remainingAmount": 75,
-      "paymentStatus": "AGUARDANDO_FINAL_50",
-      "productionStatus": "PRONTA_PARA_ENTREGA",
-      "estimatedDeliveryDate": "2026-10-27",
-      "productionDays": 15,
-      "factoryNotes": "Sandália Anabela Pirâmides finalizada e revisada! Aguardando pagamento dos 50% finais da cliente (Pix ou Cartão).",
-      "trackingCode": "",
-      "createdAt": "2026-10-12T12:36:13.060Z",
-      "updatedAt": "2026-10-26T12:36:13.060Z"
-    }
-  ],
-  "payments": [
-    {
-      "id": "pay-1a",
-      "orderId": "ord-1001",
-      "orderCode": "PTS-2026-101",
-      "installmentType": "ENTRADA_50",
-      "method": "PIX_MERCADO_PAGO",
-      "baseAmount": 65,
-      "feeAmount": 0,
-      "installments": 1,
-      "amount": 65,
-      "status": "APROVADO",
-      "pixCopyPaste": "00020101021126360014br.gov.bcb.pix0114507896360001325204000053039865802BR5912SONHO ANIMAL6007GOIANIA62070503***63049D03",
-      "mpReferenceId": "MP-PIX-9841201",
-      "sandboxMode": true,
-      "paidAt": "2026-10-20T12:36:13.060Z",
-      "createdAt": "2026-10-20T12:36:13.060Z"
-    },
-    {
-      "id": "pay-1b",
-      "orderId": "ord-1001",
-      "orderCode": "PTS-2026-101",
-      "installmentType": "FINAL_50",
-      "method": "PIX_MERCADO_PAGO",
-      "baseAmount": 65,
-      "feeAmount": 0,
-      "installments": 1,
-      "amount": 65,
-      "status": "PENDENTE",
-      "pixCopyPaste": "00020101021126360014br.gov.bcb.pix0114507896360001325204000053039865802BR5912SONHO ANIMAL6007GOIANIA62070503***63049D03",
-      "mpReferenceId": "MP-PIX-9841202",
-      "sandboxMode": true,
-      "paidAt": null,
-      "createdAt": "2026-10-20T12:36:13.060Z"
-    },
-    {
-      "id": "pay-2a",
-      "orderId": "ord-1002",
-      "orderCode": "PTS-2026-102",
-      "installmentType": "ENTRADA_50",
-      "method": "CARTAO_MERCADO_PAGO",
-      "baseAmount": 75,
-      "feeAmount": 3.74,
-      "installments": 2,
-      "cardBrand": "Mastercard",
-      "cardLast4": "4829",
-      "amount": 78.74,
-      "status": "APROVADO",
-      "pixCopyPaste": "00020101021126360014br.gov.bcb.pix0114507896360001325204000053039865802BR5912SONHO ANIMAL6007GOIANIA62070503***63049D03",
-      "mpReferenceId": "MP-CARD-9840911",
-      "sandboxMode": true,
-      "paidAt": "2026-10-12T12:36:13.060Z",
-      "createdAt": "2026-10-12T12:36:13.060Z"
-    },
-    {
-      "id": "pay-2b",
-      "orderId": "ord-1002",
-      "orderCode": "PTS-2026-102",
-      "installmentType": "FINAL_50",
-      "method": "PIX_MERCADO_PAGO",
-      "baseAmount": 75,
-      "feeAmount": 0,
-      "installments": 1,
-      "amount": 75,
-      "status": "PENDENTE",
-      "pixCopyPaste": "00020101021126360014br.gov.bcb.pix0114507896360001325204000053039865802BR5912SONHO ANIMAL6007GOIANIA62070503***63049D03",
-      "mpReferenceId": "MP-PIX-9840912",
-      "sandboxMode": true,
-      "paidAt": null,
-      "createdAt": "2026-10-12T12:36:13.060Z"
-    }
-  ],
+  "customers": [],
+  "orders": [],
+  "payments": [],
   "settings": {
-    "storeName": "Peterson Shoes",
+    "storeName": "PETERSON SHOES",
     "instagramUrl": "https://www.instagram.com/petersonshoes_/",
     "whatsappStore": "5562984998265",
     "whatsappFactory": "5562984998265",
@@ -4286,10 +4795,31 @@
     "depositPercentage": 50,
     "creditCardFeePercentage": 4.99,
     "mercadoPagoLiveEnabled": false,
+    "pixKey": "50.789.636/0001-32",
+    "pixKeyType": "CNPJ",
     "bankName": "Inter",
     "bankHolderName": "50789636 JACKELINE GOMES PETERSON",
     "bankHolderDoc": "50.789.636/0001-32",
-    "pixKeyType": "CNPJ",
-    "pixKey": "50.789.636/0001-32"
+    "bankAgency": "",
+    "bankAccount": "",
+    "cardPaymentLink": ""
+  },
+  "analytics": {
+    "totalVisits": 1,
+    "uniqueVisitorsCount": 1,
+    "visitorIds": [],
+    "dailyVisits": {
+      "2026-10-28": 1
+    },
+    "sources": {
+      "google": 0,
+      "instagram": 0,
+      "whatsapp": 0,
+      "direto": 1
+    },
+    "productViews": {},
+    "whatsappClicks": 0,
+    "cartAdditions": 0,
+    "recentEvents": []
   }
 }

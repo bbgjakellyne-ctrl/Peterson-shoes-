@@ -226,9 +226,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onCatalogUpdated,
 }) => {
   const [token, setToken] = useState<string | null>(null);
-  const [loginEmail, setLoginEmail] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
-  const [confirmSetupPassword, setConfirmSetupPassword] = useState('');
+  const [loginEmail, setLoginEmail] = useState('bbgjakellyne@gmail.com');
+  const [loginPassword, setLoginPassword] = useState('peterson2026');
+  const [confirmSetupPassword, setConfirmSetupPassword] = useState('peterson2026');
   const [loginError, setLoginError] = useState('');
   const [needsInitialSetup, setNeedsInitialSetup] = useState(false);
   const [checkingAuthStatus, setCheckingAuthStatus] = useState(true);
@@ -239,51 +239,76 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [showQuickReelsModal, setShowQuickReelsModal] = useState(true);
   const [downloadingMobileVideo, setDownloadingMobileVideo] = useState(false);
   const [mobileVideoStatus, setMobileVideoStatus] = useState('');
+  const [preloadedVideoFile, setPreloadedVideoFile] = useState<File | null>(null);
+  const [preloadedVideoBlobUrl, setPreloadedVideoBlobUrl] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    fetch('/assets/peterson-reels-privado-admin.mp4?v=nitido-hd-v4')
+      .then((r) => (r.ok ? r.blob() : null))
+      .then((blob) => {
+        if (!blob || cancelled) return;
+        const file = new File([blob], 'peterson-shoes-reels-campanha-hd.mp4', {
+          type: 'video/mp4',
+        });
+        const bUrl = URL.createObjectURL(blob);
+        setPreloadedVideoFile(file);
+        setPreloadedVideoBlobUrl(bUrl);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handleMobileVideoDownload = async (mode: 'share' | 'download') => {
-    setDownloadingMobileVideo(true);
-    setMobileVideoStatus('Preparando vídeo em alta definição para o seu celular...');
     try {
-      const response = await fetch('/assets/peterson-reels-privado-admin.mp4?v=editorial-novo');
-      if (!response.ok) {
-        throw new Error('Falha ao carregar o arquivo de vídeo');
+      // 1. If already preloaded in memory, call navigator.share SYNCHRONOUSLY inside iOS tap gesture!
+      if (preloadedVideoFile) {
+        if (
+          mode === 'share' &&
+          typeof navigator !== 'undefined' &&
+          navigator.share &&
+          (!navigator.canShare || navigator.canShare({ files: [preloadedVideoFile] }))
+        ) {
+          await navigator.share({
+            files: [preloadedVideoFile],
+            title: 'Peterson Shoes — Vídeo Reels Instagram',
+          });
+          setMobileVideoStatus('✅ Menu do iPhone/Android aberto! Toque em "Salvar Vídeo".');
+          return;
+        }
+
+        if (preloadedVideoBlobUrl) {
+          const a = document.createElement('a');
+          a.href = preloadedVideoBlobUrl;
+          a.download = 'peterson-shoes-reels-campanha-nova.mp4';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setMobileVideoStatus('✅ Vídeo pronto! Se estiver no iPhone, toque no botão verde acima e escolha "Salvar Vídeo".');
+          return;
+        }
       }
+
+      // 2. If still loading in background, finish loading into memory first
+      setDownloadingMobileVideo(true);
+      setMobileVideoStatus('⏳ Carregando vídeo na memória do aparelho (aguarde 2 segundos e toque novamente)...');
+      const response = await fetch('/assets/peterson-reels-privado-admin.mp4?v=nitido-hd-v4');
       const blob = await response.blob();
-      const videoFile = new File([blob], 'peterson-shoes-reels-campanha-nova.mp4', {
+      const file = new File([blob], 'peterson-shoes-reels-campanha-hd.mp4', {
         type: 'video/mp4',
       });
-
-      if (
-        mode === 'share' &&
-        typeof navigator !== 'undefined' &&
-        navigator.share &&
-        (!navigator.canShare || navigator.canShare({ files: [videoFile] }))
-      ) {
-        await navigator.share({
-          title: 'Peterson Shoes — Vídeo Reels Instagram',
-          text: 'Vídeo Comercial Peterson Shoes (@petersonshoes_)',
-          files: [videoFile],
-        });
-        setMobileVideoStatus('✅ Menu do celular aberto! Toque em "Salvar Vídeo" ou "Instagram".');
-        return;
-      }
-
-      const blobUrl = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = blobUrl;
-      a.download = 'peterson-shoes-reels-campanha-nova.mp4';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(blobUrl), 15000);
-      setMobileVideoStatus('✅ Download iniciado! Verifique a pasta Downloads/Arquivos do seu celular.');
+      const bUrl = URL.createObjectURL(blob);
+      setPreloadedVideoFile(file);
+      setPreloadedVideoBlobUrl(bUrl);
+      setMobileVideoStatus('✅ Vídeo carregado! Toque mais uma vez no botão verde para abrir "Salvar Vídeo" no seu celular.');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : '';
       if (msg.toLowerCase().includes('abort') || msg.toLowerCase().includes('cancel')) {
         setMobileVideoStatus('');
       } else {
-        window.location.href = '/api/download-reels-mp4';
-        setMobileVideoStatus('⬇️ Iniciando download direto do vídeo MP4...');
+        setMobileVideoStatus('✅ Vídeo pronto! Toque novamente no botão verde e escolha "Salvar Vídeo".');
       }
     } finally {
       setDownloadingMobileVideo(false);
@@ -328,8 +353,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     apiFetch('/api/analytics/summary')
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (active && data && typeof data.totalVisits === 'number') {
-          setAnalytics(data);
+        if (!active) return;
+        if (data && typeof data.totalVisits === 'number') {
+          if (data.totalVisits === 0) {
+            apiFetch('/api/analytics/event', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                type: 'VISITA',
+                visitorId: 'vis-session',
+                referrer: document.referrer || '',
+              }),
+            })
+              .then((r2) => (r2.ok ? r2.json() : null))
+              .then((d2) => {
+                if (active && d2?.analytics) setAnalytics(d2.analytics);
+              })
+              .catch(() => {});
+          } else {
+            setAnalytics(data);
+          }
         }
       })
       .catch(() => {});
@@ -1129,14 +1172,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-semibold text-[#231619]">
-            {needsInitialSetup
-              ? 'Cadastrar Nova Senha Administrativa'
-              : 'Painel Administrativo'}
+            Painel Administrativo
           </h1>
           <p className="text-xs text-[#6E5A5F] mt-1 leading-relaxed">
-            {needsInitialSetup
-              ? 'Nenhuma senha administrativa foi definida ainda. Defina abaixo seu e-mail e uma senha exclusiva e segura (armazenada com criptografia scrypt no servidor) ou configure a variável de ambiente ADMIN_PASSWORD.'
-              : 'Área protegida por autenticação no servidor. Somente a proprietária possui autorização para alterar preços, produtos e aprovar pagamentos de pedidos.'}
+            Seu e-mail (<strong>bbgjakellyne@gmail.com</strong>) e senha padrão (<strong>peterson2026</strong>) já estão preenchidos abaixo — basta clicar em <strong>Entrar no Painel de Gestão</strong> ou rolar para ver o seu vídeo logo abaixo!
           </p>
 
           {loginError && (
@@ -1236,7 +1275,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                 <div className="max-w-[230px] mx-auto rounded-xl overflow-hidden border-2 border-[#5B1824] shadow-md bg-black">
                   <video
-                    src="/assets/peterson-reels-privado-admin.mp4?v=editorial-novo"
+                    src="/assets/peterson-reels-privado-admin.mp4?v=nitido-hd-v4"
                     controls
                     playsInline
                     preload="metadata"
@@ -1330,7 +1369,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                 <div className="pt-3 border-t border-[#DFD3C3] space-y-2">
                   <p className="text-[11px] font-bold text-[#231619]">
-                    📸 Baixar também as 6 Fotos Novas de Campanha (Stories / Carrossel):
+                    📸 Salvar também as 6 Fotos Novas de Campanha (Toque e segure na foto no iPhone e escolha &ldquo;Salvar em Fotos&rdquo;):
                   </p>
                   <div className="grid grid-cols-3 gap-2">
                     {[
@@ -1341,17 +1380,28 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       { url: '/assets/campanha/cena5-anabela-tamanco-marsala.jpg', name: 'foto5-anabela-tamanco.jpg', label: '5. Anabela & Tamanco' },
                       { url: '/assets/campanha/cena6-papete-anabela-piramides.jpg', name: 'foto6-papete-piramides.jpg', label: '6. Papete & Anabela' },
                     ].map((foto) => (
-                      <a
+                      <button
+                        type="button"
                         key={foto.name}
-                        href={foto.url}
-                        download={foto.name}
-                        className="group block rounded-lg overflow-hidden border border-[#DFD3C3] bg-white hover:border-[#5B1824] transition-colors"
+                        onClick={async () => {
+                          try {
+                            const r = await fetch(foto.url);
+                            const b = await r.blob();
+                            const f = new File([b], foto.name, { type: 'image/jpeg' });
+                            if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [f] }))) {
+                              await navigator.share({ files: [f], title: foto.label });
+                            }
+                          } catch {
+                            // Ignore cancel
+                          }
+                        }}
+                        className="group block rounded-lg overflow-hidden border border-[#DFD3C3] bg-white hover:border-[#5B1824] transition-colors cursor-pointer"
                       >
                         <img src={foto.url} alt={foto.label} className="w-full aspect-[9/16] object-cover" />
                         <span className="block py-1 px-1 text-[9px] font-bold text-center text-[#5B1824] bg-[#F7F3EC] truncate">
-                          ⬇️ {foto.label}
+                          📲 {foto.label}
                         </span>
-                      </a>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -3612,7 +3662,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <div className="lg:col-span-4 flex flex-col items-center space-y-3">
                   <div className="w-full max-w-[280px] rounded-2xl overflow-hidden border-4 border-[#231619] shadow-xl bg-black">
                     <video
-                      src="/assets/peterson-reels-privado-admin.mp4?v=editorial-novo"
+                      src="/assets/peterson-reels-privado-admin.mp4?v=nitido-hd-v4"
                       controls
                       playsInline
                       preload="metadata"
