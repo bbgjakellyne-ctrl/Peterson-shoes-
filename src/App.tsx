@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   ShoppingBag,
-  Sparkles,
   Search,
-  Ruler,
   Clock,
   ShieldCheck,
   MessageCircle,
@@ -15,7 +13,6 @@ import {
   X,
 } from 'lucide-react';
 import {
-  BespokeOrder,
   BespokeProduct,
   OrderItem,
   StoreSettings,
@@ -24,9 +21,6 @@ import { formatBRL } from './utils/payment';
 import { buildCustomerProductMessage, toWhatsAppHref } from './utils/whatsapp';
 import { ProductCustomModal } from './components/ProductCustomModal';
 import { CartCheckoutDrawer } from './components/CartCheckoutDrawer';
-import { OrderTrackingModal } from './components/OrderTrackingModal';
-import { AiConsultantDrawer } from './components/AiConsultantDrawer';
-import { SizeGuideModal } from './components/SizeGuideModal';
 import { AdminDashboard } from './components/AdminDashboard';
 import {
   getBrowserStoreDb,
@@ -81,10 +75,6 @@ export default function App() {
     string | undefined
   >(undefined);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isTrackingOpen, setIsTrackingOpen] = useState(false);
-  const [trackingQuery, setTrackingQuery] = useState('');
-  const [isAiOpen, setIsAiOpen] = useState(false);
-  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
   const [isAdminView, setIsAdminView] = useState(() => {
     if (typeof window === 'undefined') return false;
     const params = new URLSearchParams(window.location.search);
@@ -504,30 +494,25 @@ export default function App() {
             >
               @petersonshoes_
             </a>
-            <button
-              type="button"
-              onClick={() => {
-                setTrackingQuery('');
-                setIsTrackingOpen(true);
-              }}
-              className="hover:text-[#631421] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            <a
+              href="#como-funciona"
+              className="hover:text-[#631421] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0"
             >
-              Rastrear Pedido
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsSizeGuideOpen(true)}
-              className="hover:text-[#631421] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              Como Funciona
+            </a>
+            <a
+              href={toWhatsAppHref(
+                settings.whatsappStore,
+                'Olá, Peterson Shoes! Vim pelo site e gostaria de atendimento.'
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackStoreEvent({ type: 'WHATSAPP' })}
+              className="hover:text-[#2E6B3E] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 inline-flex items-center gap-1.5 text-[#2E6B3E]"
             >
-              Guia de Medidas (34 ao 39)
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsAiOpen(true)}
-              className="hover:text-[#631421] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-            >
-              Consultora IA
-            </button>
+              <MessageCircle className="w-3.5 h-3.5" />
+              <span>Atendimento WhatsApp</span>
+            </a>
           </nav>
 
           {/* Zone 3: 1 primary action */}
@@ -580,17 +565,19 @@ export default function App() {
                 )}
               </div>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setTrackingQuery('');
-                  setIsTrackingOpen(true);
-                }}
-                className="hidden sm:inline-flex px-3.5 py-2.5 bg-[#F3EDE2] hover:bg-[#E6DDD0] text-[#1F1215] border border-[#D8CBB8] rounded-xl text-xs font-semibold items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
+              <a
+                href={toWhatsAppHref(
+                  settings.whatsappStore,
+                  'Olá, Peterson Shoes! Vim pelo site e gostaria de tirar uma dúvida.'
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackStoreEvent({ type: 'WHATSAPP' })}
+                className="hidden sm:inline-flex px-3.5 py-2.5 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-xl text-xs font-semibold items-center gap-1.5 whitespace-nowrap shrink-0"
               >
-                <Clock className="w-3.5 h-3.5 text-[#631421]" />
-                <span>Rastrear / Quitar 50%</span>
-              </button>
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span>Chamar no WhatsApp</span>
+              </a>
             </div>
 
             {/* Mobile Quick Action Links + Category Filter Strip */}
@@ -613,24 +600,6 @@ export default function App() {
               </div>
 
               <div className="flex items-center gap-1.5 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setTrackingQuery('');
-                    setIsTrackingOpen(true);
-                  }}
-                  className="sm:hidden px-2.5 py-1.5 bg-white text-[#631421] border border-[#D8CBB8] rounded-lg text-[11px] font-semibold whitespace-nowrap shrink-0 cursor-pointer"
-                >
-                  Rastrear Pedido
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsSizeGuideOpen(true)}
-                  className="px-2.5 py-1.5 bg-white text-[#1F1215] border border-[#D8CBB8] rounded-lg text-[11px] font-medium whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1"
-                >
-                  <Ruler className="w-3 h-3 text-[#631421]" />
-                  <span>Medidas 34–39</span>
-                </button>
                 <button
                   type="button"
                   onClick={() => setIsAdminView(true)}
@@ -676,7 +645,7 @@ export default function App() {
               </div>
 
               <span className="hidden md:inline text-[11px] text-[#631421] font-medium whitespace-nowrap">
-                Fabricação Própria em Goiânia – GO · Envio para todo o Brasil · 50% Entrada + 50% Pronta
+                Fabricação Própria em Goiânia – GO · Numeração 34 ao 39 · 50% Entrada + 50% Pronta
               </span>
             </div>
           </div>
@@ -1415,7 +1384,7 @@ export default function App() {
               </div>
               <div className="lg:col-span-5">
                 <p className="text-xs sm:text-sm text-[#4A383B] leading-relaxed">
-                  Somos de <strong>Goiânia - Goiás</strong> e produzimos sua sandália sob encomenda na numeração <strong>34 ao 39</strong> em <strong>{settings.productionDays} dias</strong>. O frete é por conta da cliente e combinado quando a sandália estiver pronta (<strong>Uber Moto</strong> em Goiânia e região ou <strong>Correios</strong> para outras cidades).
+                  Somos de <strong>Goiânia - Goiás</strong> e produzimos sua sandália sob encomenda na numeração <strong>34 ao 39</strong> em <strong>{settings.productionDays} dias</strong>. A entrega em Goiânia e região é combinada pelo <strong>WhatsApp (via Uber Moto ou retirada)</strong> assim que sua sandália ficar pronta.
                 </p>
               </div>
             </div>
@@ -1434,10 +1403,10 @@ export default function App() {
               <div className="bg-[#FAF7F2] border border-[#E6DDD0] rounded-2xl p-6 space-y-2.5">
                 <div className="flex items-center gap-2 text-[#631421] font-semibold text-sm">
                   <Clock className="w-5 h-5 shrink-0" />
-                  <span>Rastreamento de Produção em {settings.productionDays} Dias</span>
+                  <span>Confecção Artesanal em {settings.productionDays} Dias</span>
                 </div>
                 <p className="text-xs text-[#4A383B] leading-relaxed">
-                  Acompanhe pelo site cada etapa: <em>Confirmação</em>, <em>Corte & Modelagem</em>, <em>Montagem Artesanal</em>, <em>Acabamento</em> e <em>Pronta para Entrega</em> usando o código da sua encomenda.
+                  Sua sandália é fabricada exclusivamente para você em nosso ateliê em Goiânia. Assim que ficar pronta, avisamos você diretamente no seu <strong>WhatsApp</strong> para combinar a entrega e os 50% finais.
                 </p>
               </div>
 
@@ -1452,30 +1421,21 @@ export default function App() {
               </div>
             </div>
 
-            {/* Concierge CTA Card */}
+            {/* Direct WhatsApp CTA Card */}
             <div className="p-6 sm:p-8 rounded-2xl bg-[#631421] text-[#FAF7F2] flex flex-col lg:flex-row lg:items-center justify-between gap-6 shadow-md">
               <div className="space-y-1.5 max-w-2xl">
                 <p className="text-xs text-[#E5D3B3] font-medium">
-                  Atendimento Oficial · WhatsApp Direto & Consultora IA
+                  Atendimento Direto · WhatsApp Oficial @petersonshoes_
                 </p>
                 <h3 className="font-serif-display text-2xl sm:text-3xl font-semibold">
-                  Deseja auxílio personalizado para montar sua encomenda?
+                  Deseja ajuda para escolher seu modelo ou cor?
                 </h3>
                 <p className="text-xs sm:text-sm text-[#FAF7F2]/85 leading-relaxed">
-                  Nossa Consultora Virtual IA responde instantaneamente sobre os modelos do Instagram, cores, prazos e status de pedidos, ou clique abaixo para falar diretamente conosco pelo WhatsApp.
+                  Fale diretamente com a nossa equipe pelo WhatsApp para tirar dúvidas sobre modelos, cores personalizadas, prazos de confecção e entrega em Goiânia e região.
                 </p>
               </div>
 
               <div className="flex flex-wrap items-center gap-3 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setIsAiOpen(true)}
-                  className="px-5 py-3 bg-[#FAF7F2] hover:bg-[#F3EDE2] text-[#631421] rounded-xl text-xs font-semibold flex items-center gap-2 cursor-pointer whitespace-nowrap"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  <span>Conversar com Consultora IA</span>
-                </button>
-
                 <a
                   href={toWhatsAppHref(
                     settings.whatsappStore,
@@ -1483,7 +1443,8 @@ export default function App() {
                   )}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-5 py-3 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-xl text-xs font-semibold flex items-center gap-2 whitespace-nowrap"
+                  onClick={() => trackStoreEvent({ type: 'WHATSAPP' })}
+                  className="px-6 py-3.5 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 whitespace-nowrap shadow-xs"
                 >
                   <MessageCircle className="w-4 h-4" />
                   <span>Chamar Direto no WhatsApp</span>
@@ -1506,7 +1467,7 @@ export default function App() {
                 Peterson Shoes
               </p>
               <p className="text-[#C9B9AC] leading-relaxed">
-                Fabricação própria de calçados femininos artesanais em <strong>Goiânia – Goiás</strong>. Sandálias personalizadas sob encomenda na numeração 34 ao 39 BR com envio para todo o Brasil.
+                Fabricação própria de calçados femininos artesanais em <strong>Goiânia – Goiás</strong>. Sandálias e scarpins personalizados sob encomenda na numeração 34 ao 39 BR.
               </p>
               <p className="text-[11px] text-[#E5D3B3] font-mono-tabular">
                 CNPJ: {settings.bankHolderDoc || '50.789.636/0001-32'} · Goiânia/GO
@@ -1516,7 +1477,7 @@ export default function App() {
             {/* Col 2: Categories & Navigation */}
             <div className="space-y-2.5">
               <p className="font-semibold text-[#FAF7F2] uppercase tracking-wider text-[11px]">
-                Categorias & Links Úteis
+                Categorias do Catálogo
               </p>
               <ul className="space-y-2 text-[#C9B9AC]">
                 <li>
@@ -1567,27 +1528,6 @@ export default function App() {
                     Rasteiras & Gladiadoras
                   </button>
                 </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => setIsSizeGuideOpen(true)}
-                    className="hover:text-white cursor-pointer"
-                  >
-                    Guia de Medidas (34 ao 39 BR)
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setTrackingQuery('');
-                      setIsTrackingOpen(true);
-                    }}
-                    className="hover:text-white cursor-pointer"
-                  >
-                    Rastrear Pedido / Quitar 50% Finais
-                  </button>
-                </li>
               </ul>
             </div>
 
@@ -1611,8 +1551,7 @@ export default function App() {
                 Atendimento & Entregas
               </p>
               <p className="text-[#C9B9AC] leading-relaxed">
-                • <strong>Goiânia e Região:</strong> Entrega via Uber Moto.<br />
-                • <strong>Todo o Brasil:</strong> Envio via Correios (PAC / Sedex).<br />
+                • <strong>Goiânia e Região:</strong> Entrega via Uber Moto ou retirada combinada pelo WhatsApp.<br />
                 • <strong>Atendimento Oficial:</strong> Segunda a Sábado pelo WhatsApp e Instagram.
               </p>
               <div className="pt-1 flex flex-wrap items-center gap-3">
@@ -1676,7 +1615,6 @@ export default function App() {
           setActiveModalPhotoUrl(undefined);
         }}
         onAddToCart={handleAddToCart}
-        onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
         whatsappStore={settings.whatsappStore}
         creditCardFeePercentage={settings.creditCardFeePercentage ?? 4.99}
       />
@@ -1688,9 +1626,7 @@ export default function App() {
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
         onClearCart={handleClearCart}
-        onOrderCreated={(newOrder: BespokeOrder) => {
-          setTrackingQuery(newOrder.orderCode);
-        }}
+        onOrderCreated={() => {}}
         whatsappStore={settings.whatsappStore}
         creditCardFeePercentage={settings.creditCardFeePercentage ?? 4.99}
         bankName={settings.bankName}
@@ -1701,26 +1637,6 @@ export default function App() {
         bankAgency={settings.bankAgency}
         bankAccount={settings.bankAccount}
         cardPaymentLink={settings.cardPaymentLink}
-      />
-
-      <OrderTrackingModal
-        isOpen={isTrackingOpen}
-        onClose={() => setIsTrackingOpen(false)}
-        initialQuery={trackingQuery}
-        whatsappStore={settings.whatsappStore}
-        creditCardFeePercentage={settings.creditCardFeePercentage ?? 4.99}
-      />
-
-      <AiConsultantDrawer
-        isOpen={isAiOpen}
-        onClose={() => setIsAiOpen(false)}
-        whatsappStore={settings.whatsappStore}
-      />
-
-      <SizeGuideModal
-        isOpen={isSizeGuideOpen}
-        onClose={() => setIsSizeGuideOpen(false)}
-        onSelectSizeFilter={(size) => setSelectedSizeFilter(size)}
       />
 
       {quickZoomPhoto && (

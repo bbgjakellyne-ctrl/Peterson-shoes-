@@ -23,7 +23,6 @@ interface ProductCustomModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddToCart: (item: OrderItem) => void;
-  onOpenSizeGuide: () => void;
   whatsappStore: string;
   creditCardFeePercentage?: number;
 }
@@ -35,7 +34,6 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
   isOpen,
   onClose,
   onAddToCart,
-  onOpenSizeGuide,
   whatsappStore,
   creditCardFeePercentage = 4.99,
 }) => {
@@ -408,17 +406,9 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
                       2. Numeração (34 ao 39 BR):{' '}
                       <span className="text-[#631421] font-bold">{selectedSize} BR</span>
                     </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onClose();
-                        onOpenSizeGuide();
-                      }}
-                      className="text-xs font-semibold text-[#631421] hover:underline flex items-center gap-1 cursor-pointer"
-                    >
-                      <Ruler className="w-3.5 h-3.5" />
-                      <span>Abrir Provador de Medidas (cm)</span>
-                    </button>
+                    <span className="text-[11px] text-[#6E5D5F]">
+                      Forma padrão brasileira
+                    </span>
                   </div>
                   <div className="grid grid-cols-6 gap-2">
                     {product.availableSizes.map((size) => {
@@ -506,9 +496,8 @@ export const ProductCustomModal: React.FC<ProductCustomModalProps> = ({
                     &ldquo;O frete é por conta da cliente. A forma de envio e o valor da entrega serão combinados quando a sandália estiver pronta.&rdquo;
                   </p>
                   <p className="text-[11px] text-[#4A383B] leading-relaxed">
-                    • <strong>Goiânia e região:</strong> a entrega poderá ser combinada por <strong>Uber Moto</strong>.<br />
-                    • <strong>Outras cidades:</strong> o envio poderá ser combinado pelos <strong>Correios</strong>, com o frete pago pela cliente antes da postagem.<br />
-                    • O frete é separado do preço da sandália: você conclui o pedido e paga normalmente os <strong>50% de entrada da sandália</strong> agora, sem aguardar cotação de frete, e os outros <strong>50% da sandália na entrega</strong>.
+                    • <strong>Goiânia e região:</strong> entrega combinada por <strong>Uber Moto</strong> ou retirada combinada pelo WhatsApp.<br />
+                    • O frete é separado do preço da sandália: você conclui o pedido e paga normalmente os <strong>50% de entrada da sandália</strong> agora, e os outros <strong>50% da sandália quando ficar pronta</strong>.
                   </p>
                 </div>
               </div>

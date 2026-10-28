@@ -440,7 +440,7 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                         &ldquo;O frete é por conta da cliente. A forma de envio e o valor da entrega serão combinados quando a sandália estiver pronta.&rdquo;
                       </p>
                       <p className="text-[11px] text-[#4A373B]">
-                        Para <strong>Goiânia e região</strong>, a entrega poderá ser combinada por <strong>Uber Moto</strong>. Para <strong>outras cidades</strong>, o envio poderá ser combinado pelos <strong>Correios</strong>, com o frete pago pela cliente antes da postagem.
+                        Em <strong>Goiânia e região</strong>, a entrega é combinada por <strong>Uber Moto</strong> ou retirada pelo WhatsApp quando sua sandália estiver pronta.
                       </p>
                     </div>
                   </div>
@@ -612,9 +612,8 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                       &ldquo;O frete é por conta da cliente. A forma de envio e o valor da entrega serão combinados quando a sandália estiver pronta.&rdquo;
                     </p>
                     <p className="text-[11px] text-[#3E2C30] leading-relaxed">
-                      • <strong>Goiânia e região:</strong> a entrega poderá ser combinada por <strong>Uber Moto</strong>.<br />
-                      • <strong>Outras cidades:</strong> o envio poderá ser combinado pelos <strong>Correios</strong>, com o frete pago pela cliente antes da postagem.<br />
-                      • <strong>Sem espera por cotação:</strong> você conclui seu pedido agora e paga normalmente os <strong>50% de entrada da sandália</strong>. Os outros <strong>50% da sandália</strong> serão pagos na entrega (frete separado do preço da sandália).
+                      • <strong>Goiânia e região:</strong> entrega combinada por <strong>Uber Moto</strong> ou retirada combinada pelo WhatsApp.<br />
+                      • <strong>Sem espera por cotação:</strong> você conclui seu pedido agora e paga normalmente os <strong>50% de entrada da sandália</strong>. Os outros <strong>50% da sandália</strong> serão pagos quando ficar pronta (entrega combinada à parte pelo WhatsApp).
                     </p>
                   </div>
                 </div>
@@ -1183,7 +1182,7 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                       &ldquo;O frete é por conta da cliente. A forma de envio e o valor da entrega serão combinados quando a sandália estiver pronta.&rdquo;
                     </p>
                     <p className="text-[#6E5A5F]">
-                      Goiânia e região: entrega combinada por <strong>Uber Moto</strong> · Outras cidades: envio combinado pelos <strong>Correios</strong>, com o frete pago pela cliente antes da postagem.
+                      Goiânia e região: entrega combinada por <strong>Uber Moto</strong> ou retirada combinada diretamente pelo WhatsApp.
                     </p>
                   </div>
                 </div>
@@ -1240,7 +1239,7 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                   &ldquo;O frete é por conta da cliente. A forma de envio e o valor da entrega serão combinados quando a sandália estiver pronta.&rdquo;
                 </p>
                 <p className="text-[#4A373B]">
-                  Goiânia e região: <strong>Uber Moto</strong> · Outras cidades: <strong>Correios</strong> (pago pela cliente antes da postagem).
+                  Goiânia e região: <strong>Uber Moto</strong> ou retirada combinada pelo WhatsApp.
                 </p>
               </div>
             </div>
