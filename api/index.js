@@ -3764,27 +3764,33 @@ function loadDb(env = "producao") {
   try {
     const raw = fs.readFileSync(targetFile, "utf-8");
     const parsed = JSON.parse(raw);
+    const deletedProdSet = new Set(parsed.deletedProductIds || []);
+    const deletedOrdSet = new Set(parsed.deletedOrderIds || []);
+    const deletedCustSet = new Set(parsed.deletedCustomerIds || []);
     if (fs.existsSync(DB_FILE_HOMOLOG)) {
       try {
         const hRaw = fs.readFileSync(DB_FILE_HOMOLOG, "utf-8");
         const hParsed = JSON.parse(hRaw);
+        for (const dp of hParsed.deletedProductIds || []) deletedProdSet.add(dp);
+        for (const dOrd of hParsed.deletedOrderIds || []) deletedOrdSet.add(dOrd);
+        for (const dc of hParsed.deletedCustomerIds || []) deletedCustSet.add(dc);
         const existOrderIds = new Set((parsed.orders || []).map((o) => o.id));
         for (const ho of hParsed.orders || []) {
-          if (ho && ho.id && !existOrderIds.has(ho.id) && !DEMO_ORDER_IDS.has(ho.id)) {
+          if (ho && ho.id && !existOrderIds.has(ho.id) && !DEMO_ORDER_IDS.has(ho.id) && !deletedOrdSet.has(ho.id) && !deletedOrdSet.has(ho.orderCode)) {
             parsed.orders = [ho, ...parsed.orders || []];
             existOrderIds.add(ho.id);
           }
         }
         const existCustIds = new Set((parsed.customers || []).map((c) => c.id));
         for (const hc of hParsed.customers || []) {
-          if (hc && hc.id && !existCustIds.has(hc.id) && !DEMO_CUSTOMER_IDS.has(hc.id)) {
+          if (hc && hc.id && !existCustIds.has(hc.id) && !DEMO_CUSTOMER_IDS.has(hc.id) && !deletedCustSet.has(hc.id)) {
             parsed.customers = [hc, ...parsed.customers || []];
             existCustIds.add(hc.id);
           }
         }
         const existPayIds = new Set((parsed.payments || []).map((p) => p.id));
         for (const hp of hParsed.payments || []) {
-          if (hp && hp.id && !existPayIds.has(hp.id) && !DEMO_PAYMENT_IDS.has(hp.id)) {
+          if (hp && hp.id && !existPayIds.has(hp.id) && !DEMO_PAYMENT_IDS.has(hp.id) && !DEMO_ORDER_IDS.has(hp.orderId) && !deletedOrdSet.has(hp.orderId) && !deletedOrdSet.has(hp.orderCode)) {
             parsed.payments = [hp, ...parsed.payments || []];
             existPayIds.add(hp.id);
           }
@@ -3792,23 +3798,31 @@ function loadDb(env = "producao") {
       } catch {
       }
     }
+    parsed.deletedProductIds = Array.from(deletedProdSet);
+    parsed.deletedOrderIds = Array.from(deletedOrdSet);
+    parsed.deletedCustomerIds = Array.from(deletedCustSet);
     const origOrdersLen = (parsed.orders || []).length;
     const origCustomersLen = (parsed.customers || []).length;
     const origPaymentsLen = (parsed.payments || []).length;
-    parsed.orders = (parsed.orders || []).filter((o) => !DEMO_ORDER_IDS.has(o.id));
-    parsed.customers = (parsed.customers || []).filter((c) => !DEMO_CUSTOMER_IDS.has(c.id));
+    parsed.products = (parsed.products || []).filter((p) => !deletedProdSet.has(p.id));
+    parsed.orders = (parsed.orders || []).filter(
+      (o) => !DEMO_ORDER_IDS.has(o.id) && !deletedOrdSet.has(o.id) && !deletedOrdSet.has(o.orderCode)
+    );
+    parsed.customers = (parsed.customers || []).filter(
+      (c) => !DEMO_CUSTOMER_IDS.has(c.id) && !deletedCustSet.has(c.id)
+    );
     parsed.payments = (parsed.payments || []).filter(
-      (p) => !DEMO_PAYMENT_IDS.has(p.id) && !DEMO_ORDER_IDS.has(p.orderId)
+      (p) => !DEMO_PAYMENT_IDS.has(p.id) && !DEMO_ORDER_IDS.has(p.orderId) && !deletedOrdSet.has(p.orderId) && !deletedOrdSet.has(p.orderCode)
     );
     const demoPurged = parsed.orders.length !== origOrdersLen || parsed.customers.length !== origCustomersLen || parsed.payments.length !== origPaymentsLen;
     const hasBootProducts = Array.isArray(parsed.products) && parsed.products.some(
       (p) => p.id?.includes("-bota-") || p.category === "Bota" || p.image && p.image.startsWith("/lks/") && !p.image.includes("?v=clean2")
     );
-    const needsUpgrade = !parsed.products || parsed.products.length < 69 || hasBootProducts || parsed.settings?.whatsappStore !== "5562984998265" || parsed.products[0]?.availableSizes?.includes(33) || !parsed.products[0]?.colors?.some((c) => c.name === "Marsala");
+    const needsUpgrade = !parsed.products || !Array.isArray(parsed.products) || hasBootProducts || parsed.settings?.whatsappStore !== "5562984998265" || parsed.products[0]?.availableSizes?.includes(33) || parsed.products.length > 0 && !parsed.products[0]?.colors?.some((c) => c.name === "Marsala");
     if (needsUpgrade) {
       const upgraded = createInitialDatabase();
       const prevProdById = new Map((parsed.products || []).map((p) => [p.id, p]));
-      upgraded.products = upgraded.products.map((up) => {
+      upgraded.products = upgraded.products.filter((up) => !deletedProdSet.has(up.id)).map((up) => {
         const prev = prevProdById.get(up.id);
         if (!prev) return up;
         return {
@@ -3820,6 +3834,9 @@ function loadDb(env = "producao") {
           profitMarginPercent: prev.profitMarginPercent ?? up.profitMarginPercent
         };
       });
+      upgraded.deletedProductIds = Array.from(deletedProdSet);
+      upgraded.deletedOrderIds = Array.from(deletedOrdSet);
+      upgraded.deletedCustomerIds = Array.from(deletedCustSet);
       if (parsed.orders && parsed.orders.length > 0) {
         upgraded.orders = parsed.orders;
       }
@@ -4894,15 +4911,89 @@ DIRETRIZES DE ESTILO:
     const env = resolveEnv(req);
     const { id } = req.params;
     const db = loadDb(env);
+    const deletedProdSet = new Set(db.deletedProductIds || []);
+    deletedProdSet.add(id);
+    db.deletedProductIds = Array.from(deletedProdSet);
     db.products = db.products.filter((p) => p.id !== id);
     saveDb(db, env);
     res.json({ ok: true });
   });
+  app.post("/api/admin/products/restore-deleted", requireAdminAuth, (req, res) => {
+    const env = resolveEnv(req);
+    const db = loadDb(env);
+    db.deletedProductIds = [];
+    const existingIds = new Set(db.products.map((p) => p.id));
+    for (const initP of INITIAL_PRODUCTS) {
+      if (!existingIds.has(initP.id)) {
+        db.products.push(initP);
+      }
+    }
+    saveDb(db, env);
+    res.json({ ok: true, count: db.products.length });
+  });
   app.post("/api/admin/sync-orders", requireAdminAuth, (req, res) => {
     const env = resolveEnv(req);
     const db = loadDb(env);
-    const { orders, customers, payments, productOverrides } = req.body;
+    const {
+      orders,
+      customers,
+      payments,
+      productOverrides,
+      deletedProductIds,
+      deletedOrderIds,
+      deletedCustomerIds
+    } = req.body;
     let changed = false;
+    const deletedProdSet = new Set(db.deletedProductIds || []);
+    if (Array.isArray(deletedProductIds)) {
+      for (const pid of deletedProductIds) {
+        if (pid && !deletedProdSet.has(pid)) {
+          deletedProdSet.add(pid);
+          changed = true;
+        }
+      }
+    }
+    if (deletedProdSet.size > 0) {
+      db.deletedProductIds = Array.from(deletedProdSet);
+      const beforeLen = db.products.length;
+      db.products = db.products.filter((p) => !deletedProdSet.has(p.id));
+      if (db.products.length !== beforeLen) changed = true;
+    }
+    const deletedOrdSet = new Set(db.deletedOrderIds || []);
+    if (Array.isArray(deletedOrderIds)) {
+      for (const oid of deletedOrderIds) {
+        if (oid && !deletedOrdSet.has(oid)) {
+          deletedOrdSet.add(oid);
+          changed = true;
+        }
+      }
+    }
+    if (deletedOrdSet.size > 0) {
+      db.deletedOrderIds = Array.from(deletedOrdSet);
+      const beforeOrdLen = db.orders.length;
+      db.orders = db.orders.filter(
+        (o) => !deletedOrdSet.has(o.id) && !deletedOrdSet.has(o.orderCode)
+      );
+      db.payments = db.payments.filter(
+        (p) => !deletedOrdSet.has(p.orderId) && !deletedOrdSet.has(p.orderCode)
+      );
+      if (db.orders.length !== beforeOrdLen) changed = true;
+    }
+    const deletedCustSet = new Set(db.deletedCustomerIds || []);
+    if (Array.isArray(deletedCustomerIds)) {
+      for (const cid of deletedCustomerIds) {
+        if (cid && !deletedCustSet.has(cid)) {
+          deletedCustSet.add(cid);
+          changed = true;
+        }
+      }
+    }
+    if (deletedCustSet.size > 0) {
+      db.deletedCustomerIds = Array.from(deletedCustSet);
+      const beforeCustLen = db.customers.length;
+      db.customers = db.customers.filter((c) => !deletedCustSet.has(c.id));
+      if (db.customers.length !== beforeCustLen) changed = true;
+    }
     if (productOverrides && typeof productOverrides === "object") {
       db.products = db.products.map((p) => {
         const ov = productOverrides[p.id];
@@ -4922,7 +5013,7 @@ DIRETRIZES DE ESTILO:
     }
     if (Array.isArray(orders)) {
       for (const ord of orders) {
-        if (ord && ord.id && !DEMO_ORDER_IDS.has(ord.id) && !db.orders.some((o) => o.id === ord.id)) {
+        if (ord && ord.id && !DEMO_ORDER_IDS.has(ord.id) && !deletedOrdSet.has(ord.id) && !deletedOrdSet.has(ord.orderCode) && !db.orders.some((o) => o.id === ord.id)) {
           db.orders.unshift(ord);
           changed = true;
         }
@@ -4930,7 +5021,7 @@ DIRETRIZES DE ESTILO:
     }
     if (Array.isArray(customers)) {
       for (const cust of customers) {
-        if (cust && cust.id && !DEMO_CUSTOMER_IDS.has(cust.id) && !db.customers.some((c) => c.id === cust.id)) {
+        if (cust && cust.id && !DEMO_CUSTOMER_IDS.has(cust.id) && !deletedCustSet.has(cust.id) && !db.customers.some((c) => c.id === cust.id)) {
           db.customers.unshift(cust);
           changed = true;
         }
@@ -4938,7 +5029,7 @@ DIRETRIZES DE ESTILO:
     }
     if (Array.isArray(payments)) {
       for (const pay of payments) {
-        if (pay && pay.id && !DEMO_PAYMENT_IDS.has(pay.id) && !db.payments.some((p) => p.id === pay.id)) {
+        if (pay && pay.id && !DEMO_PAYMENT_IDS.has(pay.id) && !deletedOrdSet.has(pay.orderId) && !deletedOrdSet.has(pay.orderCode) && !db.payments.some((p) => p.id === pay.id)) {
           db.payments.unshift(pay);
           changed = true;
         }
@@ -5050,8 +5141,33 @@ DIRETRIZES DE ESTILO:
     const env = resolveEnv(req);
     const { id } = req.params;
     const db = loadDb(env);
-    db.orders = db.orders.filter((o) => o.id !== id && o.orderCode !== id);
-    db.payments = db.payments.filter((p) => p.orderId !== id);
+    const targetOrder = db.orders.find((o) => o.id === id || o.orderCode === id);
+    const deletedOrdSet = new Set(db.deletedOrderIds || []);
+    deletedOrdSet.add(id);
+    if (targetOrder) {
+      deletedOrdSet.add(targetOrder.id);
+      deletedOrdSet.add(targetOrder.orderCode);
+    }
+    db.deletedOrderIds = Array.from(deletedOrdSet);
+    const targetId = targetOrder?.id || id;
+    const targetCode = targetOrder?.orderCode || id;
+    db.orders = db.orders.filter(
+      (o) => o.id !== id && o.orderCode !== id && o.id !== targetId
+    );
+    db.payments = db.payments.filter(
+      (p) => p.orderId !== id && p.orderId !== targetId && p.orderCode !== targetCode
+    );
+    saveDb(db, env);
+    return res.json({ ok: true });
+  });
+  app.delete("/api/admin/customers/:id", requireAdminAuth, (req, res) => {
+    const env = resolveEnv(req);
+    const { id } = req.params;
+    const db = loadDb(env);
+    const deletedCustSet = new Set(db.deletedCustomerIds || []);
+    deletedCustSet.add(id);
+    db.deletedCustomerIds = Array.from(deletedCustSet);
+    db.customers = db.customers.filter((c) => c.id !== id);
     saveDb(db, env);
     return res.json({ ok: true });
   });

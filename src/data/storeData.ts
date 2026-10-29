@@ -3026,12 +3026,14 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
 const STORAGE_KEY_PROD = 'peterson_shoes_store_prod_v16';
 const STORAGE_KEY_HOMOLOG = 'peterson_shoes_store_homolog_v16';
 const DELETED_ORDERS_KEY = 'peterson_deleted_order_ids_v1';
+const DELETED_PRODUCTS_KEY = 'peterson_deleted_product_ids_v1';
+const DELETED_CUSTOMERS_KEY = 'peterson_deleted_customer_ids_v1';
 
 const DEMO_ORDER_IDS = new Set(['ord-1001', 'ord-1002']);
 const DEMO_CUSTOMER_IDS = new Set(['cust-1', 'cust-2']);
 const DEMO_PAYMENT_IDS = new Set(['pay-1a', 'pay-1b', 'pay-2a', 'pay-2b']);
 
-function getDeletedOrderIds(): Set<string> {
+export function getDeletedOrderIds(): Set<string> {
   if (typeof window === 'undefined') return new Set();
   try {
     const raw = window.localStorage.getItem(DELETED_ORDERS_KEY);
@@ -3043,12 +3045,69 @@ function getDeletedOrderIds(): Set<string> {
   }
 }
 
-function addDeletedOrderId(orderId: string): void {
-  if (typeof window === 'undefined') return;
+export function addDeletedOrderId(orderId: string): void {
+  if (typeof window === 'undefined' || !orderId) return;
   try {
     const current = getDeletedOrderIds();
     current.add(orderId);
     window.localStorage.setItem(DELETED_ORDERS_KEY, JSON.stringify(Array.from(current)));
+  } catch {
+    // Ignore
+  }
+}
+
+export function getDeletedProductIds(): Set<string> {
+  if (typeof window === 'undefined') return new Set();
+  try {
+    const raw = window.localStorage.getItem(DELETED_PRODUCTS_KEY);
+    if (!raw) return new Set();
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? new Set(parsed) : new Set();
+  } catch {
+    return new Set();
+  }
+}
+
+export function addDeletedProductId(productId: string): void {
+  if (typeof window === 'undefined' || !productId) return;
+  try {
+    const current = getDeletedProductIds();
+    current.add(productId);
+    window.localStorage.setItem(DELETED_PRODUCTS_KEY, JSON.stringify(Array.from(current)));
+  } catch {
+    // Ignore
+  }
+}
+
+export function restoreDeletedProducts(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.removeItem(DELETED_PRODUCTS_KEY);
+    const db = getBrowserStoreDb();
+    saveBrowserStoreDb(db);
+  } catch {
+    // Ignore
+  }
+}
+
+export function getDeletedCustomerIds(): Set<string> {
+  if (typeof window === 'undefined') return new Set();
+  try {
+    const raw = window.localStorage.getItem(DELETED_CUSTOMERS_KEY);
+    if (!raw) return new Set();
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? new Set(parsed) : new Set();
+  } catch {
+    return new Set();
+  }
+}
+
+export function addDeletedCustomerId(customerId: string): void {
+  if (typeof window === 'undefined' || !customerId) return;
+  try {
+    const current = getDeletedCustomerIds();
+    current.add(customerId);
+    window.localStorage.setItem(DELETED_CUSTOMERS_KEY, JSON.stringify(Array.from(current)));
   } catch {
     // Ignore
   }
@@ -3106,9 +3165,10 @@ export function saveProductOverride(
 
 export function sanitizeProductCatalog(products: BespokeProduct[]): BespokeProduct[] {
   const overrides = getProductOverrides();
+  const deletedProductIds = getDeletedProductIds();
   const byId = new Map<string, BespokeProduct>();
   for (const p of products || []) {
-    if (!p || !p.id || isRemovedBootProduct(p)) continue;
+    if (!p || !p.id || isRemovedBootProduct(p) || deletedProductIds.has(p.id)) continue;
     const canonical = INITIAL_PRODUCT_BY_ID.get(p.id);
     const ov = overrides[p.id];
     const baseProd =
@@ -3140,7 +3200,7 @@ export function sanitizeProductCatalog(products: BespokeProduct[]): BespokeProdu
     );
   }
   for (const initP of INITIAL_PRODUCTS) {
-    if (!byId.has(initP.id)) {
+    if (!byId.has(initP.id) && !deletedProductIds.has(initP.id)) {
       const ov = overrides[initP.id];
       const baseInit = {
         ...initP,
@@ -3171,6 +3231,7 @@ export function getBrowserStoreDb(): StoreDatabaseSchema {
   }
   const activeKey = resolveCurrentStorageKey();
   const deletedIds = getDeletedOrderIds();
+  const deletedCustomerIds = getDeletedCustomerIds();
 
   try {
     // Collect orders, customers, and payments across ALL peterson_shoes_store* keys
@@ -3194,7 +3255,7 @@ export function getBrowserStoreDb(): StoreDatabaseSchema {
       if (!rawKey) continue;
       try {
         const parsedKey = JSON.parse(rawKey) as StoreDatabaseSchema;
-        if (key === activeKey && parsedKey?.products && parsedKey.products.length >= 69) {
+        if (key === activeKey && Array.isArray(parsedKey?.products)) {
           baseParsed = parsedKey;
         }
         for (const o of parsedKey?.orders || []) {
@@ -3212,7 +3273,7 @@ export function getBrowserStoreDb(): StoreDatabaseSchema {
           }
         }
         for (const c of parsedKey?.customers || []) {
-          if (c && c.id && !DEMO_CUSTOMER_IDS.has(c.id)) {
+          if (c && c.id && !DEMO_CUSTOMER_IDS.has(c.id) && !deletedCustomerIds.has(c.id)) {
             customersMap.set(c.id, c);
           }
         }
@@ -3222,7 +3283,8 @@ export function getBrowserStoreDb(): StoreDatabaseSchema {
             p.id &&
             !DEMO_PAYMENT_IDS.has(p.id) &&
             !DEMO_ORDER_IDS.has(p.orderId) &&
-            !deletedIds.has(p.orderId)
+            !deletedIds.has(p.orderId) &&
+            !deletedIds.has(p.orderCode)
           ) {
             paymentsMap.set(p.id, p);
           }
@@ -3234,7 +3296,7 @@ export function getBrowserStoreDb(): StoreDatabaseSchema {
 
     const base = baseParsed || createInitialStoreDatabase();
     const normalizedProducts = sanitizeProductCatalog(
-      base.products && base.products.length >= 69 ? base.products : INITIAL_PRODUCTS
+      Array.isArray(base.products) ? base.products : INITIAL_PRODUCTS
     );
 
     const mergedOrders = Array.from(ordersMap.values()).sort((a, b) =>
@@ -3673,8 +3735,33 @@ export function deleteBrowserOrderAdmin(orderId: string): void {
     addDeletedOrderId(target.id);
     addDeletedOrderId(target.orderCode);
   }
-  db.orders = db.orders.filter((o) => o.id !== orderId && o.orderCode !== orderId);
-  db.payments = db.payments.filter((p) => p.orderId !== orderId);
+  const targetId = target?.id || orderId;
+  const targetCode = target?.orderCode || orderId;
+  db.orders = db.orders.filter(
+    (o) => o.id !== orderId && o.orderCode !== orderId && o.id !== targetId
+  );
+  db.payments = db.payments.filter(
+    (p) =>
+      p.orderId !== orderId &&
+      p.orderId !== targetId &&
+      p.orderCode !== targetCode
+  );
+  saveBrowserStoreDb(db);
+}
+
+export function deleteBrowserProductAdmin(productId: string): void {
+  if (!productId) return;
+  addDeletedProductId(productId);
+  const db = getBrowserStoreDb();
+  db.products = db.products.filter((p) => p.id !== productId);
+  saveBrowserStoreDb(db);
+}
+
+export function deleteBrowserCustomerAdmin(customerId: string): void {
+  if (!customerId) return;
+  addDeletedCustomerId(customerId);
+  const db = getBrowserStoreDb();
+  db.customers = db.customers.filter((c) => c.id !== customerId);
   saveBrowserStoreDb(db);
 }
 

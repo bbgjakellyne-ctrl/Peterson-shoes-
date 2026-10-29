@@ -41,12 +41,18 @@ import {
 } from '../utils/whatsapp';
 import {
   buildStandardColors,
+  deleteBrowserCustomerAdmin,
   deleteBrowserOrderAdmin,
+  deleteBrowserProductAdmin,
   getBrowserStoreDb,
+  getDeletedCustomerIds,
+  getDeletedOrderIds,
+  getDeletedProductIds,
   getProductOverrides,
   importBrowserOrderFromWhatsAppSync,
   INITIAL_PRODUCTS,
   resolveProductStyleCategory,
+  restoreDeletedProducts,
   sanitizeProductCatalog,
   saveBrowserStoreDb,
   saveProductOverride,
@@ -458,6 +464,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [orderTotalDrafts, setOrderTotalDrafts] = useState<Record<string, string>>({});
   const [savedOrderValueId, setSavedOrderValueId] = useState<string | null>(null);
 
+  // Inline deletion confirmation & feedback state
+  const [confirmDeleteProductId, setConfirmDeleteProductId] = useState<string | null>(null);
+  const [confirmDeleteOrderId, setConfirmDeleteOrderId] = useState<string | null>(null);
+  const [confirmDeleteCustomerId, setConfirmDeleteCustomerId] = useState<string | null>(null);
+  const [deletedItemFeedback, setDeletedItemFeedback] = useState<string>('');
+
   // Product Form Modal / Drawer State
   const [editingProduct, setEditingProduct] = useState<Partial<BespokeProduct> | null>(
     null
@@ -563,17 +575,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             importBrowserOrderFromWhatsAppSync(window.location.search);
           }
           const localDb = getBrowserStoreDb();
+          const deletedOrderIds = getDeletedOrderIds();
+          const deletedProductIds = getDeletedProductIds();
+          const deletedCustomerIds = getDeletedCustomerIds();
           const serverOrders = Array.isArray(data.orders) ? data.orders : [];
           const serverCustomers = Array.isArray(data.customers) ? data.customers : [];
           const serverPayments = Array.isArray(data.payments) ? data.payments : [];
 
-          // Merge server + localStorage so orders placed on this browser never vanish on serverless restarts
+          // Merge server + localStorage so orders placed on this browser never vanish on serverless restarts, while respecting deleted items
           const mergedOrdersMap = new Map<string, BespokeOrder>();
           for (const o of localDb.orders || []) {
-            if (o && o.id) mergedOrdersMap.set(o.id, o);
+            if (o && o.id && !deletedOrderIds.has(o.id) && !deletedOrderIds.has(o.orderCode)) {
+              mergedOrdersMap.set(o.id, o);
+            }
           }
           for (const o of serverOrders) {
-            if (o && o.id) {
+            if (o && o.id && !deletedOrderIds.has(o.id) && !deletedOrderIds.has(o.orderCode)) {
               const existing = mergedOrdersMap.get(o.id);
               if (!existing || (o.updatedAt || '') >= (existing.updatedAt || '')) {
                 mergedOrdersMap.set(o.id, o);
@@ -586,23 +603,37 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           const mergedCustomersMap = new Map<string, CustomerRecord>();
           for (const c of localDb.customers || []) {
-            if (c && c.id) mergedCustomersMap.set(c.id, c);
+            if (c && c.id && !deletedCustomerIds.has(c.id)) mergedCustomersMap.set(c.id, c);
           }
           for (const c of serverCustomers) {
-            if (c && c.id) mergedCustomersMap.set(c.id, c);
+            if (c && c.id && !deletedCustomerIds.has(c.id)) mergedCustomersMap.set(c.id, c);
           }
           const mergedCustomers = Array.from(mergedCustomersMap.values());
 
           const mergedPaymentsMap = new Map<string, PaymentRecord>();
           for (const p of localDb.payments || []) {
-            if (p && p.id) mergedPaymentsMap.set(p.id, p);
+            if (
+              p &&
+              p.id &&
+              !deletedOrderIds.has(p.orderId) &&
+              !deletedOrderIds.has(p.orderCode)
+            ) {
+              mergedPaymentsMap.set(p.id, p);
+            }
           }
           for (const p of serverPayments) {
-            if (p && p.id) mergedPaymentsMap.set(p.id, p);
+            if (
+              p &&
+              p.id &&
+              !deletedOrderIds.has(p.orderId) &&
+              !deletedOrderIds.has(p.orderCode)
+            ) {
+              mergedPaymentsMap.set(p.id, p);
+            }
           }
           const mergedPayments = Array.from(mergedPaymentsMap.values());
 
-          // Ensure all 69 models (without Botas) and normalized style categories are preserved
+          // Ensure all active models and normalized style categories are preserved while respecting deletions
           const mergedProducts = sanitizeProductCatalog(data.products || []);
 
           const updatedDb = {
@@ -625,7 +656,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           applyDashboardFromDb(updatedDb, { preserveDrafts: Boolean(options?.silent) });
 
           const localOverrides = getProductOverrides();
-          if (mergedOrders.length > serverOrders.length || Object.keys(localOverrides).length > 0) {
+          if (
+            mergedOrders.length > serverOrders.length ||
+            Object.keys(localOverrides).length > 0 ||
+            deletedProductIds.size > 0 ||
+            deletedOrderIds.size > 0 ||
+            deletedCustomerIds.size > 0
+          ) {
             apiFetch('/api/admin/sync-orders', {
               method: 'POST',
               headers: {
@@ -637,6 +674,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 customers: mergedCustomers,
                 payments: mergedPayments,
                 productOverrides: localOverrides,
+                deletedProductIds: Array.from(deletedProductIds),
+                deletedOrderIds: Array.from(deletedOrderIds),
+                deletedCustomerIds: Array.from(deletedCustomerIds),
               }),
             }).catch(() => {});
           }
@@ -1159,12 +1199,39 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     });
   };
 
+  const showDeletionFeedback = (msg: string) => {
+    setDeletedItemFeedback(msg);
+    setTimeout(() => {
+      setDeletedItemFeedback((curr) => (curr === msg ? '' : curr));
+    }, 3500);
+  };
+
   const handleDeleteOrder = async (orderId: string) => {
     if (!token) return;
     deleteBrowserOrderAdmin(orderId);
+    setConfirmDeleteOrderId(null);
     applyDashboardFromDb(getBrowserStoreDb());
+    showDeletionFeedback('Pedido e parcelas excluídos com sucesso!');
     try {
       await apiFetch(`/api/admin/orders/${orderId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch {
+      // Local state already updated
+    }
+  };
+
+  const handleDeleteCustomer = async (customerId: string) => {
+    if (!token) return;
+    deleteBrowserCustomerAdmin(customerId);
+    setConfirmDeleteCustomerId(null);
+    applyDashboardFromDb(getBrowserStoreDb());
+    showDeletionFeedback('Cliente excluída do cadastro com sucesso!');
+    try {
+      await apiFetch(`/api/admin/customers/${customerId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -1415,6 +1482,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   const handleDeleteProduct = async (id: string) => {
     if (!token) return;
+    deleteBrowserProductAdmin(id);
+    setConfirmDeleteProductId(null);
+    setEditingProduct((prev) => (prev?.id === id ? null : prev));
+    applyDashboardFromDb(getBrowserStoreDb());
+    onCatalogUpdated();
+    showDeletionFeedback('Modelo excluído do catálogo com sucesso!');
     try {
       const res = await apiFetch(`/api/admin/products/${id}`, {
         method: 'DELETE',
@@ -1425,11 +1498,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         return;
       }
       if (res.ok) {
-        await fetchAdminData(token);
-        onCatalogUpdated();
+        await fetchAdminData(token, { silent: true });
       }
     } catch {
-      // Ignore
+      // Local state already updated
+    }
+  };
+
+  const handleRestoreDeletedProducts = async () => {
+    if (!token) return;
+    restoreDeletedProducts();
+    applyDashboardFromDb(getBrowserStoreDb());
+    onCatalogUpdated();
+    showDeletionFeedback('Todos os modelos excluídos foram restaurados ao catálogo!');
+    try {
+      await apiFetch('/api/admin/products/restore-deleted', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      await fetchAdminData(token, { silent: true });
+    } catch {
+      // Local state already updated
     }
   };
 
@@ -1651,6 +1740,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       </header>
 
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+        {deletedItemFeedback && (
+          <div className="p-4 rounded-xl bg-[#2E6B3E] text-white text-xs font-bold flex items-center justify-between gap-3 shadow-md">
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4 shrink-0" />
+              <span>{deletedItemFeedback}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setDeletedItemFeedback('')}
+              className="px-2.5 py-1 bg-white/20 hover:bg-white/30 rounded text-[11px] cursor-pointer"
+            >
+              Fechar
+            </button>
+          </div>
+        )}
+
         {/* CENTRAL DE PEDIDOS AGUARDANDO CONFIRMAÇÃO DA PETERSON SHOES */}
         <div
           className={`rounded-2xl p-6 border-2 shadow-sm transition-colors ${
@@ -1940,14 +2045,28 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   a sua autorização.
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={openNewProductForm}
-                className="px-4 py-2.5 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-semibold flex items-center gap-2 cursor-pointer shrink-0"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Adicionar Novo Modelo</span>
-              </button>
+              <div className="flex flex-wrap items-center gap-2 shrink-0">
+                {getDeletedProductIds().size > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleRestoreDeletedProducts}
+                    className="px-3.5 py-2.5 bg-[#EFE7DA] hover:bg-[#E2D4C0] text-[#5B1824] border border-[#DFD3C3] rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    <span>
+                      Restaurar Modelos Excluídos ({getDeletedProductIds().size})
+                    </span>
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={openNewProductForm}
+                  className="px-4 py-2.5 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-semibold flex items-center gap-2 cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Adicionar Novo Modelo</span>
+                </button>
+              </div>
             </div>
 
             {/* PAINEL DE SUGESTÕES DE PADRONIZAÇÃO PSICOLÓGICA (,90) PARA APROVAÇÃO DA PROPRIETÁRIA */}
@@ -2477,21 +2596,35 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#EFE7DA]">
-                  <button
-                    type="button"
-                    onClick={() => setEditingProduct(null)}
-                    className="px-4 py-2 bg-[#EFE7DA] text-[#231619] rounded-lg text-xs font-medium cursor-pointer"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={savingProduct}
-                    className="px-5 py-2 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-semibold cursor-pointer"
-                  >
-                    {savingProduct ? 'Salvando no Banco...' : 'Salvar Produto na Loja'}
-                  </button>
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#EFE7DA]">
+                  <div>
+                    {editingProduct.id && (
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteProduct(editingProduct.id!)}
+                        className="px-4 py-2 bg-[#7A2434]/10 hover:bg-[#7A2434] text-[#7A2434] hover:text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Excluir Este Modelo</span>
+                      </button>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setEditingProduct(null)}
+                      className="px-4 py-2 bg-[#EFE7DA] text-[#231619] rounded-lg text-xs font-medium cursor-pointer"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={savingProduct}
+                      className="px-5 py-2 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-semibold cursor-pointer"
+                    >
+                      {savingProduct ? 'Salvando no Banco...' : 'Salvar Produto na Loja'}
+                    </button>
+                  </div>
                 </div>
               </form>
             )}
@@ -2900,23 +3033,50 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       </div>
                     </div>
 
-                    <div className="p-4 pt-3 border-t border-[#EFE7DA] flex items-center justify-between gap-2">
-                      <button
-                        type="button"
-                        onClick={() => openEditProductForm(prod)}
-                        className="flex-1 py-2 px-3 bg-[#EFE7DA] hover:bg-[#E2D4C0] text-[#231619] rounded-lg text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer"
-                      >
-                        <Edit3 className="w-3.5 h-3.5" />
-                        <span>Editar Detalhes / Fotos</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteProduct(prod.id)}
-                        className="py-2 px-3 bg-white hover:bg-[#7A2434]/10 text-[#7A2434] border border-[#DFD3C3] rounded-lg text-xs font-medium flex items-center justify-center gap-1 cursor-pointer"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                        <span>Excluir</span>
-                      </button>
+                    <div className="p-4 pt-3 border-t border-[#EFE7DA] flex flex-wrap items-center justify-between gap-2">
+                      {confirmDeleteProductId === prod.id ? (
+                        <div className="w-full flex items-center justify-between gap-2 bg-[#7A2434]/10 border border-[#7A2434]/40 p-2 rounded-lg">
+                          <span className="text-[11px] font-bold text-[#7A2434]">
+                            Excluir este modelo da loja?
+                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteProduct(prod.id)}
+                              className="py-1.5 px-3 bg-[#7A2434] hover:bg-[#5B1824] text-white rounded-md text-xs font-bold flex items-center gap-1 cursor-pointer"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              <span>Confirmar Exclusão</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setConfirmDeleteProductId(null)}
+                              className="py-1.5 px-2.5 bg-white hover:bg-[#EFE7DA] text-[#231619] border border-[#DFD3C3] rounded-md text-xs font-medium cursor-pointer"
+                            >
+                              Cancelar
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => openEditProductForm(prod)}
+                            className="flex-1 py-2 px-3 bg-[#EFE7DA] hover:bg-[#E2D4C0] text-[#231619] rounded-lg text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                            <span>Editar Detalhes / Fotos</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setConfirmDeleteProductId(prod.id)}
+                            className="py-2 px-3 bg-[#7A2434]/10 hover:bg-[#7A2434] text-[#7A2434] hover:text-white border border-[#7A2434]/30 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 cursor-pointer transition-colors"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            <span>Excluir Modelo</span>
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
                 );
@@ -3035,7 +3195,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         Entrada 50%: {formatBRL(order.depositAmount)} · Final 50%:{' '}
                         {formatBRL(order.remainingAmount)}
                       </p>
-                      <div className="flex items-center justify-end gap-1.5 pt-1">
+                      <div className="flex flex-wrap items-center justify-end gap-1.5 pt-1">
                         <span className="text-[11px] font-sans font-semibold text-[#6E5A5F]">
                           Editar Total (R$):
                         </span>
@@ -3061,6 +3221,33 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         >
                           {savedOrderValueId === order.id ? 'Salvo ✓' : 'Salvar Valor'}
                         </button>
+                        {confirmDeleteOrderId === order.id ? (
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteOrder(order.id)}
+                              className="px-2.5 py-1 bg-[#7A2434] hover:bg-[#5B1824] text-white rounded text-[11px] font-sans font-bold cursor-pointer"
+                            >
+                              Confirmar Exclusão
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setConfirmDeleteOrderId(null)}
+                              className="px-2 py-1 bg-[#EFE7DA] text-[#231619] rounded text-[11px] font-sans font-medium cursor-pointer"
+                            >
+                              Cancelar
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => setConfirmDeleteOrderId(order.id)}
+                            className="px-2.5 py-1 bg-[#7A2434]/10 hover:bg-[#7A2434] text-[#7A2434] hover:text-white rounded text-[11px] font-sans font-semibold flex items-center gap-1 cursor-pointer transition-colors"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                            <span>Excluir Pedido</span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -3303,7 +3490,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         </span>
                       </td>
                       <td className="py-3 px-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex flex-wrap items-center justify-end gap-2">
                           {pay.status !== 'APROVADO' && (
                             <button
                               type="button"
@@ -3331,6 +3518,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             className="text-xs font-medium text-[#5B1824] hover:underline cursor-pointer"
                           >
                             {copiedTextId === pay.id ? 'Chave Copiada!' : 'Copiar Chave CNPJ'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteOrder(pay.orderId)}
+                            className="px-2.5 py-1.5 bg-[#7A2434]/10 hover:bg-[#7A2434] text-[#7A2434] hover:text-white rounded-lg text-[11px] font-semibold flex items-center gap-1 cursor-pointer transition-colors"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                            <span>Excluir</span>
                           </button>
                         </div>
                       </td>
@@ -3364,6 +3559,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <th className="py-3 px-4 font-semibold">Cidade / Endereço</th>
                     <th className="py-3 px-4 font-semibold">Encomendas</th>
                     <th className="py-3 px-4 font-semibold text-right">Total Comprado</th>
+                    <th className="py-3 px-4 font-semibold text-right">Ações</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#EFE7DA]">
@@ -3400,6 +3596,35 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       </td>
                       <td className="py-3 px-4 text-right font-mono-tabular font-bold text-[#5B1824]">
                         {formatBRL(c.totalSpent)}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        {confirmDeleteCustomerId === c.id ? (
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteCustomer(c.id)}
+                              className="px-2.5 py-1 bg-[#7A2434] hover:bg-[#5B1824] text-white rounded text-[11px] font-bold cursor-pointer"
+                            >
+                              Confirmar
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setConfirmDeleteCustomerId(null)}
+                              className="px-2 py-1 bg-[#EFE7DA] text-[#231619] rounded text-[11px] font-medium cursor-pointer"
+                            >
+                              Cancelar
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => setConfirmDeleteCustomerId(c.id)}
+                            className="px-2.5 py-1.5 bg-[#7A2434]/10 hover:bg-[#7A2434] text-[#7A2434] hover:text-white rounded-lg text-[11px] font-semibold inline-flex items-center gap-1 cursor-pointer transition-colors"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                            <span>Excluir</span>
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}
