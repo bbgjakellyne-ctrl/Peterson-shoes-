@@ -43,8 +43,15 @@ import {
   buildStandardColors,
   deleteBrowserOrderAdmin,
   getBrowserStoreDb,
+  getProductOverrides,
+  importBrowserOrderFromWhatsAppSync,
+  INITIAL_PRODUCTS,
+  resolveProductStyleCategory,
+  sanitizeProductCatalog,
   saveBrowserStoreDb,
+  saveProductOverride,
   STANDARD_SIZES,
+  STYLE_CATEGORIES,
   updateBrowserOrderAdmin,
 } from '../data/storeData';
 import {
@@ -53,6 +60,8 @@ import {
   isHomologacao,
   switchEnvironment,
 } from '../utils/environment';
+
+const CATEGORIES = ['Todos', ...STYLE_CATEGORIES.map((c) => c.id)];
 
 interface AdminDashboardProps {
   onCloseAdmin: () => void;
@@ -439,11 +448,21 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [savingPriceId, setSavingPriceId] = useState<string | null>(null);
   const [savedPriceId, setSavedPriceId] = useState<string | null>(null);
   const [approvingTierKey, setApprovingTierKey] = useState<string | null>(null);
+  const [adminCategoryFilter, setAdminCategoryFilter] = useState<string>('Todos');
+  const [adminSearchQuery, setAdminSearchQuery] = useState<string>('');
+  const [bulkManualPriceInput, setBulkManualPriceInput] = useState<string>('');
+  const [savingBulkPrice, setSavingBulkPrice] = useState<boolean>(false);
+  const [bulkPriceSavedMsg, setBulkPriceSavedMsg] = useState<string>('');
+
+  // Manual order value editing state per order ID
+  const [orderTotalDrafts, setOrderTotalDrafts] = useState<Record<string, string>>({});
+  const [savedOrderValueId, setSavedOrderValueId] = useState<string | null>(null);
 
   // Product Form Modal / Drawer State
   const [editingProduct, setEditingProduct] = useState<Partial<BespokeProduct> | null>(
     null
   );
+  const [modalPriceInput, setModalPriceInput] = useState<string>('149.90');
   const [colorInputText, setColorInputText] = useState(
     'Preto:#1B191A, Branco:#F7F7F5, Marsala:#631421, Nude:#DFC1B4, Dourado:#D4AF37, Prata:#C4C9CE, Vermelho:#B31B2C, Rosa:#E07A9B, Outra Cor:#8E7970'
   );
@@ -540,6 +559,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       if (dashRes.ok) {
         const data = await dashRes.json();
         if (data?.products && Array.isArray(data.products)) {
+          if (typeof window !== 'undefined' && window.location.search.includes('importar_pedido=')) {
+            importBrowserOrderFromWhatsAppSync(window.location.search);
+          }
           const localDb = getBrowserStoreDb();
           const serverOrders = Array.isArray(data.orders) ? data.orders : [];
           const serverCustomers = Array.isArray(data.customers) ? data.customers : [];
@@ -580,8 +602,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           }
           const mergedPayments = Array.from(mergedPaymentsMap.values());
 
+          // Ensure all 69 models (without Botas) and normalized style categories are preserved
+          const mergedProducts = sanitizeProductCatalog(data.products || []);
+
           const updatedDb = {
-            products: data.products,
+            products: mergedProducts,
             customers: mergedCustomers,
             orders: mergedOrders,
             payments: mergedPayments,
@@ -599,7 +624,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           }
           applyDashboardFromDb(updatedDb, { preserveDrafts: Boolean(options?.silent) });
 
-          if (mergedOrders.length > serverOrders.length) {
+          const localOverrides = getProductOverrides();
+          if (mergedOrders.length > serverOrders.length || Object.keys(localOverrides).length > 0) {
             apiFetch('/api/admin/sync-orders', {
               method: 'POST',
               headers: {
@@ -610,6 +636,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 orders: mergedOrders,
                 customers: mergedCustomers,
                 payments: mergedPayments,
+                productOverrides: localOverrides,
               }),
             }).catch(() => {});
           }
@@ -856,7 +883,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     const rawVal =
       overrideSalePrice !== undefined
         ? String(overrideSalePrice)
-        : (priceDrafts[productId] || '').replace(',', '.');
+        : String(priceDrafts[productId] || '')
+            .replace(/R\$/gi, '')
+            .trim()
+            .replace(',', '.');
     const numericPrice = parseFloat(rawVal);
     if (isNaN(numericPrice) || numericPrice <= 0) return;
 
@@ -870,6 +900,57 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
     setSavingPriceId(productId);
     try {
+      // 1. Save immediately in browser override + localStorage so it never reverts
+      const localDb = getBrowserStoreDb();
+      const updatedProducts = localDb.products.map((p) => {
+        if (p.id !== productId) return p;
+        const nextCost = hasCostInput ? mCost : p.manufacturingCost ?? 0;
+        const nextExp = hasCostInput ? aExp : p.additionalExpenses ?? 0;
+        const calc = calculateProductFinancials(roundedPrice, nextCost, nextExp);
+        const updatedItem: BespokeProduct = {
+          ...p,
+          price: roundedPrice,
+          manufacturingCost: hasCostInput ? mCost : p.manufacturingCost,
+          additionalExpenses: hasCostInput ? aExp : p.additionalExpenses,
+          grossProfit: nextCost > 0 || nextExp > 0 ? calc.grossProfit : p.grossProfit,
+          profitMarginPercent:
+            nextCost > 0 || nextExp > 0
+              ? calc.profitMarginPercent
+              : p.profitMarginPercent,
+        };
+        saveProductOverride(productId, {
+          price: updatedItem.price,
+          manufacturingCost: updatedItem.manufacturingCost,
+          additionalExpenses: updatedItem.additionalExpenses,
+          grossProfit: updatedItem.grossProfit,
+          profitMarginPercent: updatedItem.profitMarginPercent,
+        });
+        return updatedItem;
+      });
+
+      saveBrowserStoreDb({ ...localDb, products: updatedProducts });
+      setProducts(updatedProducts);
+      setPriceDrafts((prev) => ({
+        ...prev,
+        [productId]: roundedPrice.toFixed(2),
+      }));
+      if (hasCostInput || mCost > 0 || aExp > 0) {
+        setProfitDrafts((prev) => ({
+          ...prev,
+          [productId]: fin.grossProfit.toFixed(2),
+        }));
+        setMarginDrafts((prev) => ({
+          ...prev,
+          [productId]: fin.profitMarginPercent.toFixed(2),
+        }));
+      }
+      setSavedPriceId(productId);
+      onCatalogUpdated();
+      setTimeout(() => {
+        setSavedPriceId((curr) => (curr === productId ? null : curr));
+      }, 2500);
+
+      // 2. Persist on server
       const payloadBody: Record<string, number> = { price: roundedPrice };
       if (hasCostInput) {
         payloadBody.manufacturingCost = mCost;
@@ -889,50 +970,84 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         setToken(null);
         return;
       }
-
-      if (res.ok) {
-        const localDb = getBrowserStoreDb();
-        const updatedProducts = localDb.products.map((p) => {
-          if (p.id !== productId) return p;
-          const nextCost = hasCostInput ? mCost : p.manufacturingCost ?? 0;
-          const nextExp = hasCostInput ? aExp : p.additionalExpenses ?? 0;
-          const calc = calculateProductFinancials(roundedPrice, nextCost, nextExp);
-          return {
-            ...p,
-            price: roundedPrice,
-            manufacturingCost: hasCostInput ? mCost : p.manufacturingCost,
-            additionalExpenses: hasCostInput ? aExp : p.additionalExpenses,
-            grossProfit: nextCost > 0 || nextExp > 0 ? calc.grossProfit : p.grossProfit,
-            profitMarginPercent:
-              nextCost > 0 || nextExp > 0
-                ? calc.profitMarginPercent
-                : p.profitMarginPercent,
-          };
-        });
-        saveBrowserStoreDb({ ...localDb, products: updatedProducts });
-        setProducts(updatedProducts);
-        setPriceDrafts((prev) => ({
-          ...prev,
-          [productId]: roundedPrice.toFixed(2),
-        }));
-        if (hasCostInput || mCost > 0 || aExp > 0) {
-          setProfitDrafts((prev) => ({
-            ...prev,
-            [productId]: fin.grossProfit.toFixed(2),
-          }));
-          setMarginDrafts((prev) => ({
-            ...prev,
-            [productId]: fin.profitMarginPercent.toFixed(2),
-          }));
-        }
-        setSavedPriceId(productId);
-        onCatalogUpdated();
-        setTimeout(() => {
-          setSavedPriceId((curr) => (curr === productId ? null : curr));
-        }, 2500);
-      }
     } finally {
       setSavingPriceId(null);
+    }
+  };
+
+  // Manual bulk price update for currently filtered category or all models
+  const handleBulkSetManualPrice = async () => {
+    if (!token) return;
+    const cleaned = bulkManualPriceInput.replace(/R\$/gi, '').trim().replace(',', '.');
+    const numericPrice = parseFloat(cleaned);
+    if (isNaN(numericPrice) || numericPrice <= 0) return;
+    const roundedPrice = Math.round(numericPrice * 100) / 100;
+
+    const targetProducts = products.filter((prod) => {
+      const prodStyle = resolveProductStyleCategory(prod);
+      const matchCat =
+        adminCategoryFilter === 'Todos' ||
+        prodStyle === adminCategoryFilter ||
+        prod.category === adminCategoryFilter;
+      const matchSearch =
+        !adminSearchQuery.trim() ||
+        prod.name.toLowerCase().includes(adminSearchQuery.toLowerCase()) ||
+        prod.sku.toLowerCase().includes(adminSearchQuery.toLowerCase());
+      return matchCat && matchSearch;
+    });
+
+    if (targetProducts.length === 0) return;
+    const targetIds = new Set(targetProducts.map((p) => p.id));
+
+    setSavingBulkPrice(true);
+    setBulkPriceSavedMsg('');
+    try {
+      const localDb = getBrowserStoreDb();
+      const nextDrafts: Record<string, string> = { ...priceDrafts };
+      const updatedProducts = localDb.products.map((p) => {
+        if (!targetIds.has(p.id)) return p;
+        const mCost = p.manufacturingCost ?? 0;
+        const aExp = p.additionalExpenses ?? 0;
+        const calc = calculateProductFinancials(roundedPrice, mCost, aExp);
+        nextDrafts[p.id] = roundedPrice.toFixed(2);
+        saveProductOverride(p.id, {
+          price: roundedPrice,
+          grossProfit: mCost > 0 || aExp > 0 ? calc.grossProfit : p.grossProfit,
+          profitMarginPercent:
+            mCost > 0 || aExp > 0 ? calc.profitMarginPercent : p.profitMarginPercent,
+        });
+        return {
+          ...p,
+          price: roundedPrice,
+          grossProfit: mCost > 0 || aExp > 0 ? calc.grossProfit : p.grossProfit,
+          profitMarginPercent:
+            mCost > 0 || aExp > 0 ? calc.profitMarginPercent : p.profitMarginPercent,
+        };
+      });
+
+      saveBrowserStoreDb({ ...localDb, products: updatedProducts });
+      setProducts(updatedProducts);
+      setPriceDrafts(nextDrafts);
+      onCatalogUpdated();
+
+      await apiFetch('/api/admin/sync-orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          productOverrides: getProductOverrides(),
+        }),
+      }).catch(() => {});
+
+      setBulkPriceSavedMsg(
+        `Preço ${formatBRL(roundedPrice)} aplicado em ${targetProducts.length} modelo(s) com sucesso!`
+      );
+      setBulkManualPriceInput('');
+      setTimeout(() => setBulkPriceSavedMsg(''), 4000);
+    } finally {
+      setSavingBulkPrice(false);
     }
   };
 
@@ -948,6 +1063,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setApprovingTierKey(tierKey);
     try {
       for (const prod of matchingProducts) {
+        saveProductOverride(prod.id, { price: toPrice });
         await apiFetch(`/api/admin/products/${prod.id}/price`, {
           method: 'PATCH',
           headers: {
@@ -987,12 +1103,21 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       paymentStatus?: PaymentStatus;
       factoryNotes?: string;
       trackingCode?: string;
+      totalAmount?: number;
+      depositAmount?: number;
+      remainingAmount?: number;
     }
   ) => {
     if (!token) return;
     const targetOrder = orders.find((o) => o.id === orderId);
     updateBrowserOrderAdmin(orderId, updates);
     applyDashboardFromDb(getBrowserStoreDb());
+    if (updates.totalAmount !== undefined) {
+      setSavedOrderValueId(orderId);
+      setTimeout(() => {
+        setSavedOrderValueId((curr) => (curr === orderId ? null : curr));
+      }, 2500);
+    }
     try {
       const res = await apiFetch(`/api/admin/orders/${orderId}`, {
         method: 'PATCH',
@@ -1017,6 +1142,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   };
 
+  const handleSaveManualOrderTotal = (order: BespokeOrder) => {
+    const raw = (orderTotalDrafts[order.id] ?? String(order.totalAmount))
+      .replace(/R\$/gi, '')
+      .trim()
+      .replace(',', '.');
+    const parsedTotal = parseFloat(raw);
+    if (isNaN(parsedTotal) || parsedTotal <= 0) return;
+    const nextTotal = Math.round(parsedTotal * 100) / 100;
+    const nextDeposit = Math.round(nextTotal * 0.5 * 100) / 100;
+    const nextRemaining = Math.round((nextTotal - nextDeposit) * 100) / 100;
+    handleUpdateOrder(order.id, {
+      totalAmount: nextTotal,
+      depositAmount: nextDeposit,
+      remainingAmount: nextRemaining,
+    });
+  };
+
   const handleDeleteOrder = async (orderId: string) => {
     if (!token) return;
     deleteBrowserOrderAdmin(orderId);
@@ -1038,8 +1180,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       name: '',
       sku: `PTS-IG-${Math.floor(16 + Math.random() * 80)}`,
       subtitle: 'Modelo Oficial @petersonshoes_ Feito Sob Encomenda',
-      category: 'Flatforms & Papetes',
-      price: 229.9,
+      category: 'Plataforma',
+      price: 149.9,
       image: IMAGE_PRESETS[0].url,
       productionDays: 15,
       featured: true,
@@ -1051,6 +1193,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         'Pagamento 50% na encomenda e 50% quando ficar pronta',
       ],
     });
+    setModalPriceInput('149,90');
     setColorInputText(
       'Preto:#1B191A, Branco:#F7F7F5, Marsala:#631421, Nude:#DFC1B4, Dourado:#D4AF37, Prata:#C4C9CE, Vermelho:#B31B2C, Rosa:#E07A9B, Outra Cor:#8E7970'
     );
@@ -1092,7 +1235,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   const openEditProductForm = (prod: BespokeProduct) => {
-    setEditingProduct({ ...prod });
+    setEditingProduct({ ...prod, category: resolveProductStyleCategory(prod) });
+    setModalPriceInput(prod.price.toFixed(2).replace('.', ','));
     setColorInputText(prod.colors.map((c) => `${c.name}:${c.hex}`).join(', '));
     setHeelInputText(prod.heelOptions.join(', '));
     setStrapInputText(prod.strapFinishes.join(', '));
@@ -1139,7 +1283,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     const defaultImg =
       editingProduct.image || '/instagram/feed_1_C454LXbOzrn_slide_1.jpg';
 
-    const numericPrice = Number(editingProduct.price || 149.9);
+    const parsedModalPrice = parseFloat(
+      String(modalPriceInput || editingProduct.price || 149.9)
+        .replace(/R\$/gi, '')
+        .trim()
+        .replace(',', '.')
+    );
+    const numericPrice =
+      !isNaN(parsedModalPrice) && parsedModalPrice > 0
+        ? Math.round(parsedModalPrice * 100) / 100
+        : Number(editingProduct.price || 149.9);
     const numericMfgCost = Number(editingProduct.manufacturingCost || 0);
     const numericAddExp = Number(editingProduct.additionalExpenses || 0);
     const prodFinancials = calculateProductFinancials(
@@ -1155,7 +1308,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       name: editingProduct.name || 'Sandália Peterson Shoes',
       subtitle:
         editingProduct.subtitle || 'Sandália Feminina Feita Sob Encomenda',
-      category: editingProduct.category || 'Flatforms & Papetes',
+      category: editingProduct.category || 'Plataforma',
       price: numericPrice,
       manufacturingCost:
         numericMfgCost > 0 ? numericMfgCost : existingProd?.manufacturingCost,
@@ -1212,7 +1365,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     };
 
     try {
+      saveProductOverride(payload.id, {
+        price: payload.price,
+        name: payload.name,
+        subtitle: payload.subtitle,
+        category: payload.category,
+        manufacturingCost: payload.manufacturingCost,
+        additionalExpenses: payload.additionalExpenses,
+        grossProfit: payload.grossProfit,
+        profitMarginPercent: payload.profitMarginPercent,
+      });
+
+      const localDb = getBrowserStoreDb();
       const isExisting = Boolean(editingProduct.id);
+      const nextProducts = isExisting
+        ? localDb.products.map((p) => (p.id === payload.id ? payload : p))
+        : [payload, ...localDb.products];
+      saveBrowserStoreDb({ ...localDb, products: nextProducts });
+      applyDashboardFromDb({ ...localDb, products: nextProducts });
+
       const url = isExisting
         ? `/api/admin/products/${editingProduct.id}`
         : '/api/admin/products';
@@ -1234,9 +1405,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       if (res.ok) {
         await fetchAdminData(token);
-        setEditingProduct(null);
-        onCatalogUpdated();
       }
+      setEditingProduct(null);
+      onCatalogUpdated();
     } finally {
       setSavingProduct(false);
     }
@@ -1511,7 +1682,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 Pedidos Aguardando Confirmação da Peterson Shoes
               </h2>
               <p className="text-xs text-[#6E5A5F]">
-                Quando uma cliente finaliza uma compra no site, o pedido aparece instantaneamente aqui embaixo para você conferir o Pix/Cartão no seu Banco Inter e aprovar em 1 clique.
+                Quando a cliente confirma o Pix no site, o pedido vai <strong>na mesma hora para o seu WhatsApp (62 98499-8265)</strong> com todas as informações e um <strong>Link Admin</strong> no final da mensagem. Ao tocar no Link Admin recebido no WhatsApp, o pedido aparece automaticamente aqui abaixo para você aprovar em 1 clique!
               </p>
             </div>
             <button
@@ -1900,6 +2071,90 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               );
             })()}
 
+            {/* FILTRO POR ESTILO, BUSCA RÁPIDA & EDIÇÃO MANUAL EM LOTE */}
+            <div className="p-5 bg-white border-2 border-[#5B1824]/25 rounded-xl space-y-4 shadow-xs">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B1824]">
+                    ✏️ Edição Manual de Valores (Individual ou por Categoria)
+                  </span>
+                  <h3 className="text-base font-bold text-[#231619]">
+                    Filtre por Estilo, Busque pelo Nome/SKU ou Defina um Valor Manual
+                  </h3>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="relative">
+                    <span className="text-xs font-semibold text-[#6E5A5F] absolute left-3 top-1/2 -translate-y-1/2">
+                      R$
+                    </span>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      placeholder="Ex: 149,90"
+                      value={bulkManualPriceInput}
+                      onChange={(e) => setBulkManualPriceInput(e.target.value)}
+                      className="w-36 pl-8 pr-3 py-2 bg-[#F7F3EC] border border-[#DFD3C3] focus:border-[#5B1824] rounded-lg text-xs font-mono-tabular font-bold text-[#231619] focus:outline-none"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    disabled={savingBulkPrice || !bulkManualPriceInput.trim()}
+                    onClick={handleBulkSetManualPrice}
+                    className="px-3.5 py-2 bg-[#5B1824] hover:bg-[#46111B] disabled:opacity-50 text-[#F7F3EC] rounded-lg text-xs font-semibold cursor-pointer transition-colors"
+                  >
+                    {savingBulkPrice
+                      ? 'Aplicando...'
+                      : `Aplicar Valor em "${adminCategoryFilter}"`}
+                  </button>
+                </div>
+              </div>
+
+              {bulkPriceSavedMsg && (
+                <div className="p-2.5 rounded-lg bg-[#2E6B3E]/10 border border-[#2E6B3E]/30 text-xs font-semibold text-[#2E6B3E] flex items-center gap-2">
+                  <Check className="w-4 h-4 shrink-0" />
+                  <span>{bulkPriceSavedMsg}</span>
+                </div>
+              )}
+
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#EFE7DA]">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {CATEGORIES.map((cat) => {
+                    const count =
+                      cat === 'Todos'
+                        ? products.length
+                        : products.filter(
+                            (p) =>
+                              resolveProductStyleCategory(p) === cat ||
+                              p.category === cat
+                          ).length;
+                    const active = adminCategoryFilter === cat;
+                    return (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => setAdminCategoryFilter(cat)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-colors ${
+                          active
+                            ? 'bg-[#5B1824] text-[#F7F3EC]'
+                            : 'bg-[#F7F3EC] text-[#4A373B] hover:bg-[#EFE7DA]'
+                        }`}
+                      >
+                        {cat} ({count})
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <input
+                  type="text"
+                  placeholder="Buscar modelo por nome ou código (ex: PTS-LKS)..."
+                  value={adminSearchQuery}
+                  onChange={(e) => setAdminSearchQuery(e.target.value)}
+                  className="w-full sm:w-72 px-3.5 py-2 bg-[#F7F3EC] border border-[#DFD3C3] focus:border-[#5B1824] rounded-lg text-xs text-[#231619] focus:outline-none"
+                />
+              </div>
+            </div>
+
             {/* Full Product Editor Modal/Form (Optional when editing full details) */}
             {editingProduct && (
               <form
@@ -1952,10 +2207,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-[#231619] mb-1">
-                      Categoria *
+                      Estilo / Categoria *
                     </label>
                     <select
-                      value={editingProduct.category || 'Flatforms & Papetes'}
+                      value={editingProduct.category || 'Plataforma'}
                       onChange={(e) =>
                         setEditingProduct({
                           ...editingProduct,
@@ -1964,18 +2219,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       }
                       className="w-full px-3 py-2 bg-[#F7F3EC] border border-[#DFD3C3] rounded-lg text-xs"
                     >
-                      <option value="Scarpins & Saltos">Scarpins & Saltos</option>
-                      <option value="Flatforms & Papetes">Flatforms & Papetes</option>
-                      <option value="Anabelas & Plataformas">Anabelas & Plataformas</option>
-                      <option value="Rasteiras & Gladiadoras">Rasteiras & Gladiadoras</option>
-                      <option value="Tamancos & Saltos">Tamancos & Saltos</option>
+                      <option value="Plataforma">Plataforma</option>
+                      <option value="Sandália de Salto">Sandália de Salto</option>
+                      <option value="Rasteiras">Rasteiras</option>
+                      <option value="Papetes">Papetes</option>
+                      <option value="Chinelos">Chinelos</option>
+                      <option value="Scarpin">Scarpin</option>
+                      <option value="Tênis Casual">Tênis Casual</option>
                     </select>
                   </div>
                 </div>
 
                 {/* Bloco de Custos, Preço de Venda, Lucro Bruto e Margem no Modal */}
                 {(() => {
-                  const modalPrice = Number(editingProduct.price ?? 149.9);
+                  const parsedModalP = parseFloat(
+                    String(modalPriceInput || editingProduct.price || 149.9)
+                      .replace(',', '.')
+                  );
+                  const modalPrice =
+                    !isNaN(parsedModalP) && parsedModalP > 0
+                      ? parsedModalP
+                      : Number(editingProduct.price ?? 149.9);
                   const modalCost = Number(editingProduct.manufacturingCost ?? 0);
                   const modalExp = Number(editingProduct.additionalExpenses ?? 0);
                   const modalFin = calculateProductFinancials(
@@ -1990,20 +2254,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           Custo de Fabricação (R$)
                         </label>
                         <input
-                          type="number"
-                          step="0.01"
-                          min="0"
-                          placeholder="Ex: 55.00"
+                          type="text"
+                          inputMode="decimal"
+                          placeholder="Ex: 55,00"
                           value={editingProduct.manufacturingCost ?? ''}
-                          onChange={(e) =>
+                          onChange={(e) => {
+                            const val = e.target.value.replace(',', '.');
                             setEditingProduct({
                               ...editingProduct,
                               manufacturingCost:
-                                e.target.value === ''
-                                  ? undefined
-                                  : parseFloat(e.target.value),
-                            })
-                          }
+                                val === '' ? undefined : parseFloat(val),
+                            });
+                          }}
                           className="w-full px-3 py-2 bg-white border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular"
                         />
                       </div>
@@ -2012,20 +2274,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           Despesas Adicionais (R$)
                         </label>
                         <input
-                          type="number"
-                          step="0.01"
-                          min="0"
+                          type="text"
+                          inputMode="decimal"
                           placeholder="Embalagem, etc."
                           value={editingProduct.additionalExpenses ?? ''}
-                          onChange={(e) =>
+                          onChange={(e) => {
+                            const val = e.target.value.replace(',', '.');
                             setEditingProduct({
                               ...editingProduct,
                               additionalExpenses:
-                                e.target.value === ''
-                                  ? undefined
-                                  : parseFloat(e.target.value),
-                            })
-                          }
+                                val === '' ? undefined : parseFloat(val),
+                            });
+                          }}
                           className="w-full px-3 py-2 bg-white border border-[#DFD3C3] rounded-lg text-xs font-mono-tabular"
                         />
                       </div>
@@ -2034,16 +2294,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           Preço de Venda (R$) *
                         </label>
                         <input
-                          type="number"
-                          step="0.01"
+                          type="text"
+                          inputMode="decimal"
                           required
-                          value={editingProduct.price ?? 149.9}
-                          onChange={(e) =>
-                            setEditingProduct({
-                              ...editingProduct,
-                              price: parseFloat(e.target.value),
-                            })
-                          }
+                          placeholder="Ex: 149,90"
+                          value={modalPriceInput}
+                          onChange={(e) => {
+                            setModalPriceInput(e.target.value);
+                            const parsed = parseFloat(
+                              e.target.value.replace(',', '.')
+                            );
+                            if (!isNaN(parsed) && parsed > 0) {
+                              setEditingProduct({
+                                ...editingProduct,
+                                price: parsed,
+                              });
+                            }
+                          }}
                           className="w-full px-3 py-2 bg-white border-2 border-[#5B1824] rounded-lg text-xs font-mono-tabular font-bold"
                         />
                       </div>
@@ -2231,7 +2498,24 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
             {/* Products Grid with Cost, Expenses, Sale Price, Profit, Margin & Psychological .90 Suggestions */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {products.map((prod) => {
+              {products
+                .filter((prod) => {
+                  const prodStyle = resolveProductStyleCategory(prod);
+                  const matchCat =
+                    adminCategoryFilter === 'Todos' ||
+                    prodStyle === adminCategoryFilter ||
+                    prod.category === adminCategoryFilter;
+                  const matchSearch =
+                    !adminSearchQuery.trim() ||
+                    prod.name
+                      .toLowerCase()
+                      .includes(adminSearchQuery.toLowerCase()) ||
+                    prod.sku
+                      .toLowerCase()
+                      .includes(adminSearchQuery.toLowerCase());
+                  return matchCat && matchSearch;
+                })
+                .map((prod) => {
                 const draftVal = priceDrafts[prod.id] ?? prod.price.toFixed(2);
                 const costVal = costDrafts[prod.id] ?? '';
                 const expVal = expenseDrafts[prod.id] ?? '';
@@ -2518,7 +2802,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                               htmlFor={`price-input-${prod.id}`}
                               className="block text-[11px] font-bold text-[#5B1824] mb-1"
                             >
-                              Preço de Venda no Site (R$):
+                              ✏️ Preço de Venda Manual no Site (R$):
                             </label>
                             <div className="flex items-center gap-2">
                               <div className="relative flex-1">
@@ -2527,8 +2811,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                 </span>
                                 <input
                                   id={`price-input-${prod.id}`}
-                                  type="number"
-                                  step="0.10"
+                                  type="text"
+                                  inputMode="decimal"
+                                  placeholder="Ex: 149,90"
                                   value={draftVal}
                                   onChange={(e) =>
                                     handleFinancialFieldChange(
@@ -2543,7 +2828,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                       handleQuickSavePrice(prod.id);
                                     }
                                   }}
-                                  className="w-full pl-8 pr-3 py-2 bg-white border border-[#DFD3C3] focus:border-[#5B1824] rounded-lg text-sm font-mono-tabular font-bold text-[#231619] focus:outline-none"
+                                  className="w-full pl-8 pr-3 py-2 bg-white border-2 border-[#5B1824]/40 focus:border-[#5B1824] rounded-lg text-sm font-mono-tabular font-bold text-[#231619] focus:outline-none"
                                 />
                               </div>
 
@@ -2553,7 +2838,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                 onClick={() => handleQuickSavePrice(prod.id)}
                                 className="px-3.5 py-2 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-semibold cursor-pointer whitespace-nowrap shrink-0 transition-colors"
                               >
-                                {savingPriceId === prod.id ? 'Salvando...' : 'Salvar Dados'}
+                                {savingPriceId === prod.id ? 'Salvando...' : 'Salvar Valor'}
                               </button>
                             </div>
                           </div>
@@ -2742,7 +3027,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       </p>
                     </div>
 
-                    <div className="text-right font-mono-tabular">
+                    <div className="text-right font-mono-tabular space-y-1.5">
                       <p className="text-sm font-bold text-[#231619]">
                         Total: {formatBRL(order.totalAmount)}
                       </p>
@@ -2750,6 +3035,33 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         Entrada 50%: {formatBRL(order.depositAmount)} · Final 50%:{' '}
                         {formatBRL(order.remainingAmount)}
                       </p>
+                      <div className="flex items-center justify-end gap-1.5 pt-1">
+                        <span className="text-[11px] font-sans font-semibold text-[#6E5A5F]">
+                          Editar Total (R$):
+                        </span>
+                        <input
+                          type="text"
+                          inputMode="decimal"
+                          value={
+                            orderTotalDrafts[order.id] ??
+                            order.totalAmount.toFixed(2).replace('.', ',')
+                          }
+                          onChange={(e) =>
+                            setOrderTotalDrafts((prev) => ({
+                              ...prev,
+                              [order.id]: e.target.value,
+                            }))
+                          }
+                          className="w-24 px-2 py-1 bg-[#F7F3EC] border border-[#DFD3C3] focus:border-[#5B1824] rounded text-xs font-mono-tabular font-bold text-[#231619] text-right focus:outline-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleSaveManualOrderTotal(order)}
+                          className="px-2.5 py-1 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded text-[11px] font-sans font-semibold cursor-pointer"
+                        >
+                          {savedOrderValueId === order.id ? 'Salvo ✓' : 'Salvar Valor'}
+                        </button>
+                      </div>
                     </div>
                   </div>
 

@@ -29,7 +29,11 @@ import {
   lookupCEP,
 } from '../utils/payment';
 import { QrCodeMatrix } from './QrCodeMatrix';
-import { buildCustomerOrderMessage, toWhatsAppHref } from '../utils/whatsapp';
+import {
+  buildCustomerOrderMessage,
+  openWhatsAppImmediate,
+  toWhatsAppHref,
+} from '../utils/whatsapp';
 import {
   confirmBrowserOrderPayment,
   createBrowserBespokeOrder,
@@ -247,48 +251,58 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
   const handleConfirmPixDeposit = async () => {
     if (!createdOrder) return;
     setConfirmingDeposit(true);
-    try {
-      const localUpdated = confirmBrowserOrderPayment(createdOrder.id, {
-        installmentType: 'ENTRADA_50',
-        method: 'PIX_MERCADO_PAGO',
-      });
-      if (localUpdated) {
-        setCreatedOrder(localUpdated);
-        const updatedDep = localUpdated.payments?.find(
-          (p: PaymentRecord) => p.installmentType === 'ENTRADA_50'
-        );
-        if (updatedDep) setDepositPayment(updatedDep);
-        onOrderCreated(localUpdated);
-      }
 
-      try {
-        const res = await apiFetch(
-          `/api/orders/${createdOrder.id}/notify-payment`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              installmentType: 'ENTRADA_50',
-              method: 'PIX_MERCADO_PAGO',
-              orderSnapshot: localUpdated || createdOrder,
-            }),
-          }
-        );
-        if (res.ok) {
-          const data = await res.json();
-          if (data?.order) {
-            setCreatedOrder(data.order);
-            const updatedDeposit = data.order.payments?.find(
-              (p: PaymentRecord) => p.installmentType === 'ENTRADA_50'
-            );
-            if (updatedDeposit) setDepositPayment(updatedDeposit);
-            onOrderCreated(data.order);
-          }
+    // 1. Registra sincronamente em Pedidos Aguardando Confirmação
+    const localUpdated = confirmBrowserOrderPayment(createdOrder.id, {
+      installmentType: 'ENTRADA_50',
+      method: 'PIX_MERCADO_PAGO',
+    });
+    const orderForWhatsapp = localUpdated || createdOrder;
+
+    if (localUpdated) {
+      setCreatedOrder(localUpdated);
+      const updatedDep = localUpdated.payments?.find(
+        (p: PaymentRecord) => p.installmentType === 'ENTRADA_50'
+      );
+      if (updatedDep) setDepositPayment(updatedDep);
+      onOrderCreated(localUpdated);
+    }
+
+    setPaymentNotified(true);
+
+    // 2. Abre IMEDIATAMENTE o WhatsApp da Peterson Shoes com todas as informações do pedido e do Pix
+    const whatsappMessage = buildCustomerOrderMessage(orderForWhatsapp, {
+      pixConfirmedByCustomer: true,
+    });
+    openWhatsAppImmediate(whatsappStore, whatsappMessage);
+
+    // 3. Sincroniza também com o servidor em segundo plano
+    try {
+      const res = await apiFetch(
+        `/api/orders/${createdOrder.id}/notify-payment`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            installmentType: 'ENTRADA_50',
+            method: 'PIX_MERCADO_PAGO',
+            orderSnapshot: orderForWhatsapp,
+          }),
         }
-      } catch {
-        // Local notification already recorded
+      );
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.order) {
+          setCreatedOrder(data.order);
+          const updatedDeposit = data.order.payments?.find(
+            (p: PaymentRecord) => p.installmentType === 'ENTRADA_50'
+          );
+          if (updatedDeposit) setDepositPayment(updatedDeposit);
+          onOrderCreated(data.order);
+        }
       }
-      setPaymentNotified(true);
+    } catch {
+      // Local notification already recorded
     } finally {
       setConfirmingDeposit(false);
     }
@@ -336,6 +350,15 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
         onOrderCreated(localUpdated);
       }
 
+      const orderForWhatsapp = localUpdated || createdOrder;
+      setPaymentNotified(true);
+
+      // Abre IMEDIATAMENTE o WhatsApp da Peterson Shoes com todas as informações do pedido
+      const whatsappMessage = buildCustomerOrderMessage(orderForWhatsapp, {
+        pixConfirmedByCustomer: true,
+      });
+      openWhatsAppImmediate(whatsappStore, whatsappMessage);
+
       try {
         const res = await apiFetch(
           `/api/orders/${createdOrder.id}/notify-payment`,
@@ -350,7 +373,7 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
               totalCharged: currentCardOption.totalWithFee,
               cardBrand: brand,
               cardLast4: last4,
-              orderSnapshot: localUpdated || createdOrder,
+              orderSnapshot: orderForWhatsapp,
             }),
           }
         );
@@ -368,7 +391,6 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
       } catch {
         // Local notification already applied
       }
-      setPaymentNotified(true);
     } finally {
       setConfirmingDeposit(false);
     }
@@ -979,26 +1001,44 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                       </div>
 
                       {paymentNotified ? (
-                        <div className="w-full p-3.5 rounded-xl bg-white border border-[#5B1824] text-left space-y-1.5 text-xs">
-                          <p className="font-bold text-[#5B1824]">
-                            ⏳ Pagamento informado — Aguardando confirmação da Peterson Shoes
+                        <div className="w-full p-3.5 rounded-xl bg-white border-2 border-[#2E6B3E] text-left space-y-2 text-xs">
+                          <p className="font-bold text-[#1E4A29]">
+                            ✅ Pedido Registrado & Enviado para o WhatsApp da Peterson Shoes!
                           </p>
                           <p className="text-[#3E2C30] leading-relaxed">
-                            Registramos o seu aviso! O seu pedido permanecerá com status{' '}
-                            <strong>Aguardando Confirmação</strong> e será confirmado assim que a{' '}
-                            <strong>Peterson Shoes verificar o recebimento de {formatBRL(createdOrder.depositAmount)} no Banco Inter</strong>. Envie também o comprovante no WhatsApp abaixo para agilizar a conferência.
+                            O seu pedido <strong>#{createdOrder.orderCode}</strong> já está em{' '}
+                            <strong>Pedidos Aguardando Confirmação</strong> e abrimos o WhatsApp oficial da{' '}
+                            <strong>Peterson Shoes</strong> com todas as informações do seu pedido para conferência do Pix de{' '}
+                            <strong>{formatBRL(createdOrder.depositAmount)}</strong> no Banco Inter.
                           </p>
+                          <a
+                            href={toWhatsAppHref(
+                              whatsappStore,
+                              buildCustomerOrderMessage(createdOrder, {
+                                pixConfirmedByCustomer: true,
+                              })
+                            )}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full py-2.5 px-4 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-colors"
+                          >
+                            <MessageCircle className="w-4 h-4" />
+                            <span>Abrir WhatsApp Novamente com os Dados do Pedido</span>
+                          </a>
                         </div>
                       ) : (
                         <button
                           type="button"
                           disabled={confirmingDeposit}
                           onClick={handleConfirmPixDeposit}
-                          className="w-full py-3 px-4 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+                          className="w-full py-3.5 px-4 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer"
                         >
-                          {confirmingDeposit
-                            ? 'Registrando aviso de pagamento para conferência...'
-                            : 'Já Realizei o Pix de 50% — Informar para Conferência'}
+                          <MessageCircle className="w-4 h-4 shrink-0" />
+                          <span>
+                            {confirmingDeposit
+                              ? 'Confirmando e abrindo WhatsApp...'
+                              : '✅ Já Fiz o Pix de 50% — Confirmar Pedido no WhatsApp Agora'}
+                          </span>
                         </button>
                       )}
                     </div>

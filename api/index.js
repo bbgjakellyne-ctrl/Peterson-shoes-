@@ -2163,8 +2163,493 @@ var INITIAL_PRODUCTS = [
       "Valor R$ 100,00 \xB7 Entrada de 50% (R$ 50,00 no Pix) + 50% quando ficar pronta"
     ],
     createdAt: "2026-03-01T12:00:00.000Z"
+  },
+  // =========================================================================
+  // 15 NOVOS MODELOS SELECIONADOS (PALMILHAS 100% LIMPAS SEM MARCA) POR CATEGORIA DE ESTILO
+  // =========================================================================
+  {
+    id: "prod-lks-06-plataforma-elisa",
+    sku: "PTS-LKS-06",
+    name: "Plataforma Anabela de R\xE1fia Tran\xE7ada \u2014 Elisa",
+    subtitle: "Salto Anabela revestido em R\xE1fia Artesanal com Tira Frontal & Fivela no Tornozelo",
+    category: "Plataforma",
+    price: 249.9,
+    image: "/lks/products/lks-10-plataforma-de-rafia-elisa.webp?v=clean2",
+    gallery: ["/lks/products/lks-10-plataforma-de-rafia-elisa.webp?v=clean2"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Anabela Alta 10cm c/ Meia Pata", "Anabela M\xE9dia 7,5cm"],
+    strapFinishes: ["Fivela Dourada c/ Trama em R\xE1fia", "Fivela Prateada"],
+    colors: buildStandardColors("Branco", "/lks/products/lks-10-plataforma-de-rafia-elisa.webp?v=clean2", {
+      Branco: "/lks/products/lks-10-plataforma-de-rafia-elisa.webp?v=clean2"
+    }),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Leveza natural e eleg\xE2ncia solar! Plataforma Anabela trabalhada em r\xE1fia tran\xE7ada com pulseira delicada e fivela dourada no tornozelo.",
+    craftDetails: [
+      "Confeccionada sob encomenda na numera\xE7\xE3o 34 ao 39 BR em at\xE9 15 dias",
+      "Dispon\xEDvel em Off-White/Branco, Nude, Caramelo, Dourado, Preto ou Outra Cor",
+      "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-06T12:00:00.000Z"
+  },
+  {
+    id: "prod-lks-07-plataforma-ayla",
+    sku: "PTS-LKS-07",
+    name: "Tamanco Plataforma Anabela Corti\xE7a & Tiras Vinil \u2014 Ayla",
+    subtitle: "Design Moderno com Tiras Transparentes em Vinil Macio & Salto Anabela em Corti\xE7a",
+    category: "Plataforma",
+    price: 239.9,
+    image: "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp?v=clean2",
+    gallery: ["/lks/products/lks-14-tamanco-salto-anabela-ayla.webp?v=clean2"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Anabela Corti\xE7a 9,5cm", "Anabela Corti\xE7a 7cm"],
+    strapFinishes: ["Tiras Duplas em Vinil Cristal", "Tiras em Couro Nude"],
+    colors: buildStandardColors("Nude", "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp?v=clean2", {
+      Nude: "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp?v=clean2"
+    }),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description: "Tend\xEAncia absoluta que alonga as pernas! O Tamanco Anabela Ayla combina o visual leve do vinil transparente com a base de corti\xE7a anat\xF4mica.",
+    craftDetails: [
+      "Confeccionada sob encomenda na numera\xE7\xE3o 34 ao 39 BR em at\xE9 15 dias",
+      "Vinil flex\xEDvel de toque macio que n\xE3o machuca o peito do p\xE9",
+      "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-06T12:00:00.000Z"
+  },
+  {
+    id: "prod-lks-08-plataforma-cecilia",
+    sku: "PTS-LKS-08",
+    name: "Plataforma Anabela Metalizada & Vinil \u2014 Cec\xEDlia",
+    subtitle: "Acabamento Dourado Champagne com Recorte Lateral Transparente & Pulseira",
+    category: "Plataforma",
+    price: 249.9,
+    image: "/lks/products/lks-18-plataforma-anabela-cecilia.webp?v=clean2",
+    gallery: ["/lks/products/lks-18-plataforma-anabela-cecilia.webp?v=clean2"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Anabela Alta 10cm", "Anabela M\xE9dia 7,5cm"],
+    strapFinishes: ["Metalizado Dourado c/ Vinil", "Todo em Couro Metalizado"],
+    colors: buildStandardColors("Dourado", "/lks/products/lks-18-plataforma-anabela-cecilia.webp?v=clean2", {
+      Dourado: "/lks/products/lks-18-plataforma-anabela-cecilia.webp?v=clean2"
+    }),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Brilho sofisticado e estabilidade impec\xE1vel! Plataforma Anabela dourada com detalhe em vinil e tira regul\xE1vel no tornozelo.",
+    craftDetails: [
+      "Confeccionada sob encomenda na numera\xE7\xE3o 34 ao 39 BR em at\xE9 15 dias",
+      "Dispon\xEDvel em Dourado, Prata, Off-White, Nude, Preto ou Outra Cor",
+      "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-06T12:00:00.000Z"
+  },
+  {
+    id: "prod-lks-09-plataforma-taina",
+    sku: "PTS-LKS-09",
+    name: "Plataforma Salto Anabela Rom\xE2ntica \u2014 Tain\xE1",
+    subtitle: "Tira Frontal Minimalista, Calcanhar Fechado & Pulseira Fivela Dourada",
+    category: "Plataforma",
+    price: 249.9,
+    image: "/lks/products/lks-22-plataforma-salto-annabela-taina.webp?v=clean2",
+    gallery: ["/lks/products/lks-22-plataforma-salto-annabela-taina.webp?v=clean2"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Anabela Alta 10cm", "Anabela M\xE9dia 7,5cm"],
+    strapFinishes: ["Fivela Dourada Delicada", "Fivela Prateada Delicada"],
+    colors: buildStandardColors("Rosa", "/lks/products/lks-22-plataforma-salto-annabela-taina.webp?v=clean2", {
+      Rosa: "/lks/products/lks-22-plataforma-salto-annabela-taina.webp?v=clean2"
+    }),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description: "Delicadeza e conforto em altura! A Plataforma Anabela Tain\xE1 traz linhas limpas e modernas que valorizam os p\xE9s com extrema leveza.",
+    craftDetails: [
+      "Confeccionada sob encomenda na numera\xE7\xE3o 34 ao 39 BR em at\xE9 15 dias",
+      "Dispon\xEDvel em Rosa Beb\xEA, Branco, Nude, Dourado, Preto ou Outra Cor",
+      "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-06T12:00:00.000Z"
+  },
+  {
+    id: "prod-lks-10-sandalia-cristal",
+    sku: "PTS-LKS-10",
+    name: "Sand\xE1lia Salto Acr\xEDlico & Vinil Transparente \u2014 Cristal",
+    subtitle: "Bico Folha Metalizado com G\xE1spea em Vinil & Salto Geom\xE9trico Cristal",
+    category: "Sand\xE1lia de Salto",
+    price: 229.9,
+    image: "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp?v=clean2",
+    gallery: ["/lks/products/lks-28-sandalia-salto-anabela-cristal.webp?v=clean2"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Salto Acr\xEDlico Cristal 9cm", "Salto Ta\xE7a Dourado 8,5cm"],
+    strapFinishes: ["Fivela Dourada c/ Tira Cristal", "Fivela Prateada c/ Tira Cristal"],
+    colors: buildStandardColors("Dourado", "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp?v=clean2", {
+      Dourado: "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp?v=clean2"
+    }),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "O efeito Cinderela moderno! Sand\xE1lia com bico folha metalizado, tiras em vinil cristal transparente e salto escultural transl\xFAcido.",
+    craftDetails: [
+      "Confeccionada sob encomenda na numera\xE7\xE3o 34 ao 39 BR em at\xE9 15 dias",
+      "Dispon\xEDvel com base Dourada, Prata, Nude, Branca ou Preta",
+      "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-06T12:00:00.000Z"
+  },
+  {
+    id: "prod-lks-11-sandalia-lulu",
+    sku: "PTS-LKS-11",
+    name: "Sand\xE1lia Salto Bloco Alto Dupla Pata Metalizada \u2014 Lulu",
+    subtitle: "Meia Pata Dupla Estruturada, Salto Bloco Alto & Tira no Tornozelo",
+    category: "Sand\xE1lia de Salto",
+    price: 249.9,
+    image: "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp?v=clean2",
+    gallery: ["/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp?v=clean2"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Salto Bloco 11cm c/ Dupla Pata", "Salto Bloco 9cm c/ Meia Pata"],
+    strapFinishes: ["Couro Espelhado Prata", "Couro Espelhado Dourado"],
+    colors: buildStandardColors("Prata", "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp?v=clean2", {
+      Prata: "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp?v=clean2"
+    }),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Presen\xE7a marcante para festas, formaturas e eventos especiais! A meia pata dupla proporciona altura imponente com inclina\xE7\xE3o suave e confort\xE1vel.",
+    craftDetails: [
+      "Confeccionada sob encomenda na numera\xE7\xE3o 34 ao 39 BR em at\xE9 15 dias",
+      "Dispon\xEDvel em Prata, Dourado, Preto, Branco, Marsala, Rosa ou Outra Cor",
+      "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-06T12:00:00.000Z"
+  },
+  {
+    id: "prod-lks-12-sandalia-thais",
+    sku: "PTS-LKS-12",
+    name: "Sand\xE1lia Salto Fino Tiras Texturizadas & Amarra\xE7\xE3o \u2014 Tha\xEDs",
+    subtitle: "Tiras Frontais Trabalhadas, Salto Fino Cl\xE1ssico & Tira Envolvente no Tornozelo",
+    category: "Sand\xE1lia de Salto",
+    price: 229.9,
+    image: "/lks/products/lks-32-sandalia-salto-fino-thais.webp?v=clean2",
+    gallery: ["/lks/products/lks-32-sandalia-salto-fino-thais.webp?v=clean2"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Salto Fino 9,5cm", "Salto Fino M\xE9dio 7,5cm"],
+    strapFinishes: ["Fivela Dourada no Tornozelo", "Fivela Prateada no Tornozelo"],
+    colors: buildStandardColors("Dourado", "/lks/products/lks-32-sandalia-salto-fino-thais.webp?v=clean2", {
+      Dourado: "/lks/products/lks-32-sandalia-salto-fino-thais.webp?v=clean2"
+    }),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description: "Sofistica\xE7\xE3o que abra\xE7a os p\xE9s! Sand\xE1lia de salto fino com tiras texturizadas e design envolvente no tornozelo.",
+    craftDetails: [
+      "Confeccionada sob encomenda na numera\xE7\xE3o 34 ao 39 BR em at\xE9 15 dias",
+      "Dispon\xEDvel em Dourado, Prata, Nude, Preto, Branco, Marsala ou Outra Cor",
+      "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-06T12:00:00.000Z"
+  },
+  {
+    id: "prod-lks-13-sandalia-diana",
+    sku: "PTS-LKS-13",
+    name: "Sand\xE1lia Salto Fino Bico Folha & Strass \u2014 Diana",
+    subtitle: "Bico Folha Elegante com Tiras Cravejadas em Strass Cristal & Salto Fino",
+    category: "Sand\xE1lia de Salto",
+    price: 229.9,
+    image: "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp?v=clean2",
+    gallery: ["/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp?v=clean2"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Salto Fino 9,5cm", "Salto Fino M\xE9dio 7,5cm"],
+    strapFinishes: ["Tiras em Strass Cristal Prata", "Tiras em Strass Dourado"],
+    colors: buildStandardColors("Prata", "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp?v=clean2", {
+      Prata: "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp?v=clean2"
+    }),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Glamour em estado puro! Sand\xE1lia de bico folha com tiras espiraladas em strass de alto brilho e salto fino alinhado.",
+    craftDetails: [
+      "Confeccionada sob encomenda na numera\xE7\xE3o 34 ao 39 BR em at\xE9 15 dias",
+      "Dispon\xEDvel em Prata, Dourado, Preto, Branco, Nude, Rosa ou Outra Cor",
+      "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-06T12:00:00.000Z"
+  },
+  {
+    id: "prod-lks-14-rasteira-brasil",
+    sku: "PTS-LKS-14",
+    name: "Rasteira Gladiadora de Corda Tran\xE7ada \u2014 Brasil",
+    subtitle: "Amarra\xE7\xE3o Artesanal em Corda Macia no Tornozelo & Solado Flat Conforto",
+    category: "Rasteiras",
+    price: 159.9,
+    image: "/lks/products/lks-38-rasteira-de-corda-brasil.webp?v=clean2",
+    gallery: [
+      "/lks/products/lks-38-rasteira-de-corda-brasil.webp?v=clean2",
+      "/lks/products/lks-39-rasteira-de-corda-brasil.webp?v=clean2"
+    ],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Solado Flat Rasteiro Conforto"],
+    strapFinishes: ["Corda Tran\xE7ada Macia c/ Amarra\xE7\xE3o", "Corda em Tom \xDAnico"],
+    colors: buildStandardColors("Dourado", "/lks/products/lks-38-rasteira-de-corda-brasil.webp?v=clean2", {
+      Dourado: "/lks/products/lks-38-rasteira-de-corda-brasil.webp?v=clean2"
+    }),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: false,
+    active: true,
+    description: "Frescor tropical e charme artesanal! Rasteira com tiras em corda macia que permitem diferentes formas de amarra\xE7\xE3o no tornozelo.",
+    craftDetails: [
+      "Confeccionada sob encomenda na numera\xE7\xE3o 34 ao 39 BR em at\xE9 15 dias",
+      "Dispon\xEDvel em Multicolor/Brasil, Off-White, Caramelo, Preto, Dourado ou Outra Cor",
+      "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-06T12:00:00.000Z"
+  },
+  {
+    id: "prod-lks-15-rasteira-concha",
+    sku: "PTS-LKS-15",
+    name: "Rasteira Slide Trama Natural & Aplique Dourado \u2014 Concha",
+    subtitle: "Tira Larga em Trama Natural Artesanal com Escultura de Concha Dourada",
+    category: "Rasteiras",
+    price: 159.9,
+    image: "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp?v=clean2",
+    gallery: [
+      "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp?v=clean2"
+    ],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Solado Flat Rasteiro c/ Bico Quadrado"],
+    strapFinishes: ["Aplique Concha Dourada", "Tira Trama Natural sem Aplique"],
+    colors: buildStandardColors("Nude", "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp?v=clean2", {
+      Nude: "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp?v=clean2"
+    }),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Eleg\xE2ncia resort chic! Rasteira slide em trama natural com aplica\xE7\xE3o escultural dourada, perfeita para dias ensolarados com muito estilo.",
+    craftDetails: [
+      "Confeccionada sob encomenda na numera\xE7\xE3o 34 ao 39 BR em at\xE9 15 dias",
+      "Palmilha lisa acolchoada e solado antiderrapante",
+      "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-06T12:00:00.000Z"
+  },
+  {
+    id: "prod-lks-16-papete-ariane",
+    sku: "PTS-LKS-16",
+    name: "Papete Flat Tran\xE7ada com Detalhe Dourado \u2014 Ariane",
+    subtitle: "Tiras Cruzadas em Trama Artesanal & Solado Flatform Anat\xF4mico",
+    category: "Papetes",
+    price: 229.9,
+    image: "/lks/products/lks-59-flat-com-aplicacao-ariane.webp?v=clean2",
+    gallery: ["/lks/products/lks-59-flat-com-aplicacao-ariane.webp?v=clean2"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Flatform Anat\xF4mica 3,5cm"],
+    strapFinishes: ["Trama Artesanal c/ Detalhe Dourado", "Trama Artesanal c/ Detalhe Prata"],
+    colors: buildStandardColors("Branco", "/lks/products/lks-59-flat-com-aplicacao-ariane.webp?v=clean2", {
+      Branco: "/lks/products/lks-59-flat-com-aplicacao-ariane.webp?v=clean2"
+    }),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Conforto absoluto com acabamento artesanal de luxo! A Flat Ariane combina tiras tran\xE7adas macias e solado flatform contornado.",
+    craftDetails: [
+      "Confeccionada sob encomenda na numera\xE7\xE3o 34 ao 39 BR em at\xE9 15 dias",
+      "Dispon\xEDvel em Branco, Off-White, Nude, Caramelo, Preto ou Outra Cor",
+      "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-06T12:00:00.000Z"
+  },
+  {
+    id: "prod-lks-17-papete-poly",
+    sku: "PTS-LKS-17",
+    name: "Papete Flat com Fivela Org\xE2nica Dourada \u2014 Poly",
+    subtitle: "Tira Larga Texturizada com Maxi Aplique Org\xE2nico Dourado & Base Trabalhada",
+    category: "Papetes",
+    price: 239.9,
+    image: "/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2",
+    gallery: ["/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Flatform Estruturada 4cm"],
+    strapFinishes: ["Maxi Aplique Org\xE2nico Dourado", "Maxi Aplique Org\xE2nico Prata"],
+    colors: buildStandardColors("Branco", "/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2", {
+      Branco: "/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2",
+      Nude: "/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2"
+    }),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Design contempor\xE2neo com maxi aplique org\xE2nico dourado e base flatform texturizada que eleva qualquer produ\xE7\xE3o casual chic.",
+    craftDetails: [
+      "Confeccionada sob encomenda na numera\xE7\xE3o 34 ao 39 BR em at\xE9 15 dias",
+      "Dispon\xEDvel em Off-White, Branco, Nude, Preto, Dourado ou Outra Cor",
+      "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-06T12:00:00.000Z"
+  },
+  {
+    id: "prod-lks-18-scarpin-dara",
+    sku: "PTS-LKS-18",
+    name: "Scarpin Fechado Salto Anabela \u2014 Dara",
+    subtitle: "Bico Fino Cl\xE1ssico com Salto Anabela Cont\xEDnuo de Alta Estabilidade",
+    category: "Scarpin",
+    price: 249.9,
+    image: "/lks/products/lks-69-scarpin-salto-anabela-dara.webp?v=clean2",
+    gallery: ["/lks/products/lks-69-scarpin-salto-anabela-dara.webp?v=clean2"],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Salto Anabela 8,5cm", "Salto Fino Cl\xE1ssico 8,5cm"],
+    strapFinishes: ["Acabamento Liso Cl\xE1ssico", "Acabamento em Verniz"],
+    colors: buildStandardColors("Branco", "/lks/products/lks-69-scarpin-salto-anabela-dara.webp?v=clean2", {
+      Branco: "/lks/products/lks-69-scarpin-salto-anabela-dara.webp?v=clean2"
+    }),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "A eleg\xE2ncia do Scarpin bico fino unida ao conforto incompar\xE1vel do salto Anabela! Ideal para trabalhar, eventos e ocasi\xF5es especiais.",
+    craftDetails: [
+      "Confeccionado sob encomenda na numera\xE7\xE3o 34 ao 39 BR em at\xE9 15 dias",
+      "Dispon\xEDvel em Branco, Off-White, Nude, Preto, Marsala, Vermelho ou Outra Cor",
+      "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-06T12:00:00.000Z"
+  },
+  {
+    id: "prod-lks-19-scarpin-sabrina",
+    sku: "PTS-LKS-19",
+    name: "Scarpin Salto Fino c/ Pulseira no Tornozelo \u2014 Sabrina",
+    subtitle: "Bico Fino Alongado, Calcanhar Fechado & Tira Delicada com Fivela",
+    category: "Scarpin",
+    price: 189.9,
+    image: "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2",
+    gallery: [
+      "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2",
+      "/lks/products/lks-73-scarpin-sabrina.webp?v=clean2"
+    ],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Salto Fino Alto 9,5cm", "Salto Fino M\xE9dio 7,5cm"],
+    strapFinishes: ["Pulseira c/ Fivela Dourada", "Pulseira c/ Fivela Prateada"],
+    colors: buildStandardColors("Nude", "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2", {
+      Nude: "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2",
+      Branco: "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2"
+    }),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Cl\xE1ssico, feminino e atemporal! O Scarpin Sabrina traz bico fino elegante e pulseira no tornozelo para caminhar com total seguran\xE7a.",
+    craftDetails: [
+      "Confeccionado sob encomenda na numera\xE7\xE3o 34 ao 39 BR em at\xE9 15 dias",
+      "Dispon\xEDvel em Mousse/Nude, Branco, Preto, Marsala, Dourado, Prata ou Outra Cor",
+      "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-06T12:00:00.000Z"
+  },
+  {
+    id: "prod-lks-20-tenis-erica",
+    sku: "PTS-LKS-20",
+    name: "T\xEAnis Casual Chunky Conforto \u2014 \xC9rica",
+    subtitle: "Solado Anat\xF4mico Ultra Leve, Design Casual Chic & Palmilha Macia",
+    category: "T\xEAnis Casual",
+    price: 199,
+    image: "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp?v=clean2",
+    gallery: [
+      "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp?v=clean2",
+      "/lks/products/lks-75-tenis-chunky-esportivo-erica.webp?v=clean2"
+    ],
+    instagramPostUrl: "https://www.instagram.com/petersonshoes_/",
+    heelOptions: ["Solado Chunky Anat\xF4mico 4,5cm"],
+    strapFinishes: ["Cadar\xE7o Algod\xE3o Premium", "Acabamento Monocrom\xE1tico"],
+    colors: buildStandardColors("Branco", "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp?v=clean2", {
+      Branco: "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp?v=clean2"
+    }),
+    availableSizes: STANDARD_SIZES,
+    productionDays: 15,
+    featured: true,
+    active: true,
+    description: "Versatilidade e conforto para o dia a dia! O T\xEAnis Casual \xC9rica une design moderno com solado super leve que absorve o impacto a cada passo.",
+    craftDetails: [
+      "Confeccionado sob encomenda na numera\xE7\xE3o 34 ao 39 BR em at\xE9 15 dias",
+      "Dispon\xEDvel em Branco, Off-White/Nude, Preto, Prata, Dourado ou Outra Cor",
+      "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
+    ],
+    createdAt: "2026-03-06T12:00:00.000Z"
   }
 ];
+var STYLE_CATEGORIES = [
+  {
+    id: "Plataforma",
+    label: "Plataforma",
+    image: "/lks/categories/plataforma.webp?v=clean2"
+  },
+  {
+    id: "Sand\xE1lia de Salto",
+    label: "Sand\xE1lia de Salto",
+    image: "/lks/categories/sandalia-salto.webp?v=clean2"
+  },
+  {
+    id: "Rasteiras",
+    label: "Rasteiras",
+    image: "/lks/categories/rasteiras.webp?v=clean2"
+  },
+  {
+    id: "Papetes",
+    label: "Papetes",
+    image: "/lks/categories/papetes.webp?v=clean2"
+  },
+  {
+    id: "Chinelos",
+    label: "Chinelos",
+    image: "/lks/categories/chinelos.webp?v=clean2"
+  },
+  {
+    id: "Scarpin",
+    label: "Scarpin",
+    image: "/lks/categories/scarpin.webp?v=clean2"
+  },
+  {
+    id: "T\xEAnis Casual",
+    label: "T\xEAnis Casual",
+    image: "/lks/categories/tenis-casual.webp?v=clean2"
+  }
+];
+var EXACT_STYLE_IDS = new Set(STYLE_CATEGORIES.map((c) => c.id));
+function resolveProductStyleCategory(product) {
+  if (EXACT_STYLE_IDS.has(product.category)) {
+    return product.category;
+  }
+  const n = (product.name || "").toLowerCase();
+  const c = (product.category || "").toLowerCase();
+  if (n.includes("t\xEAnis") || n.includes("tenis")) return "T\xEAnis Casual";
+  if (n.includes("scarpin")) return "Scarpin";
+  if (c.includes("scarpins & saltos") || c.includes("tamancos & saltos") || n.includes("salto fino") || n.includes("salto bloco") || n.includes("salto ta\xE7a") || n.includes("meia pata") || n.includes("dupla pata")) {
+    return "Sand\xE1lia de Salto";
+  }
+  if (c.includes("anabelas & plataformas") || n.includes("anabela") || n.includes("plataforma") || n.includes("espadrille")) {
+    return "Plataforma";
+  }
+  if (c.includes("rasteiras") || n.includes("rasteira")) {
+    return "Rasteiras";
+  }
+  if (n.includes("chinelo") || n.includes("slide") || n.includes("tira de dedo") || !n.includes("papete") && !n.includes("gladiadora") && !n.includes("amarra\xE7\xE3o") && !n.includes("fivela")) {
+    return "Chinelos";
+  }
+  return "Papetes";
+}
+for (const p of INITIAL_PRODUCTS) {
+  p.category = resolveProductStyleCategory(p);
+}
+var INITIAL_PRODUCT_BY_ID = new Map(INITIAL_PRODUCTS.map((p) => [p.id, p]));
 
 // server.ts
 dotenv.config();
@@ -3316,9 +3801,25 @@ function loadDb(env = "producao") {
       (p) => !DEMO_PAYMENT_IDS.has(p.id) && !DEMO_ORDER_IDS.has(p.orderId)
     );
     const demoPurged = parsed.orders.length !== origOrdersLen || parsed.customers.length !== origCustomersLen || parsed.payments.length !== origPaymentsLen;
-    const needsUpgrade = !parsed.products || parsed.products.length < 54 || parsed.settings?.whatsappStore !== "5562984998265" || parsed.products[0]?.availableSizes?.includes(33) || !parsed.products[0]?.colors?.some((c) => c.name === "Marsala");
+    const hasBootProducts = Array.isArray(parsed.products) && parsed.products.some(
+      (p) => p.id?.includes("-bota-") || p.category === "Bota" || p.image && p.image.startsWith("/lks/") && !p.image.includes("?v=clean2")
+    );
+    const needsUpgrade = !parsed.products || parsed.products.length < 69 || hasBootProducts || parsed.settings?.whatsappStore !== "5562984998265" || parsed.products[0]?.availableSizes?.includes(33) || !parsed.products[0]?.colors?.some((c) => c.name === "Marsala");
     if (needsUpgrade) {
       const upgraded = createInitialDatabase();
+      const prevProdById = new Map((parsed.products || []).map((p) => [p.id, p]));
+      upgraded.products = upgraded.products.map((up) => {
+        const prev = prevProdById.get(up.id);
+        if (!prev) return up;
+        return {
+          ...up,
+          price: typeof prev.price === "number" && prev.price > 0 ? prev.price : up.price,
+          manufacturingCost: prev.manufacturingCost ?? up.manufacturingCost,
+          additionalExpenses: prev.additionalExpenses ?? up.additionalExpenses,
+          grossProfit: prev.grossProfit ?? up.grossProfit,
+          profitMarginPercent: prev.profitMarginPercent ?? up.profitMarginPercent
+        };
+      });
       if (parsed.orders && parsed.orders.length > 0) {
         upgraded.orders = parsed.orders;
       }
@@ -3334,47 +3835,7 @@ function loadDb(env = "producao") {
       fs.writeFileSync(targetFile, JSON.stringify(upgraded, null, 2), "utf-8");
       return upgraded;
     }
-    const scarpinSkus = /* @__PURE__ */ new Set([
-      "PTS-IG-47",
-      "PTS-IG-48",
-      "PTS-IG-49",
-      "PTS-IG-50",
-      "PTS-IG-51",
-      "PTS-IG-52",
-      "PTS-IG-53",
-      "PTS-IG-54"
-    ]);
-    const optionAMap = {
-      150: 149.9,
-      130: 129.9,
-      110: 109.9,
-      100: 99.9
-    };
-    let batchUpdated = false;
-    parsed.products = parsed.products.map((prod) => {
-      let targetPrice = null;
-      if (scarpinSkus.has(prod.sku) && (prod.price === 130 || prod.price === 129.9)) {
-        targetPrice = 149.9;
-      } else if (optionAMap[prod.price] !== void 0) {
-        targetPrice = optionAMap[prod.price];
-      }
-      if (targetPrice !== null) {
-        batchUpdated = true;
-        const mCost = Number(prod.manufacturingCost) || 0;
-        const extraExp = Number(prod.additionalExpenses) || 0;
-        const totalCost = Math.round((mCost + extraExp) * 100) / 100;
-        const gProfit = Math.round((targetPrice - totalCost) * 100) / 100;
-        const pMargin = Math.round(gProfit / targetPrice * 1e4) / 100;
-        return {
-          ...prod,
-          price: targetPrice,
-          grossProfit: mCost > 0 || extraExp > 0 ? gProfit : prod.grossProfit,
-          profitMarginPercent: mCost > 0 || extraExp > 0 ? pMargin : prod.profitMarginPercent
-        };
-      }
-      return prod;
-    });
-    if (batchUpdated || demoPurged) {
+    if (demoPurged) {
       fs.writeFileSync(targetFile, JSON.stringify(parsed, null, 2), "utf-8");
     }
     parsed.settings = {
@@ -4440,8 +4901,25 @@ DIRETRIZES DE ESTILO:
   app.post("/api/admin/sync-orders", requireAdminAuth, (req, res) => {
     const env = resolveEnv(req);
     const db = loadDb(env);
-    const { orders, customers, payments } = req.body;
+    const { orders, customers, payments, productOverrides } = req.body;
     let changed = false;
+    if (productOverrides && typeof productOverrides === "object") {
+      db.products = db.products.map((p) => {
+        const ov = productOverrides[p.id];
+        if (!ov) return p;
+        const nextPrice = typeof ov.price === "number" && ov.price > 0 ? ov.price : p.price;
+        if (nextPrice !== p.price || ov.manufacturingCost !== p.manufacturingCost || ov.additionalExpenses !== p.additionalExpenses || ov.name && ov.name !== p.name) {
+          changed = true;
+          return {
+            ...p,
+            ...ov,
+            id: p.id,
+            price: nextPrice
+          };
+        }
+        return p;
+      });
+    }
     if (Array.isArray(orders)) {
       for (const ord of orders) {
         if (ord && ord.id && !DEMO_ORDER_IDS.has(ord.id) && !db.orders.some((o) => o.id === ord.id)) {
@@ -4480,6 +4958,9 @@ DIRETRIZES DE ESTILO:
       factoryNotes,
       trackingCode,
       estimatedDeliveryDate,
+      totalAmount,
+      depositAmount,
+      remainingAmount,
       orderSnapshot
     } = req.body;
     const db = loadDb(env);
@@ -4498,6 +4979,25 @@ DIRETRIZES DE ESTILO:
     }
     if (!order) {
       return res.status(404).json({ error: "Encomenda n\xE3o encontrada." });
+    }
+    if (typeof totalAmount === "number" && !isNaN(totalAmount) && totalAmount > 0) {
+      const nextTotal = Math.round(totalAmount * 100) / 100;
+      const nextDeposit = typeof depositAmount === "number" && !isNaN(depositAmount) && depositAmount >= 0 ? Math.round(depositAmount * 100) / 100 : Math.round(nextTotal * 0.5 * 100) / 100;
+      const nextRemaining = typeof remainingAmount === "number" && !isNaN(remainingAmount) && remainingAmount >= 0 ? Math.round(remainingAmount * 100) / 100 : Math.round((nextTotal - nextDeposit) * 100) / 100;
+      order.totalAmount = nextTotal;
+      order.depositAmount = nextDeposit;
+      order.remainingAmount = nextRemaining;
+      const orderPayments = db.payments.filter((p) => p.orderId === order.id);
+      const depositPay = orderPayments.find((p) => p.installmentType === "ENTRADA_50");
+      const finalPay = orderPayments.find((p) => p.installmentType === "FINAL_50");
+      if (depositPay) {
+        depositPay.baseAmount = nextDeposit;
+        depositPay.amount = nextDeposit + (depositPay.feeAmount || 0);
+      }
+      if (finalPay) {
+        finalPay.baseAmount = nextRemaining;
+        finalPay.amount = nextRemaining + (finalPay.feeAmount || 0);
+      }
     }
     if (productionStatus) {
       order.productionStatus = productionStatus;

@@ -1336,15 +1336,39 @@ function loadDb(env: AppEnvironment = 'producao'): DatabaseSchema {
       parsed.customers.length !== origCustomersLen ||
       parsed.payments.length !== origPaymentsLen;
 
+    const hasBootProducts =
+      Array.isArray(parsed.products) &&
+      parsed.products.some(
+        (p) =>
+          p.id?.includes('-bota-') ||
+          p.category === 'Bota' ||
+          (p.image && p.image.startsWith('/lks/') && !p.image.includes('?v=clean2'))
+      );
+
     const needsUpgrade =
       !parsed.products ||
-      parsed.products.length < 54 ||
+      parsed.products.length < 69 ||
+      hasBootProducts ||
       parsed.settings?.whatsappStore !== '5562984998265' ||
       parsed.products[0]?.availableSizes?.includes(33) ||
       !parsed.products[0]?.colors?.some((c) => c.name === 'Marsala');
 
     if (needsUpgrade) {
       const upgraded = createInitialDatabase();
+      // Preserve any custom prices/costs previously saved on matching product IDs
+      const prevProdById = new Map((parsed.products || []).map((p) => [p.id, p]));
+      upgraded.products = upgraded.products.map((up) => {
+        const prev = prevProdById.get(up.id);
+        if (!prev) return up;
+        return {
+          ...up,
+          price: typeof prev.price === 'number' && prev.price > 0 ? prev.price : up.price,
+          manufacturingCost: prev.manufacturingCost ?? up.manufacturingCost,
+          additionalExpenses: prev.additionalExpenses ?? up.additionalExpenses,
+          grossProfit: prev.grossProfit ?? up.grossProfit,
+          profitMarginPercent: prev.profitMarginPercent ?? up.profitMarginPercent,
+        };
+      });
       if (parsed.orders && parsed.orders.length > 0) {
         upgraded.orders = parsed.orders;
       }
@@ -1361,51 +1385,7 @@ function loadDb(env: AppEnvironment = 'producao'): DatabaseSchema {
       return upgraded;
     }
 
-    // Apply owner-authorized Option A psychological pricing (.90) across existing integer tiers
-    // while keeping PTS-IG-47..54 at 149.90 and preserving all manufacturing costs & additional expenses
-    const scarpinSkus = new Set([
-      'PTS-IG-47',
-      'PTS-IG-48',
-      'PTS-IG-49',
-      'PTS-IG-50',
-      'PTS-IG-51',
-      'PTS-IG-52',
-      'PTS-IG-53',
-      'PTS-IG-54',
-    ]);
-    const optionAMap: Record<number, number> = {
-      150: 149.9,
-      130: 129.9,
-      110: 109.9,
-      100: 99.9,
-    };
-    let batchUpdated = false;
-    parsed.products = parsed.products.map((prod) => {
-      let targetPrice: number | null = null;
-      if (scarpinSkus.has(prod.sku) && (prod.price === 130 || prod.price === 129.9)) {
-        targetPrice = 149.9;
-      } else if (optionAMap[prod.price] !== undefined) {
-        targetPrice = optionAMap[prod.price];
-      }
-
-      if (targetPrice !== null) {
-        batchUpdated = true;
-        const mCost = Number(prod.manufacturingCost) || 0;
-        const extraExp = Number(prod.additionalExpenses) || 0;
-        const totalCost = Math.round((mCost + extraExp) * 100) / 100;
-        const gProfit = Math.round((targetPrice - totalCost) * 100) / 100;
-        const pMargin = Math.round((gProfit / targetPrice) * 10000) / 100;
-        return {
-          ...prod,
-          price: targetPrice,
-          grossProfit: mCost > 0 || extraExp > 0 ? gProfit : prod.grossProfit,
-          profitMarginPercent:
-            mCost > 0 || extraExp > 0 ? pMargin : prod.profitMarginPercent,
-        };
-      }
-      return prod;
-    });
-    if (batchUpdated || demoPurged) {
+    if (demoPurged) {
       fs.writeFileSync(targetFile, JSON.stringify(parsed, null, 2), 'utf-8');
     }
 
@@ -2803,16 +2783,40 @@ DIRETRIZES DE ESTILO:
     res.json({ ok: true });
   });
 
-  // Sync local orders to server if serverless container cold-started
+  // Sync local orders and product price overrides to server if serverless container cold-started
   app.post('/api/admin/sync-orders', requireAdminAuth, (req: Request, res: Response) => {
     const env = resolveEnv(req);
     const db = loadDb(env);
-    const { orders, customers, payments } = req.body as {
+    const { orders, customers, payments, productOverrides } = req.body as {
       orders?: BespokeOrder[];
       customers?: CustomerRecord[];
       payments?: PaymentRecord[];
+      productOverrides?: Record<string, Partial<BespokeProduct>>;
     };
     let changed = false;
+    if (productOverrides && typeof productOverrides === 'object') {
+      db.products = db.products.map((p) => {
+        const ov = productOverrides[p.id];
+        if (!ov) return p;
+        const nextPrice =
+          typeof ov.price === 'number' && ov.price > 0 ? ov.price : p.price;
+        if (
+          nextPrice !== p.price ||
+          ov.manufacturingCost !== p.manufacturingCost ||
+          ov.additionalExpenses !== p.additionalExpenses ||
+          (ov.name && ov.name !== p.name)
+        ) {
+          changed = true;
+          return {
+            ...p,
+            ...ov,
+            id: p.id,
+            price: nextPrice,
+          };
+        }
+        return p;
+      });
+    }
     if (Array.isArray(orders)) {
       for (const ord of orders) {
         if (ord && ord.id && !DEMO_ORDER_IDS.has(ord.id) && !db.orders.some((o) => o.id === ord.id)) {
@@ -2843,7 +2847,7 @@ DIRETRIZES DE ESTILO:
     return res.json({ ok: true, count: db.orders.length });
   });
 
-  // Update Order Production / Payment Status (Exclusive Admin Confirmation)
+  // Update Order Production / Payment Status / Manual Order Value (Exclusive Admin Confirmation)
   app.patch('/api/admin/orders/:id', requireAdminAuth, (req: Request, res: Response) => {
     const env = resolveEnv(req);
     const { id } = req.params;
@@ -2853,6 +2857,9 @@ DIRETRIZES DE ESTILO:
       factoryNotes,
       trackingCode,
       estimatedDeliveryDate,
+      totalAmount,
+      depositAmount,
+      remainingAmount,
       orderSnapshot,
     } = req.body as {
       productionStatus?: ProductionStatus;
@@ -2860,6 +2867,9 @@ DIRETRIZES DE ESTILO:
       factoryNotes?: string;
       trackingCode?: string;
       estimatedDeliveryDate?: string;
+      totalAmount?: number;
+      depositAmount?: number;
+      remainingAmount?: number;
       orderSnapshot?: BespokeOrder;
     };
 
@@ -2882,6 +2892,34 @@ DIRETRIZES DE ESTILO:
 
     if (!order) {
       return res.status(404).json({ error: 'Encomenda não encontrada.' });
+    }
+
+    if (typeof totalAmount === 'number' && !isNaN(totalAmount) && totalAmount > 0) {
+      const nextTotal = Math.round(totalAmount * 100) / 100;
+      const nextDeposit =
+        typeof depositAmount === 'number' && !isNaN(depositAmount) && depositAmount >= 0
+          ? Math.round(depositAmount * 100) / 100
+          : Math.round(nextTotal * 0.5 * 100) / 100;
+      const nextRemaining =
+        typeof remainingAmount === 'number' && !isNaN(remainingAmount) && remainingAmount >= 0
+          ? Math.round(remainingAmount * 100) / 100
+          : Math.round((nextTotal - nextDeposit) * 100) / 100;
+
+      order.totalAmount = nextTotal;
+      order.depositAmount = nextDeposit;
+      order.remainingAmount = nextRemaining;
+
+      const orderPayments = db.payments.filter((p) => p.orderId === order!.id);
+      const depositPay = orderPayments.find((p) => p.installmentType === 'ENTRADA_50');
+      const finalPay = orderPayments.find((p) => p.installmentType === 'FINAL_50');
+      if (depositPay) {
+        depositPay.baseAmount = nextDeposit;
+        depositPay.amount = nextDeposit + (depositPay.feeAmount || 0);
+      }
+      if (finalPay) {
+        finalPay.baseAmount = nextRemaining;
+        finalPay.amount = nextRemaining + (finalPay.feeAmount || 0);
+      }
     }
 
     if (productionStatus) {

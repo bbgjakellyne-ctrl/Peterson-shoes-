@@ -24,9 +24,13 @@ import { CartCheckoutDrawer } from './components/CartCheckoutDrawer';
 import { AdminDashboard } from './components/AdminDashboard';
 import {
   getBrowserStoreDb,
+  importBrowserOrderFromWhatsAppSync,
   INITIAL_PRODUCTS,
   INITIAL_SETTINGS,
+  resolveProductStyleCategory,
+  sanitizeProductCatalog,
   saveBrowserStoreDb,
+  STYLE_CATEGORIES,
 } from './data/storeData';
 import {
   apiFetch,
@@ -36,10 +40,7 @@ import {
 
 const CATEGORIES = [
   'Todos',
-  'Scarpins & Saltos',
-  'Flatforms & Papetes',
-  'Anabelas & Plataformas',
-  'Rasteiras & Gladiadoras',
+  ...STYLE_CATEGORIES.map((c) => c.id),
 ] as const;
 
 export default function App() {
@@ -78,8 +79,12 @@ export default function App() {
   const [isAdminView, setIsAdminView] = useState(() => {
     if (typeof window === 'undefined') return false;
     const params = new URLSearchParams(window.location.search);
+    if (params.get('importar_pedido')) {
+      importBrowserOrderFromWhatsAppSync(window.location.search);
+    }
     return (
       params.get('acesso') === 'admin' ||
+      Boolean(params.get('importar_pedido')) ||
       window.location.pathname.replace(/\/+$/, '') === '/admin'
     );
   });
@@ -94,7 +99,9 @@ export default function App() {
 
   const loadStoreData = useCallback(async () => {
     const localDb = getBrowserStoreDb();
-    const localActive = localDb.products.filter((p) => p.active);
+    const localActive = localDb.products
+      .filter((p) => p.active)
+      .map((p) => ({ ...p, category: resolveProductStyleCategory(p) }));
     if (localActive.length > 0) {
       setProducts(localActive);
     }
@@ -110,10 +117,11 @@ export default function App() {
       if (prodRes.ok) {
         const prods = await prodRes.json();
         if (Array.isArray(prods) && prods.length > 0) {
-          setProducts(prods);
+          const mergedProds = sanitizeProductCatalog(prods);
+          setProducts(mergedProds.filter((p) => p.active));
           saveBrowserStoreDb({
             ...getBrowserStoreDb(),
-            products: prods,
+            products: mergedProds,
           });
         }
       }
@@ -401,8 +409,11 @@ export default function App() {
   const catalogList = products.length > 0 ? products : INITIAL_PRODUCTS;
 
   const filteredProducts = catalogList.filter((prod) => {
+    const prodStyle = resolveProductStyleCategory(prod);
     const matchCategory =
-      selectedCategory === 'Todos' || prod.category === selectedCategory;
+      selectedCategory === 'Todos' ||
+      prodStyle === selectedCategory ||
+      prod.category === selectedCategory;
     const matchSize =
       selectedSizeFilter === null ||
       prod.availableSizes.includes(selectedSizeFilter);
@@ -410,6 +421,7 @@ export default function App() {
       !searchQuery.trim() ||
       prod.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       prod.subtitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      prodStyle.toLowerCase().includes(searchQuery.toLowerCase()) ||
       prod.colors.some((c) =>
         c.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
@@ -651,9 +663,89 @@ export default function App() {
         </section>
 
         {/* ===================================================================
-            SECTION 1: CATALOG GRID — 2 COLUMNS ON MOBILE, 3 TABLET, 4 DESKTOP
+            SECTION 1: CIRCULAR STYLE CATEGORIES + CATALOG GRID
         =================================================================== */}
-        <section id="catalogo" className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8 space-y-4 sm:space-y-6">
+        <section id="catalogo" className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8 space-y-5 sm:space-y-7">
+          {/* Circular Style Category Selector (Exactly matching screenshot layout) */}
+          <div className="bg-white border border-[#E6DDD0] rounded-2xl px-4 py-5 sm:py-6 shadow-2xs">
+            <div className="flex items-start justify-start sm:justify-center gap-4 sm:gap-6 md:gap-8 overflow-x-auto pb-1">
+              {/* Circle 0: Todos */}
+              <button
+                type="button"
+                onClick={() => setSelectedCategory('Todos')}
+                className="flex flex-col items-center gap-2 shrink-0 group cursor-pointer"
+              >
+                <div
+                  className={`w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full overflow-hidden flex items-center justify-center transition-all ${
+                    selectedCategory === 'Todos'
+                      ? 'ring-2 ring-[#631421] ring-offset-2 scale-105 bg-[#631421] text-[#FAF7F2]'
+                      : 'bg-[#E9E9E6] text-[#1F1215] group-hover:scale-105'
+                  }`}
+                >
+                  <img
+                    src="/assets/aistudio/IMG_3086_5529b321.jpeg"
+                    alt="Todos os Modelos"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <span
+                  className={`text-xs sm:text-sm text-center leading-tight max-w-[90px] ${
+                    selectedCategory === 'Todos'
+                      ? 'font-bold text-[#631421]'
+                      : 'font-medium text-[#1F1215] group-hover:text-[#631421]'
+                  }`}
+                >
+                  Todos ({catalogList.length})
+                </span>
+              </button>
+
+              {/* 8 Style Categories from Screenshot: Bota, Plataforma, Sandália de Salto, Rasteiras, Papetes, Chinelos, Scarpin, Tênis Casual */}
+              {STYLE_CATEGORIES.map((styleCat) => {
+                const isSelected = selectedCategory === styleCat.id;
+                const count = catalogList.filter(
+                  (p) => resolveProductStyleCategory(p) === styleCat.id
+                ).length;
+
+                return (
+                  <button
+                    key={styleCat.id}
+                    type="button"
+                    onClick={() =>
+                      setSelectedCategory(isSelected ? 'Todos' : styleCat.id)
+                    }
+                    className="flex flex-col items-center gap-2 shrink-0 group cursor-pointer"
+                  >
+                    <div
+                      className={`w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-[#E9E9E6] overflow-hidden flex items-center justify-center transition-all ${
+                        isSelected
+                          ? 'ring-2 ring-[#631421] ring-offset-2 scale-105 shadow-sm'
+                          : 'group-hover:scale-105'
+                      }`}
+                    >
+                      <img
+                        src={styleCat.image}
+                        alt={styleCat.label}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <span
+                      className={`text-xs sm:text-sm text-center leading-tight max-w-[96px] ${
+                        isSelected
+                          ? 'font-bold text-[#631421]'
+                          : 'font-medium text-[#1F1215] group-hover:text-[#631421]'
+                      }`}
+                    >
+                      {styleCat.label}
+                      <span className="block text-[10px] text-[#6E5D5F] font-normal">
+                        ({count})
+                      </span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Compact Storefront Banner Strip */}
           <div className="p-3 sm:p-4 rounded-xl bg-[#F3EDE2] border border-[#E6DDD0] flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2.5">
@@ -1479,57 +1571,23 @@ export default function App() {
             {/* Col 2: Categories & Navigation */}
             <div className="space-y-2.5">
               <p className="font-semibold text-[#FAF7F2] uppercase tracking-wider text-[11px]">
-                Categorias do Catálogo
+                Estilos do Catálogo
               </p>
-              <ul className="space-y-2 text-[#C9B9AC]">
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedCategory('Scarpins & Saltos');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="hover:text-white cursor-pointer"
-                  >
-                    Scarpins & Saltos
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedCategory('Flatforms & Papetes');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="hover:text-white cursor-pointer"
-                  >
-                    Flatforms & Papetes
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedCategory('Anabelas & Plataformas');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="hover:text-white cursor-pointer"
-                  >
-                    Anabelas & Plataformas
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedCategory('Rasteiras & Gladiadoras');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="hover:text-white cursor-pointer"
-                  >
-                    Rasteiras & Gladiadoras
-                  </button>
-                </li>
+              <ul className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[#C9B9AC]">
+                {STYLE_CATEGORIES.map((sc) => (
+                  <li key={sc.id}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedCategory(sc.id);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className="hover:text-white cursor-pointer text-left"
+                    >
+                      {sc.label}
+                    </button>
+                  </li>
+                ))}
               </ul>
             </div>
 
