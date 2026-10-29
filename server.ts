@@ -1433,6 +1433,10 @@ interface StoredAdminCredentials {
 
 const activeAdminSessions = new Map<string, { email: string; expiresAt: number }>();
 const loginRateLimiter = new Map<string, { count: number; resetAt: number }>();
+const DEFAULT_OWNER_EMAIL = 'bbgjakellyne@gmail.com';
+const DEFAULT_OWNER_PASS = 'peterson2026';
+const ADMIN_TOKEN_SECRET =
+  process.env.ADMIN_SESSION_SECRET || 'peterson-shoes-admin-hmac-secret-2026-goiania';
 
 function loadStoredAdminCredentials(): StoredAdminCredentials | null {
   try {
@@ -1455,7 +1459,7 @@ function hasEnvAdminPassword(): boolean {
 }
 
 function isAdminConfigured(): boolean {
-  return hasEnvAdminPassword() || Boolean(loadStoredAdminCredentials());
+  return true;
 }
 
 function hashPasswordWithSalt(password: string, saltHex: string): string {
@@ -1463,53 +1467,88 @@ function hashPasswordWithSalt(password: string, saltHex: string): string {
 }
 
 function verifyAdminCredentials(emailInput: string, passwordInput: string): { ok: boolean; email: string } {
-  const cleanPassword = String(passwordInput || '');
+  const cleanPassword = String(passwordInput || '').trim();
   const cleanEmail = String(emailInput || '').trim().toLowerCase();
 
-  if (!cleanPassword) {
+  if (!cleanEmail || !cleanPassword) {
     return { ok: false, email: '' };
   }
 
   // 1. Check environment variables if configured
   if (hasEnvAdminPassword()) {
     const expectedPass = String(process.env.ADMIN_PASSWORD).trim();
-    const expectedEmail = (process.env.ADMIN_EMAIL || 'contato@petersonshoes.com.br').trim().toLowerCase();
+    const expectedEmail = (process.env.ADMIN_EMAIL || DEFAULT_OWNER_EMAIL).trim().toLowerCase();
     const passBufA = Buffer.from(cleanPassword);
     const passBufB = Buffer.from(expectedPass);
     const passMatches =
       passBufA.length === passBufB.length && crypto.timingSafeEqual(passBufA, passBufB);
-    const emailMatches = !cleanEmail || cleanEmail === expectedEmail;
-    return {
-      ok: passMatches && emailMatches,
-      email: expectedEmail,
-    };
+    const emailMatches = cleanEmail === expectedEmail;
+    if (passMatches && emailMatches) {
+      return { ok: true, email: expectedEmail };
+    }
   }
 
-  // 2. Check hashed credentials file
+  // 2. Check hashed credentials file if custom password was saved
   const stored = loadStoredAdminCredentials();
   if (stored) {
     const computedHash = hashPasswordWithSalt(cleanPassword, stored.salt);
     const bufA = Buffer.from(computedHash, 'hex');
     const bufB = Buffer.from(stored.passwordHash, 'hex');
     const passMatches = bufA.length === bufB.length && crypto.timingSafeEqual(bufA, bufB);
-    const emailMatches = !cleanEmail || cleanEmail === stored.email.toLowerCase();
-    return {
-      ok: passMatches && emailMatches,
-      email: stored.email,
-    };
+    const emailMatches =
+      cleanEmail === stored.email.toLowerCase() || cleanEmail === DEFAULT_OWNER_EMAIL;
+    if (passMatches && emailMatches) {
+      return { ok: true, email: stored.email };
+    }
+  }
+
+  // 3. Strictly verify default owner email & password
+  const passBufA = Buffer.from(cleanPassword);
+  const passBufB = Buffer.from(DEFAULT_OWNER_PASS);
+  const defaultPassMatches =
+    passBufA.length === passBufB.length && crypto.timingSafeEqual(passBufA, passBufB);
+  if (cleanEmail === DEFAULT_OWNER_EMAIL && defaultPassMatches) {
+    return { ok: true, email: DEFAULT_OWNER_EMAIL };
   }
 
   return { ok: false, email: '' };
 }
 
 function issueAdminSessionToken(email: string): string {
-  const token = crypto.randomBytes(32).toString('hex');
-  // 12-hour session expiration
-  activeAdminSessions.set(token, {
-    email,
-    expiresAt: Date.now() + 12 * 60 * 60 * 1000,
-  });
+  const expiresAt = Date.now() + 24 * 60 * 60 * 1000;
+  const payload = Buffer.from(JSON.stringify({ email, expiresAt })).toString('base64url');
+  const sig = crypto
+    .createHmac('sha256', ADMIN_TOKEN_SECRET)
+    .update(payload)
+    .digest('base64url');
+  const token = `${payload}.${sig}`;
+  activeAdminSessions.set(token, { email, expiresAt });
   return token;
+}
+
+function verifyAdminSessionToken(token: string): boolean {
+  if (!token) return false;
+  const mem = activeAdminSessions.get(token);
+  if (mem && Date.now() <= mem.expiresAt) return true;
+
+  const parts = token.split('.');
+  if (parts.length !== 2) return false;
+  const [payload, sig] = parts;
+  const expectedSig = crypto
+    .createHmac('sha256', ADMIN_TOKEN_SECRET)
+    .update(payload)
+    .digest('base64url');
+  const bufA = Buffer.from(sig);
+  const bufB = Buffer.from(expectedSig);
+  if (bufA.length !== bufB.length || !crypto.timingSafeEqual(bufA, bufB)) {
+    return false;
+  }
+  try {
+    const decoded = JSON.parse(Buffer.from(payload, 'base64url').toString('utf-8'));
+    return Boolean(decoded && decoded.email && Date.now() <= Number(decoded.expiresAt));
+  } catch {
+    return false;
+  }
 }
 
 function requireAdminAuth(req: Request, res: Response, next: NextFunction) {
@@ -1518,20 +1557,9 @@ function requireAdminAuth(req: Request, res: Response, next: NextFunction) {
     return res.status(401).json({ error: 'Não autorizado: Token administrativo ausente.' });
   }
   const token = authHeader.slice('Bearer '.length).trim();
-  if (!token) {
-    return res.status(401).json({ error: 'Não autorizado: Token administrativo vazio.' });
-  }
-
-  const session = activeAdminSessions.get(token);
-  if (!session) {
+  if (!verifyAdminSessionToken(token)) {
     return res.status(401).json({ error: 'Sessão administrativa inválida ou expirada. Faça login novamente.' });
   }
-
-  if (Date.now() > session.expiresAt) {
-    activeAdminSessions.delete(token);
-    return res.status(401).json({ error: 'Sessão administrativa expirada. Faça login novamente.' });
-  }
-
   next();
 }
 
@@ -1881,9 +1909,17 @@ ${productUrlsXml}
       }
 
       const orderNumber = 101 + db.orders.length;
-      const orderCode =
-        env === 'homologacao' ? `PTS-HML-${orderNumber}` : `PTS-2026-${orderNumber}`;
-      const orderId = `ord-${Date.now()}`;
+      const requestedOrderCode =
+        typeof req.body.orderCode === 'string' && req.body.orderCode.trim()
+          ? req.body.orderCode.trim()
+          : env === 'homologacao'
+          ? `PTS-HML-${orderNumber}`
+          : `PTS-2026-${orderNumber}`;
+      const orderCode = requestedOrderCode;
+      const orderId =
+        typeof req.body.id === 'string' && req.body.id.trim()
+          ? req.body.id.trim()
+          : `ord-${Date.now()}`;
       const productionDays = db.settings.productionDays || 15;
       const estimatedDeliveryDate = addDaysISO(productionDays);
 
@@ -1916,7 +1952,10 @@ ${productUrlsXml}
       ]);
 
       const depositPayment: PaymentRecord = {
-        id: `pay-${Date.now()}-1`,
+        id:
+          typeof req.body.depositPaymentId === 'string' && req.body.depositPaymentId.trim()
+            ? req.body.depositPaymentId.trim()
+            : `pay-${Date.now()}-1`,
         orderId,
         orderCode,
         installmentType: 'ENTRADA_50',
@@ -1934,7 +1973,10 @@ ${productUrlsXml}
       };
 
       const finalPayment: PaymentRecord = {
-        id: `pay-${Date.now()}-2`,
+        id:
+          typeof req.body.finalPaymentId === 'string' && req.body.finalPaymentId.trim()
+            ? req.body.finalPaymentId.trim()
+            : `pay-${Date.now()}-2`,
         orderId,
         orderCode,
         installmentType: 'FINAL_50',
@@ -1969,15 +2011,36 @@ ${productUrlsXml}
         estimatedDeliveryDate,
         productionDays,
         factoryNotes:
-          'Encomenda registrada no site. Aguardando conferência do recebimento dos 50% de entrada no Banco Inter pela administração.',
+          '⏳ Pedido Aguardando Confirmação da Peterson Shoes (conferir entrada de 50% no Banco Inter).',
         trackingCode: '',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
 
-      db.orders.unshift(newOrder);
-      db.payments.unshift(finalPayment, depositPayment);
+      db.orders = [newOrder, ...db.orders.filter((o) => o.id !== newOrder.id)];
+      db.payments = [
+        finalPayment,
+        depositPayment,
+        ...db.payments.filter((p) => p.orderId !== newOrder.id),
+      ];
       saveDb(db, env);
+
+      // Mirror order to production DB if created in homologacao so the owner always sees it
+      if (env !== 'producao') {
+        try {
+          const prodDb = loadDb('producao');
+          if (!prodDb.orders.some((o) => o.id === newOrder.id)) {
+            prodDb.orders.unshift(newOrder);
+            prodDb.payments.unshift(finalPayment, depositPayment);
+            if (!prodDb.customers.some((c) => c.id === customer.id)) {
+              prodDb.customers.unshift(customer);
+            }
+            saveDb(prodDb, 'producao');
+          }
+        } catch {
+          // Ignore mirror errors
+        }
+      }
 
       res.status(201).json({
         order: {
@@ -2352,31 +2415,12 @@ DIRETRIZES DE ESTILO:
     }
 
     const { email, password } = req.body as { email?: string; password?: string };
-    const cleanEmail = String(email || 'bbgjakellyne@gmail.com').trim().toLowerCase();
+    const cleanEmail = String(email || '').trim().toLowerCase();
     const cleanPassword = String(password || '').trim();
 
-    if (!isAdminConfigured() && cleanPassword.length >= 4) {
-      const salt = crypto.randomBytes(16).toString('hex');
-      const passwordHash = hashPasswordWithSalt(cleanPassword, salt);
-      const sessionSecret = crypto.randomBytes(32).toString('hex');
-      const record: StoredAdminCredentials = {
-        email: cleanEmail,
-        salt,
-        passwordHash,
-        sessionSecret,
-        updatedAt: new Date().toISOString(),
-      };
-      if (!fs.existsSync(DATA_DIR)) {
-        fs.mkdirSync(DATA_DIR, { recursive: true });
-      }
-      fs.writeFileSync(ADMIN_AUTH_FILE, JSON.stringify(record, null, 2), {
-        encoding: 'utf-8',
-        mode: 0o600,
-      });
-      const token = issueAdminSessionToken(cleanEmail);
-      return res.json({
-        token,
-        adminEmail: cleanEmail,
+    if (!cleanEmail || !cleanPassword) {
+      return res.status(401).json({
+        error: 'Informe seu e-mail e senha administrativa.',
       });
     }
 
@@ -2398,8 +2442,42 @@ DIRETRIZES DE ESTILO:
     });
 
     return res.status(401).json({
-      error: 'Credenciais inválidas. Verifique seu e-mail e senha administrativa.',
+      error: 'Acesso negado! E-mail ou senha incorretos. Área exclusiva da proprietária.',
     });
+  });
+
+  app.post('/api/admin/change-password', requireAdminAuth, (req: Request, res: Response) => {
+    const { email, newPassword } = req.body as { email?: string; newPassword?: string };
+    const cleanEmail = String(email || DEFAULT_OWNER_EMAIL).trim().toLowerCase();
+    const cleanPassword = String(newPassword || '').trim();
+
+    if (cleanPassword.length < 6) {
+      return res.status(400).json({
+        error: 'A nova senha deve ter pelo menos 6 caracteres.',
+      });
+    }
+
+    const salt = crypto.randomBytes(16).toString('hex');
+    const passwordHash = hashPasswordWithSalt(cleanPassword, salt);
+    const sessionSecret = crypto.randomBytes(32).toString('hex');
+
+    const record: StoredAdminCredentials = {
+      email: cleanEmail,
+      salt,
+      passwordHash,
+      sessionSecret,
+      updatedAt: new Date().toISOString(),
+    };
+
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    fs.writeFileSync(ADMIN_AUTH_FILE, JSON.stringify(record, null, 2), {
+      encoding: 'utf-8',
+      mode: 0o600,
+    });
+
+    return res.json({ ok: true, email: cleanEmail });
   });
 
   app.post('/api/admin/logout', (req: Request, res: Response) => {
@@ -2674,6 +2752,46 @@ DIRETRIZES DE ESTILO:
     res.json({ ok: true });
   });
 
+  // Sync local orders to server if serverless container cold-started
+  app.post('/api/admin/sync-orders', requireAdminAuth, (req: Request, res: Response) => {
+    const env = resolveEnv(req);
+    const db = loadDb(env);
+    const { orders, customers, payments } = req.body as {
+      orders?: BespokeOrder[];
+      customers?: CustomerRecord[];
+      payments?: PaymentRecord[];
+    };
+    let changed = false;
+    if (Array.isArray(orders)) {
+      for (const ord of orders) {
+        if (ord && ord.id && !DEMO_ORDER_IDS.has(ord.id) && !db.orders.some((o) => o.id === ord.id)) {
+          db.orders.unshift(ord);
+          changed = true;
+        }
+      }
+    }
+    if (Array.isArray(customers)) {
+      for (const cust of customers) {
+        if (cust && cust.id && !DEMO_CUSTOMER_IDS.has(cust.id) && !db.customers.some((c) => c.id === cust.id)) {
+          db.customers.unshift(cust);
+          changed = true;
+        }
+      }
+    }
+    if (Array.isArray(payments)) {
+      for (const pay of payments) {
+        if (pay && pay.id && !DEMO_PAYMENT_IDS.has(pay.id) && !db.payments.some((p) => p.id === pay.id)) {
+          db.payments.unshift(pay);
+          changed = true;
+        }
+      }
+    }
+    if (changed) {
+      saveDb(db, env);
+    }
+    return res.json({ ok: true, count: db.orders.length });
+  });
+
   // Update Order Production / Payment Status (Exclusive Admin Confirmation)
   app.patch('/api/admin/orders/:id', requireAdminAuth, (req: Request, res: Response) => {
     const env = resolveEnv(req);
@@ -2684,16 +2802,33 @@ DIRETRIZES DE ESTILO:
       factoryNotes,
       trackingCode,
       estimatedDeliveryDate,
+      orderSnapshot,
     } = req.body as {
       productionStatus?: ProductionStatus;
       paymentStatus?: PaymentStatus;
       factoryNotes?: string;
       trackingCode?: string;
       estimatedDeliveryDate?: string;
+      orderSnapshot?: BespokeOrder;
     };
 
     const db = loadDb(env);
-    const order = db.orders.find((o) => o.id === id);
+    let order = db.orders.find((o) => o.id === id || o.orderCode === id);
+    if (!order && orderSnapshot && orderSnapshot.id) {
+      const { payments: snapPayments, ...cleanOrder } = orderSnapshot as BespokeOrder & {
+        payments?: PaymentRecord[];
+      };
+      db.orders.unshift(cleanOrder);
+      if (Array.isArray(snapPayments)) {
+        for (const sp of snapPayments) {
+          if (!db.payments.some((p) => p.id === sp.id)) {
+            db.payments.unshift(sp);
+          }
+        }
+      }
+      order = db.orders.find((o) => o.id === cleanOrder.id);
+    }
+
     if (!order) {
       return res.status(404).json({ error: 'Encomenda não encontrada.' });
     }
@@ -2720,9 +2855,14 @@ DIRETRIZES DE ESTILO:
           depositPay.paidAt = null;
         }
       }
-      if (paymentStatus === 'ENTRADA_50_PAGA' && depositPay && depositPay.status !== 'APROVADO') {
-        depositPay.status = 'APROVADO';
-        depositPay.paidAt = new Date().toISOString();
+      if (paymentStatus === 'ENTRADA_50_PAGA') {
+        if (depositPay && depositPay.status !== 'APROVADO') {
+          depositPay.status = 'APROVADO';
+          depositPay.paidAt = new Date().toISOString();
+        }
+        if (!productionStatus && order.productionStatus === 'AGUARDANDO_CONFIRMACAO') {
+          order.productionStatus = 'CORTE_MODELAGEM';
+        }
       }
       if (paymentStatus === 'QUITADO_100') {
         if (depositPay && depositPay.status !== 'APROVADO') {
@@ -2747,6 +2887,17 @@ DIRETRIZES DE ESTILO:
       ...order,
       payments: db.payments.filter((p) => p.orderId === order.id),
     });
+  });
+
+  // Delete Order (Admin only, e.g. for removing test orders or cancelled orders)
+  app.delete('/api/admin/orders/:id', requireAdminAuth, (req: Request, res: Response) => {
+    const env = resolveEnv(req);
+    const { id } = req.params;
+    const db = loadDb(env);
+    db.orders = db.orders.filter((o) => o.id !== id && o.orderCode !== id);
+    db.payments = db.payments.filter((p) => p.orderId !== id);
+    saveDb(db, env);
+    return res.json({ ok: true });
   });
 
   // Update Store Settings

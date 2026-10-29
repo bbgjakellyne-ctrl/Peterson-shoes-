@@ -2872,13 +2872,14 @@ export function updateBrowserOrderAdmin(
       (p) => p.installmentType === 'FINAL_50'
     );
 
-    if (
-      updates.paymentStatus === 'ENTRADA_50_PAGA' &&
-      depositPay &&
-      depositPay.status !== 'APROVADO'
-    ) {
-      depositPay.status = 'APROVADO';
-      depositPay.paidAt = new Date().toISOString();
+    if (updates.paymentStatus === 'ENTRADA_50_PAGA') {
+      if (depositPay && depositPay.status !== 'APROVADO') {
+        depositPay.status = 'APROVADO';
+        depositPay.paidAt = new Date().toISOString();
+      }
+      if (!updates.productionStatus && order.productionStatus === 'AGUARDANDO_CONFIRMACAO') {
+        order.productionStatus = 'CORTE_MODELAGEM';
+      }
     }
     if (updates.paymentStatus === 'QUITADO_100') {
       if (depositPay && depositPay.status !== 'APROVADO') {
@@ -2910,3 +2911,11 @@ export function updateBrowserOrderAdmin(
     payments: db.payments.filter((p) => p.orderId === order.id),
   };
 }
+
+export function deleteBrowserOrderAdmin(orderId: string): void {
+  const db = getBrowserStoreDb();
+  db.orders = db.orders.filter((o) => o.id !== orderId && o.orderCode !== orderId);
+  db.payments = db.payments.filter((p) => p.orderId !== orderId);
+  saveBrowserStoreDb(db);
+}
+

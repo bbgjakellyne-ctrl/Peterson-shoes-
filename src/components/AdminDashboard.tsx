@@ -41,6 +41,7 @@ import {
 } from '../utils/whatsapp';
 import {
   buildStandardColors,
+  deleteBrowserOrderAdmin,
   getBrowserStoreDb,
   saveBrowserStoreDb,
   STANDARD_SIZES,
@@ -226,9 +227,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onCatalogUpdated,
 }) => {
   const [token, setToken] = useState<string | null>(null);
-  const [loginEmail, setLoginEmail] = useState('bbgjakellyne@gmail.com');
-  const [loginPassword, setLoginPassword] = useState('peterson2026');
-  const [confirmSetupPassword, setConfirmSetupPassword] = useState('peterson2026');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [confirmSetupPassword, setConfirmSetupPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [needsInitialSetup, setNeedsInitialSetup] = useState(false);
   const [checkingAuthStatus, setCheckingAuthStatus] = useState(true);
@@ -236,7 +237,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [activeTab, setActiveTab] = useState<
     'PRODUCTS' | 'ORDERS' | 'FINANCE' | 'CUSTOMERS' | 'SETTINGS' | 'ANALYTICS' | 'SEO' | 'REELS'
   >('PRODUCTS');
-  const [showQuickReelsModal, setShowQuickReelsModal] = useState(true);
   const [downloadingMobileVideo, setDownloadingMobileVideo] = useState(false);
   const [mobileVideoStatus, setMobileVideoStatus] = useState('');
   const [preloadedVideoFile, setPreloadedVideoFile] = useState<File | null>(null);
@@ -535,15 +535,65 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       if (dashRes.ok) {
         const data = await dashRes.json();
         if (data?.products && Array.isArray(data.products)) {
+          const localDb = getBrowserStoreDb();
+          const serverOrders = Array.isArray(data.orders) ? data.orders : [];
+          const serverCustomers = Array.isArray(data.customers) ? data.customers : [];
+          const serverPayments = Array.isArray(data.payments) ? data.payments : [];
+
+          // Merge server + localStorage so orders placed on this browser never vanish on serverless restarts
+          const mergedOrdersMap = new Map<string, BespokeOrder>();
+          for (const o of localDb.orders || []) {
+            if (o && o.id) mergedOrdersMap.set(o.id, o);
+          }
+          for (const o of serverOrders) {
+            if (o && o.id) mergedOrdersMap.set(o.id, o);
+          }
+          const mergedOrders = Array.from(mergedOrdersMap.values()).sort((a, b) =>
+            (b.createdAt || '').localeCompare(a.createdAt || '')
+          );
+
+          const mergedCustomersMap = new Map<string, Customer>();
+          for (const c of localDb.customers || []) {
+            if (c && c.id) mergedCustomersMap.set(c.id, c);
+          }
+          for (const c of serverCustomers) {
+            if (c && c.id) mergedCustomersMap.set(c.id, c);
+          }
+          const mergedCustomers = Array.from(mergedCustomersMap.values());
+
+          const mergedPaymentsMap = new Map<string, PaymentRecord>();
+          for (const p of localDb.payments || []) {
+            if (p && p.id) mergedPaymentsMap.set(p.id, p);
+          }
+          for (const p of serverPayments) {
+            if (p && p.id) mergedPaymentsMap.set(p.id, p);
+          }
+          const mergedPayments = Array.from(mergedPaymentsMap.values());
+
           const updatedDb = {
             products: data.products,
-            customers: data.customers || [],
-            orders: data.orders || [],
-            payments: data.payments || [],
-            settings: data.settings || getBrowserStoreDb().settings,
+            customers: mergedCustomers,
+            orders: mergedOrders,
+            payments: mergedPayments,
+            settings: data.settings || localDb.settings,
           };
           saveBrowserStoreDb(updatedDb);
           applyDashboardFromDb(updatedDb);
+
+          if (mergedOrders.length > serverOrders.length) {
+            apiFetch('/api/admin/sync-orders', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${adminToken}`,
+              },
+              body: JSON.stringify({
+                orders: mergedOrders,
+                customers: mergedCustomers,
+                payments: mergedPayments,
+              }),
+            }).catch(() => {});
+          }
         }
         if (data?.analytics) {
           setAnalytics(data.analytics);
@@ -849,6 +899,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   ) => {
     if (!token) return;
+    const targetOrder = orders.find((o) => o.id === orderId);
+    updateBrowserOrderAdmin(orderId, updates);
+    applyDashboardFromDb(getBrowserStoreDb());
     try {
       const res = await apiFetch(`/api/admin/orders/${orderId}`, {
         method: 'PATCH',
@@ -856,18 +909,36 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(updates),
+        body: JSON.stringify({
+          ...updates,
+          orderSnapshot: targetOrder,
+        }),
       });
       if (res.status === 401 || res.status === 403) {
         setToken(null);
         return;
       }
       if (res.ok) {
-        updateBrowserOrderAdmin(orderId, updates);
         await fetchAdminData(token);
       }
     } catch {
-      // Requires valid backend response
+      // Local state already updated above
+    }
+  };
+
+  const handleDeleteOrder = async (orderId: string) => {
+    if (!token) return;
+    deleteBrowserOrderAdmin(orderId);
+    applyDashboardFromDb(getBrowserStoreDb());
+    try {
+      await apiFetch(`/api/admin/orders/${orderId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch {
+      // Local state already updated
     }
   };
 
@@ -1175,7 +1246,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             Painel Administrativo
           </h1>
           <p className="text-xs text-[#6E5A5F] mt-1 leading-relaxed">
-            Seu e-mail (<strong>bbgjakellyne@gmail.com</strong>) e senha padrão (<strong>peterson2026</strong>) já estão preenchidos abaixo — basta clicar em <strong>Entrar no Painel de Gestão</strong> ou rolar para ver o seu vídeo logo abaixo!
+            Área restrita e protegida por senha exclusiva da proprietária da <strong>Peterson Shoes</strong>. Digite seu e-mail e senha administrativa para gerenciar preços, confirmar pedidos e acessar os vídeos da loja.
           </p>
 
           {loginError && (
@@ -1198,7 +1269,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   type="email"
                   required
                   autoComplete="username"
-                  placeholder="seuemail@petersonshoes.com.br"
+                  placeholder="Digite seu e-mail de administradora"
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-[#F7F3EC] border border-[#DFD3C3] rounded-lg text-sm text-[#231619] focus:outline-none focus:border-[#5B1824]"
@@ -1248,170 +1319,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </button>
             </form>
           )}
-
-          {/* Quick-Access Owner Reels Studio inside Admin Area (Hidden from Public Storefront) */}
-          <div className="mt-6 pt-5 border-t border-[#EFE7DA]">
-            <button
-              type="button"
-              onClick={() => setShowQuickReelsModal((prev) => !prev)}
-              className="w-full py-2.5 px-4 bg-[#231619] hover:bg-[#3A2429] text-[#E5D3B3] border border-[#D4AF37]/50 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
-            >
-              <span>🎬 {showQuickReelsModal ? 'Ocultar Vídeo Reels do Instagram' : 'Baixar Vídeo Reels Instagram Pronto (MP4 1080x1920)'}</span>
-            </button>
-
-            {showQuickReelsModal && (
-              <div className="mt-4 p-4 rounded-xl bg-[#F7F3EC] border border-[#DFD3C3] space-y-4">
-                <div className="space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#5B1824]">
-                    Uso Exclusivo da Loja · Oculto da Vitrine Pública
-                  </span>
-                  <h3 className="text-sm font-semibold text-[#231619]">
-                    Vídeo Comercial Reels 9:16 Full HD (18s com Trilha Sonora)
-                  </h3>
-                  <p className="text-[11px] text-[#6E5A5F] leading-relaxed">
-                    Este vídeo fica <strong>somente aqui no Painel Administrativo</strong> (nenhum cliente na vitrine vê este arquivo).
-                  </p>
-                </div>
-
-                <div className="max-w-[230px] mx-auto rounded-xl overflow-hidden border-2 border-[#5B1824] shadow-md bg-black">
-                  <video
-                    src="/assets/peterson-reels-privado-admin.mp4?v=nitido-hd-v4"
-                    controls
-                    playsInline
-                    preload="metadata"
-                    className="w-full aspect-[9/16] object-cover"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <button
-                    type="button"
-                    disabled={downloadingMobileVideo}
-                    onClick={() => handleMobileVideoDownload('share')}
-                    className="w-full py-3.5 px-4 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-lg text-xs font-bold text-center transition-colors shadow-sm cursor-pointer"
-                  >
-                    {downloadingMobileVideo
-                      ? '⏳ Preparando Vídeo para o Celular...'
-                      : '📲 Salvar Vídeo na Galeria do Celular (iPhone / Android)'}
-                  </button>
-
-                  <button
-                    type="button"
-                    disabled={downloadingMobileVideo}
-                    onClick={() => handleMobileVideoDownload('download')}
-                    className="w-full py-2.5 px-4 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-lg text-xs font-bold text-center transition-colors cursor-pointer"
-                  >
-                    ⬇️ Baixar Arquivo MP4 Direto no Aparelho
-                  </button>
-
-                  {mobileVideoStatus && (
-                    <p className="text-[11px] font-semibold text-[#2E6B3E] text-center bg-white p-2 rounded border border-[#2E6B3E]/30">
-                      {mobileVideoStatus}
-                    </p>
-                  )}
-
-                  <button
-                    type="button"
-                    onClick={() => copyToClipboard(REELS_CAPTION_TEXT, 'login-reels-caption')}
-                    className="w-full py-2.5 px-4 bg-white hover:bg-[#EFE7DA] text-[#231619] border border-[#DFD3C3] rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
-                  >
-                    {copiedTextId === 'login-reels-caption' ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 text-[#2E6B3E]" />
-                        <span>Legenda e Hashtags Copiadas!</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3.5 h-3.5" />
-                        <span>Copiar Legenda Pronta + Hashtags</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-
-                {/* Real-Time Clicks & Visits Summary inside Quick Admin View */}
-                <div className="pt-3 border-t border-[#DFD3C3] space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold text-[#5B1824] uppercase tracking-wider">
-                      📊 Desempenho em Tempo Real (Cliques no Site):
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        apiFetch('/api/analytics/summary')
-                          .then((r) => (r.ok ? r.json() : null))
-                          .then((d) => d && setAnalytics(d))
-                          .catch(() => {})
-                      }
-                      className="text-[10px] font-semibold text-[#5B1824] underline cursor-pointer"
-                    >
-                      Atualizar agora
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 text-center">
-                    <div className="p-2.5 bg-white rounded-lg border border-[#DFD3C3]">
-                      <p className="text-lg font-bold text-[#231619] font-mono-tabular">
-                        {analytics.totalVisits}
-                      </p>
-                      <p className="text-[10px] text-[#6E5A5F]">Total de Visitas</p>
-                    </div>
-                    <div className="p-2.5 bg-white rounded-lg border border-[#DFD3C3]">
-                      <p className="text-lg font-bold text-[#5B1824] font-mono-tabular">
-                        {analytics.uniqueVisitorsCount}
-                      </p>
-                      <p className="text-[10px] text-[#6E5A5F]">Pessoas Únicas</p>
-                    </div>
-                  </div>
-                  <p className="text-[10px] text-[#6E5A5F] leading-relaxed">
-                    💡 <strong>Por que o Google Search Console mostra 0 cliques?</strong> Porque o Google Search Console só mostra cliques feitos dentro da busca do Google (com atraso de 24h a 48h) e não conta cliques vindos do WhatsApp ou Instagram. Já este painel acima conta <strong>todos os cliques em tempo real</strong>!
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-[#DFD3C3] space-y-2">
-                  <p className="text-[11px] font-bold text-[#231619]">
-                    📸 Salvar também as 6 Fotos Novas de Campanha (Toque e segure na foto no iPhone e escolha &ldquo;Salvar em Fotos&rdquo;):
-                  </p>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { url: '/assets/campanha/cena1-scarpin-marsala.jpg', name: 'foto1-scarpin-marsala.jpg', label: '1. Scarpin Marsala' },
-                      { url: '/assets/campanha/cena2-slingback-ponteira-dourada.jpg', name: 'foto2-slingback-ouro.jpg', label: '2. Slingback Ouro' },
-                      { url: '/assets/campanha/cena3-slingback-cafe-mule-preta.jpg', name: 'foto3-slingback-cafe.jpg', label: '3. Verniz Café' },
-                      { url: '/assets/campanha/cena4-sandalia-mule-dourada.jpg', name: 'foto4-sandalia-dourada.jpg', label: '4. Salto Dourado' },
-                      { url: '/assets/campanha/cena5-anabela-tamanco-marsala.jpg', name: 'foto5-anabela-tamanco.jpg', label: '5. Anabela & Tamanco' },
-                      { url: '/assets/campanha/cena6-papete-anabela-piramides.jpg', name: 'foto6-papete-piramides.jpg', label: '6. Papete & Anabela' },
-                    ].map((foto) => (
-                      <button
-                        type="button"
-                        key={foto.name}
-                        onClick={async () => {
-                          try {
-                            const r = await fetch(foto.url);
-                            const b = await r.blob();
-                            const f = new File([b], foto.name, { type: 'image/jpeg' });
-                            if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [f] }))) {
-                              await navigator.share({ files: [f], title: foto.label });
-                            }
-                          } catch {
-                            // Ignore cancel
-                          }
-                        }}
-                        className="group block rounded-lg overflow-hidden border border-[#DFD3C3] bg-white hover:border-[#5B1824] transition-colors cursor-pointer"
-                      >
-                        <img src={foto.url} alt={foto.label} className="w-full aspect-[9/16] object-cover" />
-                        <span className="block py-1 px-1 text-[9px] font-bold text-center text-[#5B1824] bg-[#F7F3EC] truncate">
-                          📲 {foto.label}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
         </div>
       </div>
     );
   }
+
+  const pendingConfirmationOrders = orders.filter(
+    (o) =>
+      o.paymentStatus === 'AGUARDANDO_ENTRADA_50' ||
+      o.productionStatus === 'AGUARDANDO_CONFIRMACAO'
+  );
 
   return (
     <div className="min-h-screen bg-[#F7F3EC] text-[#231619]">
@@ -1490,6 +1407,106 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       </header>
 
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+        {/* CENTRAL DE PEDIDOS AGUARDANDO CONFIRMAÇÃO DA PETERSON SHOES */}
+        <div
+          className={`rounded-2xl p-6 border-2 shadow-sm transition-colors ${
+            pendingConfirmationOrders.length > 0
+              ? 'bg-[#FFF9EB] border-[#D4AF37]'
+              : 'bg-white border-[#DFD3C3]'
+          }`}
+        >
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span
+                  className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider ${
+                    pendingConfirmationOrders.length > 0
+                      ? 'bg-[#8C4A27] text-white'
+                      : 'bg-[#2E6B3E]/15 text-[#2E6B3E]'
+                  }`}
+                >
+                  {pendingConfirmationOrders.length > 0
+                    ? `🔔 ${pendingConfirmationOrders.length} Pedido(s) Aguardando sua Confirmação`
+                    : '✅ Tudo em Dia · Nenhum Pedido Pendente'}
+                </span>
+              </div>
+              <h2 className="text-lg sm:text-xl font-bold text-[#231619]">
+                Pedidos Aguardando Confirmação da Peterson Shoes
+              </h2>
+              <p className="text-xs text-[#6E5A5F]">
+                Quando uma cliente finaliza uma compra no site, o pedido aparece imediatamente aqui embaixo para você conferir o Pix/Cartão no seu Banco Inter e aprovar em 1 clique.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setActiveTab('ORDERS')}
+              className="px-4 py-2.5 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-xl text-xs font-semibold cursor-pointer whitespace-nowrap"
+            >
+              Ver Todos os Pedidos ({orders.length})
+            </button>
+          </div>
+
+          {pendingConfirmationOrders.length > 0 && (
+            <div className="mt-5 space-y-3">
+              {pendingConfirmationOrders.map((order) => (
+                <div
+                  key={order.id}
+                  className="bg-white border-2 border-[#D4AF37]/60 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-xs"
+                >
+                  <div className="space-y-1">
+                    <div className="flex flex-wrap items-center gap-2 text-xs">
+                      <span className="font-mono-tabular font-bold text-sm text-[#5B1824] bg-[#5B1824]/10 px-2 py-0.5 rounded">
+                        #{order.orderCode}
+                      </span>
+                      <span className="font-bold text-[#231619] text-sm">
+                        {order.customerName}
+                      </span>
+                      <span className="text-[#6E5A5F]">· WhatsApp: {order.customerWhatsapp}</span>
+                    </div>
+                    <p className="text-xs text-[#4A373B]">
+                      {order.items
+                        .map(
+                          (it) =>
+                            `${it.quantity}x ${it.name} (Cor: ${it.colorName}, Tam: ${it.size} BR)`
+                        )
+                        .join(' + ')}
+                    </p>
+                    <p className="text-xs font-mono-tabular text-[#5B1824] font-semibold">
+                      Valor Total: {formatBRL(order.totalAmount)} · Entrada 50% a Confirmar:{' '}
+                      <strong className="text-[#2E6B3E]">{formatBRL(order.depositAmount)}</strong> (
+                      {order.paymentMethod === 'PIX_50_50' ? 'Pix' : 'Cartão'})
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleUpdateOrder(order.id, {
+                          paymentStatus: 'ENTRADA_50_PAGA',
+                          productionStatus: 'CORTE_MODELAGEM',
+                        })
+                      }
+                      className="px-4 py-2.5 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer"
+                    >
+                      <Check className="w-4 h-4" />
+                      <span>Confirmar Recebimento dos 50% e Aprovar Pedido</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteOrder(order.id)}
+                      className="px-3 py-2.5 bg-[#7A2434]/10 hover:bg-[#7A2434]/20 text-[#7A2434] rounded-lg text-xs font-semibold cursor-pointer"
+                    >
+                      Excluir Teste / Cancelar
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Financial & Visitor Summary KPI Strip */}
         {metrics && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -1574,7 +1591,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             }`}
           >
             <Hammer className="w-4 h-4" />
-            <span>Encomendas & Produção 15 Dias ({orders.length})</span>
+            <span>
+              Encomendas & Confirmação de Pedidos ({orders.length}
+              {pendingConfirmationOrders.length > 0
+                ? ` · 🔔 ${pendingConfirmationOrders.length} Pendente`
+                : ''}
+              )
+            </span>
           </button>
 
           <button
@@ -2554,16 +2577,69 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </div>
             </div>
 
+            {orders.length === 0 && (
+              <div className="bg-white border border-[#DFD3C3] rounded-xl p-8 text-center space-y-2">
+                <p className="text-base font-semibold text-[#231619]">
+                  Nenhuma encomenda registrada até o momento
+                </p>
+                <p className="text-xs text-[#6E5A5F] max-w-lg mx-auto">
+                  Assim que uma cliente finalizar um pedido na vitrine da loja, ele aparecerá imediatamente aqui com o botão verde para você confirmar o recebimento dos 50% de entrada.
+                </p>
+              </div>
+            )}
+
             {orders.map((order) => {
               const factoryMsg = buildFactoryProductionMessage(order);
               const customerReadyMsg = buildReadyForFinalPaymentMessage(order);
               const factoryPhone = settings?.whatsappFactory || '5562984998265';
+              const isAwaitingConfirmation =
+                order.paymentStatus === 'AGUARDANDO_ENTRADA_50' ||
+                order.productionStatus === 'AGUARDANDO_CONFIRMACAO';
 
               return (
                 <div
                   key={order.id}
-                  className="bg-white border border-[#DFD3C3] rounded-xl p-6 space-y-5 shadow-xs"
+                  className={`bg-white border-2 rounded-xl p-6 space-y-5 shadow-xs ${
+                    isAwaitingConfirmation ? 'border-[#D4AF37]' : 'border-[#DFD3C3]'
+                  }`}
                 >
+                  {isAwaitingConfirmation && (
+                    <div className="p-4 rounded-xl bg-[#FFF9EB] border border-[#D4AF37] flex flex-wrap items-center justify-between gap-3">
+                      <div className="space-y-0.5">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-[#8C4A27]">
+                          ⏳ Aguardando Confirmação da Peterson Shoes
+                        </span>
+                        <p className="text-xs text-[#231619]">
+                          Confira se o pagamento de entrada de{' '}
+                          <strong className="font-mono-tabular">{formatBRL(order.depositAmount)}</strong>{' '}
+                          caiu na sua conta Banco Inter e clique no botão ao lado para aprovar.
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleUpdateOrder(order.id, {
+                              paymentStatus: 'ENTRADA_50_PAGA',
+                              productionStatus: 'CORTE_MODELAGEM',
+                            })
+                          }
+                          className="px-4 py-2.5 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer"
+                        >
+                          <Check className="w-4 h-4" />
+                          <span>Confirmar 50% de Entrada e Iniciar Produção</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteOrder(order.id)}
+                          className="px-3 py-2.5 bg-[#7A2434]/10 hover:bg-[#7A2434]/20 text-[#7A2434] rounded-lg text-xs font-semibold cursor-pointer"
+                        >
+                          Excluir Pedido
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="flex flex-wrap items-start justify-between gap-4 pb-4 border-b border-[#EFE7DA]">
                     <div>
                       <div className="flex items-center gap-2.5 text-xs">

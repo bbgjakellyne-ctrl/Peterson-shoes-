@@ -201,6 +201,10 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            id: localResult.order.id,
+            orderCode: localResult.order.orderCode,
+            depositPaymentId: localResult.depositPayment.id,
+            finalPaymentId: localResult.finalPayment.id,
             customerName,
             customerWhatsapp,
             customerEmail,
