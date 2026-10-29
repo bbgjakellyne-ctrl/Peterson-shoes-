@@ -458,7 +458,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [savingSettings, setSavingSettings] = useState(false);
   const [settingsSavedMsg, setSettingsSavedMsg] = useState('');
 
-  const applyDashboardFromDb = (db = getBrowserStoreDb()) => {
+  const applyDashboardFromDb = (
+    db = getBrowserStoreDb(),
+    options?: { preserveDrafts?: boolean }
+  ) => {
     const enrichedOrders = db.orders.map((o) => ({
       ...o,
       payments: db.payments.filter((p) => p.orderId === o.id),
@@ -475,26 +478,28 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       .reduce((sum, p) => sum + p.amount, 0);
 
     setProducts(db.products);
-    const pDrafts: Record<string, string> = {};
-    const cDrafts: Record<string, string> = {};
-    const eDrafts: Record<string, string> = {};
-    const prDrafts: Record<string, string> = {};
-    const mDrafts: Record<string, string> = {};
-    for (const p of db.products) {
-      pDrafts[p.id] = p.price.toFixed(2);
-      const mCost = p.manufacturingCost ?? 0;
-      const aExp = p.additionalExpenses ?? 0;
-      cDrafts[p.id] = mCost > 0 ? mCost.toFixed(2) : '';
-      eDrafts[p.id] = aExp > 0 ? aExp.toFixed(2) : '';
-      const fin = calculateProductFinancials(p.price, mCost, aExp);
-      prDrafts[p.id] = mCost > 0 || aExp > 0 ? fin.grossProfit.toFixed(2) : '';
-      mDrafts[p.id] = mCost > 0 || aExp > 0 ? fin.profitMarginPercent.toFixed(2) : '';
+    if (!options?.preserveDrafts) {
+      const pDrafts: Record<string, string> = {};
+      const cDrafts: Record<string, string> = {};
+      const eDrafts: Record<string, string> = {};
+      const prDrafts: Record<string, string> = {};
+      const mDrafts: Record<string, string> = {};
+      for (const p of db.products) {
+        pDrafts[p.id] = p.price.toFixed(2);
+        const mCost = p.manufacturingCost ?? 0;
+        const aExp = p.additionalExpenses ?? 0;
+        cDrafts[p.id] = mCost > 0 ? mCost.toFixed(2) : '';
+        eDrafts[p.id] = aExp > 0 ? aExp.toFixed(2) : '';
+        const fin = calculateProductFinancials(p.price, mCost, aExp);
+        prDrafts[p.id] = mCost > 0 || aExp > 0 ? fin.grossProfit.toFixed(2) : '';
+        mDrafts[p.id] = mCost > 0 || aExp > 0 ? fin.profitMarginPercent.toFixed(2) : '';
+      }
+      setPriceDrafts(pDrafts);
+      setCostDrafts(cDrafts);
+      setExpenseDrafts(eDrafts);
+      setProfitDrafts(prDrafts);
+      setMarginDrafts(mDrafts);
     }
-    setPriceDrafts(pDrafts);
-    setCostDrafts(cDrafts);
-    setExpenseDrafts(eDrafts);
-    setProfitDrafts(prDrafts);
-    setMarginDrafts(mDrafts);
     setOrders(enrichedOrders);
     setCustomers(db.customers);
     setPayments(db.payments);
@@ -514,17 +519,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     });
   };
 
-  const fetchAdminData = async (adminToken: string) => {
-    setLoading(true);
+  const fetchAdminData = async (
+    adminToken: string,
+    options?: { silent?: boolean }
+  ) => {
+    if (!options?.silent) {
+      setLoading(true);
+    }
     try {
-      const [dashRes, sqlRes] = await Promise.all([
-        apiFetch('/api/admin/dashboard', {
-          headers: { Authorization: `Bearer ${adminToken}` },
-        }),
-        apiFetch('/api/admin/sql-schema', {
-          headers: { Authorization: `Bearer ${adminToken}` },
-        }),
-      ]);
+      const dashRes = await apiFetch('/api/admin/dashboard', {
+        headers: { Authorization: `Bearer ${adminToken}` },
+      });
 
       if (dashRes.status === 401 || dashRes.status === 403) {
         setToken(null);
@@ -546,13 +551,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             if (o && o.id) mergedOrdersMap.set(o.id, o);
           }
           for (const o of serverOrders) {
-            if (o && o.id) mergedOrdersMap.set(o.id, o);
+            if (o && o.id) {
+              const existing = mergedOrdersMap.get(o.id);
+              if (!existing || (o.updatedAt || '') >= (existing.updatedAt || '')) {
+                mergedOrdersMap.set(o.id, o);
+              }
+            }
           }
           const mergedOrders = Array.from(mergedOrdersMap.values()).sort((a, b) =>
             (b.createdAt || '').localeCompare(a.createdAt || '')
           );
 
-          const mergedCustomersMap = new Map<string, Customer>();
+          const mergedCustomersMap = new Map<string, CustomerRecord>();
           for (const c of localDb.customers || []) {
             if (c && c.id) mergedCustomersMap.set(c.id, c);
           }
@@ -577,8 +587,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             payments: mergedPayments,
             settings: data.settings || localDb.settings,
           };
-          saveBrowserStoreDb(updatedDb);
-          applyDashboardFromDb(updatedDb);
+
+          const prevOrdersSig = JSON.stringify(
+            (localDb.orders || []).map((o) => `${o.id}:${o.paymentStatus}:${o.productionStatus}:${o.updatedAt}`)
+          );
+          const nextOrdersSig = JSON.stringify(
+            mergedOrders.map((o) => `${o.id}:${o.paymentStatus}:${o.productionStatus}:${o.updatedAt}`)
+          );
+          if (prevOrdersSig !== nextOrdersSig || !options?.silent) {
+            saveBrowserStoreDb(updatedDb);
+          }
+          applyDashboardFromDb(updatedDb, { preserveDrafts: Boolean(options?.silent) });
 
           if (mergedOrders.length > serverOrders.length) {
             apiFetch('/api/admin/sync-orders', {
@@ -599,16 +618,88 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           setAnalytics(data.analytics);
         }
       }
-      if (sqlRes.ok) {
-        const sqlData = await sqlRes.json();
-        setSqlSchema(sqlData.sql || '');
+      if (!options?.silent) {
+        const sqlRes = await apiFetch('/api/admin/sql-schema', {
+          headers: { Authorization: `Bearer ${adminToken}` },
+        });
+        if (sqlRes.ok) {
+          const sqlData = await sqlRes.json();
+          setSqlSchema(sqlData.sql || '');
+        }
       }
     } catch {
-      setLoginError('Não foi possível conectar ao servidor administrativo.');
+      if (!options?.silent) {
+        setLoginError('Não foi possível conectar ao servidor administrativo.');
+      }
     } finally {
-      setLoading(false);
+      if (!options?.silent) {
+        setLoading(false);
+      }
     }
   };
+
+  // Real-time instant order synchronization (BroadcastChannel + storage + visibility + 2s polling)
+  React.useEffect(() => {
+    if (!token) return;
+
+    const refreshFromLocalAndServer = () => {
+      const latestLocal = getBrowserStoreDb();
+      applyDashboardFromDb(latestLocal, { preserveDrafts: true });
+      fetchAdminData(token, { silent: true });
+    };
+
+    const intervalId = window.setInterval(() => {
+      fetchAdminData(token, { silent: true });
+    }, 2000);
+
+    const handleStorageEvent = (e: StorageEvent) => {
+      if (!e.key || e.key.startsWith('peterson_')) {
+        refreshFromLocalAndServer();
+      }
+    };
+
+    const handleCustomOrderEvent = () => {
+      refreshFromLocalAndServer();
+    };
+
+    const handleFocusOrVisible = () => {
+      if (document.visibilityState === 'visible') {
+        refreshFromLocalAndServer();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageEvent);
+    window.addEventListener('peterson-orders-updated', handleCustomOrderEvent);
+    window.addEventListener('focus', handleFocusOrVisible);
+    document.addEventListener('visibilitychange', handleFocusOrVisible);
+
+    let bc: BroadcastChannel | null = null;
+    if (typeof BroadcastChannel !== 'undefined') {
+      try {
+        bc = new BroadcastChannel('peterson_orders_realtime');
+        bc.onmessage = () => {
+          refreshFromLocalAndServer();
+        };
+      } catch {
+        // Ignore BroadcastChannel errors
+      }
+    }
+
+    return () => {
+      window.clearInterval(intervalId);
+      window.removeEventListener('storage', handleStorageEvent);
+      window.removeEventListener('peterson-orders-updated', handleCustomOrderEvent);
+      window.removeEventListener('focus', handleFocusOrVisible);
+      document.removeEventListener('visibilitychange', handleFocusOrVisible);
+      if (bc) {
+        try {
+          bc.close();
+        } catch {
+          // Ignore
+        }
+      }
+    };
+  }, [token]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1332,31 +1423,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   return (
     <div className="min-h-screen bg-[#F7F3EC] text-[#231619]">
-      {/* Environment Banner inside Admin */}
-      <div
-        className={`px-6 py-2 text-xs font-medium flex flex-wrap items-center justify-between gap-3 ${
-          isHomologacao()
-            ? 'bg-amber-950 text-amber-100 border-b border-amber-800'
-            : 'bg-emerald-950 text-emerald-100 border-b border-emerald-800'
-        }`}
-      >
+      {/* Real-time Sync Status Banner inside Admin */}
+      <div className="px-6 py-2 text-xs font-medium flex flex-wrap items-center justify-between gap-3 bg-emerald-950 text-emerald-100 border-b border-emerald-800">
         <div className="flex items-center gap-2">
+          <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           <span>
-            {isHomologacao()
-              ? '🧪 MODO HOMOLOGAÇÃO ATIVO — Você está editando a base de testes isolada (peterson-db-homolog.json). Os dados reais da produção permanecem intactos.'
-              : '🔒 MODO PRODUÇÃO OFICIAL — Você está visualizando os dados reais do site oficial.'}
+            🔒 PAINEL OFICIAL PETERSON SHOES — Sincronização em Tempo Real Ativa (novos pedidos aparecem automaticamente na tela a cada 2 segundos).
           </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() =>
-              switchEnvironment(isHomologacao() ? 'producao' : 'homologacao')
-            }
-            className="px-2.5 py-1 rounded bg-white/15 hover:bg-white/25 text-white text-[11px] font-semibold cursor-pointer"
-          >
-            Alternar para {isHomologacao() ? 'Produção' : 'Homologação'}
-          </button>
         </div>
       </div>
 
@@ -1417,7 +1490,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         >
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="space-y-1">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span
                   className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider ${
                     pendingConfirmationOrders.length > 0
@@ -1429,12 +1502,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     ? `🔔 ${pendingConfirmationOrders.length} Pedido(s) Aguardando sua Confirmação`
                     : '✅ Tudo em Dia · Nenhum Pedido Pendente'}
                 </span>
+                <span className="text-[11px] font-semibold text-[#2E6B3E] flex items-center gap-1">
+                  <span className="inline-block w-2 h-2 rounded-full bg-[#2E6B3E] animate-pulse" />
+                  Atualização Instantânea Ativa
+                </span>
               </div>
               <h2 className="text-lg sm:text-xl font-bold text-[#231619]">
                 Pedidos Aguardando Confirmação da Peterson Shoes
               </h2>
               <p className="text-xs text-[#6E5A5F]">
-                Quando uma cliente finaliza uma compra no site, o pedido aparece imediatamente aqui embaixo para você conferir o Pix/Cartão no seu Banco Inter e aprovar em 1 clique.
+                Quando uma cliente finaliza uma compra no site, o pedido aparece instantaneamente aqui embaixo para você conferir o Pix/Cartão no seu Banco Inter e aprovar em 1 clique.
               </p>
             </div>
             <button

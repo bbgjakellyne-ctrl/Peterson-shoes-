@@ -1258,8 +1258,8 @@ function createInitialDatabase(): DatabaseSchema {
   };
 }
 
-function getDbFilePath(env: AppEnvironment): string {
-  return env === 'homologacao' ? DB_FILE_HOMOLOG : DB_FILE_PROD;
+function getDbFilePath(_env: AppEnvironment): string {
+  return DB_FILE_PROD;
 }
 
 const DEMO_ORDER_IDS = new Set(['ord-1001', 'ord-1002']);
@@ -1288,6 +1288,37 @@ function loadDb(env: AppEnvironment = 'producao'): DatabaseSchema {
   try {
     const raw = fs.readFileSync(targetFile, 'utf-8');
     const parsed = JSON.parse(raw) as DatabaseSchema;
+
+    // Also merge any orders from DB_FILE_HOMOLOG if it exists so no order is ever split
+    if (fs.existsSync(DB_FILE_HOMOLOG)) {
+      try {
+        const hRaw = fs.readFileSync(DB_FILE_HOMOLOG, 'utf-8');
+        const hParsed = JSON.parse(hRaw) as DatabaseSchema;
+        const existOrderIds = new Set((parsed.orders || []).map((o) => o.id));
+        for (const ho of hParsed.orders || []) {
+          if (ho && ho.id && !existOrderIds.has(ho.id) && !DEMO_ORDER_IDS.has(ho.id)) {
+            parsed.orders = [ho, ...(parsed.orders || [])];
+            existOrderIds.add(ho.id);
+          }
+        }
+        const existCustIds = new Set((parsed.customers || []).map((c) => c.id));
+        for (const hc of hParsed.customers || []) {
+          if (hc && hc.id && !existCustIds.has(hc.id) && !DEMO_CUSTOMER_IDS.has(hc.id)) {
+            parsed.customers = [hc, ...(parsed.customers || [])];
+            existCustIds.add(hc.id);
+          }
+        }
+        const existPayIds = new Set((parsed.payments || []).map((p) => p.id));
+        for (const hp of hParsed.payments || []) {
+          if (hp && hp.id && !existPayIds.has(hp.id) && !DEMO_PAYMENT_IDS.has(hp.id)) {
+            parsed.payments = [hp, ...(parsed.payments || [])];
+            existPayIds.add(hp.id);
+          }
+        }
+      } catch {
+        // Ignore secondary file parse error
+      }
+    }
 
     // Strip any legacy fictional/demo records (Carolina Mendonça / Juliana Vasconcelos)
     const origOrdersLen = (parsed.orders || []).length;
@@ -1411,12 +1442,17 @@ function loadDb(env: AppEnvironment = 'producao'): DatabaseSchema {
   }
 }
 
-function saveDb(data: DatabaseSchema, env: AppEnvironment = 'producao'): void {
+function saveDb(data: DatabaseSchema, _env: AppEnvironment = 'producao'): void {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
   }
-  const targetFile = getDbFilePath(env);
-  fs.writeFileSync(targetFile, JSON.stringify(data, null, 2), 'utf-8');
+  const serialized = JSON.stringify(data, null, 2);
+  fs.writeFileSync(DB_FILE_PROD, serialized, 'utf-8');
+  try {
+    fs.writeFileSync(DB_FILE_HOMOLOG, serialized, 'utf-8');
+  } catch {
+    // Ignore secondary file write error
+  }
 }
 
 // ============================================================================
@@ -2103,6 +2139,7 @@ ${productUrlsXml}
       totalCharged,
       cardBrand,
       cardLast4,
+      orderSnapshot,
     } = req.body as {
       installmentType: 'ENTRADA_50' | 'FINAL_50';
       method?: 'PIX_MERCADO_PAGO' | 'CARTAO_MERCADO_PAGO';
@@ -2111,10 +2148,24 @@ ${productUrlsXml}
       totalCharged?: number;
       cardBrand?: string;
       cardLast4?: string;
+      orderSnapshot?: BespokeOrder & { payments?: PaymentRecord[] };
     };
 
     const db = loadDb(env);
-    const order = db.orders.find((o) => o.id === id || o.orderCode === id);
+    let order = db.orders.find((o) => o.id === id || o.orderCode === id);
+    if (!order && orderSnapshot && orderSnapshot.id) {
+      const { payments: snapPayments, ...cleanOrder } = orderSnapshot;
+      db.orders.unshift(cleanOrder);
+      if (Array.isArray(snapPayments)) {
+        for (const sp of snapPayments) {
+          if (sp && sp.id && !db.payments.some((p) => p.id === sp.id)) {
+            db.payments.unshift(sp);
+          }
+        }
+      }
+      order = db.orders.find((o) => o.id === cleanOrder.id);
+    }
+
     if (!order) {
       return res.status(404).json({ error: 'Encomenda não encontrada.' });
     }

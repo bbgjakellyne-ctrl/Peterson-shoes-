@@ -8,40 +8,27 @@ export function getActiveEnvironment(): AppEnvironment {
   }
 
   try {
-    const params = new URLSearchParams(window.location.search);
-    const urlEnv = (params.get('ambiente') || params.get('env') || '').toLowerCase().trim();
-
-    if (urlEnv === 'homologacao' || urlEnv === 'homolog' || urlEnv === 'staging' || urlEnv === 'teste') {
-      window.sessionStorage.setItem(ENV_SESSION_KEY, 'homologacao');
-      return 'homologacao';
-    }
-
-    if (urlEnv === 'producao' || urlEnv === 'prod' || urlEnv === 'oficial') {
-      window.sessionStorage.setItem(ENV_SESSION_KEY, 'producao');
-      return 'producao';
-    }
-
-    const stored = window.sessionStorage.getItem(ENV_SESSION_KEY);
-    if (stored === 'homologacao' || stored === 'producao') {
-      return stored;
-    }
+    // Clear any stale homologacao flag from previous sessions so orders are never split or hidden
+    window.sessionStorage.removeItem(ENV_SESSION_KEY);
+    window.sessionStorage.removeItem('peterson_shoes_active_env');
   } catch {
-    // Fallback
+    // Ignore storage errors
   }
 
   return 'producao';
 }
 
 export function isHomologacao(): boolean {
-  return getActiveEnvironment() === 'homologacao';
+  return false;
 }
 
-export function switchEnvironment(nextEnv: AppEnvironment): void {
+export function switchEnvironment(_nextEnv: AppEnvironment): void {
   if (typeof window === 'undefined') return;
   try {
-    window.sessionStorage.setItem(ENV_SESSION_KEY, nextEnv);
+    window.sessionStorage.removeItem(ENV_SESSION_KEY);
     const url = new URL(window.location.href);
-    url.searchParams.set('ambiente', nextEnv);
+    url.searchParams.delete('ambiente');
+    url.searchParams.delete('env');
     window.history.replaceState({}, '', url.toString());
     window.location.reload();
   } catch {

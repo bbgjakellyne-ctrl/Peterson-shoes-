@@ -3252,8 +3252,8 @@ function createInitialDatabase() {
     analytics: createEmptyAnalytics()
   };
 }
-function getDbFilePath(env) {
-  return env === "homologacao" ? DB_FILE_HOMOLOG : DB_FILE_PROD;
+function getDbFilePath(_env) {
+  return DB_FILE_PROD;
 }
 var DEMO_ORDER_IDS = /* @__PURE__ */ new Set(["ord-1001", "ord-1002"]);
 var DEMO_CUSTOMER_IDS = /* @__PURE__ */ new Set(["cust-1", "cust-2"]);
@@ -3279,6 +3279,34 @@ function loadDb(env = "producao") {
   try {
     const raw = fs.readFileSync(targetFile, "utf-8");
     const parsed = JSON.parse(raw);
+    if (fs.existsSync(DB_FILE_HOMOLOG)) {
+      try {
+        const hRaw = fs.readFileSync(DB_FILE_HOMOLOG, "utf-8");
+        const hParsed = JSON.parse(hRaw);
+        const existOrderIds = new Set((parsed.orders || []).map((o) => o.id));
+        for (const ho of hParsed.orders || []) {
+          if (ho && ho.id && !existOrderIds.has(ho.id) && !DEMO_ORDER_IDS.has(ho.id)) {
+            parsed.orders = [ho, ...parsed.orders || []];
+            existOrderIds.add(ho.id);
+          }
+        }
+        const existCustIds = new Set((parsed.customers || []).map((c) => c.id));
+        for (const hc of hParsed.customers || []) {
+          if (hc && hc.id && !existCustIds.has(hc.id) && !DEMO_CUSTOMER_IDS.has(hc.id)) {
+            parsed.customers = [hc, ...parsed.customers || []];
+            existCustIds.add(hc.id);
+          }
+        }
+        const existPayIds = new Set((parsed.payments || []).map((p) => p.id));
+        for (const hp of hParsed.payments || []) {
+          if (hp && hp.id && !existPayIds.has(hp.id) && !DEMO_PAYMENT_IDS.has(hp.id)) {
+            parsed.payments = [hp, ...parsed.payments || []];
+            existPayIds.add(hp.id);
+          }
+        }
+      } catch {
+      }
+    }
     const origOrdersLen = (parsed.orders || []).length;
     const origCustomersLen = (parsed.customers || []).length;
     const origPaymentsLen = (parsed.payments || []).length;
@@ -3379,12 +3407,16 @@ function loadDb(env = "producao") {
     return initial;
   }
 }
-function saveDb(data, env = "producao") {
+function saveDb(data, _env = "producao") {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
   }
-  const targetFile = getDbFilePath(env);
-  fs.writeFileSync(targetFile, JSON.stringify(data, null, 2), "utf-8");
+  const serialized = JSON.stringify(data, null, 2);
+  fs.writeFileSync(DB_FILE_PROD, serialized, "utf-8");
+  try {
+    fs.writeFileSync(DB_FILE_HOMOLOG, serialized, "utf-8");
+  } catch {
+  }
 }
 var activeAdminSessions = /* @__PURE__ */ new Map();
 var loginRateLimiter = /* @__PURE__ */ new Map();
@@ -3919,10 +3951,23 @@ ${productUrlsXml}
       feeAmount,
       totalCharged,
       cardBrand,
-      cardLast4
+      cardLast4,
+      orderSnapshot
     } = req.body;
     const db = loadDb(env);
-    const order = db.orders.find((o) => o.id === id || o.orderCode === id);
+    let order = db.orders.find((o) => o.id === id || o.orderCode === id);
+    if (!order && orderSnapshot && orderSnapshot.id) {
+      const { payments: snapPayments, ...cleanOrder } = orderSnapshot;
+      db.orders.unshift(cleanOrder);
+      if (Array.isArray(snapPayments)) {
+        for (const sp of snapPayments) {
+          if (sp && sp.id && !db.payments.some((p) => p.id === sp.id)) {
+            db.payments.unshift(sp);
+          }
+        }
+      }
+      order = db.orders.find((o) => o.id === cleanOrder.id);
+    }
     if (!order) {
       return res.status(404).json({ error: "Encomenda n\xE3o encontrada." });
     }

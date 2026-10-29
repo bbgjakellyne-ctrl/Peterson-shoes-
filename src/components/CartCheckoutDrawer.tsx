@@ -270,6 +270,7 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
             body: JSON.stringify({
               installmentType: 'ENTRADA_50',
               method: 'PIX_MERCADO_PAGO',
+              orderSnapshot: localUpdated || createdOrder,
             }),
           }
         );
@@ -349,6 +350,7 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
               totalCharged: currentCardOption.totalWithFee,
               cardBrand: brand,
               cardLast4: last4,
+              orderSnapshot: localUpdated || createdOrder,
             }),
           }
         );

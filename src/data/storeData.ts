@@ -2480,30 +2480,51 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
 
 const STORAGE_KEY_PROD = 'peterson_shoes_store_prod_v14';
 const STORAGE_KEY_HOMOLOG = 'peterson_shoes_store_homolog_v14';
+const DELETED_ORDERS_KEY = 'peterson_deleted_order_ids_v1';
 
 const DEMO_ORDER_IDS = new Set(['ord-1001', 'ord-1002']);
 const DEMO_CUSTOMER_IDS = new Set(['cust-1', 'cust-2']);
 const DEMO_PAYMENT_IDS = new Set(['pay-1a', 'pay-1b', 'pay-2a', 'pay-2b']);
 
-function resolveCurrentStorageKey(): string {
-  if (typeof window === 'undefined') return STORAGE_KEY_PROD;
+function getDeletedOrderIds(): Set<string> {
+  if (typeof window === 'undefined') return new Set();
   try {
-    const params = new URLSearchParams(window.location.search);
-    const urlEnv = (params.get('ambiente') || params.get('env') || '').toLowerCase().trim();
-    if (urlEnv === 'homologacao' || urlEnv === 'homolog' || urlEnv === 'teste') {
-      return STORAGE_KEY_HOMOLOG;
-    }
-    if (urlEnv === 'producao' || urlEnv === 'prod' || urlEnv === 'oficial') {
-      return STORAGE_KEY_PROD;
-    }
-    const stored =
-      window.sessionStorage.getItem('peterson_shoes_active_env_v2') ||
-      window.sessionStorage.getItem('peterson_shoes_active_env');
-    if (stored === 'homologacao') return STORAGE_KEY_HOMOLOG;
-    return STORAGE_KEY_PROD;
+    const raw = window.localStorage.getItem(DELETED_ORDERS_KEY);
+    if (!raw) return new Set();
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? new Set(parsed) : new Set();
   } catch {
-    return STORAGE_KEY_PROD;
+    return new Set();
   }
+}
+
+function addDeletedOrderId(orderId: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const current = getDeletedOrderIds();
+    current.add(orderId);
+    window.localStorage.setItem(DELETED_ORDERS_KEY, JSON.stringify(Array.from(current)));
+  } catch {
+    // Ignore
+  }
+}
+
+export function broadcastOrderRealtimeUpdate(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.dispatchEvent(new CustomEvent('peterson-orders-updated'));
+    if (typeof BroadcastChannel !== 'undefined') {
+      const bc = new BroadcastChannel('peterson_orders_realtime');
+      bc.postMessage({ type: 'ORDERS_UPDATED', timestamp: Date.now() });
+      bc.close();
+    }
+  } catch {
+    // Ignore broadcast errors
+  }
+}
+
+function resolveCurrentStorageKey(): string {
+  return STORAGE_KEY_PROD;
 }
 
 export function getBrowserStoreDb(): StoreDatabaseSchema {
@@ -2511,34 +2532,95 @@ export function getBrowserStoreDb(): StoreDatabaseSchema {
     return createInitialStoreDatabase();
   }
   const activeKey = resolveCurrentStorageKey();
+  const deletedIds = getDeletedOrderIds();
+
   try {
-    const raw = window.localStorage.getItem(activeKey);
-    if (!raw) {
-      const initial = createInitialStoreDatabase();
-      window.localStorage.setItem(activeKey, JSON.stringify(initial));
-      return initial;
+    // Collect orders, customers, and payments across ALL peterson_shoes_store* keys
+    // so orders placed when the tab was in Homologação vs Produção are never lost or hidden
+    const ordersMap = new Map<string, BespokeOrder>();
+    const customersMap = new Map<string, CustomerRecord>();
+    const paymentsMap = new Map<string, PaymentRecord>();
+
+    const allCandidateKeys: string[] = [STORAGE_KEY_HOMOLOG, STORAGE_KEY_PROD];
+    for (let i = 0; i < window.localStorage.length; i++) {
+      const k = window.localStorage.key(i);
+      if (k && k.startsWith('peterson_shoes_store') && !allCandidateKeys.includes(k)) {
+        allCandidateKeys.unshift(k);
+      }
     }
-    const parsed = JSON.parse(raw) as StoreDatabaseSchema;
-    if (!parsed.products || parsed.products.length < 54) {
-      const initial = createInitialStoreDatabase();
-      window.localStorage.setItem(activeKey, JSON.stringify(initial));
-      return initial;
+
+    let baseParsed: StoreDatabaseSchema | null = null;
+
+    for (const key of allCandidateKeys) {
+      const rawKey = window.localStorage.getItem(key);
+      if (!rawKey) continue;
+      try {
+        const parsedKey = JSON.parse(rawKey) as StoreDatabaseSchema;
+        if (key === activeKey && parsedKey?.products && parsedKey.products.length >= 54) {
+          baseParsed = parsedKey;
+        }
+        for (const o of parsedKey?.orders || []) {
+          if (
+            o &&
+            o.id &&
+            !DEMO_ORDER_IDS.has(o.id) &&
+            !deletedIds.has(o.id) &&
+            !deletedIds.has(o.orderCode)
+          ) {
+            const existing = ordersMap.get(o.id);
+            if (!existing || (o.updatedAt || '') >= (existing.updatedAt || '')) {
+              ordersMap.set(o.id, o);
+            }
+          }
+        }
+        for (const c of parsedKey?.customers || []) {
+          if (c && c.id && !DEMO_CUSTOMER_IDS.has(c.id)) {
+            customersMap.set(c.id, c);
+          }
+        }
+        for (const p of parsedKey?.payments || []) {
+          if (
+            p &&
+            p.id &&
+            !DEMO_PAYMENT_IDS.has(p.id) &&
+            !DEMO_ORDER_IDS.has(p.orderId) &&
+            !deletedIds.has(p.orderId)
+          ) {
+            paymentsMap.set(p.id, p);
+          }
+        }
+      } catch {
+        // Ignore malformed legacy storage item
+      }
     }
-    parsed.orders = (parsed.orders || []).filter((o) => !DEMO_ORDER_IDS.has(o.id));
-    parsed.customers = (parsed.customers || []).filter((c) => !DEMO_CUSTOMER_IDS.has(c.id));
-    parsed.payments = (parsed.payments || []).filter(
-      (p) => !DEMO_PAYMENT_IDS.has(p.id) && !DEMO_ORDER_IDS.has(p.orderId)
+
+    const base = baseParsed || createInitialStoreDatabase();
+    const mergedOrders = Array.from(ordersMap.values()).sort((a, b) =>
+      (b.createdAt || '').localeCompare(a.createdAt || '')
     );
-    parsed.settings = {
-      ...INITIAL_SETTINGS,
-      ...parsed.settings,
-      bankName: 'Inter',
-      bankHolderName: '50789636 JACKELINE GOMES PETERSON',
-      bankHolderDoc: '50.789.636/0001-32',
-      pixKey: '50.789.636/0001-32',
-      pixKeyType: 'CNPJ',
+    const mergedCustomers = Array.from(customersMap.values());
+    const mergedPayments = Array.from(paymentsMap.values());
+
+    const result: StoreDatabaseSchema = {
+      products:
+        base.products && base.products.length >= 54 ? base.products : INITIAL_PRODUCTS,
+      customers: mergedCustomers,
+      orders: mergedOrders,
+      payments: mergedPayments,
+      settings: {
+        ...INITIAL_SETTINGS,
+        ...(base.settings || {}),
+        bankName: 'Inter',
+        bankHolderName: '50789636 JACKELINE GOMES PETERSON',
+        bankHolderDoc: '50.789.636/0001-32',
+        pixKey: '50.789.636/0001-32',
+        pixKeyType: 'CNPJ',
+      },
     };
-    return parsed;
+
+    window.localStorage.setItem(STORAGE_KEY_PROD, JSON.stringify(result));
+    window.localStorage.setItem(STORAGE_KEY_HOMOLOG, JSON.stringify(result));
+    return result;
   } catch {
     return createInitialStoreDatabase();
   }
@@ -2546,9 +2628,11 @@ export function getBrowserStoreDb(): StoreDatabaseSchema {
 
 export function saveBrowserStoreDb(db: StoreDatabaseSchema): void {
   if (typeof window === 'undefined') return;
-  const activeKey = resolveCurrentStorageKey();
   try {
-    window.localStorage.setItem(activeKey, JSON.stringify(db));
+    const serialized = JSON.stringify(db);
+    window.localStorage.setItem(STORAGE_KEY_PROD, serialized);
+    window.localStorage.setItem(STORAGE_KEY_HOMOLOG, serialized);
+    broadcastOrderRealtimeUpdate();
   } catch {
     // Ignore storage quota errors
   }
@@ -2573,7 +2657,6 @@ export function createBrowserBespokeOrder(params: {
   finalPayment: PaymentRecord;
 } {
   const db = getBrowserStoreDb();
-  const isHomolog = resolveCurrentStorageKey() === STORAGE_KEY_HOMOLOG;
   const totalAmount = params.items.reduce(
     (acc, item) => acc + Number(item.unitPrice) * Number(item.quantity),
     0
@@ -2625,9 +2708,7 @@ export function createBrowserBespokeOrder(params: {
   }
 
   const orderNumber = 101 + db.orders.length;
-  const orderCode = isHomolog
-    ? `HOMOLOG-PTS-2026-${orderNumber}`
-    : `PTS-2026-${orderNumber}`;
+  const orderCode = `PTS-2026-${orderNumber}`;
   const orderId = `ord-${Date.now()}`;
   const productionDays = db.settings.productionDays || 15;
   const estimatedDeliveryDate = addDaysISO(productionDays);
@@ -2699,7 +2780,7 @@ export function createBrowserBespokeOrder(params: {
     estimatedDeliveryDate,
     productionDays,
     factoryNotes:
-      'Encomenda registrada no site. Aguardando pagamento dos 50% de entrada e conferência do recebimento pela Peterson Shoes no Banco Inter.',
+      '⏳ Pedido Aguardando Confirmação da Peterson Shoes (conferir entrada de 50% no Banco Inter).',
     trackingCode: '',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -2794,9 +2875,9 @@ export function confirmBrowserOrderPayment(
   const etapaLabel =
     payload.installmentType === 'FINAL_50' ? '50% finais' : '50% de entrada';
 
-  order.factoryNotes = `Cliente informou envio de pagamento (${etapaLabel} via ${methodLabel}) em ${new Date().toLocaleString(
+  order.factoryNotes = `🔔 Cliente informou pagamento (${etapaLabel} via ${methodLabel}) em ${new Date().toLocaleString(
     'pt-BR'
-  )}. Aguardando conferência e aprovação da Peterson Shoes após verificar o recebimento no Banco Inter.`;
+  )}. Aguardando confirmação da Peterson Shoes após verificar o recebimento no Banco Inter.`;
 
   order.updatedAt = new Date().toISOString();
   saveBrowserStoreDb(db);
@@ -2849,7 +2930,7 @@ export function updateBrowserOrderAdmin(
   }
 ): BespokeOrder | null {
   const db = getBrowserStoreDb();
-  const order = db.orders.find((o) => o.id === orderId);
+  const order = db.orders.find((o) => o.id === orderId || o.orderCode === orderId);
   if (!order) return null;
 
   if (updates.productionStatus) {
@@ -2913,7 +2994,13 @@ export function updateBrowserOrderAdmin(
 }
 
 export function deleteBrowserOrderAdmin(orderId: string): void {
+  addDeletedOrderId(orderId);
   const db = getBrowserStoreDb();
+  const target = db.orders.find((o) => o.id === orderId || o.orderCode === orderId);
+  if (target) {
+    addDeletedOrderId(target.id);
+    addDeletedOrderId(target.orderCode);
+  }
   db.orders = db.orders.filter((o) => o.id !== orderId && o.orderCode !== orderId);
   db.payments = db.payments.filter((p) => p.orderId !== orderId);
   saveBrowserStoreDb(db);
