@@ -1944,6 +1944,84 @@ ${productUrlsXml}
     return res.sendFile(targetMp4);
   });
 
+  const recentPushAlertSet = new Map<string, number>();
+  const PETERSON_NTFY_TOPIC = 'peterson-shoes-alerta-62984998265';
+
+  async function sendServerNtfyOrderAlert(
+    order: Partial<BespokeOrder>,
+    stage: 'PEDIDO_CRIADO' | 'PIX_CONFIRMADO' | 'TESTE' = 'PEDIDO_CRIADO'
+  ): Promise<boolean> {
+    try {
+      const dedupeKey = `${order.id || order.orderCode || 'ord'}:${stage}`;
+      const now = Date.now();
+      const lastSent = recentPushAlertSet.get(dedupeKey) || 0;
+      if (stage !== 'TESTE' && now - lastSent < 15000) {
+        return true;
+      }
+      recentPushAlertSet.set(dedupeKey, now);
+
+      const itemsSummary = Array.isArray(order.items)
+        ? order.items
+            .map(
+              (it: any) =>
+                `${it.quantity || 1}x ${it.name || 'Sandália'} (Cor: ${
+                  it.colorName || 'Padrão'
+                }, Tam: ${it.size || 36} BR)`
+            )
+            .join(' + ')
+        : 'Sandália Sob Encomenda';
+
+      const totalFormatted = `R$ ${Number(order.totalAmount || 0)
+        .toFixed(2)
+        .replace('.', ',')}`;
+      const depositFormatted = `R$ ${Number(order.depositAmount || 0)
+        .toFixed(2)
+        .replace('.', ',')}`;
+
+      const code = order.orderCode || 'PTS-2026';
+      const title =
+        stage === 'TESTE'
+          ? `🔔 Teste de Alerta no Celular — Peterson Shoes`
+          : stage === 'PIX_CONFIRMADO'
+          ? `💰 PIX DE 50% INFORMADO (#${code}) — Confirmar Agora!`
+          : `🚨 NOVO PEDIDO #${code} — Peterson Shoes!`;
+
+      const message = [
+        `Cliente: ${order.customerName || 'Cliente'} (${
+          order.customerWhatsapp || ''
+        })`,
+        `Modelo: ${itemsSummary}`,
+        `Total: ${totalFormatted} | Entrada 50%: ${depositFormatted}`,
+        `Toque para abrir o Painel Admin e aprovar em 1 clique!`,
+      ].join('\n');
+
+      const adminUrl =
+        'https://ais-pre-hjb47jbbnfvcnibk2wkogq-443983653592.us-east1.run.app/?acesso=admin';
+
+      const r = await fetch('https://ntfy.sh', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          topic: PETERSON_NTFY_TOPIC,
+          title,
+          message,
+          priority: 5,
+          tags: ['bell', 'high_heeled_shoe', 'moneybag'],
+          click: adminUrl,
+        }),
+      });
+      return r.ok;
+    } catch {
+      return false;
+    }
+  }
+
+  app.post('/api/push-alert', async (req: Request, res: Response) => {
+    const { order, stage } = req.body || {};
+    const ok = await sendServerNtfyOrderAlert(order || {}, stage || 'PEDIDO_CRIADO');
+    res.json({ ok });
+  });
+
   // Create new bespoke order with automated 50% deposit + 50% final installment
   app.post('/api/orders', async (req: Request, res: Response) => {
     try {
@@ -2153,6 +2231,8 @@ ${productUrlsXml}
         }
       }
 
+      sendServerNtfyOrderAlert(newOrder, 'PEDIDO_CRIADO').catch(() => {});
+
       res.status(201).json({
         order: {
           ...newOrder,
@@ -2291,6 +2371,8 @@ ${productUrlsXml}
     order.factoryNotes = `${order.factoryNotes} | Cliente informou envio de pagamento (${parcelaLabel} via ${methodLabel}) em ${new Date().toLocaleString('pt-BR')} — Aguardando conferência no Banco Inter pelo Admin.`;
     order.updatedAt = new Date().toISOString();
     saveDb(db, env);
+
+    sendServerNtfyOrderAlert(order, 'PIX_CONFIRMADO').catch(() => {});
 
     res.json({
       notified: true,
