@@ -40,6 +40,11 @@ import {
   getBrowserStoreDb,
 } from '../data/storeData';
 import { apiFetch } from '../utils/environment';
+import {
+  recordAnalyticsEventToCloud,
+  sendMobilePushOrderAlert,
+  syncOrderToCloud,
+} from '../lib/firebaseSync';
 
 interface CartCheckoutDrawerProps {
   isOpen: boolean;
@@ -165,35 +170,34 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
     e.preventDefault();
     setFormError('');
 
-    if (
-      !customerName.trim() ||
-      !customerWhatsapp.trim() ||
-      !cep.trim() ||
-      !street.trim() ||
-      !number.trim() ||
-      !city.trim() ||
-      !state.trim()
-    ) {
+    if (!customerName.trim() || !customerWhatsapp.trim()) {
       setFormError(
-        'Por favor, preencha seu nome, WhatsApp e endereço completo para entrega.'
+        'Por favor, preencha seu Nome e WhatsApp com DDD para registrar o pedido.'
       );
       return;
     }
 
+    const safeCep = cep.trim() || '74000-000';
+    const safeStreet = street.trim() || 'Combinar entrega pelo WhatsApp';
+    const safeNumber = number.trim() || 'S/N';
+    const safeNeighborhood = neighborhood.trim() || 'Centro';
+    const safeCity = city.trim() || 'Goiânia';
+    const safeState = state.trim() || 'GO';
+
     setSubmitting(true);
     try {
       const localResult = createBrowserBespokeOrder({
-        customerName,
-        customerWhatsapp,
-        customerEmail,
-        customerCpf,
-        cep,
-        street,
-        number,
-        complement,
-        neighborhood,
-        city,
-        state,
+        customerName: customerName.trim(),
+        customerWhatsapp: customerWhatsapp.trim(),
+        customerEmail: customerEmail.trim(),
+        customerCpf: customerCpf.trim(),
+        cep: safeCep,
+        street: safeStreet,
+        number: safeNumber,
+        complement: complement.trim(),
+        neighborhood: safeNeighborhood,
+        city: safeCity,
+        state: safeState,
         items: cart,
       });
 
@@ -203,23 +207,24 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
       try {
         const res = await apiFetch('/api/orders', {
           method: 'POST',
+          keepalive: true,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             id: localResult.order.id,
             orderCode: localResult.order.orderCode,
             depositPaymentId: localResult.depositPayment.id,
             finalPaymentId: localResult.finalPayment.id,
-            customerName,
-            customerWhatsapp,
-            customerEmail,
-            customerCpf,
-            cep,
-            street,
-            number,
-            complement,
-            neighborhood,
-            city,
-            state,
+            customerName: customerName.trim(),
+            customerWhatsapp: customerWhatsapp.trim(),
+            customerEmail: customerEmail.trim(),
+            customerCpf: customerCpf.trim(),
+            cep: safeCep,
+            street: safeStreet,
+            number: safeNumber,
+            complement: complement.trim(),
+            neighborhood: safeNeighborhood,
+            city: safeCity,
+            state: safeState,
             items: cart,
           }),
         });
@@ -233,6 +238,34 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
       } catch {
         // Fallback to localResult already created
       }
+
+      // Sincroniza imediatamente na nuvem (Firebase Firestore) e dispara Alerta Push para o celular da proprietária (mesmo com site fechado)
+      await Promise.all([
+        syncOrderToCloud(
+          finalOrder,
+          finalOrder.payments && finalOrder.payments.length > 0
+            ? finalOrder.payments
+            : [finalDeposit, localResult.finalPayment],
+          {
+            id: finalOrder.customerId,
+            name: customerName.trim(),
+            whatsapp: customerWhatsapp.trim(),
+            email: customerEmail.trim(),
+            cpf: customerCpf.trim(),
+            cep: safeCep,
+            street: safeStreet,
+            number: safeNumber,
+            complement: complement.trim(),
+            neighborhood: safeNeighborhood,
+            city: safeCity,
+            state: safeState,
+            totalOrders: 1,
+            totalSpent: finalOrder.totalAmount,
+            createdAt: finalOrder.createdAt,
+          }
+        ),
+        sendMobilePushOrderAlert(finalOrder, 'PEDIDO_CRIADO'),
+      ]);
 
       setCreatedOrder(finalOrder);
       setDepositPayment(finalDeposit);
@@ -270,42 +303,49 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
 
     setPaymentNotified(true);
 
-    // 2. Abre IMEDIATAMENTE o WhatsApp da Peterson Shoes com todas as informações do pedido e do Pix
-    const whatsappMessage = buildCustomerOrderMessage(orderForWhatsapp, {
-      pixConfirmedByCustomer: true,
-    });
-    openWhatsAppImmediate(whatsappStore, whatsappMessage);
-
-    // 3. Sincroniza também com o servidor em segundo plano
+    // 2. Sincroniza na nuvem em tempo real (Firebase), dispara Alerta Push no celular e avisa o servidor ANTES de abrir o WhatsApp
     try {
-      const res = await apiFetch(
-        `/api/orders/${createdOrder.id}/notify-payment`,
-        {
+      await Promise.all([
+        syncOrderToCloud(orderForWhatsapp, orderForWhatsapp.payments),
+        sendMobilePushOrderAlert(orderForWhatsapp, 'PIX_CONFIRMADO'),
+        recordAnalyticsEventToCloud({
+          type: 'WHATSAPP',
+          productName: orderForWhatsapp.items.map((it) => it.name).join(', '),
+        }),
+        apiFetch(`/api/orders/${createdOrder.id}/notify-payment`, {
           method: 'POST',
+          keepalive: true,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             installmentType: 'ENTRADA_50',
             method: 'PIX_MERCADO_PAGO',
             orderSnapshot: orderForWhatsapp,
           }),
-        }
-      );
-      if (res.ok) {
-        const data = await res.json();
-        if (data?.order) {
-          setCreatedOrder(data.order);
-          const updatedDeposit = data.order.payments?.find(
-            (p: PaymentRecord) => p.installmentType === 'ENTRADA_50'
-          );
-          if (updatedDeposit) setDepositPayment(updatedDeposit);
-          onOrderCreated(data.order);
-        }
-      }
+        })
+          .then((res) => (res.ok ? res.json() : null))
+          .then((data) => {
+            if (data?.order) {
+              setCreatedOrder(data.order);
+              const updatedDeposit = data.order.payments?.find(
+                (p: PaymentRecord) => p.installmentType === 'ENTRADA_50'
+              );
+              if (updatedDeposit) setDepositPayment(updatedDeposit);
+              onOrderCreated(data.order);
+            }
+          })
+          .catch(() => {}),
+      ]);
     } catch {
       // Local notification already recorded
     } finally {
       setConfirmingDeposit(false);
     }
+
+    // 3. Abre o WhatsApp da Peterson Shoes com todas as informações do pedido e do Pix
+    const whatsappMessage = buildCustomerOrderMessage(orderForWhatsapp, {
+      pixConfirmedByCustomer: true,
+    });
+    openWhatsAppImmediate(whatsappStore, whatsappMessage);
   };
 
   const handleConfirmCardDeposit = async (e: React.FormEvent) => {
@@ -353,17 +393,17 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
       const orderForWhatsapp = localUpdated || createdOrder;
       setPaymentNotified(true);
 
-      // Abre IMEDIATAMENTE o WhatsApp da Peterson Shoes com todas as informações do pedido
-      const whatsappMessage = buildCustomerOrderMessage(orderForWhatsapp, {
-        pixConfirmedByCustomer: true,
-      });
-      openWhatsAppImmediate(whatsappStore, whatsappMessage);
-
       try {
-        const res = await apiFetch(
-          `/api/orders/${createdOrder.id}/notify-payment`,
-          {
+        await Promise.all([
+          syncOrderToCloud(orderForWhatsapp, orderForWhatsapp.payments),
+          sendMobilePushOrderAlert(orderForWhatsapp, 'PIX_CONFIRMADO'),
+          recordAnalyticsEventToCloud({
+            type: 'WHATSAPP',
+            productName: orderForWhatsapp.items.map((it) => it.name).join(', '),
+          }),
+          apiFetch(`/api/orders/${createdOrder.id}/notify-payment`, {
             method: 'POST',
+            keepalive: true,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               installmentType: 'ENTRADA_50',
@@ -375,22 +415,29 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
               cardLast4: last4,
               orderSnapshot: orderForWhatsapp,
             }),
-          }
-        );
-        if (res.ok) {
-          const data = await res.json();
-          if (data?.order) {
-            setCreatedOrder(data.order);
-            const updatedDeposit = data.order.payments?.find(
-              (p: PaymentRecord) => p.installmentType === 'ENTRADA_50'
-            );
-            if (updatedDeposit) setDepositPayment(updatedDeposit);
-            onOrderCreated(data.order);
-          }
-        }
+          })
+            .then((res) => (res.ok ? res.json() : null))
+            .then((data) => {
+              if (data?.order) {
+                setCreatedOrder(data.order);
+                const updatedDeposit = data.order.payments?.find(
+                  (p: PaymentRecord) => p.installmentType === 'ENTRADA_50'
+                );
+                if (updatedDeposit) setDepositPayment(updatedDeposit);
+                onOrderCreated(data.order);
+              }
+            })
+            .catch(() => {}),
+        ]);
       } catch {
         // Local notification already applied
       }
+
+      // Abre o WhatsApp da Peterson Shoes com todas as informações do pedido
+      const whatsappMessage = buildCustomerOrderMessage(orderForWhatsapp, {
+        pixConfirmedByCustomer: true,
+      });
+      openWhatsAppImmediate(whatsappStore, whatsappMessage);
     } finally {
       setConfirmingDeposit(false);
     }
@@ -556,6 +603,7 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
           {step === 'CUSTOMER' && (
             <form
               id="checkout-customer-form"
+              noValidate
               onSubmit={handleCreateBespokeOrder}
               className="space-y-4"
             >
@@ -580,7 +628,6 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                 </label>
                 <input
                   type="text"
-                  required
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
                   placeholder="Ex: Maria Clara Almeida"
@@ -595,7 +642,6 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                   </label>
                   <input
                     type="tel"
-                    required
                     value={customerWhatsapp}
                     onChange={(e) => setCustomerWhatsapp(formatPhone(e.target.value))}
                     placeholder="(62) 99999-9999"
@@ -604,11 +650,10 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-[#231619] mb-1">
-                    CPF (Emissão de Comprovante) *
+                    CPF (Opcional)
                   </label>
                   <input
                     type="text"
-                    required
                     value={customerCpf}
                     onChange={(e) => setCustomerCpf(formatCPF(e.target.value))}
                     placeholder="000.000.000-00"
@@ -619,7 +664,7 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
 
               <div>
                 <label className="block text-xs font-semibold text-[#231619] mb-1">
-                  E-mail para Acompanhamento
+                  E-mail para Acompanhamento (Opcional)
                 </label>
                 <input
                   type="email"
@@ -633,7 +678,7 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
               <div className="pt-3 border-t border-[#DFD3C3] space-y-3">
                 <div>
                   <p className="text-xs font-semibold text-[#5B1824]">
-                    Endereço de Entrega (Envio após conclusão em 15 dias)
+                    Endereço de Entrega (Opcional agora — pode combinar pelo WhatsApp)
                   </p>
                   <div className="mt-2 p-3.5 rounded-xl bg-[#EFE7DA] border border-[#DFD3C3] space-y-1.5 text-xs text-[#231619]">
                     <p className="font-bold text-[#5B1824]">
@@ -649,11 +694,10 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
                   <div>
                     <label className="block text-xs font-semibold text-[#231619] mb-1">
-                      CEP *
+                      CEP
                     </label>
                     <input
                       type="text"
-                      required
                       value={cep}
                       onChange={(e) => handleCepChange(e.target.value)}
                       placeholder="74000-000"
@@ -662,11 +706,10 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                   </div>
                   <div className="sm:col-span-2">
                     <label className="block text-xs font-semibold text-[#231619] mb-1">
-                      Rua / Avenida *
+                      Rua / Avenida
                     </label>
                     <input
                       type="text"
-                      required
                       value={street}
                       onChange={(e) => setStreet(e.target.value)}
                       placeholder="Ex: Av. T-63"
@@ -678,11 +721,10 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
                   <div>
                     <label className="block text-xs font-semibold text-[#231619] mb-1">
-                      Número *
+                      Número
                     </label>
                     <input
                       type="text"
-                      required
                       value={number}
                       onChange={(e) => setNumber(e.target.value)}
                       placeholder="123"
@@ -706,11 +748,10 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="block text-xs font-semibold text-[#231619] mb-1">
-                      Bairro *
+                      Bairro
                     </label>
                     <input
                       type="text"
-                      required
                       value={neighborhood}
                       onChange={(e) => setNeighborhood(e.target.value)}
                       placeholder="Setor Bueno"
@@ -719,11 +760,10 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-[#231619] mb-1">
-                      Cidade *
+                      Cidade
                     </label>
                     <input
                       type="text"
-                      required
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
                       placeholder="Goiânia"
@@ -732,11 +772,10 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-[#231619] mb-1">
-                      Estado (UF) *
+                      Estado (UF)
                     </label>
                     <input
                       type="text"
-                      required
                       maxLength={2}
                       value={state}
                       onChange={(e) => setState(e.target.value.toUpperCase())}
@@ -1289,6 +1328,12 @@ export const CartCheckoutDrawer: React.FC<CartCheckoutDrawerProps> = ({
                 </p>
               </div>
             </div>
+
+            {step === 'CUSTOMER' && formError && (
+              <div className="p-2.5 bg-[#7A2434]/15 border border-[#7A2434] rounded-lg text-xs text-[#5B1824] font-semibold">
+                {formError}
+              </div>
+            )}
 
             {step === 'CART' ? (
               <button

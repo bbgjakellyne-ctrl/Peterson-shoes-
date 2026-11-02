@@ -1,0 +1,127 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function isValidOrder(data) {
+      return data.keys().hasAll([
+        'id',
+        'orderCode',
+        'customerName',
+        'customerWhatsapp',
+        'totalAmount',
+        'depositAmount',
+        'remainingAmount',
+        'paymentStatus',
+        'productionStatus',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.id is string && data.id.size() <= 128 &&
+      data.orderCode is string && data.orderCode.size() <= 64 &&
+      data.customerName is string && data.customerName.size() <= 200 &&
+      data.customerWhatsapp is string && data.customerWhatsapp.size() <= 60 &&
+      (data.totalAmount is int || data.totalAmount is float) && data.totalAmount >= 0 &&
+      (data.depositAmount is int || data.depositAmount is float) && data.depositAmount >= 0 &&
+      (data.remainingAmount is int || data.remainingAmount is float) && data.remainingAmount >= 0 &&
+      data.paymentStatus in [
+        'AGUARDANDO_ENTRADA_50',
+        'ENTRADA_50_PAGA',
+        'AGUARDANDO_FINAL_50',
+        'QUITADO_100'
+      ] &&
+      data.productionStatus in [
+        'AGUARDANDO_CONFIRMACAO',
+        'CORTE_MODELAGEM',
+        'MONTAGEM_ARTESANAL',
+        'ACABAMENTO_QUALIDADE',
+        'ACABAMENTO_PALMILHA',
+        'PRONTA_PARA_ENTREGA',
+        'ENVIADA_ENTREGUE',
+        'ENTREGUE'
+      ] &&
+      data.createdAt is string && data.createdAt.size() <= 64 &&
+      data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidPayment(data) {
+      return data.keys().hasAll([
+        'id',
+        'orderId',
+        'orderCode',
+        'installmentType',
+        'method',
+        'status',
+        'amount',
+        'createdAt'
+      ]) &&
+      data.id is string && data.id.size() <= 128 &&
+      data.orderId is string && data.orderId.size() <= 128 &&
+      data.orderCode is string && data.orderCode.size() <= 64 &&
+      data.installmentType in ['ENTRADA_50', 'FINAL_50', 'RESTANTE_50'] &&
+      data.method in ['PIX_MERCADO_PAGO', 'CARTAO_MERCADO_PAGO'] &&
+      data.status in ['PENDENTE', 'APROVADO'] &&
+      (data.amount is int || data.amount is float) && data.amount >= 0 &&
+      data.createdAt is string && data.createdAt.size() <= 64;
+    }
+
+    function isValidCustomer(data) {
+      return data.keys().hasAll(['id', 'name', 'whatsapp', 'createdAt']) &&
+      data.id is string && data.id.size() <= 128 &&
+      data.name is string && data.name.size() <= 200 &&
+      data.whatsapp is string && data.whatsapp.size() <= 60 &&
+      data.createdAt is string && data.createdAt.size() <= 64;
+    }
+
+    function isValidStoreState(data) {
+      return data.keys().hasAll(['updatedAt']) &&
+      data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    match /test/{docId} {
+      allow get: if isValidId(docId);
+    }
+
+    match /orders/{orderId} {
+      allow get: if isValidId(orderId);
+      allow list: if resource.data.id is string && resource.data.id.size() <= 128;
+      allow create: if isValidId(orderId) && isValidOrder(incoming()) && incoming().id == orderId;
+      allow update: if isValidId(orderId) && isValidOrder(incoming()) && incoming().id == orderId;
+      allow delete: if isValidId(orderId);
+    }
+
+    match /payments/{paymentId} {
+      allow get: if isValidId(paymentId);
+      allow list: if resource.data.id is string && resource.data.id.size() <= 128;
+      allow create: if isValidId(paymentId) && isValidPayment(incoming()) && incoming().id == paymentId;
+      allow update: if isValidId(paymentId) && isValidPayment(incoming()) && incoming().id == paymentId;
+      allow delete: if isValidId(paymentId);
+    }
+
+    match /customers/{customerId} {
+      allow get: if isValidId(customerId);
+      allow list: if resource.data.id is string && resource.data.id.size() <= 128;
+      allow create: if isValidId(customerId) && isValidCustomer(incoming()) && incoming().id == customerId;
+      allow update: if isValidId(customerId) && isValidCustomer(incoming()) && incoming().id == customerId;
+      allow delete: if isValidId(customerId);
+    }
+
+    match /store_state/{docId} {
+      allow get: if isValidId(docId);
+      allow list: if resource.data.updatedAt is string;
+      allow create: if isValidId(docId) && isValidStoreState(incoming());
+      allow update: if isValidId(docId) && isValidStoreState(incoming());
+      allow delete: if isValidId(docId);
+    }
+  }
+}

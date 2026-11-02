@@ -4783,455 +4783,15 @@
       "createdAt": "2026-03-01T12:00:00.000Z"
     },
     {
-      "id": "prod-lks-01-bota-alana",
-      "sku": "PTS-LKS-01",
-      "name": "Bota Cano Alto Croco com Aplicação Fivela — Alana",
-      "subtitle": "Cano Alto Textura Croco com Fivela Lateral, Bico Fino & Salto Bloco Estruturado",
-      "category": "Bota",
-      "price": 399.9,
-      "image": "/lks/products/lks-0-bota-com-aplicacao-alana.webp",
-      "gallery": [
-        "/lks/products/lks-0-bota-com-aplicacao-alana.webp",
-        "/lks/products/lks-1-bota-com-aplicacao-alana.webp"
-      ],
-      "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
-      "heelOptions": [
-        "Salto Bloco Médio 7,5cm",
-        "Salto Bloco Alto 9cm"
-      ],
-      "strapFinishes": [
-        "Fivela Metálica Dourada",
-        "Fivela Metálica Prata"
-      ],
-      "colors": [
-        {
-          "name": "Preto",
-          "hex": "#1B191A",
-          "image": "/lks/products/lks-0-bota-com-aplicacao-alana.webp"
-        },
-        {
-          "name": "Branco",
-          "hex": "#F7F7F5",
-          "image": "/lks/products/lks-0-bota-com-aplicacao-alana.webp"
-        },
-        {
-          "name": "Marsala",
-          "hex": "#631421",
-          "image": "/lks/products/lks-0-bota-com-aplicacao-alana.webp"
-        },
-        {
-          "name": "Nude",
-          "hex": "#DFC1B4",
-          "image": "/lks/products/lks-0-bota-com-aplicacao-alana.webp"
-        },
-        {
-          "name": "Dourado",
-          "hex": "#D4AF37",
-          "image": "/lks/products/lks-0-bota-com-aplicacao-alana.webp"
-        },
-        {
-          "name": "Prata",
-          "hex": "#C4C9CE",
-          "image": "/lks/products/lks-0-bota-com-aplicacao-alana.webp"
-        },
-        {
-          "name": "Vermelho",
-          "hex": "#B31B2C",
-          "image": "/lks/products/lks-0-bota-com-aplicacao-alana.webp"
-        },
-        {
-          "name": "Rosa",
-          "hex": "#E07A9B",
-          "image": "/lks/products/lks-0-bota-com-aplicacao-alana.webp"
-        },
-        {
-          "name": "Outra Cor",
-          "hex": "#8E7970",
-          "image": "/lks/products/lks-0-bota-com-aplicacao-alana.webp",
-          "isCustom": true
-        }
-      ],
-      "availableSizes": [
-        34,
-        35,
-        36,
-        37,
-        38,
-        39
-      ],
-      "productionDays": 15,
-      "featured": true,
-      "active": true,
-      "description": "Imponência e sofisticação para produções inesquecíveis! Bota de cano alto com textura croco, bico fino e aplicação de fivela lateral sobre salto bloco super confortável.",
-      "craftDetails": [
-        "Confeccionada sob encomenda na numeração 34 ao 39 BR em até 15 dias",
-        "Acabamento premium com forro macio e zíper interno reforçado",
-        "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
-      ],
-      "createdAt": "2026-03-06T12:00:00.000Z"
-    },
-    {
-      "id": "prod-lks-02-bota-europa",
-      "sku": "PTS-LKS-02",
-      "name": "Bota Cano Alto Salto Escultural Dourado — Europa",
-      "subtitle": "Bico Fino Clássico em Couro Macio com Salto Metalizado Ouro",
-      "category": "Bota",
-      "price": 399.9,
-      "image": "/lks/products/lks-2-bota-salto-ouro-cano-alto-europa.webp",
-      "gallery": [
-        "/lks/products/lks-2-bota-salto-ouro-cano-alto-europa.webp",
-        "/lks/products/lks-3-bota-salto-ouro-cano-alto-europa.webp"
-      ],
-      "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
-      "heelOptions": [
-        "Salto Escultural Dourado 8,5cm",
-        "Salto Bloco 7,5cm"
-      ],
-      "strapFinishes": [
-        "Salto Metalizado Dourado",
-        "Acabamento Clássico Liso"
-      ],
-      "colors": [
-        {
-          "name": "Marsala",
-          "hex": "#631421",
-          "image": "/lks/products/lks-2-bota-salto-ouro-cano-alto-europa.webp"
-        },
-        {
-          "name": "Preto",
-          "hex": "#1B191A",
-          "image": "/lks/products/lks-2-bota-salto-ouro-cano-alto-europa.webp"
-        },
-        {
-          "name": "Branco",
-          "hex": "#F7F7F5",
-          "image": "/lks/products/lks-2-bota-salto-ouro-cano-alto-europa.webp"
-        },
-        {
-          "name": "Nude",
-          "hex": "#DFC1B4",
-          "image": "/lks/products/lks-2-bota-salto-ouro-cano-alto-europa.webp"
-        },
-        {
-          "name": "Dourado",
-          "hex": "#D4AF37",
-          "image": "/lks/products/lks-2-bota-salto-ouro-cano-alto-europa.webp"
-        },
-        {
-          "name": "Prata",
-          "hex": "#C4C9CE",
-          "image": "/lks/products/lks-2-bota-salto-ouro-cano-alto-europa.webp"
-        },
-        {
-          "name": "Vermelho",
-          "hex": "#B31B2C",
-          "image": "/lks/products/lks-2-bota-salto-ouro-cano-alto-europa.webp"
-        },
-        {
-          "name": "Rosa",
-          "hex": "#E07A9B",
-          "image": "/lks/products/lks-2-bota-salto-ouro-cano-alto-europa.webp"
-        },
-        {
-          "name": "Outra Cor",
-          "hex": "#8E7970",
-          "image": "/lks/products/lks-2-bota-salto-ouro-cano-alto-europa.webp",
-          "isCustom": true
-        }
-      ],
-      "availableSizes": [
-        34,
-        35,
-        36,
-        37,
-        38,
-        39
-      ],
-      "productionDays": 15,
-      "featured": true,
-      "active": true,
-      "description": "Design europeu contemporâneo com salto escultural dourado que transforma qualquer look em uma produção de luxo.",
-      "craftDetails": [
-        "Confeccionada sob encomenda na numeração 34 ao 39 BR em até 15 dias",
-        "Disponível em Marrom Café/Marsala, Preto, Branco, Nude ou Outra Cor",
-        "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
-      ],
-      "createdAt": "2026-03-06T12:00:00.000Z"
-    },
-    {
-      "id": "prod-lks-03-bota-gabi",
-      "sku": "PTS-LKS-03",
-      "name": "Bota Over Cano Longo Dobrável Salto Bloco — Gabi",
-      "subtitle": "Cano Longo com Dobra Superior Charmosa, Bico Fino & Salto Bloco",
-      "category": "Bota",
-      "price": 419.9,
-      "image": "/lks/products/lks-4-bota-over-cano-longo-salto-bloco-gabi.webp",
-      "gallery": [
-        "/lks/products/lks-4-bota-over-cano-longo-salto-bloco-gabi.webp",
-        "/lks/products/lks-5-bota-over-cano-longo-salto-bloco-gabi.webp"
-      ],
-      "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
-      "heelOptions": [
-        "Salto Bloco 8cm",
-        "Salto Bloco 6cm"
-      ],
-      "strapFinishes": [
-        "Cano Longo c/ Dobra Superior",
-        "Acabamento Liso Premium"
-      ],
-      "colors": [
-        {
-          "name": "Nude",
-          "hex": "#DFC1B4",
-          "image": "/lks/products/lks-4-bota-over-cano-longo-salto-bloco-gabi.webp"
-        },
-        {
-          "name": "Preto",
-          "hex": "#1B191A",
-          "image": "/lks/products/lks-4-bota-over-cano-longo-salto-bloco-gabi.webp"
-        },
-        {
-          "name": "Branco",
-          "hex": "#F7F7F5",
-          "image": "/lks/products/lks-4-bota-over-cano-longo-salto-bloco-gabi.webp"
-        },
-        {
-          "name": "Marsala",
-          "hex": "#631421",
-          "image": "/lks/products/lks-4-bota-over-cano-longo-salto-bloco-gabi.webp"
-        },
-        {
-          "name": "Dourado",
-          "hex": "#D4AF37",
-          "image": "/lks/products/lks-4-bota-over-cano-longo-salto-bloco-gabi.webp"
-        },
-        {
-          "name": "Prata",
-          "hex": "#C4C9CE",
-          "image": "/lks/products/lks-4-bota-over-cano-longo-salto-bloco-gabi.webp"
-        },
-        {
-          "name": "Vermelho",
-          "hex": "#B31B2C",
-          "image": "/lks/products/lks-4-bota-over-cano-longo-salto-bloco-gabi.webp"
-        },
-        {
-          "name": "Rosa",
-          "hex": "#E07A9B",
-          "image": "/lks/products/lks-4-bota-over-cano-longo-salto-bloco-gabi.webp"
-        },
-        {
-          "name": "Outra Cor",
-          "hex": "#8E7970",
-          "image": "/lks/products/lks-4-bota-over-cano-longo-salto-bloco-gabi.webp",
-          "isCustom": true
-        }
-      ],
-      "availableSizes": [
-        34,
-        35,
-        36,
-        37,
-        38,
-        39
-      ],
-      "productionDays": 15,
-      "featured": false,
-      "active": true,
-      "description": "Bota Over de cano longo com acabamento macio e salto bloco estável, perfeita para alongar a silhueta com máximo conforto.",
-      "craftDetails": [
-        "Confeccionada sob encomenda na numeração 34 ao 39 BR em até 15 dias",
-        "Disponível em Caramelo/Nude, Preto, Marrom Café, Branco ou Outra Cor",
-        "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
-      ],
-      "createdAt": "2026-03-06T12:00:00.000Z"
-    },
-    {
-      "id": "prod-lks-04-bota-ana-paula",
-      "sku": "PTS-LKS-04",
-      "name": "Bota Cano Alto Salto Bloco Bico Fino — Ana Paula",
-      "subtitle": "Clássica e Versátil em Couro Liso com Salto Bloco Anatômico",
-      "category": "Bota",
-      "price": 399.9,
-      "image": "/lks/products/lks-6-bota-cano-alto-salto-bloco-bico-fino-ana-paula.webp",
-      "gallery": [
-        "/lks/products/lks-6-bota-cano-alto-salto-bloco-bico-fino-ana-paula.webp",
-        "/lks/products/lks-7-bota-cano-alto-salto-bloco-bico-fino-ana-paula.webp"
-      ],
-      "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
-      "heelOptions": [
-        "Salto Bloco 8cm",
-        "Salto Bloco 6cm"
-      ],
-      "strapFinishes": [
-        "Cano Alto Clássico Liso",
-        "Zíper Interno Invisível"
-      ],
-      "colors": [
-        {
-          "name": "Preto",
-          "hex": "#1B191A",
-          "image": "/lks/products/lks-6-bota-cano-alto-salto-bloco-bico-fino-ana-paula.webp"
-        },
-        {
-          "name": "Branco",
-          "hex": "#F7F7F5",
-          "image": "/lks/products/lks-6-bota-cano-alto-salto-bloco-bico-fino-ana-paula.webp"
-        },
-        {
-          "name": "Marsala",
-          "hex": "#631421",
-          "image": "/lks/products/lks-6-bota-cano-alto-salto-bloco-bico-fino-ana-paula.webp"
-        },
-        {
-          "name": "Nude",
-          "hex": "#DFC1B4",
-          "image": "/lks/products/lks-6-bota-cano-alto-salto-bloco-bico-fino-ana-paula.webp"
-        },
-        {
-          "name": "Dourado",
-          "hex": "#D4AF37",
-          "image": "/lks/products/lks-6-bota-cano-alto-salto-bloco-bico-fino-ana-paula.webp"
-        },
-        {
-          "name": "Prata",
-          "hex": "#C4C9CE",
-          "image": "/lks/products/lks-6-bota-cano-alto-salto-bloco-bico-fino-ana-paula.webp"
-        },
-        {
-          "name": "Vermelho",
-          "hex": "#B31B2C",
-          "image": "/lks/products/lks-6-bota-cano-alto-salto-bloco-bico-fino-ana-paula.webp"
-        },
-        {
-          "name": "Rosa",
-          "hex": "#E07A9B",
-          "image": "/lks/products/lks-6-bota-cano-alto-salto-bloco-bico-fino-ana-paula.webp"
-        },
-        {
-          "name": "Outra Cor",
-          "hex": "#8E7970",
-          "image": "/lks/products/lks-6-bota-cano-alto-salto-bloco-bico-fino-ana-paula.webp",
-          "isCustom": true
-        }
-      ],
-      "availableSizes": [
-        34,
-        35,
-        36,
-        37,
-        38,
-        39
-      ],
-      "productionDays": 15,
-      "featured": false,
-      "active": true,
-      "description": "O modelo indispensável no closet feminino! Bota de cano alto com bico fino elegante e salto bloco que garante estabilidade o dia inteiro.",
-      "craftDetails": [
-        "Confeccionada sob encomenda na numeração 34 ao 39 BR em até 15 dias",
-        "Disponível em Preto, Marsala/Vinho, Marrom, Branco ou Outra Cor",
-        "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
-      ],
-      "createdAt": "2026-03-06T12:00:00.000Z"
-    },
-    {
-      "id": "prod-lks-05-bota-selena",
-      "sku": "PTS-LKS-05",
-      "name": "Bota Bico Fino Cano Médio Slouchy Salto Bloco — Selena",
-      "subtitle": "Cano Médio Drapeado Moderno com Bico Fino & Salto Bloco Alto",
-      "category": "Bota",
-      "price": 399.9,
-      "image": "/lks/products/lks-8-bota-bico-fino-cano-medio-salto-bloco-selena.webp",
-      "gallery": [
-        "/lks/products/lks-8-bota-bico-fino-cano-medio-salto-bloco-selena.webp",
-        "/lks/products/lks-9-bota-bico-fino-cano-medio-salto-bloco-selena.webp"
-      ],
-      "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
-      "heelOptions": [
-        "Salto Bloco 8,5cm",
-        "Salto Bloco 6,5cm"
-      ],
-      "strapFinishes": [
-        "Cano Médio Drapeado",
-        "Cano Médio Liso"
-      ],
-      "colors": [
-        {
-          "name": "Marsala",
-          "hex": "#631421",
-          "image": "/lks/products/lks-8-bota-bico-fino-cano-medio-salto-bloco-selena.webp"
-        },
-        {
-          "name": "Preto",
-          "hex": "#1B191A",
-          "image": "/lks/products/lks-8-bota-bico-fino-cano-medio-salto-bloco-selena.webp"
-        },
-        {
-          "name": "Branco",
-          "hex": "#F7F7F5",
-          "image": "/lks/products/lks-8-bota-bico-fino-cano-medio-salto-bloco-selena.webp"
-        },
-        {
-          "name": "Nude",
-          "hex": "#DFC1B4",
-          "image": "/lks/products/lks-8-bota-bico-fino-cano-medio-salto-bloco-selena.webp"
-        },
-        {
-          "name": "Dourado",
-          "hex": "#D4AF37",
-          "image": "/lks/products/lks-8-bota-bico-fino-cano-medio-salto-bloco-selena.webp"
-        },
-        {
-          "name": "Prata",
-          "hex": "#C4C9CE",
-          "image": "/lks/products/lks-8-bota-bico-fino-cano-medio-salto-bloco-selena.webp"
-        },
-        {
-          "name": "Vermelho",
-          "hex": "#B31B2C",
-          "image": "/lks/products/lks-8-bota-bico-fino-cano-medio-salto-bloco-selena.webp"
-        },
-        {
-          "name": "Rosa",
-          "hex": "#E07A9B",
-          "image": "/lks/products/lks-8-bota-bico-fino-cano-medio-salto-bloco-selena.webp"
-        },
-        {
-          "name": "Outra Cor",
-          "hex": "#8E7970",
-          "image": "/lks/products/lks-8-bota-bico-fino-cano-medio-salto-bloco-selena.webp",
-          "isCustom": true
-        }
-      ],
-      "availableSizes": [
-        34,
-        35,
-        36,
-        37,
-        38,
-        39
-      ],
-      "productionDays": 15,
-      "featured": false,
-      "active": true,
-      "description": "Charme e autenticidade no cano médio drapeado com bico fino e salto bloco estruturado.",
-      "craftDetails": [
-        "Confeccionada sob encomenda na numeração 34 ao 39 BR em até 15 dias",
-        "Disponível em Marrom/Marsala, Preto, Caramelo, Nude ou Outra Cor",
-        "Entrada de 50% no Pix (Banco Inter) + 50% quando ficar pronta"
-      ],
-      "createdAt": "2026-03-06T12:00:00.000Z"
-    },
-    {
       "id": "prod-lks-06-plataforma-elisa",
       "sku": "PTS-LKS-06",
       "name": "Plataforma Anabela de Ráfia Trançada — Elisa",
       "subtitle": "Salto Anabela revestido em Ráfia Artesanal com Tira Frontal & Fivela no Tornozelo",
       "category": "Plataforma",
       "price": 249.9,
-      "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp",
+      "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp?v=clean2",
       "gallery": [
-        "/lks/products/lks-10-plataforma-de-rafia-elisa.webp"
+        "/lks/products/lks-10-plataforma-de-rafia-elisa.webp?v=clean2"
       ],
       "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
       "heelOptions": [
@@ -5246,47 +4806,47 @@
         {
           "name": "Branco",
           "hex": "#F7F7F5",
-          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp"
+          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp?v=clean2"
         },
         {
           "name": "Preto",
           "hex": "#1B191A",
-          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp"
+          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp?v=clean2"
         },
         {
           "name": "Marsala",
           "hex": "#631421",
-          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp"
+          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp?v=clean2"
         },
         {
           "name": "Nude",
           "hex": "#DFC1B4",
-          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp"
+          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp?v=clean2"
         },
         {
           "name": "Dourado",
           "hex": "#D4AF37",
-          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp"
+          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp?v=clean2"
         },
         {
           "name": "Prata",
           "hex": "#C4C9CE",
-          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp"
+          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp?v=clean2"
         },
         {
           "name": "Vermelho",
           "hex": "#B31B2C",
-          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp"
+          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp?v=clean2"
         },
         {
           "name": "Rosa",
           "hex": "#E07A9B",
-          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp"
+          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp?v=clean2"
         },
         {
           "name": "Outra Cor",
           "hex": "#8E7970",
-          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp",
+          "image": "/lks/products/lks-10-plataforma-de-rafia-elisa.webp?v=clean2",
           "isCustom": true
         }
       ],
@@ -5316,9 +4876,9 @@
       "subtitle": "Design Moderno com Tiras Transparentes em Vinil Macio & Salto Anabela em Cortiça",
       "category": "Plataforma",
       "price": 239.9,
-      "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp",
+      "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp?v=clean2",
       "gallery": [
-        "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp"
+        "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp?v=clean2"
       ],
       "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
       "heelOptions": [
@@ -5333,47 +4893,47 @@
         {
           "name": "Nude",
           "hex": "#DFC1B4",
-          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp"
+          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp?v=clean2"
         },
         {
           "name": "Preto",
           "hex": "#1B191A",
-          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp"
+          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp?v=clean2"
         },
         {
           "name": "Branco",
           "hex": "#F7F7F5",
-          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp"
+          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp?v=clean2"
         },
         {
           "name": "Marsala",
           "hex": "#631421",
-          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp"
+          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp?v=clean2"
         },
         {
           "name": "Dourado",
           "hex": "#D4AF37",
-          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp"
+          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp?v=clean2"
         },
         {
           "name": "Prata",
           "hex": "#C4C9CE",
-          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp"
+          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp?v=clean2"
         },
         {
           "name": "Vermelho",
           "hex": "#B31B2C",
-          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp"
+          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp?v=clean2"
         },
         {
           "name": "Rosa",
           "hex": "#E07A9B",
-          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp"
+          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp?v=clean2"
         },
         {
           "name": "Outra Cor",
           "hex": "#8E7970",
-          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp",
+          "image": "/lks/products/lks-14-tamanco-salto-anabela-ayla.webp?v=clean2",
           "isCustom": true
         }
       ],
@@ -5403,9 +4963,9 @@
       "subtitle": "Acabamento Dourado Champagne com Recorte Lateral Transparente & Pulseira",
       "category": "Plataforma",
       "price": 249.9,
-      "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp",
+      "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp?v=clean2",
       "gallery": [
-        "/lks/products/lks-18-plataforma-anabela-cecilia.webp"
+        "/lks/products/lks-18-plataforma-anabela-cecilia.webp?v=clean2"
       ],
       "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
       "heelOptions": [
@@ -5420,47 +4980,47 @@
         {
           "name": "Dourado",
           "hex": "#D4AF37",
-          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp"
+          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp?v=clean2"
         },
         {
           "name": "Preto",
           "hex": "#1B191A",
-          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp"
+          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp?v=clean2"
         },
         {
           "name": "Branco",
           "hex": "#F7F7F5",
-          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp"
+          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp?v=clean2"
         },
         {
           "name": "Marsala",
           "hex": "#631421",
-          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp"
+          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp?v=clean2"
         },
         {
           "name": "Nude",
           "hex": "#DFC1B4",
-          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp"
+          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp?v=clean2"
         },
         {
           "name": "Prata",
           "hex": "#C4C9CE",
-          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp"
+          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp?v=clean2"
         },
         {
           "name": "Vermelho",
           "hex": "#B31B2C",
-          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp"
+          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp?v=clean2"
         },
         {
           "name": "Rosa",
           "hex": "#E07A9B",
-          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp"
+          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp?v=clean2"
         },
         {
           "name": "Outra Cor",
           "hex": "#8E7970",
-          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp",
+          "image": "/lks/products/lks-18-plataforma-anabela-cecilia.webp?v=clean2",
           "isCustom": true
         }
       ],
@@ -5490,9 +5050,9 @@
       "subtitle": "Tira Frontal Minimalista, Calcanhar Fechado & Pulseira Fivela Dourada",
       "category": "Plataforma",
       "price": 249.9,
-      "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp",
+      "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp?v=clean2",
       "gallery": [
-        "/lks/products/lks-22-plataforma-salto-annabela-taina.webp"
+        "/lks/products/lks-22-plataforma-salto-annabela-taina.webp?v=clean2"
       ],
       "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
       "heelOptions": [
@@ -5507,47 +5067,47 @@
         {
           "name": "Rosa",
           "hex": "#E07A9B",
-          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp"
+          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp?v=clean2"
         },
         {
           "name": "Preto",
           "hex": "#1B191A",
-          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp"
+          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp?v=clean2"
         },
         {
           "name": "Branco",
           "hex": "#F7F7F5",
-          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp"
+          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp?v=clean2"
         },
         {
           "name": "Marsala",
           "hex": "#631421",
-          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp"
+          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp?v=clean2"
         },
         {
           "name": "Nude",
           "hex": "#DFC1B4",
-          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp"
+          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp?v=clean2"
         },
         {
           "name": "Dourado",
           "hex": "#D4AF37",
-          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp"
+          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp?v=clean2"
         },
         {
           "name": "Prata",
           "hex": "#C4C9CE",
-          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp"
+          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp?v=clean2"
         },
         {
           "name": "Vermelho",
           "hex": "#B31B2C",
-          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp"
+          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp?v=clean2"
         },
         {
           "name": "Outra Cor",
           "hex": "#8E7970",
-          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp",
+          "image": "/lks/products/lks-22-plataforma-salto-annabela-taina.webp?v=clean2",
           "isCustom": true
         }
       ],
@@ -5577,9 +5137,9 @@
       "subtitle": "Bico Folha Metalizado com Gáspea em Vinil & Salto Geométrico Cristal",
       "category": "Sandália de Salto",
       "price": 229.9,
-      "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp",
+      "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp?v=clean2",
       "gallery": [
-        "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp"
+        "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp?v=clean2"
       ],
       "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
       "heelOptions": [
@@ -5594,47 +5154,47 @@
         {
           "name": "Dourado",
           "hex": "#D4AF37",
-          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp"
+          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp?v=clean2"
         },
         {
           "name": "Preto",
           "hex": "#1B191A",
-          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp"
+          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp?v=clean2"
         },
         {
           "name": "Branco",
           "hex": "#F7F7F5",
-          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp"
+          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp?v=clean2"
         },
         {
           "name": "Marsala",
           "hex": "#631421",
-          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp"
+          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp?v=clean2"
         },
         {
           "name": "Nude",
           "hex": "#DFC1B4",
-          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp"
+          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp?v=clean2"
         },
         {
           "name": "Prata",
           "hex": "#C4C9CE",
-          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp"
+          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp?v=clean2"
         },
         {
           "name": "Vermelho",
           "hex": "#B31B2C",
-          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp"
+          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp?v=clean2"
         },
         {
           "name": "Rosa",
           "hex": "#E07A9B",
-          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp"
+          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp?v=clean2"
         },
         {
           "name": "Outra Cor",
           "hex": "#8E7970",
-          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp",
+          "image": "/lks/products/lks-28-sandalia-salto-anabela-cristal.webp?v=clean2",
           "isCustom": true
         }
       ],
@@ -5664,9 +5224,9 @@
       "subtitle": "Meia Pata Dupla Estruturada, Salto Bloco Alto & Tira no Tornozelo",
       "category": "Sandália de Salto",
       "price": 249.9,
-      "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp",
+      "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp?v=clean2",
       "gallery": [
-        "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp"
+        "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp?v=clean2"
       ],
       "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
       "heelOptions": [
@@ -5681,47 +5241,47 @@
         {
           "name": "Prata",
           "hex": "#C4C9CE",
-          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp"
+          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp?v=clean2"
         },
         {
           "name": "Preto",
           "hex": "#1B191A",
-          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp"
+          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp?v=clean2"
         },
         {
           "name": "Branco",
           "hex": "#F7F7F5",
-          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp"
+          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp?v=clean2"
         },
         {
           "name": "Marsala",
           "hex": "#631421",
-          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp"
+          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp?v=clean2"
         },
         {
           "name": "Nude",
           "hex": "#DFC1B4",
-          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp"
+          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp?v=clean2"
         },
         {
           "name": "Dourado",
           "hex": "#D4AF37",
-          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp"
+          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp?v=clean2"
         },
         {
           "name": "Vermelho",
           "hex": "#B31B2C",
-          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp"
+          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp?v=clean2"
         },
         {
           "name": "Rosa",
           "hex": "#E07A9B",
-          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp"
+          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp?v=clean2"
         },
         {
           "name": "Outra Cor",
           "hex": "#8E7970",
-          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp",
+          "image": "/lks/products/lks-30-sandalia-salto-dupla-pata-lulu.webp?v=clean2",
           "isCustom": true
         }
       ],
@@ -5751,9 +5311,9 @@
       "subtitle": "Tiras Frontais Trabalhadas, Salto Fino Clássico & Tira Envolvente no Tornozelo",
       "category": "Sandália de Salto",
       "price": 229.9,
-      "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp",
+      "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp?v=clean2",
       "gallery": [
-        "/lks/products/lks-32-sandalia-salto-fino-thais.webp"
+        "/lks/products/lks-32-sandalia-salto-fino-thais.webp?v=clean2"
       ],
       "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
       "heelOptions": [
@@ -5768,47 +5328,47 @@
         {
           "name": "Dourado",
           "hex": "#D4AF37",
-          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp"
+          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp?v=clean2"
         },
         {
           "name": "Preto",
           "hex": "#1B191A",
-          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp"
+          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp?v=clean2"
         },
         {
           "name": "Branco",
           "hex": "#F7F7F5",
-          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp"
+          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp?v=clean2"
         },
         {
           "name": "Marsala",
           "hex": "#631421",
-          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp"
+          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp?v=clean2"
         },
         {
           "name": "Nude",
           "hex": "#DFC1B4",
-          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp"
+          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp?v=clean2"
         },
         {
           "name": "Prata",
           "hex": "#C4C9CE",
-          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp"
+          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp?v=clean2"
         },
         {
           "name": "Vermelho",
           "hex": "#B31B2C",
-          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp"
+          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp?v=clean2"
         },
         {
           "name": "Rosa",
           "hex": "#E07A9B",
-          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp"
+          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp?v=clean2"
         },
         {
           "name": "Outra Cor",
           "hex": "#8E7970",
-          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp",
+          "image": "/lks/products/lks-32-sandalia-salto-fino-thais.webp?v=clean2",
           "isCustom": true
         }
       ],
@@ -5838,9 +5398,9 @@
       "subtitle": "Bico Folha Elegante com Tiras Cravejadas em Strass Cristal & Salto Fino",
       "category": "Sandália de Salto",
       "price": 229.9,
-      "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp",
+      "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp?v=clean2",
       "gallery": [
-        "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp"
+        "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp?v=clean2"
       ],
       "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
       "heelOptions": [
@@ -5855,47 +5415,47 @@
         {
           "name": "Prata",
           "hex": "#C4C9CE",
-          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp"
+          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp?v=clean2"
         },
         {
           "name": "Preto",
           "hex": "#1B191A",
-          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp"
+          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp?v=clean2"
         },
         {
           "name": "Branco",
           "hex": "#F7F7F5",
-          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp"
+          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp?v=clean2"
         },
         {
           "name": "Marsala",
           "hex": "#631421",
-          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp"
+          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp?v=clean2"
         },
         {
           "name": "Nude",
           "hex": "#DFC1B4",
-          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp"
+          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp?v=clean2"
         },
         {
           "name": "Dourado",
           "hex": "#D4AF37",
-          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp"
+          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp?v=clean2"
         },
         {
           "name": "Vermelho",
           "hex": "#B31B2C",
-          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp"
+          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp?v=clean2"
         },
         {
           "name": "Rosa",
           "hex": "#E07A9B",
-          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp"
+          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp?v=clean2"
         },
         {
           "name": "Outra Cor",
           "hex": "#8E7970",
-          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp",
+          "image": "/lks/products/lks-34-sandalia-de-salto-fino-bico-folha-e-strass-diana.webp?v=clean2",
           "isCustom": true
         }
       ],
@@ -5925,10 +5485,10 @@
       "subtitle": "Amarração Artesanal em Corda Macia no Tornozelo & Solado Flat Conforto",
       "category": "Rasteiras",
       "price": 159.9,
-      "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp",
+      "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp?v=clean2",
       "gallery": [
-        "/lks/products/lks-38-rasteira-de-corda-brasil.webp",
-        "/lks/products/lks-39-rasteira-de-corda-brasil.webp"
+        "/lks/products/lks-38-rasteira-de-corda-brasil.webp?v=clean2",
+        "/lks/products/lks-39-rasteira-de-corda-brasil.webp?v=clean2"
       ],
       "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
       "heelOptions": [
@@ -5942,47 +5502,47 @@
         {
           "name": "Dourado",
           "hex": "#D4AF37",
-          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp"
+          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp?v=clean2"
         },
         {
           "name": "Preto",
           "hex": "#1B191A",
-          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp"
+          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp?v=clean2"
         },
         {
           "name": "Branco",
           "hex": "#F7F7F5",
-          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp"
+          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp?v=clean2"
         },
         {
           "name": "Marsala",
           "hex": "#631421",
-          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp"
+          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp?v=clean2"
         },
         {
           "name": "Nude",
           "hex": "#DFC1B4",
-          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp"
+          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp?v=clean2"
         },
         {
           "name": "Prata",
           "hex": "#C4C9CE",
-          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp"
+          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp?v=clean2"
         },
         {
           "name": "Vermelho",
           "hex": "#B31B2C",
-          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp"
+          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp?v=clean2"
         },
         {
           "name": "Rosa",
           "hex": "#E07A9B",
-          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp"
+          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp?v=clean2"
         },
         {
           "name": "Outra Cor",
           "hex": "#8E7970",
-          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp",
+          "image": "/lks/products/lks-38-rasteira-de-corda-brasil.webp?v=clean2",
           "isCustom": true
         }
       ],
@@ -6012,10 +5572,9 @@
       "subtitle": "Tira Larga em Trama Natural Artesanal com Escultura de Concha Dourada",
       "category": "Rasteiras",
       "price": 159.9,
-      "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp",
+      "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp?v=clean2",
       "gallery": [
-        "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp",
-        "/lks/products/lks-53-rasteira-com-aplicacao-concha.webp"
+        "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp?v=clean2"
       ],
       "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
       "heelOptions": [
@@ -6029,47 +5588,47 @@
         {
           "name": "Nude",
           "hex": "#DFC1B4",
-          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp"
+          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp?v=clean2"
         },
         {
           "name": "Preto",
           "hex": "#1B191A",
-          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp"
+          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp?v=clean2"
         },
         {
           "name": "Branco",
           "hex": "#F7F7F5",
-          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp"
+          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp?v=clean2"
         },
         {
           "name": "Marsala",
           "hex": "#631421",
-          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp"
+          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp?v=clean2"
         },
         {
           "name": "Dourado",
           "hex": "#D4AF37",
-          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp"
+          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp?v=clean2"
         },
         {
           "name": "Prata",
           "hex": "#C4C9CE",
-          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp"
+          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp?v=clean2"
         },
         {
           "name": "Vermelho",
           "hex": "#B31B2C",
-          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp"
+          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp?v=clean2"
         },
         {
           "name": "Rosa",
           "hex": "#E07A9B",
-          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp"
+          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp?v=clean2"
         },
         {
           "name": "Outra Cor",
           "hex": "#8E7970",
-          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp",
+          "image": "/lks/products/lks-52-rasteira-com-aplicacao-concha.webp?v=clean2",
           "isCustom": true
         }
       ],
@@ -6099,9 +5658,9 @@
       "subtitle": "Tiras Cruzadas em Trama Artesanal & Solado Flatform Anatômico",
       "category": "Papetes",
       "price": 229.9,
-      "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp",
+      "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp?v=clean2",
       "gallery": [
-        "/lks/products/lks-59-flat-com-aplicacao-ariane.webp"
+        "/lks/products/lks-59-flat-com-aplicacao-ariane.webp?v=clean2"
       ],
       "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
       "heelOptions": [
@@ -6115,47 +5674,47 @@
         {
           "name": "Branco",
           "hex": "#F7F7F5",
-          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp"
+          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp?v=clean2"
         },
         {
           "name": "Preto",
           "hex": "#1B191A",
-          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp"
+          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp?v=clean2"
         },
         {
           "name": "Marsala",
           "hex": "#631421",
-          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp"
+          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp?v=clean2"
         },
         {
           "name": "Nude",
           "hex": "#DFC1B4",
-          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp"
+          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp?v=clean2"
         },
         {
           "name": "Dourado",
           "hex": "#D4AF37",
-          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp"
+          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp?v=clean2"
         },
         {
           "name": "Prata",
           "hex": "#C4C9CE",
-          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp"
+          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp?v=clean2"
         },
         {
           "name": "Vermelho",
           "hex": "#B31B2C",
-          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp"
+          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp?v=clean2"
         },
         {
           "name": "Rosa",
           "hex": "#E07A9B",
-          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp"
+          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp?v=clean2"
         },
         {
           "name": "Outra Cor",
           "hex": "#8E7970",
-          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp",
+          "image": "/lks/products/lks-59-flat-com-aplicacao-ariane.webp?v=clean2",
           "isCustom": true
         }
       ],
@@ -6185,9 +5744,9 @@
       "subtitle": "Tira Larga Texturizada com Maxi Aplique Orgânico Dourado & Base Trabalhada",
       "category": "Papetes",
       "price": 239.9,
-      "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp",
+      "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2",
       "gallery": [
-        "/lks/products/lks-60-flat-com-aplicacoes-poly.webp"
+        "/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2"
       ],
       "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
       "heelOptions": [
@@ -6201,47 +5760,47 @@
         {
           "name": "Branco",
           "hex": "#F7F7F5",
-          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp"
+          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2"
         },
         {
           "name": "Preto",
           "hex": "#1B191A",
-          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp"
+          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2"
         },
         {
           "name": "Marsala",
           "hex": "#631421",
-          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp"
+          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2"
         },
         {
           "name": "Nude",
           "hex": "#DFC1B4",
-          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp"
+          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2"
         },
         {
           "name": "Dourado",
           "hex": "#D4AF37",
-          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp"
+          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2"
         },
         {
           "name": "Prata",
           "hex": "#C4C9CE",
-          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp"
+          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2"
         },
         {
           "name": "Vermelho",
           "hex": "#B31B2C",
-          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp"
+          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2"
         },
         {
           "name": "Rosa",
           "hex": "#E07A9B",
-          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp"
+          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2"
         },
         {
           "name": "Outra Cor",
           "hex": "#8E7970",
-          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp",
+          "image": "/lks/products/lks-60-flat-com-aplicacoes-poly.webp?v=clean2",
           "isCustom": true
         }
       ],
@@ -6271,9 +5830,9 @@
       "subtitle": "Bico Fino Clássico com Salto Anabela Contínuo de Alta Estabilidade",
       "category": "Scarpin",
       "price": 249.9,
-      "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp",
+      "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp?v=clean2",
       "gallery": [
-        "/lks/products/lks-69-scarpin-salto-anabela-dara.webp"
+        "/lks/products/lks-69-scarpin-salto-anabela-dara.webp?v=clean2"
       ],
       "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
       "heelOptions": [
@@ -6288,47 +5847,47 @@
         {
           "name": "Branco",
           "hex": "#F7F7F5",
-          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp"
+          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp?v=clean2"
         },
         {
           "name": "Preto",
           "hex": "#1B191A",
-          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp"
+          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp?v=clean2"
         },
         {
           "name": "Marsala",
           "hex": "#631421",
-          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp"
+          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp?v=clean2"
         },
         {
           "name": "Nude",
           "hex": "#DFC1B4",
-          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp"
+          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp?v=clean2"
         },
         {
           "name": "Dourado",
           "hex": "#D4AF37",
-          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp"
+          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp?v=clean2"
         },
         {
           "name": "Prata",
           "hex": "#C4C9CE",
-          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp"
+          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp?v=clean2"
         },
         {
           "name": "Vermelho",
           "hex": "#B31B2C",
-          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp"
+          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp?v=clean2"
         },
         {
           "name": "Rosa",
           "hex": "#E07A9B",
-          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp"
+          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp?v=clean2"
         },
         {
           "name": "Outra Cor",
           "hex": "#8E7970",
-          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp",
+          "image": "/lks/products/lks-69-scarpin-salto-anabela-dara.webp?v=clean2",
           "isCustom": true
         }
       ],
@@ -6358,10 +5917,10 @@
       "subtitle": "Bico Fino Alongado, Calcanhar Fechado & Tira Delicada com Fivela",
       "category": "Scarpin",
       "price": 189.9,
-      "image": "/lks/products/lks-72-scarpin-sabrina.webp",
+      "image": "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2",
       "gallery": [
-        "/lks/products/lks-72-scarpin-sabrina.webp",
-        "/lks/products/lks-73-scarpin-sabrina.webp"
+        "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2",
+        "/lks/products/lks-73-scarpin-sabrina.webp?v=clean2"
       ],
       "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
       "heelOptions": [
@@ -6376,47 +5935,47 @@
         {
           "name": "Nude",
           "hex": "#DFC1B4",
-          "image": "/lks/products/lks-72-scarpin-sabrina.webp"
+          "image": "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2"
         },
         {
           "name": "Preto",
           "hex": "#1B191A",
-          "image": "/lks/products/lks-72-scarpin-sabrina.webp"
+          "image": "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2"
         },
         {
           "name": "Branco",
           "hex": "#F7F7F5",
-          "image": "/lks/products/lks-72-scarpin-sabrina.webp"
+          "image": "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2"
         },
         {
           "name": "Marsala",
           "hex": "#631421",
-          "image": "/lks/products/lks-72-scarpin-sabrina.webp"
+          "image": "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2"
         },
         {
           "name": "Dourado",
           "hex": "#D4AF37",
-          "image": "/lks/products/lks-72-scarpin-sabrina.webp"
+          "image": "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2"
         },
         {
           "name": "Prata",
           "hex": "#C4C9CE",
-          "image": "/lks/products/lks-72-scarpin-sabrina.webp"
+          "image": "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2"
         },
         {
           "name": "Vermelho",
           "hex": "#B31B2C",
-          "image": "/lks/products/lks-72-scarpin-sabrina.webp"
+          "image": "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2"
         },
         {
           "name": "Rosa",
           "hex": "#E07A9B",
-          "image": "/lks/products/lks-72-scarpin-sabrina.webp"
+          "image": "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2"
         },
         {
           "name": "Outra Cor",
           "hex": "#8E7970",
-          "image": "/lks/products/lks-72-scarpin-sabrina.webp",
+          "image": "/lks/products/lks-72-scarpin-sabrina.webp?v=clean2",
           "isCustom": true
         }
       ],
@@ -6446,10 +6005,10 @@
       "subtitle": "Solado Anatômico Ultra Leve, Design Casual Chic & Palmilha Macia",
       "category": "Tênis Casual",
       "price": 199,
-      "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp",
+      "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp?v=clean2",
       "gallery": [
-        "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp",
-        "/lks/products/lks-75-tenis-chunky-esportivo-erica.webp"
+        "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp?v=clean2",
+        "/lks/products/lks-75-tenis-chunky-esportivo-erica.webp?v=clean2"
       ],
       "instagramPostUrl": "https://www.instagram.com/petersonshoes_/",
       "heelOptions": [
@@ -6463,47 +6022,47 @@
         {
           "name": "Branco",
           "hex": "#F7F7F5",
-          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp"
+          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp?v=clean2"
         },
         {
           "name": "Preto",
           "hex": "#1B191A",
-          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp"
+          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp?v=clean2"
         },
         {
           "name": "Marsala",
           "hex": "#631421",
-          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp"
+          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp?v=clean2"
         },
         {
           "name": "Nude",
           "hex": "#DFC1B4",
-          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp"
+          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp?v=clean2"
         },
         {
           "name": "Dourado",
           "hex": "#D4AF37",
-          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp"
+          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp?v=clean2"
         },
         {
           "name": "Prata",
           "hex": "#C4C9CE",
-          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp"
+          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp?v=clean2"
         },
         {
           "name": "Vermelho",
           "hex": "#B31B2C",
-          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp"
+          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp?v=clean2"
         },
         {
           "name": "Rosa",
           "hex": "#E07A9B",
-          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp"
+          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp?v=clean2"
         },
         {
           "name": "Outra Cor",
           "hex": "#8E7970",
-          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp",
+          "image": "/lks/products/lks-74-tenis-chunky-esportivo-erica.webp?v=clean2",
           "isCustom": true
         }
       ],
@@ -6527,9 +6086,105 @@
       "createdAt": "2026-03-06T12:00:00.000Z"
     }
   ],
-  "customers": [],
-  "orders": [],
-  "payments": [],
+  "customers": [
+    {
+      "id": "cust-teste-101",
+      "name": "Pedido Teste — Jakellyne",
+      "email": "bbgjakellyne@gmail.com",
+      "whatsapp": "(62) 98499-8265",
+      "cpf": "",
+      "cep": "74305-090",
+      "street": "Av. C-7",
+      "number": "S/N",
+      "complement": "Setor Sudoeste",
+      "neighborhood": "Setor Sudoeste",
+      "city": "Goiânia",
+      "state": "GO",
+      "totalOrders": 1,
+      "totalSpent": 149.9,
+      "createdAt": "2026-03-06T12:00:00.000Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "ord-teste-2026-101",
+      "orderCode": "PTS-2026-101",
+      "customerId": "cust-teste-101",
+      "customerName": "Pedido Teste — Jakellyne",
+      "customerWhatsapp": "(62) 98499-8265",
+      "customerEmail": "bbgjakellyne@gmail.com",
+      "customerCpf": "",
+      "shippingAddress": "Av. C-7, S/N (Setor Sudoeste) - Setor Sudoeste, Goiânia/GO - CEP 74305-090",
+      "items": [
+        {
+          "productId": "prod-ig-49-scarpin-marsala-pulseira",
+          "sku": "PTS-IG-49",
+          "name": "Scarpin Bico Fino Salto Alto & Pulseira (Marsala)",
+          "image": "/assets/aistudio/IMG_3086_5529b321.jpeg",
+          "unitPrice": 149.9,
+          "quantity": 1,
+          "size": 36,
+          "colorName": "Marsala",
+          "colorHex": "#631421",
+          "customization": {
+            "heelOption": "Salto Fino Alto 9,5cm",
+            "strapFinish": "Fivela Dourada no Tornozelo",
+            "footWidth": "Padrão",
+            "insoleEngraving": "",
+            "customNotes": "Pedido de teste para conferência, edição de valor ou exclusão no painel"
+          }
+        }
+      ],
+      "totalAmount": 149.9,
+      "depositAmount": 74.95,
+      "remainingAmount": 74.95,
+      "preferredPaymentMethod": "PIX_MERCADO_PAGO",
+      "paymentStatus": "AGUARDANDO_ENTRADA_50",
+      "productionStatus": "AGUARDANDO_CONFIRMACAO",
+      "estimatedDeliveryDate": "2026-11-14",
+      "productionDays": 15,
+      "factoryNotes": "🔔 Pedido Teste registrado — Aguardando confirmação da Peterson Shoes (conferir Pix de 50%, editar valor manualmente ou excluir).",
+      "trackingCode": "",
+      "createdAt": "2026-03-06T12:00:00.000Z",
+      "updatedAt": "2026-03-06T12:00:00.000Z"
+    }
+  ],
+  "payments": [
+    {
+      "id": "pay-teste-101-1",
+      "orderId": "ord-teste-2026-101",
+      "orderCode": "PTS-2026-101",
+      "installmentType": "ENTRADA_50",
+      "method": "PIX_MERCADO_PAGO",
+      "baseAmount": 74.95,
+      "feeAmount": 0,
+      "installments": 1,
+      "amount": 74.95,
+      "status": "PENDENTE",
+      "pixCopyPaste": "00020101021126360014br.gov.bcb.pix0114507896360001325204000053039865802BR5912SONHO ANIMAL6007GOIANIA62070503***63049D03",
+      "mpReferenceId": "PIX-INTER-TESTE101E",
+      "sandboxMode": true,
+      "paidAt": null,
+      "createdAt": "2026-03-06T12:00:00.000Z"
+    },
+    {
+      "id": "pay-teste-101-2",
+      "orderId": "ord-teste-2026-101",
+      "orderCode": "PTS-2026-101",
+      "installmentType": "FINAL_50",
+      "method": "PIX_MERCADO_PAGO",
+      "baseAmount": 74.95,
+      "feeAmount": 0,
+      "installments": 1,
+      "amount": 74.95,
+      "status": "PENDENTE",
+      "pixCopyPaste": "00020101021126360014br.gov.bcb.pix0114507896360001325204000053039865802BR5912SONHO ANIMAL6007GOIANIA62070503***63049D03",
+      "mpReferenceId": "PIX-INTER-TESTE101F",
+      "sandboxMode": true,
+      "paidAt": null,
+      "createdAt": "2026-03-06T12:00:00.000Z"
+    }
+  ],
   "settings": {
     "storeName": "PETERSON SHOES",
     "instagramUrl": "https://www.instagram.com/petersonshoes_/",
@@ -6565,5 +6220,8 @@
     "whatsappClicks": 0,
     "cartAdditions": 0,
     "recentEvents": []
-  }
+  },
+  "deletedProductIds": [],
+  "deletedOrderIds": [],
+  "deletedCustomerIds": []
 }

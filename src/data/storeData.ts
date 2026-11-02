@@ -3008,11 +3008,114 @@ for (const p of INITIAL_PRODUCTS) {
   p.category = resolveProductStyleCategory(p);
 }
 
+export const INITIAL_CUSTOMERS: CustomerRecord[] = [
+  {
+    id: 'cust-teste-101',
+    name: 'Pedido Teste — Jakellyne',
+    email: 'bbgjakellyne@gmail.com',
+    whatsapp: '(62) 98499-8265',
+    cpf: '',
+    cep: '74305-090',
+    street: 'Av. C-7',
+    number: 'S/N',
+    complement: 'Setor Sudoeste',
+    neighborhood: 'Setor Sudoeste',
+    city: 'Goiânia',
+    state: 'GO',
+    totalOrders: 1,
+    totalSpent: 149.9,
+    createdAt: '2026-03-06T12:00:00.000Z',
+  },
+];
+
+export const INITIAL_PAYMENTS: PaymentRecord[] = [
+  {
+    id: 'pay-teste-101-1',
+    orderId: 'ord-teste-2026-101',
+    orderCode: 'PTS-2026-101',
+    installmentType: 'ENTRADA_50',
+    method: 'PIX_MERCADO_PAGO',
+    baseAmount: 74.95,
+    feeAmount: 0,
+    installments: 1,
+    amount: 74.95,
+    status: 'PENDENTE',
+    pixCopyPaste: BANCO_INTER_OFFICIAL_BRCODE,
+    mpReferenceId: 'PIX-INTER-TESTE101E',
+    sandboxMode: true,
+    paidAt: null,
+    createdAt: '2026-03-06T12:00:00.000Z',
+  },
+  {
+    id: 'pay-teste-101-2',
+    orderId: 'ord-teste-2026-101',
+    orderCode: 'PTS-2026-101',
+    installmentType: 'FINAL_50',
+    method: 'PIX_MERCADO_PAGO',
+    baseAmount: 74.95,
+    feeAmount: 0,
+    installments: 1,
+    amount: 74.95,
+    status: 'PENDENTE',
+    pixCopyPaste: BANCO_INTER_OFFICIAL_BRCODE,
+    mpReferenceId: 'PIX-INTER-TESTE101F',
+    sandboxMode: true,
+    paidAt: null,
+    createdAt: '2026-03-06T12:00:00.000Z',
+  },
+];
+
+export const INITIAL_ORDERS: BespokeOrder[] = [
+  {
+    id: 'ord-teste-2026-101',
+    orderCode: 'PTS-2026-101',
+    customerId: 'cust-teste-101',
+    customerName: 'Pedido Teste — Jakellyne',
+    customerWhatsapp: '(62) 98499-8265',
+    customerEmail: 'bbgjakellyne@gmail.com',
+    customerCpf: '',
+    shippingAddress: 'Av. C-7, S/N (Setor Sudoeste) - Setor Sudoeste, Goiânia/GO - CEP 74305-090',
+    items: [
+      {
+        productId: 'prod-ig-49-scarpin-marsala-pulseira',
+        sku: 'PTS-IG-49',
+        name: 'Scarpin Bico Fino Salto Alto & Pulseira (Marsala)',
+        image: '/assets/aistudio/IMG_3086_5529b321.jpeg',
+        unitPrice: 149.9,
+        quantity: 1,
+        size: 36,
+        colorName: 'Marsala',
+        colorHex: '#631421',
+        customization: {
+          heelOption: 'Salto Fino Alto 9,5cm',
+          strapFinish: 'Fivela Dourada no Tornozelo',
+          footWidth: 'Padrão',
+          insoleEngraving: '',
+          customNotes: 'Pedido de teste para conferência, edição de valor ou exclusão no painel',
+        },
+      },
+    ],
+    totalAmount: 149.9,
+    depositAmount: 74.95,
+    remainingAmount: 74.95,
+    preferredPaymentMethod: 'PIX_MERCADO_PAGO',
+    paymentStatus: 'AGUARDANDO_ENTRADA_50',
+    productionStatus: 'AGUARDANDO_CONFIRMACAO',
+    estimatedDeliveryDate: addDaysISO(15),
+    productionDays: 15,
+    factoryNotes:
+      '🔔 Pedido Teste registrado — Aguardando confirmação da Peterson Shoes (conferir Pix de 50%, editar valor manualmente ou excluir).',
+    trackingCode: '',
+    createdAt: '2026-03-06T12:00:00.000Z',
+    updatedAt: '2026-03-06T12:00:00.000Z',
+  },
+];
+
 export function createInitialStoreDatabase(): StoreDatabaseSchema {
   const settings: StoreSettings = { ...INITIAL_SETTINGS };
-  const customers: CustomerRecord[] = [];
-  const payments: PaymentRecord[] = [];
-  const orders: BespokeOrder[] = [];
+  const customers: CustomerRecord[] = [...INITIAL_CUSTOMERS];
+  const payments: PaymentRecord[] = [...INITIAL_PAYMENTS];
+  const orders: BespokeOrder[] = [...INITIAL_ORDERS];
 
   return {
     products: INITIAL_PRODUCTS,
@@ -3023,8 +3126,8 @@ export function createInitialStoreDatabase(): StoreDatabaseSchema {
   };
 }
 
-const STORAGE_KEY_PROD = 'peterson_shoes_store_prod_v16';
-const STORAGE_KEY_HOMOLOG = 'peterson_shoes_store_homolog_v16';
+const STORAGE_KEY_PROD = 'peterson_shoes_store_prod_v17';
+const STORAGE_KEY_HOMOLOG = 'peterson_shoes_store_homolog_v17';
 const DELETED_ORDERS_KEY = 'peterson_deleted_order_ids_v1';
 const DELETED_PRODUCTS_KEY = 'peterson_deleted_product_ids_v1';
 const DELETED_CUSTOMERS_KEY = 'peterson_deleted_customer_ids_v1';
@@ -3291,6 +3394,31 @@ export function getBrowserStoreDb(): StoreDatabaseSchema {
         }
       } catch {
         // Ignore malformed legacy storage item
+      }
+    }
+
+    // Ensure initial pending test order is present unless explicitly deleted by admin
+    for (const initOrd of INITIAL_ORDERS) {
+      if (
+        !ordersMap.has(initOrd.id) &&
+        !deletedIds.has(initOrd.id) &&
+        !deletedIds.has(initOrd.orderCode)
+      ) {
+        ordersMap.set(initOrd.id, initOrd);
+      }
+    }
+    for (const initCust of INITIAL_CUSTOMERS) {
+      if (!customersMap.has(initCust.id) && !deletedCustomerIds.has(initCust.id)) {
+        customersMap.set(initCust.id, initCust);
+      }
+    }
+    for (const initPay of INITIAL_PAYMENTS) {
+      if (
+        !paymentsMap.has(initPay.id) &&
+        !deletedIds.has(initPay.orderId) &&
+        !deletedIds.has(initPay.orderCode)
+      ) {
+        paymentsMap.set(initPay.id, initPay);
       }
     }
 

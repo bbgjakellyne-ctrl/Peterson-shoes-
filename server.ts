@@ -15,7 +15,12 @@ import type {
   PaymentStatus,
   ProductionStatus,
 } from './src/types/peterson.ts';
-import { INITIAL_PRODUCTS as STORE_INITIAL_PRODUCTS } from './src/data/storeData.ts';
+import {
+  INITIAL_PRODUCTS as STORE_INITIAL_PRODUCTS,
+  INITIAL_ORDERS as STORE_INITIAL_ORDERS,
+  INITIAL_PAYMENTS as STORE_INITIAL_PAYMENTS,
+  INITIAL_CUSTOMERS as STORE_INITIAL_CUSTOMERS,
+} from './src/data/storeData.ts';
 
 dotenv.config();
 
@@ -1247,9 +1252,9 @@ function createInitialDatabase(): DatabaseSchema {
     cardPaymentLink: '',
   };
 
-  const customers: CustomerRecord[] = [];
-  const payments: PaymentRecord[] = [];
-  const orders: BespokeOrder[] = [];
+  const customers: CustomerRecord[] = [...STORE_INITIAL_CUSTOMERS];
+  const payments: PaymentRecord[] = [...STORE_INITIAL_PAYMENTS];
+  const orders: BespokeOrder[] = [...STORE_INITIAL_ORDERS];
 
   return {
     products: STORE_INITIAL_PRODUCTS,
@@ -1384,6 +1389,41 @@ function loadDb(env: AppEnvironment = 'producao'): DatabaseSchema {
       parsed.customers.length !== origCustomersLen ||
       parsed.payments.length !== origPaymentsLen;
 
+    // Merge initial pending test order unless explicitly deleted by admin
+    let seededTestOrder = false;
+    const currentOrderIds = new Set((parsed.orders || []).map((o) => o.id));
+    for (const initOrd of STORE_INITIAL_ORDERS) {
+      if (
+        !currentOrderIds.has(initOrd.id) &&
+        !deletedOrdSet.has(initOrd.id) &&
+        !deletedOrdSet.has(initOrd.orderCode)
+      ) {
+        parsed.orders = [initOrd, ...(parsed.orders || [])];
+        currentOrderIds.add(initOrd.id);
+        seededTestOrder = true;
+      }
+    }
+    const currentPayIds = new Set((parsed.payments || []).map((p) => p.id));
+    for (const initPay of STORE_INITIAL_PAYMENTS) {
+      if (
+        !currentPayIds.has(initPay.id) &&
+        !deletedOrdSet.has(initPay.orderId) &&
+        !deletedOrdSet.has(initPay.orderCode)
+      ) {
+        parsed.payments = [...(parsed.payments || []), initPay];
+        currentPayIds.add(initPay.id);
+        seededTestOrder = true;
+      }
+    }
+    const currentCustIds = new Set((parsed.customers || []).map((c) => c.id));
+    for (const initCust of STORE_INITIAL_CUSTOMERS) {
+      if (!currentCustIds.has(initCust.id) && !deletedCustSet.has(initCust.id)) {
+        parsed.customers = [initCust, ...(parsed.customers || [])];
+        currentCustIds.add(initCust.id);
+        seededTestOrder = true;
+      }
+    }
+
     const hasBootProducts =
       Array.isArray(parsed.products) &&
       parsed.products.some(
@@ -1397,6 +1437,7 @@ function loadDb(env: AppEnvironment = 'producao'): DatabaseSchema {
       !parsed.products ||
       !Array.isArray(parsed.products) ||
       hasBootProducts ||
+      parsed.products.length < STORE_INITIAL_PRODUCTS.length - deletedProdSet.size ||
       parsed.settings?.whatsappStore !== '5562984998265' ||
       parsed.products[0]?.availableSizes?.includes(33) ||
       (parsed.products.length > 0 &&
@@ -1439,7 +1480,7 @@ function loadDb(env: AppEnvironment = 'producao'): DatabaseSchema {
       return upgraded;
     }
 
-    if (demoPurged) {
+    if (demoPurged || seededTestOrder) {
       fs.writeFileSync(targetFile, JSON.stringify(parsed, null, 2), 'utf-8');
     }
 

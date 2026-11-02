@@ -37,6 +37,15 @@ import {
   isHomologacao,
   switchEnvironment,
 } from './utils/environment';
+import {
+  recordAnalyticsEventToCloud,
+  subscribeToCloudStore,
+  syncOrderToCloud,
+} from './lib/firebaseSync';
+import {
+  addDeletedProductId,
+  saveProductOverride,
+} from './data/storeData';
 
 const CATEGORIES = [
   'Todos',
@@ -80,7 +89,10 @@ export default function App() {
     if (typeof window === 'undefined') return false;
     const params = new URLSearchParams(window.location.search);
     if (params.get('importar_pedido')) {
-      importBrowserOrderFromWhatsAppSync(window.location.search);
+      const imported = importBrowserOrderFromWhatsAppSync(window.location.search);
+      if (imported) {
+        syncOrderToCloud(imported, imported.payments).catch(() => {});
+      }
     }
     return (
       params.get('acesso') === 'admin' ||
@@ -144,6 +156,36 @@ export default function App() {
 
   useEffect(() => {
     loadStoreData();
+    const unsub = subscribeToCloudStore({
+      onCloudCatalogUpdated: ({ productOverrides, deletedProductIds, settings: cloudSettings }) => {
+        let changed = false;
+        if (productOverrides && Object.keys(productOverrides).length > 0) {
+          for (const [pid, ov] of Object.entries(productOverrides)) {
+            if (ov && typeof ov === 'object') {
+              saveProductOverride(pid, ov as Partial<BespokeProduct>);
+              changed = true;
+            }
+          }
+        }
+        if (Array.isArray(deletedProductIds) && deletedProductIds.length > 0) {
+          for (const pid of deletedProductIds) {
+            addDeletedProductId(pid);
+            changed = true;
+          }
+        }
+        if (changed) {
+          const localDb = getBrowserStoreDb();
+          const refreshed = sanitizeProductCatalog(localDb.products);
+          setProducts(refreshed.filter((p) => p.active));
+        }
+        if (cloudSettings && cloudSettings.storeName) {
+          setSettings(cloudSettings);
+        }
+      },
+    });
+    return () => {
+      unsub();
+    };
   }, [loadStoreData]);
 
   // Deep-linking support for Google Sitemap URLs (?modelo=PTS-IG-XX or ?categoria=...)
@@ -313,6 +355,11 @@ export default function App() {
           localStorage.setItem('peterson_visitor_id', visitorId);
         }
         const referrer = document.referrer || window.location.search || '';
+        recordAnalyticsEventToCloud({
+          ...payload,
+          visitorId,
+          referrer,
+        }).catch(() => {});
         apiFetch('/api/analytics/event', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

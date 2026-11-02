@@ -40,7 +40,11 @@ import {
   toWhatsAppHref,
 } from '../utils/whatsapp';
 import {
+  addDeletedCustomerId,
+  addDeletedOrderId,
+  addDeletedProductId,
   buildStandardColors,
+  createBrowserBespokeOrder,
   deleteBrowserCustomerAdmin,
   deleteBrowserOrderAdmin,
   deleteBrowserProductAdmin,
@@ -50,6 +54,9 @@ import {
   getDeletedProductIds,
   getProductOverrides,
   importBrowserOrderFromWhatsAppSync,
+  INITIAL_CUSTOMERS,
+  INITIAL_ORDERS,
+  INITIAL_PAYMENTS,
   INITIAL_PRODUCTS,
   resolveProductStyleCategory,
   restoreDeletedProducts,
@@ -66,6 +73,20 @@ import {
   isHomologacao,
   switchEnvironment,
 } from '../utils/environment';
+import {
+  deleteCustomerFromCloud,
+  deleteOrderFromCloud,
+  PETERSON_MOBILE_PUSH_TOPIC,
+  playNewOrderAlertSound,
+  recordAnalyticsEventToCloud,
+  seedInitialOrderToCloudIfEmpty,
+  sendMobilePushOrderAlert,
+  subscribeToCloudStore,
+  syncCatalogOverridesToCloud,
+  syncOrderToCloud,
+  syncSettingsToCloud,
+  unlockAdminAudioAlert,
+} from '../lib/firebaseSync';
 
 const CATEGORIES = ['Todos', ...STYLE_CATEGORIES.map((c) => c.id)];
 
@@ -470,6 +491,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [confirmDeleteCustomerId, setConfirmDeleteCustomerId] = useState<string | null>(null);
   const [deletedItemFeedback, setDeletedItemFeedback] = useState<string>('');
 
+  // Audible & Visual New Order Alert state
+  const [soundAlertEnabled, setSoundAlertEnabled] = useState<boolean>(true);
+  const [acknowledgedOrderIds, setAcknowledgedOrderIds] = useState<string[]>([]);
+  const [showMobilePushGuide, setShowMobilePushGuide] = useState<boolean>(false);
+  const [sendingMobilePushTest, setSendingMobilePushTest] = useState<boolean>(false);
+  const knownPendingOrderIdsRef = React.useRef<Set<string>>(new Set());
+  const soundEnabledRef = React.useRef<boolean>(true);
+  React.useEffect(() => {
+    soundEnabledRef.current = soundAlertEnabled;
+  }, [soundAlertEnabled]);
+
   // Product Form Modal / Drawer State
   const [editingProduct, setEditingProduct] = useState<Partial<BespokeProduct> | null>(
     null
@@ -705,9 +737,182 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   };
 
-  // Real-time instant order synchronization (BroadcastChannel + storage + visibility + 2s polling)
+  // Real-time instant order & visit synchronization (Firebase Cloud Firestore + BroadcastChannel + storage + 3s server sync)
   React.useEffect(() => {
     if (!token) return;
+
+    // Seed initial pending order to Cloud Firestore if cloud is completely empty
+    seedInitialOrderToCloudIfEmpty(
+      INITIAL_ORDERS,
+      INITIAL_PAYMENTS,
+      INITIAL_CUSTOMERS
+    ).catch(() => {});
+
+    // Also push any local orders to Cloud Firestore so nothing is ever lost
+    const initialLocal = getBrowserStoreDb();
+    const initDeletedOrders = getDeletedOrderIds();
+    for (const localOrd of initialLocal.orders || []) {
+      if (
+        localOrd &&
+        localOrd.id &&
+        !initDeletedOrders.has(localOrd.id) &&
+        !initDeletedOrders.has(localOrd.orderCode)
+      ) {
+        const ordPays = (initialLocal.payments || []).filter(
+          (p) => p.orderId === localOrd.id
+        );
+        const ordCust = (initialLocal.customers || []).find(
+          (c) => c.id === localOrd.customerId
+        );
+        syncOrderToCloud(localOrd, ordPays, ordCust).catch(() => {});
+      }
+    }
+
+    const unsubCloud = subscribeToCloudStore({
+      onCloudOrdersUpdated: ({
+        orders: cloudOrders,
+        payments: cloudPayments,
+        customers: cloudCustomers,
+        deletedOrderIds: cloudDeletedOrderIds,
+        deletedCustomerIds: cloudDeletedCustomerIds,
+      }) => {
+        for (const delId of cloudDeletedOrderIds) {
+          addDeletedOrderId(delId);
+        }
+        for (const delCustId of cloudDeletedCustomerIds) {
+          addDeletedCustomerId(delCustId);
+        }
+
+        const localDb = getBrowserStoreDb();
+        const deletedOrderIds = getDeletedOrderIds();
+        const deletedCustomerIds = getDeletedCustomerIds();
+
+        const mergedOrdersMap = new Map<string, BespokeOrder>();
+        for (const o of localDb.orders || []) {
+          if (
+            o &&
+            o.id &&
+            !deletedOrderIds.has(o.id) &&
+            !deletedOrderIds.has(o.orderCode)
+          ) {
+            mergedOrdersMap.set(o.id, o);
+          }
+        }
+        for (const o of cloudOrders || []) {
+          if (
+            o &&
+            o.id &&
+            !deletedOrderIds.has(o.id) &&
+            !deletedOrderIds.has(o.orderCode)
+          ) {
+            const existing = mergedOrdersMap.get(o.id);
+            if (!existing || (o.updatedAt || '') >= (existing.updatedAt || '')) {
+              mergedOrdersMap.set(o.id, o);
+            }
+          }
+        }
+        const mergedOrders = Array.from(mergedOrdersMap.values()).sort((a, b) =>
+          (b.createdAt || '').localeCompare(a.createdAt || '')
+        );
+
+        const mergedPaymentsMap = new Map<string, PaymentRecord>();
+        for (const p of localDb.payments || []) {
+          if (
+            p &&
+            p.id &&
+            !deletedOrderIds.has(p.orderId) &&
+            !deletedOrderIds.has(p.orderCode)
+          ) {
+            mergedPaymentsMap.set(p.id, p);
+          }
+        }
+        for (const p of cloudPayments || []) {
+          if (
+            p &&
+            p.id &&
+            !deletedOrderIds.has(p.orderId) &&
+            !deletedOrderIds.has(p.orderCode)
+          ) {
+            mergedPaymentsMap.set(p.id, p);
+          }
+        }
+        const mergedPayments = Array.from(mergedPaymentsMap.values());
+
+        const mergedCustomersMap = new Map<string, CustomerRecord>();
+        for (const c of localDb.customers || []) {
+          if (c && c.id && !deletedCustomerIds.has(c.id)) {
+            mergedCustomersMap.set(c.id, c);
+          }
+        }
+        for (const c of cloudCustomers || []) {
+          if (c && c.id && !deletedCustomerIds.has(c.id)) {
+            mergedCustomersMap.set(c.id, c);
+          }
+        }
+        const mergedCustomers = Array.from(mergedCustomersMap.values());
+
+        const nextDb = {
+          ...localDb,
+          orders: mergedOrders,
+          payments: mergedPayments,
+          customers: mergedCustomers,
+        };
+        saveBrowserStoreDb(nextDb);
+        applyDashboardFromDb(nextDb, { preserveDrafts: true });
+      },
+      onCloudAnalyticsUpdated: (cloudAnalytics) => {
+        if (cloudAnalytics && typeof cloudAnalytics.totalVisits === 'number') {
+          setAnalytics((prev) => {
+            if (cloudAnalytics.totalVisits >= prev.totalVisits) {
+              return {
+                totalVisits: cloudAnalytics.totalVisits,
+                uniqueVisitorsCount: cloudAnalytics.uniqueVisitorsCount,
+                dailyVisits: cloudAnalytics.dailyVisits,
+                sources: cloudAnalytics.sources,
+                productViews: cloudAnalytics.productViews,
+                whatsappClicks: cloudAnalytics.whatsappClicks,
+                cartAdditions: cloudAnalytics.cartAdditions,
+                recentEvents: cloudAnalytics.recentEvents,
+              };
+            }
+            return prev;
+          });
+        }
+      },
+      onCloudCatalogUpdated: ({
+        productOverrides,
+        deletedProductIds,
+        settings: cloudSettings,
+      }) => {
+        let changed = false;
+        if (productOverrides && Object.keys(productOverrides).length > 0) {
+          for (const [pid, ov] of Object.entries(productOverrides)) {
+            if (ov && typeof ov === 'object') {
+              saveProductOverride(pid, ov as Partial<BespokeProduct>);
+              changed = true;
+            }
+          }
+        }
+        if (Array.isArray(deletedProductIds) && deletedProductIds.length > 0) {
+          for (const pid of deletedProductIds) {
+            addDeletedProductId(pid);
+            changed = true;
+          }
+        }
+        if (changed) {
+          const localDb = getBrowserStoreDb();
+          const refreshed = sanitizeProductCatalog(localDb.products);
+          saveBrowserStoreDb({ ...localDb, products: refreshed });
+          applyDashboardFromDb(
+            { ...localDb, products: refreshed },
+            { preserveDrafts: true }
+          );
+        }
+        if (cloudSettings && cloudSettings.storeName) {
+          setSettings(cloudSettings);
+        }
+      },
+    });
 
     const refreshFromLocalAndServer = () => {
       const latestLocal = getBrowserStoreDb();
@@ -717,7 +922,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
     const intervalId = window.setInterval(() => {
       fetchAdminData(token, { silent: true });
-    }, 2000);
+    }, 3500);
 
     const handleStorageEvent = (e: StorageEvent) => {
       if (!e.key || e.key.startsWith('peterson_')) {
@@ -753,6 +958,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
 
     return () => {
+      unsubCloud();
       window.clearInterval(intervalId);
       window.removeEventListener('storage', handleStorageEvent);
       window.removeEventListener('peterson-orders-updated', handleCustomOrderEvent);
@@ -767,6 +973,73 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       }
     };
   }, [token]);
+
+  // Detect new pending orders and trigger Audible + Visual Alert
+  React.useEffect(() => {
+    if (!token) return;
+    const currentPending = orders.filter(
+      (o) =>
+        o.paymentStatus === 'AGUARDANDO_ENTRADA_50' ||
+        o.productionStatus === 'AGUARDANDO_CONFIRMACAO'
+    );
+
+    let hasBrandNewOrder = false;
+    let latestNewOrder: BespokeOrder | null = null;
+    for (const ord of currentPending) {
+      if (!knownPendingOrderIdsRef.current.has(ord.id)) {
+        knownPendingOrderIdsRef.current.add(ord.id);
+        hasBrandNewOrder = true;
+        latestNewOrder = ord;
+      }
+    }
+
+    if (hasBrandNewOrder) {
+      if (soundEnabledRef.current) {
+        playNewOrderAlertSound();
+      }
+      if (
+        latestNewOrder &&
+        typeof window !== 'undefined' &&
+        'Notification' in window &&
+        Notification.permission === 'granted'
+      ) {
+        try {
+          new Notification(
+            `🔔 Novo Pedido #${latestNewOrder.orderCode} — Peterson Shoes`,
+            {
+              body: `${latestNewOrder.customerName} (${formatBRL(
+                latestNewOrder.totalAmount
+              )}) aguarda confirmação dos 50%!`,
+            }
+          );
+        } catch {
+          // Ignore notification errors
+        }
+      }
+    }
+  }, [orders, token]);
+
+  // Gentle periodic sound reminder every 25s while there is an unacknowledged pending order
+  React.useEffect(() => {
+    if (!token || !soundAlertEnabled) return;
+    const unacknowledgedPending = orders.filter(
+      (o) =>
+        (o.paymentStatus === 'AGUARDANDO_ENTRADA_50' ||
+          o.productionStatus === 'AGUARDANDO_CONFIRMACAO') &&
+        !acknowledgedOrderIds.includes(o.id)
+    );
+    if (unacknowledgedPending.length === 0) return;
+
+    const reminderTimer = window.setInterval(() => {
+      if (soundEnabledRef.current) {
+        playNewOrderAlertSound();
+      }
+    }, 25000);
+
+    return () => {
+      window.clearInterval(reminderTimer);
+    };
+  }, [orders, token, soundAlertEnabled, acknowledgedOrderIds]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -986,6 +1259,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       }
       setSavedPriceId(productId);
       onCatalogUpdated();
+      syncCatalogOverridesToCloud(
+        getProductOverrides(),
+        Array.from(getDeletedProductIds())
+      ).catch(() => {});
       setTimeout(() => {
         setSavedPriceId((curr) => (curr === productId ? null : curr));
       }, 2500);
@@ -1069,6 +1346,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       setProducts(updatedProducts);
       setPriceDrafts(nextDrafts);
       onCatalogUpdated();
+      syncCatalogOverridesToCloud(
+        getProductOverrides(),
+        Array.from(getDeletedProductIds())
+      ).catch(() => {});
 
       await apiFetch('/api/admin/sync-orders', {
         method: 'POST',
@@ -1131,6 +1412,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       saveBrowserStoreDb({ ...localDb, products: updatedProducts });
       applyDashboardFromDb({ ...localDb, products: updatedProducts });
       onCatalogUpdated();
+      syncCatalogOverridesToCloud(
+        getProductOverrides(),
+        Array.from(getDeletedProductIds())
+      ).catch(() => {});
     } finally {
       setApprovingTierKey(null);
     }
@@ -1150,8 +1435,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   ) => {
     if (!token) return;
     const targetOrder = orders.find((o) => o.id === orderId);
-    updateBrowserOrderAdmin(orderId, updates);
-    applyDashboardFromDb(getBrowserStoreDb());
+    const updatedLocalOrder = updateBrowserOrderAdmin(orderId, updates);
+    const latestDb = getBrowserStoreDb();
+    applyDashboardFromDb(latestDb);
+    if (updatedLocalOrder) {
+      const updatedPays = latestDb.payments.filter(
+        (p) => p.orderId === updatedLocalOrder.id
+      );
+      syncOrderToCloud(updatedLocalOrder, updatedPays).catch(() => {});
+    }
     if (updates.totalAmount !== undefined) {
       setSavedOrderValueId(orderId);
       setTimeout(() => {
@@ -1208,10 +1500,21 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   const handleDeleteOrder = async (orderId: string) => {
     if (!token) return;
+    const targetOrder = orders.find(
+      (o) => o.id === orderId || o.orderCode === orderId
+    );
+    const targetPayIds = payments
+      .filter((p) => p.orderId === orderId || p.orderId === targetOrder?.id)
+      .map((p) => p.id);
     deleteBrowserOrderAdmin(orderId);
     setConfirmDeleteOrderId(null);
     applyDashboardFromDb(getBrowserStoreDb());
     showDeletionFeedback('Pedido e parcelas excluídos com sucesso!');
+    deleteOrderFromCloud(
+      targetOrder?.id || orderId,
+      targetOrder?.orderCode,
+      targetPayIds
+    ).catch(() => {});
     try {
       await apiFetch(`/api/admin/orders/${orderId}`, {
         method: 'DELETE',
@@ -1224,12 +1527,93 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   };
 
+  const handleCreateTestOrder = async () => {
+    unlockAdminAudioAlert();
+    const sampleProduct = products[0] || INITIAL_PRODUCTS[0];
+    const localResult = createBrowserBespokeOrder({
+      customerName: 'Pedido Teste Peterson Shoes',
+      customerWhatsapp: '(62) 98499-8265',
+      customerEmail: 'bbgjakellyne@gmail.com',
+      customerCpf: '',
+      cep: '74000-000',
+      street: 'Entrega a combinar pelo WhatsApp',
+      number: 'S/N',
+      complement: 'Pedido Teste',
+      neighborhood: 'Centro',
+      city: 'Goiânia',
+      state: 'GO',
+      items: [
+        {
+          productId: sampleProduct.id,
+          sku: sampleProduct.sku,
+          name: sampleProduct.name,
+          image: sampleProduct.image,
+          colorName: sampleProduct.colors[0]?.name || 'Preto',
+          colorHex: sampleProduct.colors[0]?.hex || '#1B191A',
+          size: 36,
+          quantity: 1,
+          unitPrice: sampleProduct.price,
+          customization: {
+            heelOption: sampleProduct.heelOptions[0] || 'Padrão',
+            strapFinish: sampleProduct.strapFinishes[0] || 'Acabamento Original',
+            footWidth: 'Padrão',
+            insoleEngraving: '',
+            customNotes: 'Pedido de teste para conferência de alerta e aprovação',
+          },
+        },
+      ],
+    });
+    applyDashboardFromDb(getBrowserStoreDb());
+    if (soundAlertEnabled) {
+      playNewOrderAlertSound();
+    }
+    showDeletionFeedback(
+      `🔔 Pedido Teste #${localResult.order.orderCode} criado em Aguardando Confirmação (sincronizado na nuvem)!`
+    );
+    syncOrderToCloud(localResult.order, [
+      localResult.depositPayment,
+      localResult.finalPayment,
+    ]).catch(() => {});
+    sendMobilePushOrderAlert(localResult.order, 'PEDIDO_CRIADO').catch(() => {});
+    try {
+      await apiFetch('/api/orders', {
+        method: 'POST',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: localResult.order.id,
+          orderCode: localResult.order.orderCode,
+          depositPaymentId: localResult.depositPayment.id,
+          finalPaymentId: localResult.finalPayment.id,
+          customerName: 'Pedido Teste Peterson Shoes',
+          customerWhatsapp: '(62) 98499-8265',
+          customerEmail: 'bbgjakellyne@gmail.com',
+          customerCpf: '',
+          cep: '74000-000',
+          street: 'Entrega a combinar pelo WhatsApp',
+          number: 'S/N',
+          complement: 'Pedido Teste',
+          neighborhood: 'Centro',
+          city: 'Goiânia',
+          state: 'GO',
+          items: localResult.order.items,
+        }),
+      });
+      if (token) {
+        await fetchAdminData(token);
+      }
+    } catch {
+      // Local test order already created
+    }
+  };
+
   const handleDeleteCustomer = async (customerId: string) => {
     if (!token) return;
     deleteBrowserCustomerAdmin(customerId);
     setConfirmDeleteCustomerId(null);
     applyDashboardFromDb(getBrowserStoreDb());
     showDeletionFeedback('Cliente excluída do cadastro com sucesso!');
+    deleteCustomerFromCloud(customerId).catch(() => {});
     try {
       await apiFetch(`/api/admin/customers/${customerId}`, {
         method: 'DELETE',
@@ -1450,6 +1834,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         : [payload, ...localDb.products];
       saveBrowserStoreDb({ ...localDb, products: nextProducts });
       applyDashboardFromDb({ ...localDb, products: nextProducts });
+      syncCatalogOverridesToCloud(
+        getProductOverrides(),
+        Array.from(getDeletedProductIds())
+      ).catch(() => {});
 
       const url = isExisting
         ? `/api/admin/products/${editingProduct.id}`
@@ -1488,6 +1876,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     applyDashboardFromDb(getBrowserStoreDb());
     onCatalogUpdated();
     showDeletionFeedback('Modelo excluído do catálogo com sucesso!');
+    syncCatalogOverridesToCloud(
+      getProductOverrides(),
+      Array.from(getDeletedProductIds())
+    ).catch(() => {});
     try {
       const res = await apiFetch(`/api/admin/products/${id}`, {
         method: 'DELETE',
@@ -1511,6 +1903,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     applyDashboardFromDb(getBrowserStoreDb());
     onCatalogUpdated();
     showDeletionFeedback('Todos os modelos excluídos foram restaurados ao catálogo!');
+    syncCatalogOverridesToCloud(getProductOverrides(), []).catch(() => {});
     try {
       await apiFetch('/api/admin/products/restore-deleted', {
         method: 'POST',
@@ -1527,6 +1920,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     if (!token || !settings) return;
     setSavingSettings(true);
     setSettingsSavedMsg('');
+    syncSettingsToCloud(settings).catch(() => {});
     try {
       const res = await apiFetch('/api/admin/settings', {
         method: 'PUT',
@@ -1681,15 +2075,61 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       o.productionStatus === 'AGUARDANDO_CONFIRMACAO'
   );
 
+  const unacknowledgedPendingOrders = pendingConfirmationOrders.filter(
+    (o) => !acknowledgedOrderIds.includes(o.id)
+  );
+
   return (
-    <div className="min-h-screen bg-[#F7F3EC] text-[#231619]">
-      {/* Real-time Sync Status Banner inside Admin */}
+    <div
+      className="min-h-screen bg-[#F7F3EC] text-[#231619]"
+      onClick={() => unlockAdminAudioAlert()}
+    >
+      {/* Real-time Cloud Sync Status Banner inside Admin */}
       <div className="px-6 py-2 text-xs font-medium flex flex-wrap items-center justify-between gap-3 bg-emerald-950 text-emerald-100 border-b border-emerald-800">
         <div className="flex items-center gap-2">
           <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           <span>
-            🔒 PAINEL OFICIAL PETERSON SHOES — Sincronização em Tempo Real Ativa (novos pedidos aparecem automaticamente na tela a cada 2 segundos).
+            ☁️ BANCO DE DADOS EM NUVEM EM TEMPO REAL ATIVO — Visitas e pedidos feitos em qualquer celular aparecem na mesma hora com Alerta Sonoro.
           </span>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              unlockAdminAudioAlert();
+              const next = !soundAlertEnabled;
+              setSoundAlertEnabled(next);
+              if (next) {
+                playNewOrderAlertSound();
+                if (
+                  typeof window !== 'undefined' &&
+                  'Notification' in window &&
+                  Notification.permission === 'default'
+                ) {
+                  Notification.requestPermission().catch(() => {});
+                }
+              }
+            }}
+            className={`px-2.5 py-1 rounded text-[11px] font-bold cursor-pointer transition-colors ${
+              soundAlertEnabled
+                ? 'bg-emerald-500 text-emerald-950 hover:bg-emerald-400'
+                : 'bg-white/15 text-emerald-200 hover:bg-white/25'
+            }`}
+          >
+            {soundAlertEnabled
+              ? '🔊 Alerta Sonoro: ATIVO'
+              : '🔇 Alerta Sonoro: DESATIVADO'}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              unlockAdminAudioAlert();
+              playNewOrderAlertSound();
+            }}
+            className="px-2.5 py-1 rounded bg-amber-400 hover:bg-amber-300 text-amber-950 text-[11px] font-bold cursor-pointer"
+          >
+            🔔 Testar Som de Alerta
+          </button>
         </div>
       </div>
 
@@ -1740,6 +2180,117 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       </header>
 
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+        {/* ALERTA SONORO E VISUAL DE NOVO PEDIDO PARA ACEITAR / CONFIRMAR */}
+        {unacknowledgedPendingOrders.length > 0 && (
+          <div className="rounded-2xl bg-[#7A1C24] text-white p-5 border-2 border-[#D4AF37] shadow-xl space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[#D4AF37] text-[#231619] text-lg font-bold shrink-0 animate-bounce">
+                  🔔
+                </span>
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full bg-[#D4AF37] text-[#231619] text-[11px] font-extrabold uppercase tracking-wider">
+                      🚨 ALERTA DE NOVO PEDIDO PARA ACEITAR ({unacknowledgedPendingOrders.length})
+                    </span>
+                    <span className="text-xs text-[#F7F3EC]/90 font-medium">
+                      Confira o Pix de 50% no seu Banco Inter e clique em Confirmar abaixo
+                    </span>
+                  </div>
+                  <h3 className="text-base sm:text-lg font-bold mt-1">
+                    Você tem {unacknowledgedPendingOrders.length} pedido(s) aguardando sua confirmação!
+                  </h3>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    unlockAdminAudioAlert();
+                    playNewOrderAlertSound();
+                  }}
+                  className="px-3 py-2 rounded-lg bg-white/15 hover:bg-white/25 text-white text-xs font-bold cursor-pointer"
+                >
+                  🔊 Ouvir Som do Alerta
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setAcknowledgedOrderIds((prev) =>
+                      Array.from(
+                        new Set([
+                          ...prev,
+                          ...unacknowledgedPendingOrders.map((o) => o.id),
+                        ])
+                      )
+                    )
+                  }
+                  className="px-3 py-2 rounded-lg bg-black/30 hover:bg-black/45 text-[#E5D3B3] text-xs font-semibold cursor-pointer"
+                >
+                  Silenciar Aviso Atual
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-2.5">
+              {unacknowledgedPendingOrders.map((ord) => (
+                <div
+                  key={`alert-${ord.id}`}
+                  className="bg-white text-[#231619] rounded-xl p-4 flex flex-wrap items-center justify-between gap-3 border border-[#D4AF37]"
+                >
+                  <div className="space-y-0.5">
+                    <div className="flex flex-wrap items-center gap-2 text-xs">
+                      <span className="font-mono-tabular font-bold text-[#5B1824] bg-[#5B1824]/10 px-2 py-0.5 rounded">
+                        #{ord.orderCode}
+                      </span>
+                      <span className="font-bold text-sm">{ord.customerName}</span>
+                      <span className="text-[#6E5A5F]">· WhatsApp: {ord.customerWhatsapp}</span>
+                    </div>
+                    <p className="text-xs text-[#4A373B]">
+                      {ord.items
+                        .map(
+                          (it) =>
+                            `${it.quantity}x ${it.name} (Cor: ${it.colorName}, Tam: ${it.size} BR)`
+                        )
+                        .join(' + ')}
+                    </p>
+                    <p className="text-xs font-mono-tabular font-bold text-[#2E6B3E]">
+                      Total: {formatBRL(ord.totalAmount)} · Entrada 50% a Receber: {formatBRL(ord.depositAmount)}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleUpdateOrder(ord.id, {
+                          paymentStatus: 'ENTRADA_50_PAGA',
+                          productionStatus: 'CORTE_MODELAGEM',
+                        })
+                      }
+                      className="px-4 py-2.5 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+                    >
+                      <Check className="w-4 h-4" />
+                      <span>✅ Aceitar & Confirmar 50%</span>
+                    </button>
+                    <a
+                      href={toWhatsAppHref(
+                        ord.customerWhatsapp,
+                        `Olá ${ord.customerName}! Aqui é da Peterson Shoes (@petersonshoes_). Recebemos seu pedido #${ord.orderCode}!`
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-2.5 bg-[#F7F3EC] hover:bg-[#EFE7DA] text-[#5B1824] border border-[#DFD3C3] rounded-lg text-xs font-semibold flex items-center gap-1.5"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      <span>WhatsApp Cliente</span>
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {deletedItemFeedback && (
           <div className="p-4 rounded-xl bg-[#2E6B3E] text-white text-xs font-bold flex items-center justify-between gap-3 shadow-md">
             <div className="flex items-center gap-2">
@@ -1780,58 +2331,194 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </span>
                 <span className="text-[11px] font-semibold text-[#2E6B3E] flex items-center gap-1">
                   <span className="inline-block w-2 h-2 rounded-full bg-[#2E6B3E] animate-pulse" />
-                  Atualização Instantânea Ativa
+                  Nuvem em Tempo Real + Alerta Sonoro Ativo
                 </span>
               </div>
               <h2 className="text-lg sm:text-xl font-bold text-[#231619]">
                 Pedidos Aguardando Confirmação da Peterson Shoes
               </h2>
               <p className="text-xs text-[#6E5A5F]">
-                Quando a cliente confirma o Pix no site, o pedido vai <strong>na mesma hora para o seu WhatsApp (62 98499-8265)</strong> com todas as informações e um <strong>Link Admin</strong> no final da mensagem. Ao tocar no Link Admin recebido no WhatsApp, o pedido aparece automaticamente aqui abaixo para você aprovar em 1 clique!
+                Assim que uma cliente faz um pedido em qualquer celular ou computador, ele sincroniza <strong>instantaneamente na nuvem</strong>, toca um <strong>alerta sonoro</strong> aqui no painel e também vai para o seu WhatsApp (62 98499-8265) para você aprovar, editar o valor ou excluir em 1 clique!
               </p>
             </div>
-            <button
-              type="button"
-              onClick={() => setActiveTab('ORDERS')}
-              className="px-4 py-2.5 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-xl text-xs font-semibold cursor-pointer whitespace-nowrap"
-            >
-              Ver Todos os Pedidos ({orders.length})
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setShowMobilePushGuide((prev) => !prev)}
+                className="px-3.5 py-2.5 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-xl text-xs font-bold cursor-pointer whitespace-nowrap shadow-xs"
+              >
+                📲 Alerta no Celular (Com Site Fechado)
+              </button>
+              <button
+                type="button"
+                onClick={handleCreateTestOrder}
+                className="px-3.5 py-2.5 bg-white hover:bg-[#F7F3EC] text-[#5B1824] border border-[#5B1824]/40 rounded-xl text-xs font-bold cursor-pointer whitespace-nowrap"
+              >
+                + Criar Pedido Teste
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('ORDERS')}
+                className="px-4 py-2.5 bg-[#5B1824] hover:bg-[#46111B] text-[#F7F3EC] rounded-xl text-xs font-semibold cursor-pointer whitespace-nowrap"
+              >
+                Ver Todos os Pedidos ({orders.length})
+              </button>
+            </div>
           </div>
+
+          {showMobilePushGuide && (
+            <div className="mt-4 bg-[#F7F3EC] border-2 border-[#2E6B3E]/40 rounded-xl p-4 space-y-3">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="space-y-1">
+                  <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#2E6B3E] text-white text-[10px] font-bold uppercase tracking-wider">
+                    📲 Você NÃO precisa ficar com o site aberto!
+                  </span>
+                  <h3 className="text-sm font-bold text-[#231619]">
+                    Como receber o Alerta na Tela Bloqueada do seu Celular (iPhone ou Android) com o site fechado:
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowMobilePushGuide(false)}
+                  className="text-xs font-semibold text-[#5B1824] hover:underline cursor-pointer"
+                >
+                  Fechar guia
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-[#4A373B]">
+                <div className="bg-white p-3 rounded-lg border border-[#DFD3C3] space-y-1">
+                  <p className="font-bold text-[#231619]">1. Pelo seu WhatsApp (Automático)</p>
+                  <p>
+                    Quando a cliente clica em confirmar o Pix, o site abre o seu WhatsApp <strong>(62) 98499-8265</strong> com todos os dados do pedido.
+                  </p>
+                </div>
+                <div className="bg-white p-3 rounded-lg border border-[#DFD3C3] space-y-1.5">
+                  <p className="font-bold text-[#231619]">2. App Gratuito ntfy (Apita com Site Fechado)</p>
+                  <p>
+                    Baixe o app gratuito <strong>ntfy</strong> (App Store no iPhone ou Google Play), toque em <strong>+</strong> e cole o código exclusivo da sua loja:
+                  </p>
+                  <div className="flex items-center gap-1.5 pt-1">
+                    <code className="px-2 py-1 bg-[#F7F3EC] border border-[#DFD3C3] rounded font-mono text-[11px] font-bold text-[#5B1824] select-all">
+                      {PETERSON_MOBILE_PUSH_TOPIC}
+                    </code>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        copyToClipboard(PETERSON_MOBILE_PUSH_TOPIC, 'ntfy-topic')
+                      }
+                      className="px-2.5 py-1 bg-[#5B1824] text-white rounded text-[11px] font-bold cursor-pointer whitespace-nowrap"
+                    >
+                      {copiedTextId === 'ntfy-topic' ? '✓ Copiado!' : 'Copiar Código'}
+                    </button>
+                  </div>
+                </div>
+                <div className="bg-white p-3 rounded-lg border border-[#DFD3C3] space-y-1.5">
+                  <p className="font-bold text-[#231619]">3. Salvo no Banco em Nuvem 24h</p>
+                  <p>
+                    Mesmo se o seu celular estiver bloqueado ou fechado na hora da compra, o pedido fica salvo na nuvem esperando você abrir o painel para aceitar.
+                  </p>
+                  <button
+                    type="button"
+                    disabled={sendingMobilePushTest}
+                    onClick={async () => {
+                      setSendingMobilePushTest(true);
+                      unlockAdminAudioAlert();
+                      playNewOrderAlertSound();
+                      const sampleOrd =
+                        pendingConfirmationOrders[0] ||
+                        orders[0] ||
+                        INITIAL_ORDERS[0];
+                      const ok = await sendMobilePushOrderAlert(
+                        sampleOrd,
+                        'TESTE'
+                      );
+                      setSendingMobilePushTest(false);
+                      showDeletionFeedback(
+                        ok
+                          ? '📲 Notificação enviada para o seu celular! Confira no app ntfy.'
+                          : '🔔 Som de teste tocado no painel!'
+                      );
+                    }}
+                    className="w-full mt-1 py-1.5 px-3 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-lg text-[11px] font-bold cursor-pointer"
+                  >
+                    {sendingMobilePushTest
+                      ? 'Enviando para o celular...'
+                      : '📲 Testar Notificação no Celular Agora'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {pendingConfirmationOrders.length > 0 && (
             <div className="mt-5 space-y-3">
               {pendingConfirmationOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="bg-white border-2 border-[#D4AF37]/60 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-xs"
+                  className="bg-white border-2 border-[#D4AF37]/60 rounded-xl p-4 space-y-3 shadow-xs"
                 >
-                  <div className="space-y-1">
-                    <div className="flex flex-wrap items-center gap-2 text-xs">
-                      <span className="font-mono-tabular font-bold text-sm text-[#5B1824] bg-[#5B1824]/10 px-2 py-0.5 rounded">
-                        #{order.orderCode}
-                      </span>
-                      <span className="font-bold text-[#231619] text-sm">
-                        {order.customerName}
-                      </span>
-                      <span className="text-[#6E5A5F]">· WhatsApp: {order.customerWhatsapp}</span>
-                    </div>
-                    <p className="text-xs text-[#4A373B]">
-                      {order.items
-                        .map(
-                          (it) =>
-                            `${it.quantity}x ${it.name} (Cor: ${it.colorName}, Tam: ${it.size} BR)`
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex flex-wrap items-center gap-2 text-xs">
+                        <span className="font-mono-tabular font-bold text-sm text-[#5B1824] bg-[#5B1824]/10 px-2 py-0.5 rounded">
+                          #{order.orderCode}
+                        </span>
+                        <span className="font-bold text-[#231619] text-sm">
+                          {order.customerName}
+                        </span>
+                        <span className="text-[#6E5A5F]">· WhatsApp: {order.customerWhatsapp}</span>
+                      </div>
+                      <p className="text-xs text-[#4A373B]">
+                        {order.items
+                          .map(
+                            (it) =>
+                              `${it.quantity}x ${it.name} (Cor: ${it.colorName}, Tam: ${it.size} BR)`
+                          )
+                          .join(' + ')}
+                      </p>
+                      <p className="text-xs font-mono-tabular text-[#5B1824] font-semibold">
+                        Valor Total: {formatBRL(order.totalAmount)} · Entrada 50% a Confirmar:{' '}
+                        <strong className="text-[#2E6B3E]">{formatBRL(order.depositAmount)}</strong> (
+                        {order.preferredPaymentMethod === 'CARTAO_MERCADO_PAGO'
+                          ? 'Cartão de Crédito'
+                          : 'Pix Banco Inter'}
                         )
-                        .join(' + ')}
-                    </p>
-                    <p className="text-xs font-mono-tabular text-[#5B1824] font-semibold">
-                      Valor Total: {formatBRL(order.totalAmount)} · Entrada 50% a Confirmar:{' '}
-                      <strong className="text-[#2E6B3E]">{formatBRL(order.depositAmount)}</strong> (
-                      {order.paymentMethod === 'PIX_50_50' ? 'Pix' : 'Cartão'})
-                    </p>
+                      </p>
+                    </div>
+
+                    {/* EDIÇÃO MANUAL DE VALOR DIRETO NO CARD DE CONFIRMAÇÃO */}
+                    <div className="flex flex-wrap items-center gap-2 bg-[#FBF9F5] border border-[#DFD3C3] rounded-lg px-3 py-2">
+                      <label className="text-[11px] font-bold text-[#5B1824] whitespace-nowrap">
+                        ✏️ Editar Valor Total (R$):
+                      </label>
+                      <input
+                        type="text"
+                        inputMode="decimal"
+                        value={
+                          orderTotalDrafts[order.id] !== undefined
+                            ? orderTotalDrafts[order.id]
+                            : order.totalAmount.toFixed(2).replace('.', ',')
+                        }
+                        onChange={(e) =>
+                          setOrderTotalDrafts((prev) => ({
+                            ...prev,
+                            [order.id]: e.target.value,
+                          }))
+                        }
+                        className="w-24 px-2.5 py-1 bg-white border border-[#DFD3C3] rounded text-xs font-mono-tabular font-bold text-[#231619]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleSaveManualOrderTotal(order)}
+                        className="px-2.5 py-1 bg-[#5B1824] hover:bg-[#46111B] text-white rounded text-[11px] font-semibold cursor-pointer"
+                      >
+                        {savedOrderValueId === order.id ? '✓ Valor Salvo!' : 'Salvar Valor'}
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-2">
+                  <div className="pt-2 border-t border-[#EFE7DA] flex flex-wrap items-center justify-between gap-2">
                     <button
                       type="button"
                       onClick={() =>
@@ -1843,16 +2530,39 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       className="px-4 py-2.5 bg-[#2E6B3E] hover:bg-[#235330] text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer"
                     >
                       <Check className="w-4 h-4" />
-                      <span>Confirmar Recebimento dos 50% e Aprovar Pedido</span>
+                      <span>Confirmar Recebimento dos 50% ({formatBRL(order.depositAmount)}) e Aprovar Pedido</span>
                     </button>
 
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteOrder(order.id)}
-                      className="px-3 py-2.5 bg-[#7A2434]/10 hover:bg-[#7A2434]/20 text-[#7A2434] rounded-lg text-xs font-semibold cursor-pointer"
-                    >
-                      Excluir Teste / Cancelar
-                    </button>
+                    {confirmDeleteOrderId === order.id ? (
+                      <div className="flex items-center gap-1.5 bg-[#7A2434]/10 border border-[#7A2434] rounded-lg px-2.5 py-1.5">
+                        <span className="text-[11px] font-bold text-[#7A2434]">
+                          Confirmar exclusão?
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteOrder(order.id)}
+                          className="px-2.5 py-1 bg-[#7A2434] hover:bg-[#5B1824] text-white rounded text-[11px] font-bold cursor-pointer"
+                        >
+                          Sim, Excluir
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setConfirmDeleteOrderId(null)}
+                          className="px-2 py-1 bg-white text-[#4A373B] border border-[#DFD3C3] rounded text-[11px] font-semibold cursor-pointer"
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setConfirmDeleteOrderId(order.id)}
+                        className="px-3 py-2 bg-[#7A2434]/10 hover:bg-[#7A2434]/20 text-[#7A2434] rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Excluir Pedido</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}

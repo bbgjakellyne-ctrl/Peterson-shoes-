@@ -228,21 +228,25 @@ export function toWhatsAppHref(
 }
 
 export function openWhatsAppImmediate(phone: string, text: string): void {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const href = toWhatsAppHref(phone, text);
   try {
-    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(
-      navigator.userAgent || ''
-    );
-    if (isMobile) {
-      window.location.href = href;
-      return;
-    }
-    const win = window.open(href, '_blank', 'noopener,noreferrer');
-    if (!win) {
-      window.location.href = href;
-    }
+    const a = document.createElement('a');
+    a.href = href;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      try {
+        document.body.removeChild(a);
+      } catch {
+        // Ignore cleanup errors
+      }
+    }, 300);
   } catch {
-    window.location.href = href;
+    // Fallback ignored in iframe
   }
 }
+

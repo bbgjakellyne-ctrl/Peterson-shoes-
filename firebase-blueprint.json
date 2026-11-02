@@ -1,0 +1,149 @@
+{
+  "entities": {
+    "BespokeOrder": {
+      "title": "BespokeOrder",
+      "description": "Encomenda artesanal de calçado feminino da Peterson Shoes (50% entrada + 50% na entrega).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "orderCode": { "type": "string", "maxLength": 64 },
+        "customerId": { "type": "string", "maxLength": 128 },
+        "customerName": { "type": "string", "maxLength": 200 },
+        "customerWhatsapp": { "type": "string", "maxLength": 60 },
+        "customerEmail": { "type": "string", "maxLength": 200 },
+        "customerCpf": { "type": "string", "maxLength": 40 },
+        "shippingAddress": { "type": "string", "maxLength": 500 },
+        "totalAmount": { "type": "number" },
+        "depositAmount": { "type": "number" },
+        "remainingAmount": { "type": "number" },
+        "paymentStatus": {
+          "type": "string",
+          "enum": [
+            "AGUARDANDO_ENTRADA_50",
+            "ENTRADA_50_PAGA",
+            "AGUARDANDO_FINAL_50",
+            "QUITADO_100"
+          ]
+        },
+        "productionStatus": {
+          "type": "string",
+          "enum": [
+            "AGUARDANDO_CONFIRMACAO",
+            "CORTE_MODELAGEM",
+            "MONTAGEM_ARTESANAL",
+            "ACABAMENTO_QUALIDADE",
+            "ACABAMENTO_PALMILHA",
+            "PRONTA_PARA_ENTREGA",
+            "ENVIADA_ENTREGUE",
+            "ENTREGUE"
+          ]
+        },
+        "preferredPaymentMethod": { "type": "string", "maxLength": 64 },
+        "estimatedDeliveryDate": { "type": "string", "maxLength": 64 },
+        "productionDays": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 },
+        "factoryNotes": { "type": "string", "maxLength": 2000 },
+        "trackingCode": { "type": "string", "maxLength": 120 }
+      },
+      "required": [
+        "id",
+        "orderCode",
+        "customerName",
+        "customerWhatsapp",
+        "totalAmount",
+        "depositAmount",
+        "remainingAmount",
+        "paymentStatus",
+        "productionStatus",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PaymentRecord": {
+      "title": "PaymentRecord",
+      "description": "Registro de parcela de pagamento (50% entrada ou 50% final na entrega).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "orderId": { "type": "string", "maxLength": 128 },
+        "orderCode": { "type": "string", "maxLength": 64 },
+        "installmentType": {
+          "type": "string",
+          "enum": ["ENTRADA_50", "FINAL_50", "RESTANTE_50"]
+        },
+        "method": {
+          "type": "string",
+          "enum": ["PIX_MERCADO_PAGO", "CARTAO_MERCADO_PAGO"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["PENDENTE", "APROVADO"]
+        },
+        "amount": { "type": "number" },
+        "baseAmount": { "type": "number" },
+        "feeAmount": { "type": "number" },
+        "installments": { "type": "number" },
+        "pixCopyPaste": { "type": "string", "maxLength": 1000 },
+        "mpReferenceId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": [
+        "id",
+        "orderId",
+        "orderCode",
+        "installmentType",
+        "method",
+        "status",
+        "amount",
+        "createdAt"
+      ]
+    },
+    "CustomerRecord": {
+      "title": "CustomerRecord",
+      "description": "Cadastro de cliente da Peterson Shoes.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "maxLength": 200 },
+        "whatsapp": { "type": "string", "maxLength": 60 },
+        "email": { "type": "string", "maxLength": 200 },
+        "cpf": { "type": "string", "maxLength": 40 },
+        "city": { "type": "string", "maxLength": 120 },
+        "state": { "type": "string", "maxLength": 40 },
+        "totalOrders": { "type": "number" },
+        "totalSpent": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "name", "whatsapp", "createdAt"]
+    },
+    "StoreState": {
+      "title": "StoreState",
+      "description": "Estado global sincronizado da loja (analytics de visitas, overrides de preços e configurações).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["updatedAt"]
+    }
+  },
+  "firestore": {
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/BespokeOrder" },
+      "description": "Pedidos sob encomenda criados pelas clientes na vitrine e gerenciados no painel admin."
+    },
+    "/payments/{paymentId}": {
+      "schema": { "$ref": "#/entities/PaymentRecord" },
+      "description": "Parcelas de 50% de entrada e 50% na entrega vinculadas aos pedidos."
+    },
+    "/customers/{customerId}": {
+      "schema": { "$ref": "#/entities/CustomerRecord" },
+      "description": "Clientes cadastradas ao realizar pedidos na loja."
+    },
+    "/store_state/{docId}": {
+      "schema": { "$ref": "#/entities/StoreState" },
+      "description": "Documentos de sincronização em tempo real de visitas/acessos, preços do catálogo, itens excluídos e configurações."
+    }
+  }
+}
